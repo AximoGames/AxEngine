@@ -59,20 +59,20 @@ namespace Net3dBoolDemo
             GL.Begin(PrimitiveType.Triangles);
 
             var verts = Mesh.GetVertices();
-            int[] ind = Mesh.GetIndices();
+            var indicies = Mesh.GetIndices();
 
-            for (var i = 0; i < ind.Length; i = i + 3)
+            for (var i = 0; i < indicies.Length; i = i + 3)
             {
                 GL.Normal3(new Vector3(1, 1, 1));
-                var p = verts[ind[i]];
+                var p = verts[indicies[i]];
                 GL.Color3(Color.Red);
                 GL.Vertex3(new Vector3d(p.X, p.Y, p.Z));
 
-                p = verts[ind[i + 1]];
+                p = verts[indicies[i + 1]];
                 GL.Color3(Color.Blue);
                 GL.Vertex3(new Vector3d(p.X, p.Y, p.Z));
 
-                p = verts[ind[i + 2]];
+                p = verts[indicies[i + 2]];
                 GL.Color3(Color.Green);
                 GL.Vertex3(new Vector3d(p.X, p.Y, p.Z));
             }
