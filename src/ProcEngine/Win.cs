@@ -4,6 +4,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using LearnOpenTK.Common;
+using Net3dBoolDemo;
 
 namespace LearnOpenTK
 {
@@ -69,10 +70,13 @@ namespace LearnOpenTK
         private Shader _lampShader;
         private Shader _lightingShader;
 
-        private Camera _camera;
+        private Cam Camera;
         private bool _firstMove = true;
         private Vector2 _lastPos;
 
+        private float[] MouseSpeed = new float[3];
+        private Vector2 MouseDelta;
+        private float UpDownDelta;
 
         //public static Matrix4 CameraMatrix;
         //private float[] MouseSpeed = new float[3];
@@ -127,13 +131,13 @@ namespace LearnOpenTK
             // better to do it this way. Look through the web version for a much better understanding of this.
             GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
 
-            _camera = new Camera(Vector3.UnitZ * 3, Width / (float)Height);
+            Camera = new Cam(new Vector3(1f, -5f, 2f), Width / (float)Height);
+            //Camera = new Cam(Vector3.UnitZ * 3, Width / (float)Height);
 
             CursorVisible = false;
 
             base.OnLoad(e);
         }
-
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
@@ -144,13 +148,13 @@ namespace LearnOpenTK
             _lightingShader.Use();
 
             _lightingShader.SetMatrix4("model", Matrix4.Identity);
-            _lightingShader.SetMatrix4("view", _camera.GetViewMatrix());
-            _lightingShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
+            _lightingShader.SetMatrix4("view", Camera.GetViewMatrix());
+            _lightingShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
 
             _lightingShader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
             _lightingShader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
             _lightingShader.SetVector3("lightPos", _lightPos);
-            _lightingShader.SetVector3("viewPos", _camera.Position);
+            _lightingShader.SetVector3("viewPos", Camera.Position);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
 
@@ -163,8 +167,8 @@ namespace LearnOpenTK
             lampMatrix *= Matrix4.CreateTranslation(_lightPos);
 
             _lampShader.SetMatrix4("model", lampMatrix);
-            _lampShader.SetMatrix4("view", _camera.GetViewMatrix());
-            _lampShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
+            _lampShader.SetMatrix4("view", Camera.GetViewMatrix());
+            _lampShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
 
@@ -188,38 +192,64 @@ namespace LearnOpenTK
                 Exit();
             }
 
-            const float cameraSpeed = 1.5f;
-            const float sensitivity = 0.2f;
-
-            if (input.IsKeyDown(Key.W))
-                _camera.Position += _camera.Front * cameraSpeed * (float)e.Time; // Forward 
-            if (input.IsKeyDown(Key.S))
-                _camera.Position -= _camera.Front * cameraSpeed * (float)e.Time; // Backwards
-            if (input.IsKeyDown(Key.A))
-                _camera.Position -= _camera.Right * cameraSpeed * (float)e.Time; // Left
-            if (input.IsKeyDown(Key.D))
-                _camera.Position += _camera.Right * cameraSpeed * (float)e.Time; // Right
-            if (input.IsKeyDown(Key.Space))
-                _camera.Position += _camera.Up * cameraSpeed * (float)e.Time; // Up 
-            if (input.IsKeyDown(Key.LShift))
-                _camera.Position -= _camera.Up * cameraSpeed * (float)e.Time; // Down
-
-            var mouse = Mouse.GetState();
-
-            if (_firstMove)
+            var kbState = Keyboard.GetState();
+            if (kbState[Key.W])
             {
-                _lastPos = new Vector2(mouse.X, mouse.Y);
-                _firstMove = false;
+                Camera.Position.X += (float)Math.Cos(Camera.Facing) * 0.1f;
+                Camera.Position.Y += (float)Math.Sin(Camera.Facing) * 0.1f;
             }
-            else
-            {
-                var deltaX = mouse.X - _lastPos.X;
-                var deltaY = mouse.Y - _lastPos.Y;
-                _lastPos = new Vector2(mouse.X, mouse.Y);
 
-                _camera.Yaw += deltaX * sensitivity;
-                _camera.Pitch -= deltaY * sensitivity;
+            if (kbState[Key.S])
+            {
+                Camera.Position.X -= (float)Math.Cos(Camera.Facing) * 0.1f;
+                Camera.Position.Y -= (float)Math.Sin(Camera.Facing) * 0.1f;
             }
+
+            if (kbState[Key.A])
+            {
+                Camera.Position.X += (float)Math.Cos(Camera.Facing + Math.PI / 2) * 0.1f;
+                Camera.Position.Y += (float)Math.Sin(Camera.Facing + Math.PI / 2) * 0.1f;
+            }
+
+            if (kbState[Key.D])
+            {
+                Camera.Position.X -= (float)Math.Cos(Camera.Facing + Math.PI / 2) * 0.1f;
+                Camera.Position.Y -= (float)Math.Sin(Camera.Facing + Math.PI / 2) * 0.1f;
+            }
+
+            if (kbState[Key.Left])
+                MouseDelta.X = -2;
+
+            if (kbState[Key.Right])
+                MouseDelta.X = 2;
+
+            if (kbState[Key.Up])
+                MouseDelta.Y = -1;
+
+            if (kbState[Key.Down])
+                MouseDelta.Y = 1;
+
+            if (kbState[Key.PageUp])
+                UpDownDelta = -3;
+
+            if (kbState[Key.PageDown])
+                UpDownDelta = 3;
+
+            MouseSpeed[0] *= 0.9f;
+            MouseSpeed[1] *= 0.9f;
+            MouseSpeed[2] *= 0.9f;
+            MouseSpeed[0] -= MouseDelta.X / 1000f;
+            MouseSpeed[1] -= MouseDelta.Y / 1000f;
+            MouseSpeed[2] -= UpDownDelta / 1000f;
+            MouseDelta = new Vector2();
+            UpDownDelta = 0;
+
+            Camera.Facing += MouseSpeed[0] * 2;
+            Camera.Pitch += MouseSpeed[1] * 2;
+            Camera.Position.Z += MouseSpeed[2] * 2;
+
+            if (kbState[Key.Escape])
+                Exit();
 
             base.OnUpdateFrame(e);
         }
@@ -236,7 +266,7 @@ namespace LearnOpenTK
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
-            _camera.Fov -= e.DeltaPrecise;
+            Camera.Fov -= e.DeltaPrecise;
             base.OnMouseWheel(e);
         }
 
@@ -244,7 +274,7 @@ namespace LearnOpenTK
         protected override void OnResize(EventArgs e)
         {
             GL.Viewport(0, 0, Width, Height);
-            _camera.AspectRatio = Width / (float)Height;
+            Camera.AspectRatio = Width / (float)Height;
             base.OnResize(e);
         }
 

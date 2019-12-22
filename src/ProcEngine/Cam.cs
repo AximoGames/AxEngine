@@ -5,15 +5,22 @@ namespace Net3dBoolDemo
 {
     public class Cam
     {
-        public Vector3 Location;
+        public Vector3 Position;
         public float Pitch = -0.3f;
         public Vector3 Up = Vector3.UnitZ;
         public float Facing = (float)Math.PI / 2 + 0.15f;
         public float AspectRatio;
         private float _fov = (float)Math.PI / 4;
 
-        public Cam()
+        public Cam(Vector3 position, float aspectRatio)
         {
+            Position = position;
+            AspectRatio = aspectRatio;
+        }
+
+        public Cam(Vector3 position)
+        {
+            Position = position;
         }
 
         // The field of view (FOV) is the vertical angle of the camera view, this has been discussed more in depth in a
@@ -31,7 +38,7 @@ namespace Net3dBoolDemo
 
         public Matrix4 GetViewMatrix()
         {
-            var loc = new Vector3(Location.X, Location.Y, Location.Z);
+            var loc = new Vector3(Position.X, Position.Y, Position.Z);
             var lookatPoint = new Vector3((float)Math.Cos(Facing), (float)Math.Sin(Facing), (float)Math.Sin(Pitch));
             return Matrix4.LookAt(loc, loc + lookatPoint, Up);
         }

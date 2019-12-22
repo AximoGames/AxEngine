@@ -24,8 +24,8 @@ namespace Net3dBoolDemo
             VSync = VSyncMode.On;
             Title = "Net3dBool Demo with OpenTK";
 
-            Camera = new Cam();
-            Camera.Location = new Vector3(1f, -5f, 2f);
+            Camera = new Cam(new Vector3(1f, -5f, 2f));
+            Camera.SetAspectRatio(Width, Height);
 
             MouseDelta = new Vector2();
 
@@ -39,26 +39,26 @@ namespace Net3dBoolDemo
             var kbState = Keyboard.GetState();
             if (kbState[Key.W])
             {
-                Camera.Location.X += (float)Math.Cos(Camera.Facing) * 0.1f;
-                Camera.Location.Y += (float)Math.Sin(Camera.Facing) * 0.1f;
+                Camera.Position.X += (float)Math.Cos(Camera.Facing) * 0.1f;
+                Camera.Position.Y += (float)Math.Sin(Camera.Facing) * 0.1f;
             }
 
             if (kbState[Key.S])
             {
-                Camera.Location.X -= (float)Math.Cos(Camera.Facing) * 0.1f;
-                Camera.Location.Y -= (float)Math.Sin(Camera.Facing) * 0.1f;
+                Camera.Position.X -= (float)Math.Cos(Camera.Facing) * 0.1f;
+                Camera.Position.Y -= (float)Math.Sin(Camera.Facing) * 0.1f;
             }
 
             if (kbState[Key.A])
             {
-                Camera.Location.X += (float)Math.Cos(Camera.Facing + Math.PI / 2) * 0.1f;
-                Camera.Location.Y += (float)Math.Sin(Camera.Facing + Math.PI / 2) * 0.1f;
+                Camera.Position.X += (float)Math.Cos(Camera.Facing + Math.PI / 2) * 0.1f;
+                Camera.Position.Y += (float)Math.Sin(Camera.Facing + Math.PI / 2) * 0.1f;
             }
 
             if (kbState[Key.D])
             {
-                Camera.Location.X -= (float)Math.Cos(Camera.Facing + Math.PI / 2) * 0.1f;
-                Camera.Location.Y -= (float)Math.Sin(Camera.Facing + Math.PI / 2) * 0.1f;
+                Camera.Position.X -= (float)Math.Cos(Camera.Facing + Math.PI / 2) * 0.1f;
+                Camera.Position.Y -= (float)Math.Sin(Camera.Facing + Math.PI / 2) * 0.1f;
             }
 
             if (kbState[Key.Left])
@@ -90,7 +90,7 @@ namespace Net3dBoolDemo
 
             Camera.Facing += MouseSpeed[0] * 2;
             Camera.Pitch += MouseSpeed[1] * 2;
-            Camera.Location.Z += MouseSpeed[2] * 2;
+            Camera.Position.Z += MouseSpeed[2] * 2;
 
             if (kbState[Key.Escape])
                 Exit();

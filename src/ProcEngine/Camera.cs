@@ -31,7 +31,7 @@ namespace LearnOpenTK.Common
         }
 
         // The position of the camera
-        public Vector3 Position { get; set; }
+        public Vector3 Position;
         // This is simply the aspect ratio of the viewport, used for the projection matrix
         public float AspectRatio { private get; set; }
 

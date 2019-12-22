@@ -55,6 +55,9 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Shaders\lighting.frag" />
+    <None Include="Shaders\shader.frag" />
+    <None Include="Shaders\shader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\External\Net3dBool\src\Net3dBool\Net3dBool.csproj">
