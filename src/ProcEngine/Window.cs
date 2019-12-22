@@ -12,14 +12,11 @@ namespace Net3dBoolDemo
     public abstract class ExtendedGameWindow : GameWindow
     {
 
-        public static Matrix4 CameraMatrix;
+        public Cam Camera;
+
         private float[] MouseSpeed = new float[3];
         private Vector2 MouseDelta;
         private float UpDownDelta;
-        private Vector3 CameraLocation;
-        private Vector3 Up = Vector3.UnitZ;
-        private float Pitch = -0.3f;
-        private float Facing = (float)Math.PI / 2 + 0.15f;
 
         protected override void OnLoad(EventArgs e)
         {
@@ -27,8 +24,9 @@ namespace Net3dBoolDemo
             VSync = VSyncMode.On;
             Title = "Net3dBool Demo with OpenTK";
 
-            CameraMatrix = Matrix4.Identity;
-            CameraLocation = new Vector3(1f, -5f, 2f);
+            Camera = new Cam();
+            Camera.Location = new Vector3(1f, -5f, 2f);
+
             MouseDelta = new Vector2();
 
             MouseMove += new EventHandler<MouseMoveEventArgs>(OnMouseMove);
@@ -41,26 +39,26 @@ namespace Net3dBoolDemo
             var kbState = Keyboard.GetState();
             if (kbState[Key.W])
             {
-                CameraLocation.X += (float)Math.Cos(Facing) * 0.1f;
-                CameraLocation.Y += (float)Math.Sin(Facing) * 0.1f;
+                Camera.Location.X += (float)Math.Cos(Camera.Facing) * 0.1f;
+                Camera.Location.Y += (float)Math.Sin(Camera.Facing) * 0.1f;
             }
 
             if (kbState[Key.S])
             {
-                CameraLocation.X -= (float)Math.Cos(Facing) * 0.1f;
-                CameraLocation.Y -= (float)Math.Sin(Facing) * 0.1f;
+                Camera.Location.X -= (float)Math.Cos(Camera.Facing) * 0.1f;
+                Camera.Location.Y -= (float)Math.Sin(Camera.Facing) * 0.1f;
             }
 
             if (kbState[Key.A])
             {
-                CameraLocation.X += (float)Math.Cos(Facing + Math.PI / 2) * 0.1f;
-                CameraLocation.Y += (float)Math.Sin(Facing + Math.PI / 2) * 0.1f;
+                Camera.Location.X += (float)Math.Cos(Camera.Facing + Math.PI / 2) * 0.1f;
+                Camera.Location.Y += (float)Math.Sin(Camera.Facing + Math.PI / 2) * 0.1f;
             }
 
             if (kbState[Key.D])
             {
-                CameraLocation.X -= (float)Math.Cos(Facing + Math.PI / 2) * 0.1f;
-                CameraLocation.Y -= (float)Math.Sin(Facing + Math.PI / 2) * 0.1f;
+                Camera.Location.X -= (float)Math.Cos(Camera.Facing + Math.PI / 2) * 0.1f;
+                Camera.Location.Y -= (float)Math.Sin(Camera.Facing + Math.PI / 2) * 0.1f;
             }
 
             if (kbState[Key.Left])
@@ -90,13 +88,9 @@ namespace Net3dBoolDemo
             MouseDelta = new Vector2();
             UpDownDelta = 0;
 
-            Facing += MouseSpeed[0] * 2;
-            Pitch += MouseSpeed[1] * 2;
-            CameraLocation.Z += MouseSpeed[2] * 2;
-
-            var loc = new Vector3(CameraLocation.X, CameraLocation.Y, CameraLocation.Z);
-            Vector3 lookatPoint = new Vector3((float)Math.Cos(Facing), (float)Math.Sin(Facing), (float)Math.Sin(Pitch));
-            CameraMatrix = Matrix4.LookAt(loc, loc + lookatPoint, Up);
+            Camera.Facing += MouseSpeed[0] * 2;
+            Camera.Pitch += MouseSpeed[1] * 2;
+            Camera.Location.Z += MouseSpeed[2] * 2;
 
             if (kbState[Key.Escape])
                 Exit();
@@ -108,13 +102,20 @@ namespace Net3dBoolDemo
                 MouseDelta = new Vector2(e.XDelta, e.YDelta);
         }
 
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            Camera.Fov -= e.DeltaPrecise;
+            base.OnMouseWheel(e);
+        }
+
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
 
             GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
+            Camera.SetAspectRatio(Width, Height);
 
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 0.1f, 150.0f);
+            Matrix4 projection = Camera.GetProjectionMatrix();
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projection);
         }
@@ -129,7 +130,8 @@ namespace Net3dBoolDemo
             GL.Enable(EnableCap.Blend);
 
             GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref CameraMatrix);
+            var viewMatrix = Camera.GetViewMatrix();
+            GL.LoadMatrix(ref viewMatrix);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
