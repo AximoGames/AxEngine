@@ -42,9 +42,16 @@ namespace LearnOpenTK
             ctx = new GameContext();
             ctx.Camera = new Cam(new Vector3(1f, -5f, 2f), Width / (float)Height);
 
+            lightObj = new LightObject()
+            {
+                Context = ctx,
+            };
+            lightObj.Init();
+
             obj = new TestObject()
             {
                 Context = ctx,
+                Light = lightObj,
             };
             obj.Init();
 
@@ -54,12 +61,14 @@ namespace LearnOpenTK
         }
 
         private IRenderableObject obj;
+        private ILightObject lightObj;
         private GameContext ctx;
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            (lightObj as IRenderableObject).OnRender();
             obj.OnRender();
 
             SwapBuffers();
@@ -172,6 +181,7 @@ namespace LearnOpenTK
             GL.UseProgram(0);
 
             obj.Free();
+            lightObj.Free();
 
             base.OnUnload(e);
         }
