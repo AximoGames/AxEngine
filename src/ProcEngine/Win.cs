@@ -14,63 +14,6 @@ namespace LearnOpenTK
     // where the lighting calculations happens.
     public class Window : GameWindow
     {
-        // Here we now have added the normals of the vertices
-        // Remember to define the layouts to the VAO's
-        private readonly float[] _vertices =
-        {
-             // Position          Normal
-             0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, // Front face
-            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-             0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-             0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-
-            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, // Back face
-             0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-             0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-             0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-
-            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, // Left face
-            -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-
-             0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, // Right face 0 1 0
-             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-             0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-             0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-             0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-
-            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, // Bottom face
-             0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-             0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-             0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-
-            0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, // Top face
-           -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-           -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-           -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
-        };
-        private readonly Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
-
-        private int _vertexBufferObject;
-        private int _vaoModel;
-        private int _vaoLamp;
-
-        private Shader _lampShader;
-        private Shader _lightingShader;
-
-        private Cam Camera;
 
         private float[] MouseSpeed = new float[3];
         private Vector2 MouseDelta;
@@ -87,6 +30,7 @@ namespace LearnOpenTK
 
         public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title) { }
 
+        public Cam Camera => ctx.Camera;
 
         protected override void OnLoad(EventArgs e)
         {
@@ -95,81 +39,28 @@ namespace LearnOpenTK
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
 
-            _vertexBufferObject = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
+            ctx = new GameContext();
+            ctx.Camera = new Cam(new Vector3(1f, -5f, 2f), Width / (float)Height);
 
-            _lightingShader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
-            _lampShader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
+            obj = new TestObject()
+            {
+                Context = ctx,
+            };
+            obj.Init();
 
-            _vaoModel = GL.GenVertexArray();
-            GL.BindVertexArray(_vaoModel);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-
-            var positionLocation = _lightingShader.GetAttribLocation("aPos");
-            GL.EnableVertexAttribArray(positionLocation);
-            // Remember to change the stride as we now have 6 floats per vertex
-            GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
-
-            // We now need to define the layout of the normal so the shader can use it
-            var normalLocation = _lightingShader.GetAttribLocation("aNormal");
-            GL.EnableVertexAttribArray(normalLocation);
-            GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
-
-            _vaoLamp = GL.GenVertexArray();
-            GL.BindVertexArray(_vaoLamp);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-
-            positionLocation = _lampShader.GetAttribLocation("aPos");
-            GL.EnableVertexAttribArray(positionLocation);
-            // Also change the stride here as we now have 6 floats per vertex. Now we don't define the normal for the lamp VAO
-            // this is because it isn't used, it might seem like a waste to use the same VBO if they dont have the same data
-            // The two cubes still use the same position, and since the position is already in the graphics memory it is actually
-            // better to do it this way. Look through the web version for a much better understanding of this.
-            GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
-
-            Camera = new Cam(new Vector3(1f, -5f, 2f), Width / (float)Height);
-            //Camera = new Cam(Vector3.UnitZ * 3, Width / (float)Height);
-
-            CursorVisible = false;
+            //CursorVisible = false;
 
             base.OnLoad(e);
         }
+
+        private IRenderableObject obj;
+        private GameContext ctx;
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.BindVertexArray(_vaoModel);
-
-            _lightingShader.Use();
-
-            _lightingShader.SetMatrix4("model", Matrix4.Identity);
-            _lightingShader.SetMatrix4("view", Camera.GetViewMatrix());
-            _lightingShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
-
-            _lightingShader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
-            _lightingShader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
-            _lightingShader.SetVector3("lightPos", _lightPos);
-            _lightingShader.SetVector3("viewPos", Camera.Position);
-
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
-
-            GL.BindVertexArray(_vaoLamp);
-
-            _lampShader.Use();
-
-            Matrix4 lampMatrix = Matrix4.Identity;
-            lampMatrix *= Matrix4.CreateScale(0.2f);
-            lampMatrix *= Matrix4.CreateTranslation(_lightPos);
-
-            _lampShader.SetMatrix4("model", lampMatrix);
-            _lampShader.SetMatrix4("view", Camera.GetViewMatrix());
-            _lampShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
-
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+            obj.OnRender();
 
             SwapBuffers();
 
@@ -255,10 +146,8 @@ namespace LearnOpenTK
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
-            if (Focused)
-            {
-                Mouse.SetPosition(X + Width / 2f, Y + Height / 2f);
-            }
+            if (e.Mouse.LeftButton == ButtonState.Pressed)
+                MouseDelta = new Vector2(e.XDelta, e.YDelta);
 
             base.OnMouseMove(e);
         }
@@ -269,7 +158,6 @@ namespace LearnOpenTK
             base.OnMouseWheel(e);
         }
 
-
         protected override void OnResize(EventArgs e)
         {
             GL.Viewport(0, 0, Width, Height);
@@ -277,19 +165,13 @@ namespace LearnOpenTK
             base.OnResize(e);
         }
 
-
         protected override void OnUnload(EventArgs e)
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
             GL.UseProgram(0);
 
-            GL.DeleteBuffer(_vertexBufferObject);
-            GL.DeleteVertexArray(_vaoModel);
-            GL.DeleteVertexArray(_vaoLamp);
-
-            GL.DeleteProgram(_lampShader.Handle);
-            GL.DeleteProgram(_lightingShader.Handle);
+            obj.Free();
 
             base.OnUnload(e);
         }
