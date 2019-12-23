@@ -7,8 +7,8 @@ namespace Net3dBoolDemo
     {
         public static void Main(string[] args)
         {
-            var demo = new TDemoWindow();
-            //var demo = new Window(800, 600, "blubb");
+            //var demo = new TDemoWindow();
+            var demo = new Window(800, 600, "blubb");
 
             // Run the game at 60 updates per second
             demo.Run(60.0);

@@ -19,11 +19,11 @@ namespace LearnOpenTK
         private readonly float[] _vertices =
         {
              // Position          Normal
-            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, // Front face
-             0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-             0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+             0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, // Front face
+            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
              0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
             -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+             0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
             -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
             -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, // Back face
@@ -40,11 +40,11 @@ namespace LearnOpenTK
             -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
             -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, // Right face
-             0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-             0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+             0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, // Right face 0 1 0
+             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
              0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
              0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+             0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
              0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
             -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, // Bottom face
@@ -54,12 +54,12 @@ namespace LearnOpenTK
             -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
             -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, // Top face
-             0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-             0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-             0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+            0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, // Top face
+           -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+           -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+           -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
         };
         private readonly Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
 
@@ -71,8 +71,6 @@ namespace LearnOpenTK
         private Shader _lightingShader;
 
         private Cam Camera;
-        private bool _firstMove = true;
-        private Vector2 _lastPos;
 
         private float[] MouseSpeed = new float[3];
         private Vector2 MouseDelta;
@@ -95,6 +93,7 @@ namespace LearnOpenTK
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
             GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.CullFace);
 
             _vertexBufferObject = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
@@ -158,7 +157,7 @@ namespace LearnOpenTK
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
 
-            GL.BindVertexArray(_vaoModel);
+            GL.BindVertexArray(_vaoLamp);
 
             _lampShader.Use();
 
