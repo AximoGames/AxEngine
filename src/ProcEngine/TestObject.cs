@@ -37,6 +37,7 @@ namespace ProcEngine
             var layout = new VertexLayout();
             layout.AddAttribute(_shader.GetAttribLocation("aPos"), 3, typeof(float), false, 0);
             layout.AddAttribute(_shader.GetAttribLocation("aNormal"), 3, typeof(float), false, 3 * sizeof(float));
+            layout.AddAttribute(_shader.GetAttribLocation("aTexCoords"), 2, typeof(float), false, 6 * sizeof(float));
 
             vao = new VertexArrayObject(layout, vbo);
             vao.Create();
