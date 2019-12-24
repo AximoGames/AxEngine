@@ -15,6 +15,7 @@ namespace LearnOpenTK.Common
 
         private readonly Dictionary<string, int> _uniformLocations;
 
+        public string FragSourcePath { get; private set; }
 
         // This is how you create a simple shader.
         // Shaders are written in GLSL, which is a language very similar to C in its semantics.
@@ -22,6 +23,8 @@ namespace LearnOpenTK.Common
         // A commented example of GLSL can be found in shader.vert
         public Shader(string vertPath, string fragPath)
         {
+            FragSourcePath = fragPath;
+
             // There are several different types of shaders, but the only two you need for basic rendering are the vertex and fragment shaders.
             // The vertex shader is responsible for moving around vertices, and uploading that data to the fragment shader.
             //   The vertex shader won't be too important here, but they'll be more important later.
@@ -40,7 +43,6 @@ namespace LearnOpenTK.Common
 
             // And then compile
             CompileShader(vertexShader);
-
 
             // We do the same for the fragment shader
             shaderSource = LoadSource(fragPath);
@@ -116,7 +118,9 @@ namespace LearnOpenTK.Common
             if (code != (int)All.True)
             {
                 // We can use `GL.GetProgramInfoLog(program)` to get information about the error.
-                throw new Exception($"Error occurred whilst linking Program({program})");
+                var msg = GL.GetProgramInfoLog(program);
+                Console.WriteLine(msg);
+                throw new Exception($"Error occurred whilst linking Program({program}): {msg}");
             }
         }
 
@@ -165,8 +169,11 @@ namespace LearnOpenTK.Common
         /// <param name="data">The data to set</param>
         public void SetInt(string name, int data)
         {
-            GL.UseProgram(Handle);
-            GL.Uniform1(_uniformLocations[name], data);
+            if (_uniformLocations.TryGetValue(name, out var location))
+            {
+                GL.UseProgram(Handle);
+                GL.Uniform1(location, data);
+            }
         }
 
         /// <summary>
@@ -176,8 +183,11 @@ namespace LearnOpenTK.Common
         /// <param name="data">The data to set</param>
         public void SetFloat(string name, float data)
         {
-            GL.UseProgram(Handle);
-            GL.Uniform1(_uniformLocations[name], data);
+            if (_uniformLocations.TryGetValue(name, out var location))
+            {
+                GL.UseProgram(Handle);
+                GL.Uniform1(location, data);
+            }
         }
 
         /// <summary>
@@ -192,8 +202,11 @@ namespace LearnOpenTK.Common
         /// </remarks>
         public void SetMatrix4(string name, Matrix4 data)
         {
-            GL.UseProgram(Handle);
-            GL.UniformMatrix4(_uniformLocations[name], true, ref data);
+            if (_uniformLocations.TryGetValue(name, out var location))
+            {
+                GL.UseProgram(Handle);
+                GL.UniformMatrix4(location, true, ref data);
+            }
         }
 
         /// <summary>
@@ -203,8 +216,11 @@ namespace LearnOpenTK.Common
         /// <param name="data">The data to set</param>
         public void SetVector3(string name, Vector3 data)
         {
-            GL.UseProgram(Handle);
-            GL.Uniform3(_uniformLocations[name], data);
+            if (_uniformLocations.TryGetValue(name, out var location))
+            {
+                GL.UseProgram(Handle);
+                GL.Uniform3(location, data);
+            }
         }
     }
 }

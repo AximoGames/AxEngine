@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using OpenTK.Graphics.OpenGL4;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 
@@ -22,7 +23,7 @@ namespace LearnOpenTK.Common
             // For this example, we're going to use .NET's built-in System.Drawing library to load textures.
 
             // Load the image
-            using (var image = new Bitmap(path))
+            using (var image = new Bitmap(Path.Combine("..", "..", path)))
             {
                 // First, we get our pixels from the bitmap we loaded.
                 // Arguments:

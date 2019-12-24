@@ -1,21 +1,33 @@
 #version 330 core
 out vec4 FragColor;
 
+struct Material {
+    sampler2D diffuse;
+    sampler2D specular;
+    float     shininess;
+};
+
 //In order to calculate some basic lighting we need a few things per model basis, and a few things per fragment basis:
 uniform vec3 objectColor; //The color of the object.
 uniform vec3 lightColor; //The color of the light.
 uniform vec3 lightPos; //The position of the light.
 uniform vec3 viewPos; //The position of the view and/or of the player.
+uniform Material material;
 
 in vec3 Normal; //The normal of the fragment is calculated in the vertex shader.
 in vec3 FragPos; //The fragment position.
+in vec2 TexCoords;
 
 void main()
 {
+    //vec3 lightColor2 = vec3(0.5, 0.0, 0.1);
+    //vec3 lightColor2 = lightColor;
+    vec3 lightColor2 = vec3(texture(material.diffuse, TexCoords));
+
     //The ambient color is the color where the light does not directly hit the object.
     //You can think of it as an underlying tone throughout the object. Or the light coming from the scene/the sky (not the sun).
     float ambientStrength = 0.1;
-    vec3 ambient = ambientStrength * lightColor;
+    vec3 ambient = ambientStrength * lightColor2;
 
     //We calculate the light direction, and make sure the normal is normalized.
     vec3 norm = normalize(Normal);
@@ -24,7 +36,7 @@ void main()
     //The diffuse part of the phong model.
     //This is the part of the light that gives the most, it is the color of the object where it is hit by light.
     float diff = max(dot(norm, lightDir), 0.0); //We make sure the value is non negative with the max function.
-    vec3 diffuse = diff * lightColor;
+    vec3 diffuse = diff * lightColor2;
 
 
     //The specular light is the light that shines from the object, like light hitting metal.
@@ -33,7 +45,7 @@ void main()
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32); //The 32 is the shininess of the material.
-    vec3 specular = specularStrength * spec * lightColor;
+    vec3 specular = specularStrength * spec * lightColor2;
 
     //At last we add all the light components together and multiply with the color of the object. Then we set the color
     //and makes sure the alpha value is 1

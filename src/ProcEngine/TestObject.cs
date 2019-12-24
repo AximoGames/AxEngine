@@ -23,12 +23,17 @@ namespace ProcEngine
         private VertexArrayObject vao;
         private VertexBufferObject vbo;
 
+        private Texture txt0;
+        private Texture txt1;
+
         public override void Init()
         {
             if (Debug)
                 _vertices = DataHelper.CubeDebug;
 
             _shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
+            txt0 = new Texture("Ressources/woodenbox.png");
+            txt1 = new Texture("Ressources/woodenbox_specular.png");
 
             vbo = new VertexBufferObject();
             vbo.Create();
@@ -49,11 +54,17 @@ namespace ProcEngine
         {
             vao.Use();
 
+            txt0.Use(TextureUnit.Texture0);
+            txt1.Use(TextureUnit.Texture1);
+
             _shader.Use();
 
             _shader.SetMatrix4("model", ModelMatrix);
             _shader.SetMatrix4("view", Camera.GetViewMatrix());
             _shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+
+            //_shader.SetInt("material.diffuse", 0);
+            //_shader.SetInt("material.specular", 1);
 
             _shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
             _shader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
