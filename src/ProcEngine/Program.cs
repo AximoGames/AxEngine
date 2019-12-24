@@ -1,7 +1,7 @@
 ﻿using LearnOpenTK;
 using System;
 
-namespace Net3dBoolDemo
+namespace ProcEngine
 {
     class MainClass
     {

@@ -4,7 +4,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using LearnOpenTK.Common;
-using Net3dBoolDemo;
+using ProcEngine;
 
 namespace LearnOpenTK
 {
@@ -39,21 +39,31 @@ namespace LearnOpenTK
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
 
-            ctx = new GameContext();
+            ctx = new RenderContext();
             ctx.Camera = new Cam(new Vector3(1f, -5f, 2f), Width / (float)Height);
 
             lightObj = new LightObject()
             {
                 Context = ctx,
             };
-            lightObj.Init();
+            //lightObj.Init();
 
             obj = new TestObject()
             {
                 Context = ctx,
+                ModelMatrix = Matrix4.Identity,
                 Light = lightObj,
             };
             obj.Init();
+
+            obj2 = new TestObject()
+            {
+                Context = ctx,
+                ModelMatrix = Matrix4.CreateTranslation(1.5f, 1.5f, 0.0f),
+                Light = lightObj,
+                Debug = true,
+            };
+            obj2.Init();
 
             //CursorVisible = false;
 
@@ -61,15 +71,18 @@ namespace LearnOpenTK
         }
 
         private IRenderableObject obj;
+        private IRenderableObject obj2;
         private ILightObject lightObj;
-        private GameContext ctx;
+        private RenderContext ctx;
+        private IRenderTarget target;
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            (lightObj as IRenderableObject).OnRender();
+            //(lightObj as IRenderableObject).OnRender();
             obj.OnRender();
+            obj2.OnRender();
 
             SwapBuffers();
 
@@ -181,7 +194,8 @@ namespace LearnOpenTK
             GL.UseProgram(0);
 
             obj.Free();
-            lightObj.Free();
+            obj2.Free();
+            //lightObj.Free();
 
             base.OnUnload(e);
         }

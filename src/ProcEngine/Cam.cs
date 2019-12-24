@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK;
 
-namespace Net3dBoolDemo
+namespace ProcEngine
 {
     public class Cam
     {

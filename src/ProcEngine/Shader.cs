@@ -127,6 +127,10 @@ namespace LearnOpenTK.Common
             GL.UseProgram(Handle);
         }
 
+        public void Free()
+        {
+            GL.DeleteProgram(Handle);
+        }
 
         // The shader sources provided with this project use hardcoded layout(location)-s. If you want to do it dynamically,
         // you can omit the layout(location=X) lines in the vertex shader, and use this in VertexAttribPointer instead of the hardcoded values.

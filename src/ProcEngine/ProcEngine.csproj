@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{303329F6-C910-4043-81E5-5080659ECB28}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Net3dBoolDemo</RootNamespace>
-    <AssemblyName>Net3dBoolDemo</AssemblyName>
+    <RootNamespace>ProcEngine</RootNamespace>
+    <AssemblyName>ProcEngine</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
