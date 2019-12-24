@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace ProcEngine
 {
+
     public class VertexArrayObject
     {
         private int _Handle;
@@ -13,11 +14,14 @@ namespace ProcEngine
 
         public int VertexCount { get; private set; }
 
+        public VertexLayout Layout { get; private set; }
+
         private VertexBufferObject _vbo;
         public VertexBufferObject VertextBufferObject;
 
-        public VertexArrayObject(VertexBufferObject vbo)
+        public VertexArrayObject(VertexLayout layout, VertexBufferObject vbo)
         {
+            Layout = layout;
             _vbo = vbo;
         }
 

@@ -55,6 +55,7 @@
     <Compile Include="Texture.cs" />
     <Compile Include="VertexArrayObject.cs" />
     <Compile Include="VertexBufferObject.cs" />
+    <Compile Include="VertextLayout.cs" />
     <Compile Include="Win.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="Demo.cs" />

@@ -33,7 +33,9 @@ namespace ProcEngine
             vbo.Create();
             vbo.Use();
 
-            vao = new VertexArrayObject(vbo);
+            var layout = new VertexLayout();
+
+            vao = new VertexArrayObject(layout, vbo);
             vao.Create();
 
             vao.AddAttribute(_shader.GetAttribLocation("aPos"), 3, typeof(float), false, 0);
