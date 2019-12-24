@@ -27,9 +27,9 @@ namespace ProcEngine
             vbo.Use();
 
             var layout = new VertexLayout();
-            layout.AddAttribute(_shader.GetAttribLocation("aPos"), 3, typeof(float), false);
-            layout.AddAttribute(_shader.GetAttribLocation("aNormal"), 3, typeof(float), false);
-            layout.AddAttribute(_shader.GetAttribLocation("aTexCoords"), 2, typeof(float), false);
+            layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 3);
+            layout.AddAttribute<float>(_shader.GetAttribLocation("aNormal"), 3);
+            layout.AddAttribute<float>(_shader.GetAttribLocation("aTexCoords"), 2);
 
             vao = new VertexArrayObject(layout, vbo);
             vao.Create();

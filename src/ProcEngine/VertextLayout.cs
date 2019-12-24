@@ -13,8 +13,9 @@ namespace ProcEngine
 
         private int _Stride;
 
-        public void AddAttribute(int index, int size, Type type, bool normalized)
+        public void AddAttribute<T>(int index, int size, bool normalized = false)
         {
+            var type = typeof(T);
             var offset = _Stride;
             _Stride += size * GetSizeOf(type);
             var attr = new VertexLayoutAttribute
