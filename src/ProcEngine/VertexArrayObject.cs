@@ -8,9 +8,7 @@ namespace ProcEngine
     public class VertexArrayObject
     {
         private int _Handle;
-
         public int Handle => _Handle;
-        private int _Stride;
 
         public int VertexCount { get; private set; }
 
@@ -57,16 +55,6 @@ namespace ProcEngine
             VertexCount = vertices.Length / 6;
         }
 
-        public void AddAttribute(int index, int size, Type type, bool normalized, int offset)
-        {
-            _Stride += size * GetSizeOf(type);
-            InitAttribsList.Add(() =>
-            {
-                GL.EnableVertexAttribArray(index);
-                GL.VertexAttribPointer(index, size, GetVertexAttribPointerType(type), normalized, _Stride, offset);
-            });
-        }
-
         private void InitAttributes()
         {
             if (AttribuesInitialized)
@@ -76,30 +64,7 @@ namespace ProcEngine
             _vbo.Use();
             Use();
 
-            foreach (var act in InitAttribsList)
-            {
-                act();
-            }
-        }
-
-        private List<Action> InitAttribsList = new List<Action>();
-
-        private class Attrib
-        {
-        }
-
-        private static VertexAttribPointerType GetVertexAttribPointerType(Type type)
-        {
-            if (type == typeof(float))
-                return VertexAttribPointerType.Float;
-            throw new NotImplementedException();
-        }
-
-        private static int GetSizeOf(Type type)
-        {
-            if (type == typeof(float))
-                return 4;
-            throw new NotImplementedException();
+            Layout.InitAttributes();
         }
 
         //public void AddPosition()

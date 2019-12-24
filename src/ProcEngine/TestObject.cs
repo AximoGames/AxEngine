@@ -1,7 +1,8 @@
-﻿
+﻿using LearnOpenTK.Common;
 using OpenTK;
-//using OpenTK.Graphics.OpenGL4;
-using LearnOpenTK.Common;
+using OpenTK.Graphics.OpenGL4;
+using System;
+using System.Collections.Generic;
 
 namespace ProcEngine
 {
@@ -34,12 +35,11 @@ namespace ProcEngine
             vbo.Use();
 
             var layout = new VertexLayout();
+            layout.AddAttribute(_shader.GetAttribLocation("aPos"), 3, typeof(float), false, 0);
+            layout.AddAttribute(_shader.GetAttribLocation("aNormal"), 3, typeof(float), false, 3 * sizeof(float));
 
             vao = new VertexArrayObject(layout, vbo);
             vao.Create();
-
-            vao.AddAttribute(_shader.GetAttribLocation("aPos"), 3, typeof(float), false, 0);
-            vao.AddAttribute(_shader.GetAttribLocation("aNormal"), 3, typeof(float), false, 3 * sizeof(float));
 
             vao.SetData(_vertices);
         }
