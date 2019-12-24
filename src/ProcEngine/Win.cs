@@ -46,7 +46,7 @@ namespace LearnOpenTK
             {
                 Context = ctx,
             };
-            //lightObj.Init();
+            lightObj.Init();
 
             obj = new TestObject()
             {
@@ -80,7 +80,7 @@ namespace LearnOpenTK
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            //(lightObj as IRenderableObject).OnRender();
+            (lightObj as IRenderableObject).OnRender();
             obj.OnRender();
             obj2.OnRender();
 
@@ -195,7 +195,7 @@ namespace LearnOpenTK
 
             obj.Free();
             obj2.Free();
-            //lightObj.Free();
+            lightObj.Free();
 
             base.OnUnload(e);
         }

@@ -1,6 +1,5 @@
 ﻿
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
 using LearnOpenTK.Common;
 
 namespace ProcEngine
@@ -11,30 +10,32 @@ namespace ProcEngine
 
         public Vector3 Position { get; set; } = new Vector3(1.2f, 1.0f, 2.0f);
 
-        private int _vertexBufferObject;
-        private int _vaoModel;
-
         private Shader _shader;
+        private VertexArrayObject vao;
+        private VertexBufferObject vbo;
 
         private float[] _vertices = DataHelper.Cube;
 
         public override void Init()
         {
-            _vertexBufferObject = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
-
             _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
 
-            _vaoModel = GL.GenVertexArray();
-            GL.BindVertexArray(_vaoModel);
+            vbo = new VertexBufferObject();
+            vbo.Create();
+            vbo.Use();
 
-            // BindBuffer(GL_ARRAY_BUFFER) does not directly touch the bound VAO
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
+            vao = new VertexArrayObject(vbo);
+            vao.Create();
+
+            vao.AddAttribute(_shader.GetAttribLocation("aPos"), 3, typeof(float), false, 0);
+            vao.AddAttribute(_shader.GetAttribLocation("aNormal"), 3, typeof(float), false, 3 * sizeof(float));
+
+            vao.SetData(_vertices);
         }
 
         public void OnRender()
         {
+            vao.Use();
             _shader.Use();
 
             Matrix4 lampMatrix = Matrix4.Identity;
@@ -45,14 +46,14 @@ namespace ProcEngine
             _shader.SetMatrix4("view", Camera.GetViewMatrix());
             _shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+            vao.Draw();
         }
 
         public override void Free()
         {
-            GL.DeleteBuffer(_vertexBufferObject);
-            GL.DeleteVertexArray(_vaoModel);
-            GL.DeleteProgram(_shader.Handle);
+            vao.Free();
+            vbo.Free();
+            _shader.Free();
         }
 
     }

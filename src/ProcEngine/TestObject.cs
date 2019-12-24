@@ -1,6 +1,6 @@
 ﻿
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+//using OpenTK.Graphics.OpenGL4;
 using LearnOpenTK.Common;
 
 namespace ProcEngine
@@ -30,15 +30,16 @@ namespace ProcEngine
             _shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
 
             vbo = new VertexBufferObject();
-            vbo.Init();
-            vbo.SetData(_vertices);
+            vbo.Create();
             vbo.Use();
 
-            vao = new VertexArrayObject(vbo, 6 * sizeof(float));
-            vao.Init();
+            vao = new VertexArrayObject(vbo);
+            vao.Create();
 
-            vao.VertexAttribPointer(_shader.GetAttribLocation("aPos"), 3, VertexAttribPointerType.Float, false, 0);
-            vao.VertexAttribPointer(_shader.GetAttribLocation("aNormal"), 3, VertexAttribPointerType.Float, false, 3 * sizeof(float));
+            vao.AddAttribute(_shader.GetAttribLocation("aPos"), 3, typeof(float), false, 0);
+            vao.AddAttribute(_shader.GetAttribLocation("aNormal"), 3, typeof(float), false, 3 * sizeof(float));
+
+            vao.SetData(_vertices);
         }
 
         public void OnRender()
@@ -56,7 +57,7 @@ namespace ProcEngine
             _shader.SetVector3("lightPos", Light.Position);
             _shader.SetVector3("viewPos", Camera.Position);
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+            vao.Draw();
         }
 
         public override void Free()
