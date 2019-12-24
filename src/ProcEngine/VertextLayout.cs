@@ -16,18 +16,31 @@ namespace ProcEngine
         public void AddAttribute(int index, int size, Type type, bool normalized, int offset)
         {
             _Stride += size * GetSizeOf(type);
-            InitAttribsList.Add(() =>
+            var attr = new VertexLayoutAttribute
             {
-                GL.EnableVertexAttribArray(index);
-                GL.VertexAttribPointer(index, size, GetVertexAttribPointerType(type), normalized, _Stride, offset);
-            });
+                Index = index,
+                Size = size,
+                Type = GetVertexAttribPointerType(type),
+                Normalized = normalized,
+                Stride = 0,
+                Offset = offset,
+            };
+            Attributes.Add(attr);
+            UpdateStride();
+        }
+
+        private void UpdateStride()
+        {
+            foreach (var attr in Attributes)
+                attr.Stride = _Stride;
         }
 
         internal void InitAttributes()
         {
-            foreach (var act in InitAttribsList)
+            foreach (var attr in Attributes)
             {
-                act();
+                GL.EnableVertexAttribArray(attr.Index);
+                GL.VertexAttribPointer(attr.Index, attr.Size, attr.Type, attr.Normalized, attr.Stride, attr.Offset);
             }
         }
 
@@ -45,7 +58,7 @@ namespace ProcEngine
             throw new NotImplementedException();
         }
 
-        private List<Action> InitAttribsList = new List<Action>();
+        private List<VertexLayoutAttribute> Attributes = new List<VertexLayoutAttribute>();
 
     }
 
