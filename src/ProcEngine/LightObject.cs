@@ -27,12 +27,11 @@ namespace ProcEngine
             vbo.Use();
 
             var layout = new VertexLayout();
+            layout.AddAttribute(_shader.GetAttribLocation("aPos"), 3, typeof(float), false, 0);
+            layout.AddAttribute(_shader.GetAttribLocation("aNormal"), 3, typeof(float), false, 3 * sizeof(float));
 
             vao = new VertexArrayObject(layout, vbo);
             vao.Create();
-
-            layout.AddAttribute(_shader.GetAttribLocation("aPos"), 3, typeof(float), false, 0);
-            layout.AddAttribute(_shader.GetAttribLocation("aNormal"), 3, typeof(float), false, 3 * sizeof(float));
 
             vao.SetData(_vertices);
         }

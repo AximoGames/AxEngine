@@ -26,9 +26,9 @@ namespace ProcEngine
         public void Create()
         {
             _Handle = GL.GenVertexArray();
+            Use();
+            Layout.InitAttributes();
         }
-
-        private bool AttribuesInitialized = false;
 
         public static int CurrentHandle;
         public void Use()
@@ -47,24 +47,9 @@ namespace ProcEngine
 
         internal void SetData(float[] vertices)
         {
-            if (!AttribuesInitialized)
-                InitAttributes();
-
             Use();
             _vbo.SetData(vertices);
             VertexCount = vertices.Length / 6;
-        }
-
-        private void InitAttributes()
-        {
-            if (AttribuesInitialized)
-                return;
-            AttribuesInitialized = true;
-
-            _vbo.Use();
-            Use();
-
-            Layout.InitAttributes();
         }
 
         //public void AddPosition()
