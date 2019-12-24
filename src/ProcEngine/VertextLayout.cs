@@ -13,8 +13,9 @@ namespace ProcEngine
 
         private int _Stride;
 
-        public void AddAttribute(int index, int size, Type type, bool normalized, int offset)
+        public void AddAttribute(int index, int size, Type type, bool normalized)
         {
+            var offset = _Stride;
             _Stride += size * GetSizeOf(type);
             var attr = new VertexLayoutAttribute
             {
@@ -22,7 +23,7 @@ namespace ProcEngine
                 Size = size,
                 Type = GetVertexAttribPointerType(type),
                 Normalized = normalized,
-                Stride = 0,
+                Stride = 0, // will be set in UpdateStride()
                 Offset = offset,
             };
             Attributes.Add(attr);
