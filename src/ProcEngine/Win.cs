@@ -102,7 +102,27 @@ namespace LearnOpenTK
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+
+            GL.Enable(EnableCap.DepthTest);
+
+            //--
+
+            GL.Viewport(0, 0, 1024, 1024);
+            shadowFb.Use();
+            GL.Clear(ClearBufferMask.DepthBufferBit);
+
+            // Render objects
+            (light as IRenderableObject).OnRender(); // Just a box. No light effect itself
+            (box1 as IShadowObject).OnRenderShadow();
+            (box2 as IShadowObject).OnRenderShadow();
+            (floor as IShadowObject).OnRenderShadow();
+
+            shadowFb.DestinationTexture.GetDepthTexture().Save("test.png");
+
+            //--
+
             // Configure
+            GL.Viewport(0, 0, Width, Height);
             fb.Use();
             GL.Enable(EnableCap.DepthTest);
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);

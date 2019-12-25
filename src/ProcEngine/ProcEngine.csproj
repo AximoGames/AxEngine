@@ -68,6 +68,8 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Shaders\lighting.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\shadow.vert" />
     <None Include="Shaders\screen.frag" />
     <None Include="Shaders\screen.vert" />
     <None Include="Shaders\shader.frag" />

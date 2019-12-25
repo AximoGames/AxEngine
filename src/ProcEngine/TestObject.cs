@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ProcEngine
 {
-    public class TestObject : GameObject, IRenderableObject
+    public class TestObject : GameObject, IRenderableObject, IShadowObject
     {
 
         public Cam Camera => Context.Camera;
@@ -16,7 +16,8 @@ namespace ProcEngine
 
         public ILightObject Light;
 
-        private Shader _shader;
+        private Shader _Shader;
+        private Shader _ShadowShader;
 
         private float[] _vertices = DataHelper.Cube;
 
@@ -31,18 +32,20 @@ namespace ProcEngine
             if (Debug)
                 _vertices = DataHelper.CubeDebug;
 
-            _shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
+            _Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
             txt0 = new Texture("Ressources/woodenbox.png");
             txt1 = new Texture("Ressources/woodenbox_specular.png");
+
+            _ShadowShader = new Shader("Shaders/shadow.vert", "Shaders/shadow.frag");
 
             vbo = new VertexBufferObject();
             vbo.Create();
             vbo.Use();
 
             var layout = new VertexLayout();
-            layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 3);
-            layout.AddAttribute<float>(_shader.GetAttribLocation("aNormal"), 3);
-            layout.AddAttribute<float>(_shader.GetAttribLocation("aTexCoords"), 2);
+            layout.AddAttribute<float>(_Shader.GetAttribLocation("aPos"), 3);
+            layout.AddAttribute<float>(_Shader.GetAttribLocation("aNormal"), 3);
+            layout.AddAttribute<float>(_Shader.GetAttribLocation("aTexCoords"), 2);
 
             vao = new VertexArrayObject(layout, vbo);
             vao.Create();
@@ -57,19 +60,40 @@ namespace ProcEngine
             txt0.Use(TextureUnit.Texture0);
             txt1.Use(TextureUnit.Texture1);
 
-            _shader.Use();
+            _Shader.Use();
 
-            _shader.SetMatrix4("model", ModelMatrix);
-            _shader.SetMatrix4("view", Camera.GetViewMatrix());
-            _shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+            _Shader.SetMatrix4("model", ModelMatrix);
+            _Shader.SetMatrix4("view", Camera.GetViewMatrix());
+            _Shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
 
             //_shader.SetInt("material.diffuse", 0);
             //_shader.SetInt("material.specular", 1);
 
-            _shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
-            _shader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
-            _shader.SetVector3("lightPos", Light.Position);
-            _shader.SetVector3("viewPos", Camera.Position);
+            _Shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
+            _Shader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
+            _Shader.SetVector3("lightPos", Light.Position);
+            _Shader.SetVector3("viewPos", Camera.Position);
+
+            vao.Draw();
+        }
+
+        public void OnRenderShadow()
+        {
+            vao.Use();
+
+            txt0.Use(TextureUnit.Texture0);
+            txt1.Use(TextureUnit.Texture1);
+
+            _ShadowShader.Use();
+
+            _ShadowShader.SetMatrix4("model", ModelMatrix);
+            _ShadowShader.SetMatrix4("view", Camera.GetViewMatrix());
+            _ShadowShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+
+            //_Shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
+            //_Shader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
+            //_Shader.SetVector3("lightPos", Light.Position);
+            //_Shader.SetVector3("viewPos", Camera.Position);
 
             vao.Draw();
         }
@@ -78,7 +102,8 @@ namespace ProcEngine
         {
             vao.Free();
             vbo.Free();
-            _shader.Free();
+            _Shader.Free();
+            _ShadowShader.Free();
         }
 
     }

@@ -1,4 +1,9 @@
-﻿namespace ProcEngine
+﻿using OpenTK.Graphics.OpenGL4;
+using System;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
+namespace ProcEngine
 {
     internal static class DataHelper
     {
@@ -110,6 +115,38 @@
              1.0f, -1.0f,  1.0f, 0.0f,
              1.0f,  1.0f,  1.0f, 1.0f
         };
+
+        public static Bitmap GetDepthTexture(int width, int height, Action<IntPtr> getPixels)
+        {
+            Bitmap bitmap = new Bitmap(width, height);
+            var ptr = Marshal.AllocHGlobal(width * height * 4);
+
+            getPixels(ptr);
+
+            var floats = new float[1024 * 1024];
+            Marshal.Copy(ptr, floats, 0, 1024 * 1024);
+            Marshal.FreeHGlobal(ptr);
+
+            for (var y = 0; y < 1024; y++)
+            {
+                for (var x = 0; x < 1024; x++)
+                {
+                    var value = floats[y * 1024 + x];
+                    value = 1 - value;
+                    value *= 300;
+                    value = 1 - value;
+                    var component = (int)(value * 255f);
+                    component = Math.Max(0, Math.Min(component, 255));
+                    var color = Color.FromArgb(component, component, component);
+                    bitmap.SetPixel(x, y, color);
+                }
+            }
+
+            bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
+
+            return bitmap;
+        }
+
 
     }
 

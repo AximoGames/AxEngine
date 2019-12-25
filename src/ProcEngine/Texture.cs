@@ -2,7 +2,9 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
+using ProcEngine;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 
 namespace LearnOpenTK.Common
@@ -14,24 +16,36 @@ namespace LearnOpenTK.Common
 
         public Texture(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
         {
+            Width = width;
+            Height = height;
             GL.GenTextures(1, out Handle);
             Use();
             GL.TexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
         }
 
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+
         public Bitmap GetTexture()
         {
-            Bitmap bitmap = new Bitmap(800, 600);
-            var bits = bitmap.LockBits(new Rectangle(0, 0, 800, 600), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            Bitmap bitmap = new Bitmap(Width, Height);
+            var bits = bitmap.LockBits(new Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             //BindToRead(ReadBufferMode.ColorAttachment0 + AttachmentIndex);
             //GL.ReadPixels(0, 0, 800, 600, PixelFormat.Rgb, PixelType.Float, bits.Scan0);
             GL.BindTexture(TextureTarget.Texture2D, Handle);
             GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Bgra, PixelType.UnsignedByte, bits.Scan0);
             bitmap.UnlockBits(bits);
 
+            bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
             //bitmap.Save("test.bmp");
 
             return bitmap;
+        }
+
+        public Bitmap GetDepthTexture()
+        {
+            GL.BindTexture(TextureTarget.Texture2D, Handle);
+            return DataHelper.GetDepthTexture(Width, Height, (ptr) => GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.DepthComponent, PixelType.Float, ptr));
         }
 
         public void SetLinearFilter()

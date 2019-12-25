@@ -28,9 +28,15 @@ namespace ProcEngine
             //GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Rgb, PixelType.UnsignedByte, bits.Scan0);
             bitmap.UnlockBits(bits);
 
-            bitmap.Save("test.bmp");
+            bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
+            //bitmap.Save("test.bmp");
 
             return bitmap;
+        }
+
+        public Bitmap GetDepthTexture()
+        {
+            return DataHelper.GetDepthTexture(Width, Height, (ptr) => GL.ReadPixels(0, 0, Width, Height, PixelFormat.DepthComponent, PixelType.UnsignedByte, ptr));
         }
 
         public FrameBuffer(int width, int height)
