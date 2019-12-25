@@ -26,7 +26,7 @@ void main()
 
     //The ambient color is the color where the light does not directly hit the object.
     //You can think of it as an underlying tone throughout the object. Or the light coming from the scene/the sky (not the sun).
-    float ambientStrength = 0.5;
+    float ambientStrength = 0.25;
     vec3 ambient = ambientStrength * lightColor2;
 
     //We calculate the light direction, and make sure the normal is normalized.

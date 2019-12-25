@@ -65,6 +65,14 @@ namespace LearnOpenTK
             };
             obj2.Init();
 
+            obj3 = new TestObject()
+            {
+                Context = ctx,
+                ModelMatrix = Matrix4.CreateScale(8, 8, 8) * Matrix4.CreateTranslation(0f, 0f, -4.5f),
+                Light = lightObj,
+            };
+            obj3.Init();
+
             //CursorVisible = false;
 
             base.OnLoad(e);
@@ -72,6 +80,7 @@ namespace LearnOpenTK
 
         private IRenderableObject obj;
         private IRenderableObject obj2;
+        private IRenderableObject obj3;
         private ILightObject lightObj;
         private RenderContext ctx;
         private IRenderTarget target;
@@ -83,6 +92,7 @@ namespace LearnOpenTK
             (lightObj as IRenderableObject).OnRender();
             obj.OnRender();
             obj2.OnRender();
+            obj3.OnRender();
 
             SwapBuffers();
 
@@ -195,6 +205,7 @@ namespace LearnOpenTK
 
             obj.Free();
             obj2.Free();
+            obj3.Free();
             lightObj.Free();
 
             base.OnUnload(e);
