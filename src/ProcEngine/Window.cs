@@ -24,7 +24,7 @@ namespace ProcEngine
             VSync = VSyncMode.On;
             Title = "Net3dBool Demo with OpenTK";
 
-            Camera = new Cam(new Vector3(1f, -5f, 2f));
+            Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f));
             Camera.SetAspectRatio(Width, Height);
 
             MouseDelta = new Vector2();

@@ -1,6 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace ProcEngine
@@ -127,18 +128,30 @@ namespace ProcEngine
             Marshal.Copy(ptr, floats, 0, 1024 * 1024);
             Marshal.FreeHGlobal(ptr);
 
+            var collection = floats.Where(v => v != 1);
+            var min = collection.Min();
+            var max = collection.Max();
+            var span = max - min;
+
+            var factor = 1.0f / span;
+
             for (var y = 0; y < 1024; y++)
             {
                 for (var x = 0; x < 1024; x++)
                 {
                     var value = floats[y * 1024 + x];
-                    value = 1 - value;
-                    value *= 300;
-                    value = 1 - value;
-                    var component = (int)(value * 255f);
-                    component = Math.Max(0, Math.Min(component, 255));
-                    var color = Color.FromArgb(component, component, component);
-                    bitmap.SetPixel(x, y, color);
+                    if (value != 1.0f)
+                    {
+                        value -= min;
+                        value *= factor;
+                        //value = 1 - value;
+                        //value *= 300;
+                        //value = 1 - value;
+                        var component = (int)(value * 255f);
+                        component = Math.Max(0, Math.Min(component, 255));
+                        var color = Color.FromArgb(component, component, component);
+                        bitmap.SetPixel(x, y, color);
+                    }
                 }
             }
 

@@ -9,7 +9,7 @@ namespace ProcEngine
     {
         public Cam Camera => Context.Camera;
 
-        public Vector3 Position { get; set; } = new Vector3(1.2f, 1.0f, 2.0f);
+        public Vector3 Position { get; set; }
 
         private Shader _shader;
         private VertexArrayObject vao;

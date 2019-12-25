@@ -39,12 +39,17 @@ namespace LearnOpenTK
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
 
+            var lightPosition = new Vector3(1.2f, 1.0f, 2.0f);
+
             ctx = new RenderContext();
-            ctx.Camera = new Cam(new Vector3(1f, -5f, 2f), Width / (float)Height);
+            ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), Width / (float)Height);
+            //ctx.Camera = new PerspectiveFieldOfViewCamera(lightPosition, Width / (float)Height);
+            //ctx.Camera = new OrthographicCamera(lightPosition);
 
             light = new LightObject()
             {
                 Context = ctx,
+                Position = lightPosition,
             };
             light.Init();
 
@@ -79,13 +84,13 @@ namespace LearnOpenTK
             fb.InitNormal();
             fb.CreateRenderBuffer();
 
+            shadowFb = new FrameBuffer(Width, Height);
+            shadowFb.InitDepth();
+
             target = new ScreenObject(fb.DestinationTexture)
             {
             };
             target.Init();
-
-            shadowFb = new FrameBuffer(Width, Height);
-            shadowFb.InitDepth();
 
             base.OnLoad(e);
         }
@@ -116,8 +121,6 @@ namespace LearnOpenTK
             (box1 as IShadowObject).OnRenderShadow();
             (box2 as IShadowObject).OnRenderShadow();
             (floor as IShadowObject).OnRenderShadow();
-
-            shadowFb.DestinationTexture.GetDepthTexture().Save("test.png");
 
             //--
 
@@ -212,10 +215,16 @@ namespace LearnOpenTK
 
             Camera.Facing += MouseSpeed[0] * 2;
             Camera.Pitch += MouseSpeed[1] * 2;
+            Console.WriteLine(Camera.Pitch + " : " + Math.Round(MouseSpeed[1], 3));
             Camera.Position.Z += MouseSpeed[2] * 2;
 
             if (kbState[Key.Escape])
                 Exit();
+
+            if (kbState[Key.F12])
+            {
+                shadowFb.DestinationTexture.GetDepthTexture().Save("test.png");
+            }
 
             base.OnUpdateFrame(e);
         }

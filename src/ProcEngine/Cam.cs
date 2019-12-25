@@ -3,25 +3,75 @@ using OpenTK;
 
 namespace ProcEngine
 {
-    public class Cam
+    public enum CameraType
     {
-        public Vector3 Position;
-        public float Pitch = -0.3f;
-        public Vector3 Up = Vector3.UnitZ;
-        public float Facing = (float)Math.PI / 2 + 0.15f;
-        public float AspectRatio;
-        private float _fov = (float)Math.PI / 4;
+        PerspectiveFieldOfView,
+        Orthographic,
+    }
 
-        public Cam(Vector3 position, float aspectRatio)
+    public class PerspectiveFieldOfViewCamera : Cam
+    {
+        public override CameraType Type => CameraType.PerspectiveFieldOfView;
+
+        public PerspectiveFieldOfViewCamera(Vector3 position, float aspectRatio) : base(position)
         {
-            Position = position;
             AspectRatio = aspectRatio;
         }
+
+        public PerspectiveFieldOfViewCamera(Vector3 position) : base(position)
+        {
+        }
+
+        public override Matrix4 GetProjectionMatrix()
+        {
+            return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.01f, 150f);
+        }
+
+    }
+
+    public class OrthographicCamera : Cam
+    {
+        public override CameraType Type => CameraType.Orthographic;
+
+        public OrthographicCamera(Vector3 position) : base(position)
+        {
+        }
+
+        public override Matrix4 GetProjectionMatrix()
+        {
+            float near_plane = 1.0f;
+            float far_plane = 20f;
+
+            return Matrix4.CreateOrthographicOffCenter(-10, 10, -10, 10, near_plane, far_plane);
+            //return Matrix4.CreateOrthographic(20, 20, near_plane, far_plane);
+        }
+
+    }
+
+    public abstract class Cam
+    {
+        public Vector3 Position;
+        public abstract CameraType Type { get; }
+        public float Pitch = -0.3f;
+        protected float _fov = (float)Math.PI / 4;
 
         public Cam(Vector3 position)
         {
             Position = position;
         }
+
+        public Vector3 Up = Vector3.UnitZ;
+        public float Facing = (float)Math.PI / 2 + 0.15f;
+        public float AspectRatio;
+
+        public virtual Matrix4 GetViewMatrix()
+        {
+            var loc = new Vector3(Position.X, Position.Y, Position.Z);
+            var lookatPoint = new Vector3((float)Math.Cos(Facing) * (float)Math.Cos(Pitch), (float)Math.Sin(Facing) * (float)Math.Cos(Pitch), (float)Math.Sin(Pitch));
+            return Matrix4.LookAt(loc, loc + lookatPoint, Up);
+        }
+
+        public abstract Matrix4 GetProjectionMatrix();
 
         // The field of view (FOV) is the vertical angle of the camera view, this has been discussed more in depth in a
         // previous tutorial, but in this tutorial you have also learned how we can use this to simulate a zoom feature.
@@ -36,24 +86,10 @@ namespace ProcEngine
             }
         }
 
-        public Matrix4 GetViewMatrix()
-        {
-            var loc = new Vector3(Position.X, Position.Y, Position.Z);
-            var lookatPoint = new Vector3((float)Math.Cos(Facing), (float)Math.Sin(Facing), (float)Math.Sin(Pitch));
-            return Matrix4.LookAt(loc, loc + lookatPoint, Up);
-        }
-
-        public Matrix4 GetProjectionMatrix()
-        {
-            //return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.1f, 100f);
-            return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.01f, 150f);
-        }
-
         public void SetAspectRatio(float width, float height)
         {
             AspectRatio = width / height;
         }
-
     }
 
 }

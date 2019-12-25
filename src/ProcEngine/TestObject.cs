@@ -86,14 +86,20 @@ namespace ProcEngine
 
             _ShadowShader.Use();
 
+            float near_plane = 1.0f;
+            float far_plane = 7.5f;
+
+            var lightProjection = Matrix4.CreateOrthographic(20, 20, near_plane, far_plane);
+            var lightView = Matrix4.LookAt(Light.Position, new Vector3(Light.Position.X, Light.Position.Y, 0), new Vector3(0, -1, 0));
+            var lightSpaceMatrix = lightProjection * lightView;
+
+            //_ShadowShader.SetMatrix4("model", ModelMatrix);
+            //_ShadowShader.SetMatrix4("view", lightView);
+            //_ShadowShader.SetMatrix4("projection", lightProjection);
+
             _ShadowShader.SetMatrix4("model", ModelMatrix);
             _ShadowShader.SetMatrix4("view", Camera.GetViewMatrix());
             _ShadowShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
-
-            //_Shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
-            //_Shader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
-            //_Shader.SetVector3("lightPos", Light.Position);
-            //_Shader.SetVector3("viewPos", Camera.Position);
 
             vao.Draw();
         }
