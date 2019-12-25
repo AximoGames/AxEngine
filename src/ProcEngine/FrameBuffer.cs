@@ -39,7 +39,7 @@ namespace ProcEngine
             Height = height;
         }
 
-        public void Init()
+        public void InitNormal()
         {
             GL.GenFramebuffers(1, out _Handle);
             Use();
@@ -50,6 +50,28 @@ namespace ProcEngine
 
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _DestinationTexture.Handle, 0);
 
+            Check();
+        }
+
+        public void InitDepth()
+        {
+            GL.GenFramebuffers(1, out _Handle);
+            Use();
+
+            _DestinationTexture = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent, 1024, 1024, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+            _DestinationTexture.SetNearestFilter();
+            _DestinationTexture.SetRepeatWrap();
+            _DestinationTexture.Use();
+
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, _DestinationTexture.Handle, 0);
+            GL.DrawBuffer(DrawBufferMode.None);
+            GL.ReadBuffer(ReadBufferMode.None);
+
+            Check();
+        }
+
+        private void Check()
+        {
             if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
                 throw new Exception();
         }

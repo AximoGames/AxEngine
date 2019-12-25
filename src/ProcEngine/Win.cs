@@ -76,7 +76,7 @@ namespace LearnOpenTK
             //CursorVisible = false;
 
             fb = new FrameBuffer(Width, Height);
-            fb.Init();
+            fb.InitNormal();
             fb.CreateRenderBuffer();
 
             target = new ScreenObject(fb.DestinationTexture)
@@ -84,10 +84,14 @@ namespace LearnOpenTK
             };
             target.Init();
 
+            shadowFb = new FrameBuffer(Width, Height);
+            shadowFb.InitDepth();
+
             base.OnLoad(e);
         }
 
         private FrameBuffer fb;
+        private FrameBuffer shadowFb;
 
         private IRenderableObject box1;
         private IRenderableObject box2;
@@ -101,7 +105,7 @@ namespace LearnOpenTK
             // Configure
             fb.Use();
             GL.Enable(EnableCap.DepthTest);
-            GL.ClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+            GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             // Render objects

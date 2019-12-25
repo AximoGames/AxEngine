@@ -41,6 +41,20 @@ namespace LearnOpenTK.Common
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
         }
 
+        public void SetNearestFilter()
+        {
+            Use();
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
+        }
+
+        public void SetRepeatWrap()
+        {
+            Use();
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)All.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)All.Repeat);
+        }
+
         // Create texture from path.
         public Texture(string path)
         {
