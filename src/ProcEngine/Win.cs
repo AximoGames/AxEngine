@@ -80,8 +80,9 @@ namespace LearnOpenTK
 
             //CursorVisible = false;
 
-            fb = new FrameBuffer();
+            fb = new FrameBuffer(Width, Height);
             fb.Init();
+            fb.CreateRenderBuffer();
 
             base.OnLoad(e);
         }
