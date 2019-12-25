@@ -15,6 +15,14 @@ namespace ProcEngine
         private VertexArrayObject vao;
         private VertexBufferObject vbo;
 
+        private Texture _SourceTexture;
+        private Texture SourceTexture => _SourceTexture;
+
+        public ScreenObject(Texture sourceTexture)
+        {
+            _SourceTexture = sourceTexture;
+        }
+
         public override void Init()
         {
             _shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag");
@@ -47,7 +55,7 @@ namespace ProcEngine
 
             _shader.Use();
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, FrameBuffer.txt.Handle);
+            GL.BindTexture(TextureTarget.Texture2D, SourceTexture.Handle);
 
             //GL.Disable(EnableCap.CullFace);
             vao.Draw();

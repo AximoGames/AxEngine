@@ -50,6 +50,7 @@
     <Compile Include="LightObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RenderBuffer.cs" />
     <Compile Include="RenderContext.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="ScreenObject.cs" />

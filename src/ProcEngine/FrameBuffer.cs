@@ -7,33 +7,13 @@ using System.Drawing;
 namespace ProcEngine
 {
 
-    public class RenderBuffer
+    public class FrameBuffer
     {
+        private Texture _DestinationTexture;
+        public Texture DestinationTexture => _DestinationTexture;
 
         private int _Handle;
         public int Handle => _Handle;
-
-        public RenderBuffer(FrameBuffer fb)
-        {
-            fb.Use();
-
-            GL.GenRenderbuffers(1, out _Handle);
-            Use();
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Depth24Stencil8, 800, 600);
-            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, RenderbufferTarget.Renderbuffer, _Handle);
-        }
-
-        public void Use()
-        {
-            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _Handle);
-        }
-
-    }
-
-    public class FrameBuffer
-    {
-        public static Texture txt;
-        public static int bufNum;
 
         public int Width { get; private set; }
         public int Height { get; private set; }
@@ -53,12 +33,6 @@ namespace ProcEngine
             return bitmap;
         }
 
-        private static void BindToRead(ReadBufferMode Mode)
-        {
-            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, bufNum);
-            GL.ReadBuffer(Mode);
-        }
-
         public FrameBuffer(int width, int height)
         {
             Width = width;
@@ -67,16 +41,14 @@ namespace ProcEngine
 
         public void Init()
         {
-            GL.GenFramebuffers(1, out bufNum);
+            GL.GenFramebuffers(1, out _Handle);
             Use();
 
-            txt = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, Width, Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, IntPtr.Zero);
-            txt.SetLinearFilter();
-            txt.Use();
+            _DestinationTexture = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, Width, Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, IntPtr.Zero);
+            _DestinationTexture.SetLinearFilter();
+            _DestinationTexture.Use();
 
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, txt.Handle, 0);
-
-
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _DestinationTexture.Handle, 0);
 
             if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
                 throw new Exception();
@@ -91,7 +63,7 @@ namespace ProcEngine
 
         public void Use()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, bufNum);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _Handle);
         }
 
     }

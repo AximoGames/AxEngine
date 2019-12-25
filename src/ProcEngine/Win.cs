@@ -73,16 +73,16 @@ namespace LearnOpenTK
             };
             obj3.Init();
 
-            target = new ScreenObject
-            {
-            };
-            target.Init();
-
             //CursorVisible = false;
 
             fb = new FrameBuffer(Width, Height);
             fb.Init();
             fb.CreateRenderBuffer();
+
+            target = new ScreenObject(fb.DestinationTexture)
+            {
+            };
+            target.Init();
 
             base.OnLoad(e);
         }
@@ -98,8 +98,7 @@ namespace LearnOpenTK
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, FrameBuffer.bufNum);
-            //GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            fb.Use();
             GL.Enable(EnableCap.DepthTest);
             GL.ClearColor(0.0f, 0.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -108,10 +107,6 @@ namespace LearnOpenTK
             obj.OnRender();
             obj2.OnRender();
             obj3.OnRender();
-
-            //FrameBuffer.GetTexture2(0);
-            //GL.BindTexture(TextureTarget.Texture2D, FrameBuffer.texColorBuffer);
-            //FrameBuffer.GetTexture(0);
 
             target.OnRender();
 
