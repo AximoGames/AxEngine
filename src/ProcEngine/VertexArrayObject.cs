@@ -49,7 +49,7 @@ namespace ProcEngine
         {
             Use();
             _vbo.SetData(vertices);
-            VertexCount = vertices.Length / 6;
+            VertexCount = (vertices.Length* sizeof(float)) / Layout.Stride;
         }
 
         //public void AddPosition()

@@ -1,11 +1,10 @@
 ﻿using LearnOpenTK.Common;
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
-using System;
 using System.Collections.Generic;
 
 namespace ProcEngine
 {
+
     public class LightObject : GameObject, IRenderableObject, IPosition, ILightObject
     {
         public Cam Camera => Context.Camera;

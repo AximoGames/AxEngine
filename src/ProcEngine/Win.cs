@@ -28,7 +28,7 @@ namespace LearnOpenTK
         //private float Pitch = -0.3f;
         //private float Facing = (float)Math.PI / 2 + 0.15f;
 
-        public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title) { }
+        public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.Default) { }
 
         public Cam Camera => ctx.Camera;
 
@@ -73,10 +73,20 @@ namespace LearnOpenTK
             };
             obj3.Init();
 
+            target = new ScreenObject
+            {
+            };
+            target.Init();
+
             //CursorVisible = false;
+
+            fb = new FrameBuffer();
+            fb.Init();
 
             base.OnLoad(e);
         }
+
+        private FrameBuffer fb;
 
         private IRenderableObject obj;
         private IRenderableObject obj2;
@@ -87,12 +97,22 @@ namespace LearnOpenTK
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, FrameBuffer.bufNum);
+            //GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            GL.Enable(EnableCap.DepthTest);
+            GL.ClearColor(0.0f, 0.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             (lightObj as IRenderableObject).OnRender();
             obj.OnRender();
             obj2.OnRender();
             obj3.OnRender();
+
+            //FrameBuffer.GetTexture2(0);
+            //GL.BindTexture(TextureTarget.Texture2D, FrameBuffer.texColorBuffer);
+            //FrameBuffer.GetTexture(0);
+
+            target.OnRender();
 
             SwapBuffers();
 

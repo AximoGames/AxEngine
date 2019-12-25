@@ -12,6 +12,7 @@ namespace ProcEngine
     {
 
         private int _Stride;
+        public int Stride => _Stride;
 
         public void AddAttribute<T>(int index, int size, bool normalized = false)
         {
