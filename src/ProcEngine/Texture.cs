@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using OpenTK.Graphics.OpenGL4;
@@ -10,6 +11,35 @@ namespace LearnOpenTK.Common
     public class Texture
     {
         public readonly int Handle;
+
+        public Texture(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        {
+            GL.GenTextures(1, out Handle);
+            Use();
+            GL.TexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+        }
+
+        public Bitmap GetTexture()
+        {
+            Bitmap bitmap = new Bitmap(800, 600);
+            var bits = bitmap.LockBits(new Rectangle(0, 0, 800, 600), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            //BindToRead(ReadBufferMode.ColorAttachment0 + AttachmentIndex);
+            //GL.ReadPixels(0, 0, 800, 600, PixelFormat.Rgb, PixelType.Float, bits.Scan0);
+            GL.BindTexture(TextureTarget.Texture2D, Handle);
+            GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Bgra, PixelType.UnsignedByte, bits.Scan0);
+            bitmap.UnlockBits(bits);
+
+            //bitmap.Save("test.bmp");
+
+            return bitmap;
+        }
+
+        public void SetLinearFilter()
+        {
+            Use();
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
+        }
 
         // Create texture from path.
         public Texture(string path)

@@ -47,7 +47,7 @@ namespace ProcEngine
 
             _shader.Use();
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, FrameBuffer.texColorBuffer);
+            GL.BindTexture(TextureTarget.Texture2D, FrameBuffer.txt.Handle);
 
             //GL.Disable(EnableCap.CullFace);
             vao.Draw();
