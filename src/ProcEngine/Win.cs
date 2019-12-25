@@ -42,36 +42,36 @@ namespace LearnOpenTK
             ctx = new RenderContext();
             ctx.Camera = new Cam(new Vector3(1f, -5f, 2f), Width / (float)Height);
 
-            lightObj = new LightObject()
+            light = new LightObject()
             {
                 Context = ctx,
             };
-            lightObj.Init();
+            light.Init();
 
-            obj = new TestObject()
+            box1 = new TestObject()
             {
                 Context = ctx,
                 ModelMatrix = Matrix4.Identity,
-                Light = lightObj,
+                Light = light,
             };
-            obj.Init();
+            box1.Init();
 
-            obj2 = new TestObject()
+            box2 = new TestObject()
             {
                 Context = ctx,
                 ModelMatrix = Matrix4.CreateTranslation(1.5f, 1.5f, 0.0f),
-                Light = lightObj,
+                Light = light,
                 Debug = true,
             };
-            obj2.Init();
+            box2.Init();
 
-            obj3 = new TestObject()
+            floor = new TestObject()
             {
                 Context = ctx,
                 ModelMatrix = Matrix4.CreateScale(8, 8, 8) * Matrix4.CreateTranslation(0f, 0f, -4.5f),
-                Light = lightObj,
+                Light = light,
             };
-            obj3.Init();
+            floor.Init();
 
             //CursorVisible = false;
 
@@ -89,27 +89,31 @@ namespace LearnOpenTK
 
         private FrameBuffer fb;
 
-        private IRenderableObject obj;
-        private IRenderableObject obj2;
-        private IRenderableObject obj3;
-        private ILightObject lightObj;
+        private IRenderableObject box1;
+        private IRenderableObject box2;
+        private IRenderableObject floor;
+        private ILightObject light;
         private RenderContext ctx;
         private IRenderTarget target;
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            // Configure
             fb.Use();
             GL.Enable(EnableCap.DepthTest);
             GL.ClearColor(0.0f, 0.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            (lightObj as IRenderableObject).OnRender();
-            obj.OnRender();
-            obj2.OnRender();
-            obj3.OnRender();
+            // Render objects
+            (light as IRenderableObject).OnRender(); // Just a box. No light effect itself
+            box1.OnRender();
+            box2.OnRender();
+            floor.OnRender();
 
+            // Render Screen Surface
             target.OnRender();
 
+            // Commit result
             SwapBuffers();
 
             base.OnRenderFrame(e);
@@ -219,10 +223,10 @@ namespace LearnOpenTK
             GL.BindVertexArray(0);
             GL.UseProgram(0);
 
-            obj.Free();
-            obj2.Free();
-            obj3.Free();
-            lightObj.Free();
+            box1.Free();
+            box2.Free();
+            floor.Free();
+            light.Free();
 
             base.OnUnload(e);
         }
