@@ -1,4 +1,5 @@
-﻿using LearnOpenTK.Common;
+﻿using LearnOpenTK;
+using LearnOpenTK.Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
@@ -56,6 +57,7 @@ namespace ProcEngine
             _shader.Use();
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, SourceTexture.Handle);
+            //GL.BindTexture(TextureTarget.Texture2D, Window.shadowFb.DestinationTexture.Handle);
 
             //GL.Disable(EnableCap.CullFace);
             vao.Draw();

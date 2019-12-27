@@ -39,7 +39,7 @@ namespace LearnOpenTK
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
 
-            var lightPosition = new Vector3(1.2f, 1.0f, 2.0f);
+            var lightPosition = new Vector3(1.2f, -0.5f, 2.0f);
 
             ctx = new RenderContext();
             ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), Width / (float)Height);
@@ -96,7 +96,7 @@ namespace LearnOpenTK
         }
 
         private FrameBuffer fb;
-        private FrameBuffer shadowFb;
+        public static FrameBuffer shadowFb;
 
         private IRenderableObject box1;
         private IRenderableObject box2;
@@ -140,12 +140,24 @@ namespace LearnOpenTK
             // Render Screen Surface
             target.OnRender();
 
+            //CheckForProgramError();
+
             // Commit result
             SwapBuffers();
 
             base.OnRenderFrame(e);
         }
 
+        private void CheckForProgramError()
+        {
+            var err = LastErrorCode;
+            if (err != ErrorCode.NoError)
+            {
+                var s = "";
+            }
+        }
+
+        public static ErrorCode LastErrorCode => GL.GetError();
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
@@ -215,7 +227,7 @@ namespace LearnOpenTK
 
             Camera.Facing += MouseSpeed[0] * 2;
             Camera.Pitch += MouseSpeed[1] * 2;
-            Console.WriteLine(Camera.Pitch + " : " + Math.Round(MouseSpeed[1], 3));
+            //Console.WriteLine(Camera.Pitch + " : " + Math.Round(MouseSpeed[1], 3));
             Camera.Position.Z += MouseSpeed[2] * 2;
 
             if (kbState[Key.Escape])

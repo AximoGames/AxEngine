@@ -14,6 +14,9 @@ void main()
 
     //color = vec4(0, (1-gl_FragCoord.z)*100000, 0, 1);
 
+    // dispay shadow map: (override)
+    //color = vec4(vec3(color.r), 1.0);
+
 
     FragColor = color;
 }

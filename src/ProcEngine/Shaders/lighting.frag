@@ -14,9 +14,14 @@ uniform vec3 lightPos; //The position of the light.
 uniform vec3 viewPos; //The position of the view and/or of the player.
 uniform Material material;
 
+uniform sampler2D shadowMap;
+
 in vec3 Normal; //The normal of the fragment is calculated in the vertex shader.
 in vec3 FragPos; //The fragment position.
 in vec2 TexCoords;
+in vec4 FragPosLightSpace;
+
+float ShadowCalculation(vec4 fragPosLightSpace);
 
 void main()
 {
@@ -50,8 +55,34 @@ void main()
     //At last we add all the light components together and multiply with the color of the object. Then we set the color
     //and makes sure the alpha value is 1
     vec3 result = (ambient + diffuse + specular) * objectColor;
+
+    float shadow = ShadowCalculation(FragPosLightSpace);       
+    //result = vec3(shadow);    
+    //result = result * shadow;    
+    result = (1.0 - shadow) * lightColor2;
+
     FragColor = vec4(result, 1.0);
+
+    // shadow test (override)
+    //float depthValue = texture(depthMap, TexCoords).r;
+    //FragColor = vec4(vec3(depthValue), 1.0);
     
     //Note we still use the light color * object color from the last tutorial.
     //This time the light values are in the phong model (ambient, diffuse and specular)
+}
+
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+    // perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // check whether current frag pos is in shadow
+    float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
+
+    return shadow;
 }

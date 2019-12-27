@@ -16,6 +16,7 @@ namespace LearnOpenTK.Common
         private readonly Dictionary<string, int> _uniformLocations;
 
         public string FragSourcePath { get; private set; }
+        public string VertSourcePath { get; private set; }
 
         // This is how you create a simple shader.
         // Shaders are written in GLSL, which is a language very similar to C in its semantics.
@@ -23,6 +24,7 @@ namespace LearnOpenTK.Common
         // A commented example of GLSL can be found in shader.vert
         public Shader(string vertPath, string fragPath)
         {
+            VertSourcePath = vertPath;
             FragSourcePath = fragPath;
 
             // There are several different types of shaders, but the only two you need for basic rendering are the vertex and fragment shaders.
@@ -142,7 +144,13 @@ namespace LearnOpenTK.Common
         // you can omit the layout(location=X) lines in the vertex shader, and use this in VertexAttribPointer instead of the hardcoded values.
         public int GetAttribLocation(string attribName)
         {
-            return GL.GetAttribLocation(Handle, attribName);
+            Use();
+            var attrHandle = GL.GetAttribLocation(Handle, attribName);
+            if (attrHandle < 0)
+            {
+                Console.WriteLine($"GetAttribLocation({attribName}): attrib in '{VertSourcePath}' not found");
+            }
+            return attrHandle;
         }
 
 
