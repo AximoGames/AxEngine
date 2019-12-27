@@ -34,6 +34,13 @@ namespace LearnOpenTK
 
         protected override void OnLoad(EventArgs e)
         {
+            var vendor = GL.GetString(StringName.Vendor);
+            var version = GL.GetString(StringName.Version);
+            var shadingLanguageVersion = GL.GetString(StringName.ShadingLanguageVersion);
+            var renderer = GL.GetString(StringName.Renderer);
+
+            Console.WriteLine($"Vendor: {vendor}, version: {version}, shadinglangVersion: {shadingLanguageVersion}, renderer: {renderer}");
+
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
             GL.Enable(EnableCap.DepthTest);

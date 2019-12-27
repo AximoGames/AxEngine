@@ -81,7 +81,7 @@ namespace LearnOpenTK.Common
             // For this example, we're going to use .NET's built-in System.Drawing library to load textures.
 
             // Load the image
-            using (var image = new Bitmap(Path.Combine("..", "..", path)))
+            using (var image = new Bitmap(Path.Combine("..", "..", "..", path)))
             {
                 // First, we get our pixels from the bitmap we loaded.
                 // Arguments:

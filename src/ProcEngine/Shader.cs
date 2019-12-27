@@ -17,6 +17,7 @@ namespace LearnOpenTK.Common
 
         public string FragSourcePath { get; private set; }
         public string VertSourcePath { get; private set; }
+        public string VertSource { get; private set; }
 
         // This is how you create a simple shader.
         // Shaders are written in GLSL, which is a language very similar to C in its semantics.
@@ -36,6 +37,7 @@ namespace LearnOpenTK.Common
             // Load vertex shader and compile
             // LoadSource is a simple function that just loads all text from the file whose path is given.
             var shaderSource = LoadSource(vertPath);
+            VertSource = shaderSource;
 
             // GL.CreateShader will create an empty shader (obviously). The ShaderType enum denotes which type of shader will be created.
             var vertexShader = GL.CreateShader(ShaderType.VertexShader);
@@ -63,6 +65,8 @@ namespace LearnOpenTK.Common
 
             // And then link them together.
             LinkProgram(Handle);
+
+            //if(
 
             // When the shader program is linked, it no longer needs the individual shaders attacked to it; the compiled code is copied into the shader program.
             // Detach them, and then delete them.
@@ -153,11 +157,10 @@ namespace LearnOpenTK.Common
             return attrHandle;
         }
 
-
         // Just loads the entire file into a string.
         private static string LoadSource(string path)
         {
-            using (var sr = new StreamReader(Path.Combine("..", "..", path), Encoding.UTF8))
+            using (var sr = new StreamReader(Path.Combine("..", "..", "..", path), Encoding.UTF8))
             {
                 return sr.ReadToEnd();
             }
