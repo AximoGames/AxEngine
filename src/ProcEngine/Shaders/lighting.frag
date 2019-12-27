@@ -64,8 +64,8 @@ void main()
     FragColor = vec4(result, 1.0);
 
     // shadow test (override)
-    //float depthValue = texture(depthMap, TexCoords).r;
-    //FragColor = vec4(vec3(depthValue), 1.0);
+    //float depthValue = texture(shadowMap, TexCoords).r;
+    FragColor = vec4(texture(shadowMap, TexCoords).rgb, 1.0);
     
     //Note we still use the light color * object color from the last tutorial.
     //This time the light values are in the phong model (ambient, diffuse and specular)

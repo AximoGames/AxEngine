@@ -71,9 +71,9 @@ namespace ProcEngine
 
             _Shader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
-            _Shader.SetInt("material.diffuse", (int)TextureUnit.Texture0);
-            _Shader.SetInt("material.specular", (int)TextureUnit.Texture1);
-            _Shader.SetInt("shadowMap", (int)TextureUnit.Texture2);
+            _Shader.SetInt("material.diffuse", 0);
+            _Shader.SetInt("material.specular", 1);
+            _Shader.SetInt("shadowMap", 2);
 
             _Shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
             _Shader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
