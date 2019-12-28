@@ -62,6 +62,11 @@ namespace ProcEngine
             txt0.Use(TextureUnit.Texture0);
             txt1.Use(TextureUnit.Texture1);
             Window.shadowFb.DestinationTexture.Use(TextureUnit.Texture2);
+            var debugMatrix = new Matrix4(
+    new Vector4(1, 0, 0, 0),
+    new Vector4(0, 0, 1, 0),
+    new Vector4(0, 1, 0, 0),
+    new Vector4(0, 0, 0, 1));
 
             _Shader.Use();
 
@@ -74,6 +79,7 @@ namespace ProcEngine
             _Shader.SetInt("material.diffuse", 0);
             _Shader.SetInt("material.specular", 1);
             _Shader.SetInt("shadowMap", 2);
+            _Shader.SetMatrix4("debugMatrix", debugMatrix);
 
             _Shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
             _Shader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
@@ -91,25 +97,19 @@ namespace ProcEngine
 
             _ShadowShader.Use();
 
-            float near_plane = 1.0f;
+            float near_plane = 0.01f;
             float far_plane = 7.5f;
 
-            var debugMatrix = new Matrix4(
-                new Vector4(1, 0, 0, 0),
-                new Vector4(0, 0, 1, 0),
-                new Vector4(0, 1, 0, 0),
-                new Vector4(0, 0, 0, 1));
 
             //var lightProjection = Matrix4.CreateOrthographic(20, 20, near_plane, far_plane);
             var lightProjection = Matrix4.CreateOrthographicOffCenter(-10, 10, -10, 10, near_plane, far_plane);
             //var lightProjection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 2.0f, 1.0f, 0.1f, 100f);
-            var lightView = Matrix4.LookAt(Light.Position, new Vector3(Light.Position.X + 1.0f, Light.Position.Y + 1.0f, Light.Position.Z + -1.0f), new Vector3(0, -1, 0));
+            var lightView = Matrix4.LookAt(Light.Position, new Vector3(4 , 0, 0), new Vector3(0, 0, 1));
             lightSpaceMatrix = lightProjection * lightView;
 
             _ShadowShader.SetMatrix4("model", ModelMatrix);
             _ShadowShader.SetMatrix4("view", lightView);
             _ShadowShader.SetMatrix4("projection", lightProjection);
-            _ShadowShader.SetMatrix4("debugMatrix", debugMatrix);
 
             //_ShadowShader.SetMatrix4("model", ModelMatrix);
             //_ShadowShader.SetMatrix4("view", Camera.GetViewMatrix());

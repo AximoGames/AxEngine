@@ -20,7 +20,6 @@ void main()
     FragPos = vec3(vec4(aPos, 1.0) * model);
     Normal = transpose(inverse(mat3(model))) * aNormal;
     TexCoords = aTexCoords;
-
     // shadow
     FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0); // BUGFIX: aPos --> FragPos
 }

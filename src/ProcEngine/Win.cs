@@ -46,7 +46,7 @@ namespace LearnOpenTK
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
 
-            var lightPosition = new Vector3(1.2f, -0.5f, 2.0f);
+            var lightPosition = new Vector3(5, 2, 2);
 
             ctx = new RenderContext();
             ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), Width / (float)Height);
@@ -63,7 +63,7 @@ namespace LearnOpenTK
             box1 = new TestObject()
             {
                 Context = ctx,
-                ModelMatrix = Matrix4.Identity,
+                ModelMatrix = Matrix4.CreateTranslation(4,0,0),
                 Light = light,
             };
             box1.Init();
@@ -124,7 +124,7 @@ namespace LearnOpenTK
             GL.Clear(ClearBufferMask.DepthBufferBit);
 
             // Render objects
-            (light as IRenderableObject).OnRender(); // Just a box. No light effect itself
+            //(light as IRenderableObject).OnRender(); // Just a box. No light effect itself
             (box1 as IShadowObject).OnRenderShadow();
             //(box2 as IShadowObject).OnRenderShadow();
             (floor as IShadowObject).OnRenderShadow();

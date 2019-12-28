@@ -15,6 +15,7 @@ uniform vec3 viewPos; //The position of the view and/or of the player.
 uniform Material material;
 
 uniform sampler2D shadowMap;
+uniform mat4 debugMatrix;
 
 in vec3 Normal; //The normal of the fragment is calculated in the vertex shader.
 in vec3 FragPos; //The fragment position.
@@ -29,7 +30,7 @@ void main()
     vec3 normal = normalize(Normal);
     vec3 lightColor = vec3(0.3);
     // ambient
-    vec3 ambient = 0.3 * color;
+    vec3 ambient = 0.6 * color;
     // diffuse
     vec3 lightDir = normalize(lightPos - FragPos);
     float diff = max(dot(lightDir, normal), 0.0);
@@ -42,7 +43,7 @@ void main()
     spec = pow(max(dot(normal, halfwayDir), 0.0), 64.0);
     vec3 specular = spec * lightColor;
     // calculate shadow
-    float shadow = ShadowCalculation(FragPosLightSpace);                      
+    float shadow = ShadowCalculation(debugMatrix * FragPosLightSpace);                      
     //shadow=0;
     vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
     
@@ -51,7 +52,7 @@ void main()
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
-    // perform perspective divide
+        // perform perspective divide
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     // transform to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;

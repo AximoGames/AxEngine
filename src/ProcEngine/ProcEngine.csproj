@@ -81,7 +81,6 @@
     <Compile Include="VertextLayout.cs" />
     <Compile Include="Win.cs" />
     <Compile Include="Window.cs" />
-    <Compile Include="Demo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -93,11 +92,5 @@
     <None Include="Shaders\screen.vert" />
     <None Include="Shaders\shader.frag" />
     <None Include="Shaders\shader.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\External\Net3dBool\src\Net3dBool\Net3dBool.csproj">
-      <Project>{7ee4636d-8a92-4015-9562-7fcd6add0645}</Project>
-      <Name>Net3dBool</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>
