@@ -94,9 +94,10 @@ namespace ProcEngine
             float near_plane = 1.0f;
             float far_plane = 7.5f;
 
-            var lightProjection = Matrix4.CreateOrthographic(20, 20, near_plane, far_plane);
+            //var lightProjection = Matrix4.CreateOrthographic(20, 20, near_plane, far_plane);
+            var lightProjection = Matrix4.CreateOrthographicOffCenter(-10, 10, -10, 10, near_plane, far_plane);
             //var lightProjection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 2.0f, 1.0f, 0.1f, 100f);
-            var lightView = Matrix4.LookAt(Light.Position, new Vector3(Light.Position.X, Light.Position.Y, 0), new Vector3(0, -1, 0));
+            var lightView = Matrix4.LookAt(Light.Position, new Vector3(Light.Position.X + 1.0f, Light.Position.Y + 1.0f, Light.Position.Z + -1.0f), new Vector3(0, -1, 0));
             lightSpaceMatrix = lightProjection * lightView;
 
             _ShadowShader.SetMatrix4("model", ModelMatrix);

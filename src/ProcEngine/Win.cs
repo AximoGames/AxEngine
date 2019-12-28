@@ -73,7 +73,7 @@ namespace LearnOpenTK
                 Context = ctx,
                 ModelMatrix = Matrix4.CreateTranslation(1.5f, 1.5f, 0.0f),
                 Light = light,
-                Debug = true,
+                //Debug = true,
             };
             box2.Init();
 
@@ -126,7 +126,7 @@ namespace LearnOpenTK
             // Render objects
             (light as IRenderableObject).OnRender(); // Just a box. No light effect itself
             (box1 as IShadowObject).OnRenderShadow();
-            (box2 as IShadowObject).OnRenderShadow();
+            //(box2 as IShadowObject).OnRenderShadow();
             (floor as IShadowObject).OnRenderShadow();
 
             //--
@@ -141,7 +141,7 @@ namespace LearnOpenTK
             // Render objects
             (light as IRenderableObject).OnRender(); // Just a box. No light effect itself
             box1.OnRender();
-            box2.OnRender();
+            //box2.OnRender();
             floor.OnRender();
 
             // Render Screen Surface

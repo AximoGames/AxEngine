@@ -25,50 +25,28 @@ float ShadowCalculation(vec4 fragPosLightSpace);
 
 void main()
 {
-    //vec3 lightColor2 = vec3(0.5, 0.0, 0.1);
-    //vec3 lightColor2 = lightColor;
-    vec3 lightColor2 = vec3(texture(material.diffuse, TexCoords));
-
-    //The ambient color is the color where the light does not directly hit the object.
-    //You can think of it as an underlying tone throughout the object. Or the light coming from the scene/the sky (not the sun).
-    float ambientStrength = 0.25;
-    vec3 ambient = ambientStrength * lightColor2;
-
-    //We calculate the light direction, and make sure the normal is normalized.
-    vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(lightPos - FragPos); //Note: The light is pointing from the light to the fragment
-
-    //The diffuse part of the phong model.
-    //This is the part of the light that gives the most, it is the color of the object where it is hit by light.
-    float diff = max(dot(norm, lightDir), 0.0); //We make sure the value is non negative with the max function.
-    vec3 diffuse = diff * lightColor2;
-
-
-    //The specular light is the light that shines from the object, like light hitting metal.
-    //The calculations are explained much more detailed in the web version of the tutorials.
-    float specularStrength = 0.5;
+    vec3 color = texture(material.diffuse, TexCoords).rgb;
+    vec3 normal = normalize(Normal);
+    vec3 lightColor = vec3(0.3);
+    // ambient
+    vec3 ambient = 0.3 * color;
+    // diffuse
+    vec3 lightDir = normalize(lightPos - FragPos);
+    float diff = max(dot(lightDir, normal), 0.0);
+    vec3 diffuse = diff * lightColor;
+    // specular
     vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32); //The 32 is the shininess of the material.
-    vec3 specular = specularStrength * spec * lightColor2;
-
-    //At last we add all the light components together and multiply with the color of the object. Then we set the color
-    //and makes sure the alpha value is 1
-    vec3 result = (ambient + diffuse + specular) * objectColor;
-
-    float shadow = ShadowCalculation(FragPosLightSpace);       
-    //result = vec3(shadow);    
-    //result = result * shadow;    
-    result = (1.0 - shadow) * lightColor2;
-
-    FragColor = vec4(result, 1.0);
-
-    // shadow test (override)
-    //float depthValue = texture(shadowMap, TexCoords).r;
-    FragColor = vec4(texture(shadowMap, TexCoords).rgb, 1.0);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = 0.0;
+    vec3 halfwayDir = normalize(lightDir + viewDir);  
+    spec = pow(max(dot(normal, halfwayDir), 0.0), 64.0);
+    vec3 specular = spec * lightColor;
+    // calculate shadow
+    float shadow = ShadowCalculation(FragPosLightSpace);                      
+    //shadow=0;
+    vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
     
-    //Note we still use the light color * object color from the last tutorial.
-    //This time the light values are in the phong model (ambient, diffuse and specular)
+    FragColor = vec4(lighting, 1.0);
 }
 
 float ShadowCalculation(vec4 fragPosLightSpace)
@@ -81,8 +59,28 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     float closestDepth = texture(shadowMap, projCoords.xy).r; 
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
+    // calculate bias (based on depth map resolution and slope)
+    vec3 normal = normalize(Normal);
+    vec3 lightDir = normalize(lightPos - FragPos);
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
     // check whether current frag pos is in shadow
-    float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
-
+    // float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+    // PCF
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
+    
+    // keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
+    if(projCoords.z > 1.0)
+        shadow = 0.0;
+        
     return shadow;
 }
