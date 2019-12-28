@@ -32,6 +32,8 @@ namespace LearnOpenTK
 
         public Cam Camera => ctx.Camera;
 
+        private double CamAngle = 0;
+
         protected override void OnLoad(EventArgs e)
         {
             var vendor = GL.GetString(StringName.Vendor);
@@ -114,6 +116,9 @@ namespace LearnOpenTK
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            CamAngle -= 0.01;
+            var pos = new Vector3((float)(Math.Cos(CamAngle) * 2f), (float)(Math.Sin(CamAngle) * 2f), 2.0f);
+            light.Position = pos;
 
             GL.Enable(EnableCap.DepthTest);
 
