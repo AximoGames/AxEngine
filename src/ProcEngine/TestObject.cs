@@ -105,7 +105,7 @@ namespace ProcEngine
             var lightProjection = Matrix4.CreateOrthographicOffCenter(-12, 12, -12, 12, near_plane, far_plane);
             //var lightProjection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 2.0f, 1.0f, 0.1f, 100f);
             var lightView = Matrix4.LookAt(Light.Position, new Vector3(0, 0, 0), new Vector3(0, 0, 1));
-            lightSpaceMatrix = lightProjection * lightView;
+            lightSpaceMatrix =  lightView  * lightProjection ;
 
             _ShadowShader.SetMatrix4("model", ModelMatrix);
             _ShadowShader.SetMatrix4("view", lightView);

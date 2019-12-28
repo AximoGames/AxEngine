@@ -43,7 +43,7 @@ void main()
 	spec=pow(max(dot(normal,halfwayDir),0.),64.);
 	vec3 specular=spec*lightColor;
 	// calculate shadow
-	float shadow=ShadowCalculation(FragPosLightSpace);
+	float shadow=ShadowCalculation(FragPosLightSpace * debugMatrix);
 	//shadow=0;
 	vec3 lighting=(ambient+(1.-shadow)*(diffuse+specular))*color;
 	
@@ -60,8 +60,28 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 	float closestDepth=texture(shadowMap,projCoords.xy).r;
 	// get depth of current fragment from light's perspective
 	float currentDepth=projCoords.z;
+	// calculate bias (based on depth map resolution and slope)
+	vec3 normal=normalize(Normal);
+	vec3 lightDir=normalize(lightPos-FragPos);
+	float bias=max(.05*(1.-dot(normal,lightDir)),.005);
 	// check whether current frag pos is in shadow
-	float shadow=currentDepth>closestDepth?1.:0.;
+	// float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+	// PCF
+	float shadow=0.;
+	vec2 texelSize=1./textureSize(shadowMap,0);
+	for(int x=-1;x<=1;++x)
+	{
+		for(int y=-1;y<=1;++y)
+		{
+			float pcfDepth=texture(shadowMap,projCoords.xy+vec2(x,y)*texelSize).r;
+			shadow+=currentDepth-bias>pcfDepth?1.:0.;
+		}
+	}
+	shadow/=9.;
+	
+	// keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
+	if(projCoords.z>1.)
+	shadow=0.;
 	
 	return shadow;
 }
