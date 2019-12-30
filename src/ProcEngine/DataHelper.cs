@@ -56,6 +56,9 @@ namespace ProcEngine
             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
         };
 
+        private const float dX = -0.5f;
+        private const float dY = -0.5f;
+        private const float dZ = 0.7f;
         public static readonly float[] CubeDebug =
         {
              // Position          Normal
@@ -66,12 +69,12 @@ namespace ProcEngine
              0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
             -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-            -0.6f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, // Top face
-             0.6f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-             0.6f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-             0.6f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-            -0.6f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
-            -0.6f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+            -0.6f, -0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, // Top face
+             0.6f, -0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+             0.6f,  0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+             0.6f,  0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+            -0.6f,  0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+            -0.6f, -0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
 
             -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f, // Left face
             -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
@@ -99,7 +102,50 @@ namespace ProcEngine
              0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
             -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
              0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+
+//--
+            -0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f, // Bottom face
+             0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+             0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+            -0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+             0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+            -0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+
+            -0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, // Top face
+             0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+             0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+             0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+            -0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+            -0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+
+            -0.1f+dX,  0.1f+dY,  0.3f+dZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f, // Left face
+            -0.1f+dX,  0.1f+dY, -0.3f+dZ, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+            -0.1f+dX, -0.1f+dY, -0.3f+dZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            -0.1f+dX, -0.1f+dY, -0.3f+dZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            -0.1f+dX, -0.1f+dY,  0.3f+dZ, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+            -0.1f+dX,  0.1f+dY,  0.3f+dZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+
+             0.1f+dX, -0.1f+dY, -0.3f+dZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f, // Right face
+             0.1f+dX,  0.1f+dY, -0.3f+dZ,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+             0.1f+dX,  0.1f+dY,  0.3f+dZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+             0.1f+dX,  0.1f+dY,  0.3f+dZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+             0.1f+dX, -0.1f+dY,  0.3f+dZ,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+             0.1f+dX, -0.1f+dY, -0.3f+dZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+
+            -0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f, // Front face
+             0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+             0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+             0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+            -0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+            -0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+
+             0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f, // Back face
+            -0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+             0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+            -0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+             0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+            -0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
         };
 
         // Here we now have added the normals of the vertices
