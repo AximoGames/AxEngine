@@ -20,6 +20,11 @@ namespace ProcEngine
         void OnRender();
     }
 
+    public interface IReloadable : IGameObject
+    {
+        void OnReload();
+    }
+
     public interface IShadowObject : IGameObject
     {
         void OnRenderShadow();

@@ -11,9 +11,9 @@ namespace LearnOpenTK.Common
     // A simple class meant to help create shaders.
     public class Shader
     {
-        public readonly int Handle;
+        public int Handle { get; private set; }
 
-        private readonly Dictionary<string, int> _uniformLocations;
+        private Dictionary<string, int> _uniformLocations;
 
         public string FragSourcePath { get; private set; }
         public string VertSourcePath { get; private set; }
@@ -99,6 +99,28 @@ namespace LearnOpenTK.Common
             }
         }
 
+        public void Reload()
+        {
+            try
+            {
+                var sh = new Shader(VertSourcePath, FragSourcePath);
+                SetFrom(sh);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+        }
+
+        private void SetFrom(Shader source)
+        {
+            Handle = source.Handle;
+            FragSourcePath = source.FragSourcePath;
+            VertSourcePath = source.VertSourcePath;
+            VertSource = source.VertSource;
+            _uniformLocations = source._uniformLocations;
+        }
 
         private static void CompileShader(int shader)
         {
@@ -131,7 +153,6 @@ namespace LearnOpenTK.Common
                 throw new Exception($"Error occurred whilst linking Program({program}): {msg}");
             }
         }
-
 
         // A wrapper function that enables the shader program.
         public void Use()

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace ProcEngine
 {
-    public class TestObject : GameObject, IRenderableObject, IShadowObject
+    public class TestObject : GameObject, IRenderableObject, IShadowObject, IReloadable
     {
 
         public Cam Camera => Context.Camera;
@@ -126,6 +126,11 @@ namespace ProcEngine
             _ShadowShader.Free();
         }
 
+        public void OnReload()
+        {
+            _Shader.Reload();
+            _ShadowShader.Reload();
+        }
     }
 
 }
