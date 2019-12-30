@@ -67,6 +67,7 @@ namespace LearnOpenTK
                 Context = ctx,
                 ModelMatrix = Matrix4.CreateTranslation(0, 0, 0),
                 Light = light,
+                Debug = true,
             };
             box1.Init();
 
