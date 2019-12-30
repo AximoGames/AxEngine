@@ -245,12 +245,23 @@ namespace LearnOpenTK
             if (kbState[Key.Escape])
                 Exit();
 
+            if (kbState[Key.F11])
+            {
+                Reload();
+            }
+
             if (kbState[Key.F12])
             {
                 shadowFb.DestinationTexture.GetDepthTexture().Save("test.png");
             }
 
             base.OnUpdateFrame(e);
+        }
+
+        private void Reload()
+        {
+            (box1 as IReloadable).OnReload();
+            (floor as IReloadable).OnReload();
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
