@@ -69,6 +69,13 @@ namespace LearnOpenTK.Common
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)All.ClampToBorder);
         }
 
+        public void SetDepthComparisonMode()
+        {
+            Use();
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureCompareMode, (int)All.CompareRefToTexture);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureCompareFunc,(int)All.Lequal);
+        }
+
         // Create texture from path.
         public Texture(string path)
         {

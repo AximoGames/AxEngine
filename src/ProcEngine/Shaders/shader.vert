@@ -31,13 +31,13 @@ void main()
     FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0); // BUGFIX: aPos --> FragPos
 
     vec4 position = vec4(aPos,1.0);
-    vec4 world_pos = model * position;
-    vec4 eye_coord = view * world_pos;
-    vec4 clip_pos = projection * eye_coord;
+    vec4 world_pos =  position * model ;
+    vec4 eye_coord = world_pos * view ;
+    vec4 clip_pos = eye_coord * projection ;
 
     vertex.world_coord = world_pos.xyz;
     vertex.eye_coord = eye_coord.xyz;
-    vertex.shadow_coord = lightSpaceMatrix * world_pos;
-    vertex.normal = mat3(view * model) * aNormal;
+    vertex.shadow_coord =  world_pos * lightSpaceMatrix ;
+    vertex.normal =   aNormal * mat3( model * view) ;
     gl_Position = clip_pos;
 }

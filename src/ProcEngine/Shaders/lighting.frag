@@ -70,6 +70,7 @@ void main()
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
+	/*
 	// perform perspective divide
 	vec3 projCoords=fragPosLightSpace.xyz/fragPosLightSpace.w;
 	// transform to [0,1] range
@@ -101,5 +102,6 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 	if(projCoords.z>1.)
 	shadow=0.;
 	
-	return shadow;
+	return shadow;*/
+	return 0;
 }

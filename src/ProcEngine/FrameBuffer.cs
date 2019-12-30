@@ -67,6 +67,7 @@ namespace ProcEngine
             _DestinationTexture = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent, 1024, 1024, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
             _DestinationTexture.SetNearestFilter();
             _DestinationTexture.SetClampToBordreWrap();
+            _DestinationTexture.SetDepthComparisonMode();
             _DestinationTexture.Use();
 
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, _DestinationTexture.Handle, 0);
