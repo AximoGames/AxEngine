@@ -14,13 +14,20 @@ uniform vec3 lightPos;//The position of the light.
 uniform vec3 viewPos;//The position of the view and/or of the player.
 uniform Material material;
 
-uniform sampler2D shadowMap;
+uniform sampler2DShadow shadowMap;
 uniform mat4 debugMatrix;
 
 in vec3 Normal;//The normal of the fragment is calculated in the vertex shader.
 in vec3 FragPos;//The fragment position.
 in vec2 TexCoords;
 in vec4 FragPosLightSpace;
+
+in VS_FS_INTERFACE { 
+    vec4 shadow_coord; 
+    vec3 world_coord; 
+    vec3 eye_coord; 
+    vec3 normal; 
+} fragment;
 
 float ShadowCalculation(vec4 fragPosLightSpace);
 
@@ -42,12 +49,23 @@ void main()
 	vec3 halfwayDir=normalize(lightDir+viewDir);
 	spec=pow(max(dot(normal,halfwayDir),0.),64.);
 	vec3 specular=spec*lightColor;
-	// calculate shadow
+	/*// calculate shadow
 	float shadow=ShadowCalculation(FragPosLightSpace * debugMatrix);
 	//shadow=0;
 	vec3 lighting=(ambient+(1.-shadow)*(diffuse+specular))*color;
-	
 	FragColor=vec4(lighting,1.);
+*/
+
+	vec3 N = fragment.normal;
+	vec3 L = normalize(lightPos - fragment.world_coord);
+	vec3 R = reflect(-L,N);
+	vec3 E = normalize(fragment.eye_coord);
+	float NdotL = dot(N,L);
+	float EdotR = dot(-E,R);
+	float diffuseF = max(NdotL,0.0);
+	float specularF = max(pow(EdotR,material.shininess),0.0);
+	float f = textureProj(shadowMap,fragment.shadow_coord);
+	FragColor = vec4(ambient + f * (color * diffuseF ), 1.0);
 }
 
 float ShadowCalculation(vec4 fragPosLightSpace)
