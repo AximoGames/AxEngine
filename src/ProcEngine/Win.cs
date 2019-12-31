@@ -5,6 +5,8 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using LearnOpenTK.Common;
 using ProcEngine;
+using System.IO;
+using System.Collections.Generic;
 
 namespace LearnOpenTK
 {
@@ -102,7 +104,22 @@ namespace LearnOpenTK
             };
             target.Init();
 
+            StartFileListener();
+
             base.OnLoad(e);
+        }
+
+        private FileSystemWatcher ShaderWatcher;
+
+        private void StartFileListener()
+        {
+            ShaderWatcher = new FileSystemWatcher(Path.Combine("..", "..", "..", "Shaders"));
+            ShaderWatcher.Changed += (sender, e) =>
+            {
+                // Reload have to be in Main-Thread.
+                Dispatch(() => Reload());
+            };
+            ShaderWatcher.EnableRaisingEvents = true;
         }
 
         private FrameBuffer fb;
@@ -174,6 +191,8 @@ namespace LearnOpenTK
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
+            ProcessTaskQueue();
+
             if (!Focused)
             {
                 return;
@@ -257,6 +276,26 @@ namespace LearnOpenTK
             }
 
             base.OnUpdateFrame(e);
+        }
+
+        private Queue<Action> TaskQueue = new Queue<Action>();
+
+        public void Dispatch(Action act)
+        {
+            lock (TaskQueue)
+                TaskQueue.Enqueue(act);
+        }
+
+        private void ProcessTaskQueue()
+        {
+            while (TaskQueue.Count > 0)
+            {
+                Action act;
+                lock (TaskQueue)
+                    act = TaskQueue.Dequeue();
+                if (act != null)
+                    act();
+            }
         }
 
         private void Reload()
