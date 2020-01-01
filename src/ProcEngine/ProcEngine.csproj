@@ -79,6 +79,7 @@
     <Compile Include="VertexBufferObject.cs" />
     <Compile Include="VertexLayoutAttribute.cs" />
     <Compile Include="VertextLayout.cs" />
+    <Compile Include="Win2.cs" />
     <Compile Include="Win.cs" />
     <Compile Include="Window.cs" />
   </ItemGroup>
