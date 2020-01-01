@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -205,6 +206,17 @@ namespace ProcEngine
 
             return bitmap;
         }
+
+        public static Matrix4 CoordinateSystemMatrix = new Matrix4(
+            new Vector4(1, 0, 0, 0),
+            new Vector4(0, 0, 1, 0),
+            new Vector4(0, -1, 0, 0),
+            new Vector4(0, 0, 0, 1));
+
+        public static Matrix3 CoordinateSystemMatrix3 = new Matrix3(
+            new Vector3(1, 0, 0),
+            new Vector3(0, 0, 1),
+            new Vector3(0, -1, 0));
 
 
     }
