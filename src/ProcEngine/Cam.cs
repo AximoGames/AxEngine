@@ -64,10 +64,18 @@ namespace ProcEngine
         public float Facing = (float)Math.PI / 2 + 0.15f;
         public float AspectRatio;
 
+        public Vector3? LookAt;
+
         public virtual Matrix4 GetViewMatrix()
         {
             var loc = new Vector3(Position.X, Position.Y, Position.Z);
-            var lookatPoint = new Vector3((float)Math.Cos(Facing) * (float)Math.Cos(Pitch), (float)Math.Sin(Facing) * (float)Math.Cos(Pitch), (float)Math.Sin(Pitch));
+
+            Vector3 lookatPoint;
+            if (LookAt != null)
+                lookatPoint = (Vector3)LookAt;
+            else
+                lookatPoint = new Vector3((float)Math.Cos(Facing) * (float)Math.Cos(Pitch), (float)Math.Sin(Facing) * (float)Math.Cos(Pitch), (float)Math.Sin(Pitch));
+
             return Matrix4.LookAt(loc, loc + lookatPoint, Up);
         }
 

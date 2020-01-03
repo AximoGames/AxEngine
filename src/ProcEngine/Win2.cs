@@ -20,7 +20,7 @@ namespace LearnOpenTK
         int SHADOW_HEIGHT;
         int depthMapFBO;
         int woodTexture;
-        Camera camera;
+        PerspectiveFieldOfViewCamera camera;
         int depthMap;
         int planeVAO;
         int cubeVAO;
@@ -32,10 +32,12 @@ namespace LearnOpenTK
         {
             GL.Enable(EnableCap.DepthTest);
 
-            camera = new Camera(new Vector3(0.0f, 0.0f, 3.0f), (float)800 / 600);
+            camera = new PerspectiveFieldOfViewCamera(new Vector3(0.0f, 0.0f, 3.0f), (float)800 / 600);
+            //camera.Up = Vector3.UnitY;
+            //camera.LookAt = new Vector3(0, 0, -1);
 
             shader = new Shader("Shaders/3.1.3.shadow_mapping/3.1.3.shadow_mapping.vs", "Shaders/3.1.3.shadow_mapping/3.1.3.shadow_mapping.fs");
-            simpleDepthShader = new Shader("Shaders/3.1.3.shadow_mapping/3.1.3.debug_quad.vs", "Shaders/3.1.3.shadow_mapping/3.1.3.debug_quad_depth.fs");
+            simpleDepthShader = new Shader("Shaders/3.1.3.shadow_mapping/3.1.3.shadow_mapping_depth.vs", "Shaders/3.1.3.shadow_mapping/3.1.3.shadow_mapping_depth.fs");
 
             // set up vertex data (and buffer(s)) and configure vertex attributes
             // ------------------------------------------------------------------
@@ -149,7 +151,10 @@ namespace LearnOpenTK
             GL.Viewport(0, 0, 800, 600);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             shader.Use();
-            Matrix4 projection = camera.GetProjectionMatrix(); // MOD
+            //Matrix4 projection = Matrix4.CreateOrthographicOffCenter(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+            //Matrix4 view = Matrix4.LookAt(lightPos, new Vector3(0.0f), new Vector3(0.0f, 1.0f, 0.0f));
+            //Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), (float)Width / (float)Height, 0.1f, 100f); // MOD
+            Matrix4 projection = camera.GetProjectionMatrix();
             Matrix4 view = camera.GetViewMatrix();
             shader.SetMatrix4("projection", projection);
             shader.SetMatrix4("view", view);
@@ -175,6 +180,7 @@ namespace LearnOpenTK
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
             // -------------------------------------------------------------------------------
             SwapBuffers();
+            base.OnRenderFrame(e);
         }
 
         private void renderScene(Shader shader)
@@ -275,6 +281,117 @@ namespace LearnOpenTK
 
         }
 
+        private float[] MouseSpeed = new float[3];
+        private Vector2 MouseDelta;
+        private float UpDownDelta;
+
+        protected override void OnUpdateFrame(FrameEventArgs e)
+        {
+            if (!Focused)
+            {
+                return;
+            }
+
+            var input = Keyboard.GetState();
+
+            if (input.IsKeyDown(Key.Escape))
+            {
+                Exit();
+            }
+
+            var kbState = Keyboard.GetState();
+            if (kbState[Key.W])
+            {
+                camera.Position.X += (float)Math.Cos(camera.Facing) * 0.1f;
+                camera.Position.Y += (float)Math.Sin(camera.Facing) * 0.1f;
+            }
+
+            if (kbState[Key.S])
+            {
+                camera.Position.X -= (float)Math.Cos(camera.Facing) * 0.1f;
+                camera.Position.Y -= (float)Math.Sin(camera.Facing) * 0.1f;
+            }
+
+            if (kbState[Key.A])
+            {
+                camera.Position.X += (float)Math.Cos(camera.Facing + Math.PI / 2) * 0.1f;
+                camera.Position.Y += (float)Math.Sin(camera.Facing + Math.PI / 2) * 0.1f;
+            }
+
+            if (kbState[Key.D])
+            {
+                camera.Position.X -= (float)Math.Cos(camera.Facing + Math.PI / 2) * 0.1f;
+                camera.Position.Y -= (float)Math.Sin(camera.Facing + Math.PI / 2) * 0.1f;
+            }
+
+            if (kbState[Key.Left])
+                MouseDelta.X = -2;
+
+            if (kbState[Key.Right])
+                MouseDelta.X = 2;
+
+            if (kbState[Key.Up])
+                MouseDelta.Y = -1;
+
+            if (kbState[Key.Down])
+                MouseDelta.Y = 1;
+
+            if (kbState[Key.PageUp])
+                UpDownDelta = -3;
+
+            if (kbState[Key.PageDown])
+                UpDownDelta = 3;
+
+            MouseSpeed[0] *= 0.9f;
+            MouseSpeed[1] *= 0.9f;
+            MouseSpeed[2] *= 0.9f;
+            MouseSpeed[0] -= MouseDelta.X / 1000f;
+            MouseSpeed[1] -= MouseDelta.Y / 1000f;
+            MouseSpeed[2] -= UpDownDelta / 1000f;
+            MouseDelta = new Vector2();
+            UpDownDelta = 0;
+
+            camera.Facing += MouseSpeed[0] * 2;
+            camera.Pitch += MouseSpeed[1] * 2;
+            //Console.WriteLine(Camera.Pitch + " : " + Math.Round(MouseSpeed[1], 3));
+            camera.Position.Z += MouseSpeed[2] * 2;
+
+            if (kbState[Key.Escape])
+                Exit();
+
+            //if (kbState[Key.F11])
+            //{
+            //    Reload();
+            //}
+
+            //if (kbState[Key.F12])
+            //{
+            //    shadowFb.DestinationTexture.GetDepthTexture().Save("test.png");
+            //}
+
+            base.OnUpdateFrame(e);
+        }
+
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            if (e.Mouse.LeftButton == ButtonState.Pressed)
+                MouseDelta = new Vector2(e.XDelta, e.YDelta);
+
+            base.OnMouseMove(e);
+        }
+
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            camera.Fov -= e.DeltaPrecise;
+            base.OnMouseWheel(e);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            GL.Viewport(0, 0, Width, Height);
+            camera.AspectRatio = Width / (float)Height;
+            base.OnResize(e);
+        }
 
     }
 
