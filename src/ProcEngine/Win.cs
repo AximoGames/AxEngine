@@ -282,8 +282,9 @@ namespace LearnOpenTK
 
         private void Reload()
         {
-            //(box1 as IReloadable).OnReload();
-            //(floor as IReloadable).OnReload();
+            foreach (var obj in ctx.AllObjects)
+                if (obj is IReloadable reloadable)
+                    reloadable.OnReload();
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
