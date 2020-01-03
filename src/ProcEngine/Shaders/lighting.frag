@@ -43,7 +43,7 @@ void main()
 	spec=pow(max(dot(normal,halfwayDir),0.),64.);
 	vec3 specular=spec*lightColor;
 	// calculate shadow
-	float shadow=ShadowCalculation(FragPosLightSpace*debugMatrix);
+	float shadow=ShadowCalculation(FragPosLightSpace);
 	//shadow=0;
 	vec3 lighting=(ambient+(1.-shadow)*(diffuse+specular))*color;
 	
