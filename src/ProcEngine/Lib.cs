@@ -11,13 +11,29 @@ namespace ProcEngine
 
     public interface IGameObject
     {
+        int Id { get; }
+        RenderContext Context { get; }
         void Init();
         void Free();
+        void AssignContext(RenderContext ctx);
     }
 
     public interface IRenderableObject : IGameObject
     {
         void OnRender();
+        RenderPosition RenderPosition { get; }
+
+    }
+
+    public interface ILightTarget
+    {
+        List<ILightObject> Lights { get; }
+    }
+
+    public enum RenderPosition
+    {
+        Scene,
+        Screen,
     }
 
     public interface IReloadable : IGameObject

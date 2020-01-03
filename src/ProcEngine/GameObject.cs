@@ -4,9 +4,14 @@ namespace ProcEngine
 {
     public abstract class GameObject : IGameObject
     {
-        public readonly int Id;
+        public int Id { get; }
 
-        public RenderContext Context;
+        public RenderContext Context { get; private set; }
+
+        public void AssignContext(RenderContext ctx)
+        {
+            Context = ctx;
+        }
 
         public GameObject()
         {

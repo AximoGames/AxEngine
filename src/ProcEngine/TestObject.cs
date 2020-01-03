@@ -7,15 +7,15 @@ using System.Collections.Generic;
 
 namespace ProcEngine
 {
-    public class TestObject : GameObject, IRenderableObject, IShadowObject, IReloadable
+    public class TestObject : GameObject, IRenderableObject, IShadowObject, IReloadable, ILightTarget
     {
 
         public Cam Camera => Context.Camera;
         public Matrix4 ModelMatrix { get; set; } = Matrix4.Identity;
 
-        public bool Debug;
+        public RenderPosition RenderPosition => RenderPosition.Scene;
 
-        public ILightObject Light;
+        public bool Debug;
 
         private Shader _Shader;
         private Shader _ShadowShader;
@@ -81,6 +81,8 @@ namespace ProcEngine
             _Shader.SetInt("shadowMap", 2);
             _Shader.SetMatrix4("debugMatrix", debugMatrix);
 
+            ILightObject Light = Lights[0];
+
             _Shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
             _Shader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
             _Shader.SetVector3("lightPos", Light.Position);
@@ -100,6 +102,7 @@ namespace ProcEngine
             float near_plane = 0.01f;
             float far_plane = 7.5f;
 
+            ILightObject Light = Lights[0];
 
             //            var lightProjection = Matrix4.CreateOrthographic(20, 20, near_plane, far_plane);
             var lightProjection = Matrix4.CreateOrthographicOffCenter(-12, 12, -12, 12, near_plane, far_plane);
@@ -131,6 +134,9 @@ namespace ProcEngine
             _Shader.Reload();
             _ShadowShader.Reload();
         }
+
+        public List<ILightObject> Lights => Context.LightObjects;
+
     }
 
 }

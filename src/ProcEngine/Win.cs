@@ -57,38 +57,27 @@ namespace LearnOpenTK
             //ctx.Camera = new PerspectiveFieldOfViewCamera(lightPosition, Width / (float)Height);
             //ctx.Camera = new OrthographicCamera(lightPosition);
 
-            light = new LightObject()
+            ctx.AddObject(new LightObject()
             {
-                Context = ctx,
                 Position = lightPosition,
-            };
-            light.Init();
+            });
 
-            box1 = new TestObject()
+            ctx.AddObject(new TestObject()
             {
-                Context = ctx,
                 ModelMatrix = Matrix4.CreateTranslation(0, 0, 0),
-                Light = light,
                 Debug = true,
-            };
-            box1.Init();
+            });
 
-            box2 = new TestObject()
+            ctx.AddObject(new TestObject()
             {
-                Context = ctx,
                 ModelMatrix = Matrix4.CreateTranslation(1.5f, 1.5f, 0.0f),
-                Light = light,
                 //Debug = true,
-            };
-            box2.Init();
+            });
 
-            floor = new TestObject()
+            ctx.AddObject(new TestObject()
             {
-                Context = ctx,
                 ModelMatrix = Matrix4.CreateScale(8, 8, 8) * Matrix4.CreateTranslation(0f, 0f, -4.5f),
-                Light = light,
-            };
-            floor.Init();
+            });
 
             //CursorVisible = false;
 
@@ -99,10 +88,9 @@ namespace LearnOpenTK
             shadowFb = new FrameBuffer(Width, Height);
             shadowFb.InitDepth();
 
-            target = new ScreenObject(fb.DestinationTexture)
+            ctx.AddObject(new ScreenObject(fb.DestinationTexture)
             {
-            };
-            target.Init();
+            });
 
             StartFileListener();
 
@@ -125,17 +113,14 @@ namespace LearnOpenTK
         private FrameBuffer fb;
         public static FrameBuffer shadowFb;
 
-        private IRenderableObject box1;
-        private IRenderableObject box2;
-        private IRenderableObject floor;
-        private ILightObject light;
         private RenderContext ctx;
-        private IRenderTarget target;
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             CamAngle -= 0.01;
             var pos = new Vector3((float)(Math.Cos(CamAngle) * 2f), (float)(Math.Sin(CamAngle) * 2f), 2.0f);
+            ILightObject light = ctx.LightObjects[0];
+
             light.Position = pos;
 
             GL.Enable(EnableCap.DepthTest);
@@ -147,10 +132,8 @@ namespace LearnOpenTK
             GL.Clear(ClearBufferMask.DepthBufferBit);
 
             // Render objects
-            //(light as IRenderableObject).OnRender(); // Just a box. No light effect itself
-            (box1 as IShadowObject).OnRenderShadow();
-            //(box2 as IShadowObject).OnRenderShadow();
-            (floor as IShadowObject).OnRenderShadow();
+            foreach (var obj in ctx.ShadowObjects)
+                obj.OnRenderShadow();
 
             //--
 
@@ -162,13 +145,12 @@ namespace LearnOpenTK
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             // Render objects
-            (light as IRenderableObject).OnRender(); // Just a box. No light effect itself
-            box1.OnRender();
-            //box2.OnRender();
-            floor.OnRender();
+            foreach (var obj in ctx.RenderableObjects)
+                obj.OnRender();
 
             // Render Screen Surface
-            target.OnRender();
+            foreach (var obj in ctx.RenderableScreenObjects)
+                obj.OnRender();
 
             //CheckForProgramError();
 
@@ -300,8 +282,8 @@ namespace LearnOpenTK
 
         private void Reload()
         {
-            (box1 as IReloadable).OnReload();
-            (floor as IReloadable).OnReload();
+            //(box1 as IReloadable).OnReload();
+            //(floor as IReloadable).OnReload();
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
@@ -331,10 +313,8 @@ namespace LearnOpenTK
             GL.BindVertexArray(0);
             GL.UseProgram(0);
 
-            box1.Free();
-            box2.Free();
-            floor.Free();
-            light.Free();
+            foreach (var obj in ctx.AllObjects)
+                obj.Free();
 
             base.OnUnload(e);
         }

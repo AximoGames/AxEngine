@@ -11,6 +11,8 @@ namespace ProcEngine
 
         public Vector3 Position { get; set; }
 
+        public RenderPosition RenderPosition => RenderPosition.Scene;
+
         private Shader _shader;
         private VertexArrayObject vao;
         private VertexBufferObject vbo;
