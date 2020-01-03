@@ -39,11 +39,10 @@ namespace ProcEngine
 
         public override Matrix4 GetProjectionMatrix()
         {
-            float near_plane = 1.0f;
-            float far_plane = 20f;
+            float near_plane = 0.01f;
+            float far_plane = 7.5f;
 
             return Matrix4.CreateOrthographicOffCenter(-10, 10, -10, 10, near_plane, far_plane);
-            //return Matrix4.CreateOrthographic(20, 20, near_plane, far_plane);
         }
 
     }
@@ -72,11 +71,15 @@ namespace ProcEngine
 
             Vector3 lookatPoint;
             if (LookAt != null)
+            {
                 lookatPoint = (Vector3)LookAt;
+                return Matrix4.LookAt(loc, lookatPoint, Up);
+            }
             else
+            {
                 lookatPoint = new Vector3((float)Math.Cos(Facing) * (float)Math.Cos(Pitch), (float)Math.Sin(Facing) * (float)Math.Cos(Pitch), (float)Math.Sin(Pitch));
-
-            return Matrix4.LookAt(loc, loc + lookatPoint, Up);
+                return Matrix4.LookAt(loc, loc + lookatPoint, Up);
+            }
         }
 
         public abstract Matrix4 GetProjectionMatrix();
