@@ -50,16 +50,23 @@ namespace LearnOpenTK
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
 
-            var lightPosition = new Vector3(0, 2, 2);
-
             ctx = new RenderContext();
-            ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), Width / (float)Height);
+            ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), Width / (float)Height)
+            {
+                NearPlane = 0.01f,
+                FarPlane = 100.0f,
+            };
             //ctx.Camera = new PerspectiveFieldOfViewCamera(lightPosition, Width / (float)Height);
             //ctx.Camera = new OrthographicCamera(lightPosition);
 
             ctx.AddObject(new LightObject()
             {
-                Position = lightPosition,
+                Position = new Vector3(0, 2, 2),
+            });
+
+            ctx.AddObject(new LightObject()
+            {
+                Position = new Vector3(1f, 0.5f, 1.5f),
             });
 
             ctx.AddObject(new TestObject()
@@ -88,6 +95,9 @@ namespace LearnOpenTK
             shadowFb = new FrameBuffer(Width, Height);
             shadowFb.InitDepth();
 
+            shadowCubeFb = new FrameBuffer(Width, Height);
+            shadowCubeFb.InitCubeDepth();
+
             ctx.AddObject(new ScreenObject(fb.DestinationTexture)
             {
             });
@@ -112,6 +122,7 @@ namespace LearnOpenTK
 
         private FrameBuffer fb;
         public static FrameBuffer shadowFb;
+        public static FrameBuffer shadowCubeFb;
 
         private RenderContext ctx;
 
@@ -133,7 +144,10 @@ namespace LearnOpenTK
 
             // Render objects
             foreach (var obj in ctx.ShadowObjects)
+            {
                 obj.OnRenderShadow();
+                obj.OnRenderCubeShadow();
+            }
 
             //--
 

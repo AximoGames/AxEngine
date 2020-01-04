@@ -19,6 +19,7 @@ namespace ProcEngine
 
         private Shader _Shader;
         private Shader _ShadowShader;
+        private Shader _CubeShadowShader;
 
         private float[] _vertices = DataHelper.Cube;
 
@@ -39,6 +40,7 @@ namespace ProcEngine
             txt1 = new Texture("Ressources/woodenbox_specular.png");
 
             _ShadowShader = new Shader("Shaders/shadow.vert", "Shaders/shadow.frag");
+            _CubeShadowShader = new Shader("Shaders/shadow.vert", "Shaders/shadow.frag");
 
             vbo = new VertexBufferObject();
             vbo.Create();
@@ -99,9 +101,13 @@ namespace ProcEngine
 
             _ShadowShader.Use();
 
-            ILightObject Light = Lights[0];
+            ILightObject light = Lights[0];
 
-            var shadowCamera = new OrthographicCamera(Light.Position);
+            var shadowCamera = new OrthographicCamera(light.Position)
+            {
+                NearPlane = 0.01f,
+                FarPlane = 7.5f,
+            };
             shadowCamera.LookAt = new Vector3(0);
 
             var lightProjection = shadowCamera.GetProjectionMatrix();
@@ -113,6 +119,52 @@ namespace ProcEngine
             _ShadowShader.SetMatrix4("projection", lightProjection);
 
             vao.Draw();
+        }
+
+        private List<Matrix4> CubeShadowsMatrices = new List<Matrix4>();
+
+        public void OnRenderCubeShadow()
+        {
+            return;
+            vao.Use();
+
+            _CubeShadowShader.Use();
+
+            ILightObject light = Lights[1];
+
+            var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
+            {
+                NearPlane = 1f,
+                FarPlane = 25f,
+            };
+
+            CubeShadowsMatrices.Clear();
+
+            AddShadowCubeMatrix(shadowCamera, new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f));
+            AddShadowCubeMatrix(shadowCamera, new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f));
+            AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
+            AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 0.0f, -1.0f));
+            AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f));
+            AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f));
+
+            var lightProjection = shadowCamera.GetProjectionMatrix();
+            var lightView = shadowCamera.GetViewMatrix();
+            lightSpaceMatrix = lightView * lightProjection;
+
+            _CubeShadowShader.SetMatrix4("model", ModelMatrix);
+            for (var i = 0; i < CubeShadowsMatrices.Count; i++)
+                _CubeShadowShader.SetMatrix4($"shadowMatrices[{i}]", CubeShadowsMatrices[i]);
+            _CubeShadowShader.SetVector3("lightPos", light.Position);
+            _CubeShadowShader.SetFloat("far_plane", shadowCamera.FarPlane);
+
+            vao.Draw();
+        }
+
+        private void AddShadowCubeMatrix(Cam camera, Vector3 direction, Vector3 up)
+        {
+            var proj = camera.GetProjectionMatrix();
+            var view = Matrix4.LookAt(camera.Position, camera.Position + direction, up);
+            CubeShadowsMatrices.Add(view);
         }
 
         public override void Free()

@@ -44,6 +44,7 @@ namespace ProcEngine
     public interface IShadowObject : IGameObject
     {
         void OnRenderShadow();
+        void OnRenderCubeShadow();
     }
 
     public interface IRenderTarget : IRenderableObject

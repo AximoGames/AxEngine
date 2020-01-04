@@ -32,7 +32,11 @@ namespace LearnOpenTK
         {
             GL.Enable(EnableCap.DepthTest);
 
-            camera = new PerspectiveFieldOfViewCamera(new Vector3(0.0f, 0.0f, 3.0f), (float)800 / 600);
+            camera = new PerspectiveFieldOfViewCamera(new Vector3(0.0f, 0.0f, 3.0f), (float)800 / 600)
+            {
+                NearPlane = 0.01f,
+                FarPlane = 100.0f,
+            };
             //camera.Up = Vector3.UnitY;
             //camera.LookAt = new Vector3(0, 0, -1);
 

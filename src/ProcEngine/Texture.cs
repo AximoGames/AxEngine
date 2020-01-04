@@ -13,14 +13,38 @@ namespace LearnOpenTK.Common
     public class Texture
     {
         public readonly int Handle;
+        private TextureTarget Target = TextureTarget.Texture2D;
 
         public Texture(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
         {
             Width = width;
             Height = height;
+            Target = target;
             GL.GenTextures(1, out Handle);
             Use();
             GL.TexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+        }
+
+        private Texture(int handle, TextureTarget target, int width, int height)
+        {
+            Handle = handle;
+            Target = target;
+            Width = width;
+            Height = height;
+        }
+
+        public static Texture CreateCubeShadowMap(PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        {
+            int handle;
+            GL.GenTextures(1, out handle);
+            var txt = new Texture(handle, TextureTarget.TextureCubeMap, width, height);
+            txt.Use();
+            for (var i = 0; i < 6; i++)
+                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.DepthComponent, width, height, border, format, type, pixels);
+
+            txt.SetNearestFilter();
+            txt.SetClampToEdgeWrap();
+            return txt;
         }
 
         public int Width { get; private set; }
@@ -32,8 +56,8 @@ namespace LearnOpenTK.Common
             var bits = bitmap.LockBits(new Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             //BindToRead(ReadBufferMode.ColorAttachment0 + AttachmentIndex);
             //GL.ReadPixels(0, 0, 800, 600, PixelFormat.Rgb, PixelType.Float, bits.Scan0);
-            GL.BindTexture(TextureTarget.Texture2D, Handle);
-            GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Bgra, PixelType.UnsignedByte, bits.Scan0);
+            GL.BindTexture(Target, Handle);
+            GL.GetTexImage(Target, 0, PixelFormat.Bgra, PixelType.UnsignedByte, bits.Scan0);
             bitmap.UnlockBits(bits);
 
             bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
@@ -44,34 +68,43 @@ namespace LearnOpenTK.Common
 
         public Bitmap GetDepthTexture()
         {
-            GL.BindTexture(TextureTarget.Texture2D, Handle);
-            return DataHelper.GetDepthTexture(Width, Height, (ptr) => GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.DepthComponent, PixelType.Float, ptr));
+            GL.BindTexture(Target, Handle);
+            return DataHelper.GetDepthTexture(Width, Height, (ptr) => GL.GetTexImage(Target, 0, PixelFormat.DepthComponent, PixelType.Float, ptr));
         }
 
         public void SetLinearFilter()
         {
             Use();
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
+            GL.TexParameter(Target, TextureParameterName.TextureMinFilter, (int)All.Linear);
+            GL.TexParameter(Target, TextureParameterName.TextureMagFilter, (int)All.Linear);
         }
 
         public void SetNearestFilter()
         {
             Use();
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
+            GL.TexParameter(Target, TextureParameterName.TextureMinFilter, (int)All.Nearest);
+            GL.TexParameter(Target, TextureParameterName.TextureMagFilter, (int)All.Nearest);
         }
 
         public void SetClampToBordreWrap()
         {
             Use();
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)All.ClampToBorder);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)All.ClampToBorder);
+            GL.TexParameter(Target, TextureParameterName.TextureWrapS, (int)All.ClampToBorder);
+            GL.TexParameter(Target, TextureParameterName.TextureWrapT, (int)All.ClampToBorder);
+        }
+
+        public void SetClampToEdgeWrap()
+        {
+            Use();
+            GL.TexParameter(Target, TextureParameterName.TextureWrapS, (int)All.ClampToEdge);
+            GL.TexParameter(Target, TextureParameterName.TextureWrapT, (int)All.ClampToEdge);
+            GL.TexParameter(Target, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
         }
 
         // Create texture from path.
         public Texture(string path)
         {
+            Target = TextureTarget.Texture2D;
             // Generate handle
             Handle = GL.GenTexture();
 
@@ -107,7 +140,7 @@ namespace LearnOpenTK.Common
                 //   The format of the pixels, explained above. Since we loaded the pixels as ARGB earlier, we need to use BGRA.
                 //   Data type of the pixels.
                 //   And finally, the actual pixels.
-                GL.TexImage2D(TextureTarget.Texture2D,
+                GL.TexImage2D(Target,
                     0,
                     PixelInternalFormat.Rgba,
                     image.Width,
@@ -125,14 +158,14 @@ namespace LearnOpenTK.Common
             // You could also use (amongst other options) Nearest, which just grabs the nearest pixel, which makes the texture look pixelated if scaled too far.
             // NOTE: The default settings for both of these are LinearMipmap. If you leave these as default but don't generate mipmaps,
             // your image will fail to render at all (usually resulting in pure black instead).
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(Target, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(Target, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 
 
             // Now, set the wrapping mode. S is for the X axis, and T is for the Y axis.
             // We set this to Repeat so that textures will repeat when wrapped. Not demonstrated here since the texture coordinates exactly match
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(Target, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(Target, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
 
             // Next, generate mipmaps.
             // Mipmaps are smaller copies of the texture, scaled down. Each mipmap level is half the size of the previous one
@@ -149,7 +182,7 @@ namespace LearnOpenTK.Common
         public void Use(TextureUnit unit = TextureUnit.Texture0)
         {
             GL.ActiveTexture(unit);
-            GL.BindTexture(TextureTarget.Texture2D, Handle);
+            GL.BindTexture(Target, Handle);
         }
     }
 }

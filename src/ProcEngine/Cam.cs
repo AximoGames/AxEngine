@@ -24,7 +24,7 @@ namespace ProcEngine
 
         public override Matrix4 GetProjectionMatrix()
         {
-            return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.1f, 100f);
+            return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, NearPlane, FarPlane);
         }
 
     }
@@ -53,6 +53,9 @@ namespace ProcEngine
         public abstract CameraType Type { get; }
         public float Pitch = -0.3f;
         protected float _fov = (float)Math.PI / 4;
+
+        public float FarPlane;
+        public float NearPlane;
 
         public Cam(Vector3 position)
         {

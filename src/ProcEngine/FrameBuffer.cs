@@ -76,10 +76,26 @@ namespace ProcEngine
             Check();
         }
 
+        public void InitCubeDepth()
+        {
+            GL.GenFramebuffers(1, out _Handle);
+            Use();
+
+            _DestinationTexture = Texture.CreateCubeShadowMap(PixelInternalFormat.DepthComponent, 1024, 1024, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+            _DestinationTexture.Use();
+
+            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, _DestinationTexture.Handle, 0);
+            GL.DrawBuffer(DrawBufferMode.None);
+            GL.ReadBuffer(ReadBufferMode.None);
+
+            Check();
+        }
+
         private void Check()
         {
-            if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
-                throw new Exception();
+            var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            if (status != FramebufferErrorCode.FramebufferComplete)
+                throw new Exception(status.ToString());
         }
 
         public RenderBuffer RenderBuffer { get; private set; }
