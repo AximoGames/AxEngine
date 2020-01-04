@@ -144,10 +144,12 @@ namespace LearnOpenTK
 
             // Render objects
             foreach (var obj in ctx.ShadowObjects)
-            {
                 obj.OnRenderShadow();
+
+            shadowCubeFb.Use();
+            GL.Clear(ClearBufferMask.DepthBufferBit);
+            foreach (var obj in ctx.ShadowObjects)
                 obj.OnRenderCubeShadow();
-            }
 
             //--
 

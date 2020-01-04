@@ -125,12 +125,11 @@ namespace ProcEngine
 
         public void OnRenderCubeShadow()
         {
-            return;
             vao.Use();
 
             _CubeShadowShader.Use();
 
-            ILightObject light = Lights[1];
+            ILightObject light = Lights[1]; // TODO
 
             var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
             {
@@ -146,10 +145,6 @@ namespace ProcEngine
             AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 0.0f, -1.0f));
             AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f));
             AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f));
-
-            var lightProjection = shadowCamera.GetProjectionMatrix();
-            var lightView = shadowCamera.GetViewMatrix();
-            lightSpaceMatrix = lightView * lightProjection;
 
             _CubeShadowShader.SetMatrix4("model", ModelMatrix);
             for (var i = 0; i < CubeShadowsMatrices.Count; i++)
