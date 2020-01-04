@@ -107,13 +107,25 @@ namespace LearnOpenTK.Common
             for (var i = 0; i < numberOfUniforms; i++)
             {
                 // get the name of this uniform,
-                var key = GL.GetActiveUniform(Handle, i, out _, out _);
+                int size;
+                ActiveUniformType type;
+                var key = GL.GetActiveUniform(Handle, i, out size, out type);
 
                 // get the location,
                 var location = GL.GetUniformLocation(Handle, key);
 
                 // and then add it to the dictionary.
                 _uniformLocations.Add(key, location);
+
+                if (size > 1)
+                {
+                    for (int n = 1; n < size; n++)
+                    {
+                        var keyN = key.Replace("[0]", $"[{n}]");
+                        _uniformLocations.Add(keyN, GL.GetUniformLocation(Handle, keyN));
+                    }
+                }
+
             }
         }
 
