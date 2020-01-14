@@ -111,7 +111,7 @@ namespace LearnOpenTK
 
         private void StartFileListener()
         {
-            ShaderWatcher = new FileSystemWatcher(Path.Combine("..", "..", "..", "Shaders"));
+            ShaderWatcher = new FileSystemWatcher(Path.Combine(DirectoryHelper.RootDir, "Shaders"));
             ShaderWatcher.Changed += (sender, e) =>
             {
                 // Reload have to be in Main-Thread.
@@ -201,6 +201,7 @@ namespace LearnOpenTK
             if (input.IsKeyDown(Key.Escape))
             {
                 Exit();
+                Environment.Exit(0);
             }
 
             var kbState = Keyboard.GetState();

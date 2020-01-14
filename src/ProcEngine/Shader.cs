@@ -4,7 +4,7 @@ using System.Text;
 using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
-
+using ProcEngine;
 
 namespace LearnOpenTK.Common
 {
@@ -211,7 +211,7 @@ namespace LearnOpenTK.Common
         // Just loads the entire file into a string.
         private static string LoadSource(string path)
         {
-            using (var sr = new StreamReader(Path.Combine("..", "..", "..", path), Encoding.UTF8))
+            using (var sr = new StreamReader(Path.Combine(DirectoryHelper.RootDir, path), Encoding.UTF8))
             {
                 return sr.ReadToEnd();
             }
