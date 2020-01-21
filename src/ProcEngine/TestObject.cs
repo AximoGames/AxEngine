@@ -10,7 +10,7 @@ namespace ProcEngine
     public class TestObject : GameObject, IRenderableObject, IShadowObject, IReloadable, ILightTarget
     {
 
-        public Cam Camera => Context.Camera;
+        public Camera Camera => Context.Camera;
         public Matrix4 ModelMatrix { get; set; } = Matrix4.Identity;
 
         public RenderPosition RenderPosition => RenderPosition.Scene;
@@ -155,7 +155,7 @@ namespace ProcEngine
             vao.Draw();
         }
 
-        private void AddShadowCubeMatrix(Cam camera, Vector3 direction, Vector3 up)
+        private void AddShadowCubeMatrix(Camera camera, Vector3 direction, Vector3 up)
         {
             var proj = camera.GetProjectionMatrix();
             var view = Matrix4.LookAt(camera.Position, camera.Position + direction, up);

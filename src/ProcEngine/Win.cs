@@ -32,7 +32,7 @@ namespace LearnOpenTK
 
         public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.Default) { }
 
-        public Cam Camera => ctx.Camera;
+        public Camera Camera => ctx.Camera;
 
         private double CamAngle = 0;
 

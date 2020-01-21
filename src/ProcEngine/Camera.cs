@@ -9,7 +9,7 @@ namespace ProcEngine
         Orthographic,
     }
 
-    public class PerspectiveFieldOfViewCamera : Cam
+    public class PerspectiveFieldOfViewCamera : Camera
     {
         public override CameraType Type => CameraType.PerspectiveFieldOfView;
 
@@ -29,7 +29,7 @@ namespace ProcEngine
 
     }
 
-    public class OrthographicCamera : Cam
+    public class OrthographicCamera : Camera
     {
         public override CameraType Type => CameraType.Orthographic;
 
@@ -47,7 +47,7 @@ namespace ProcEngine
 
     }
 
-    public abstract class Cam
+    public abstract class Camera
     {
         public Vector3 Position;
         public abstract CameraType Type { get; }
@@ -57,7 +57,7 @@ namespace ProcEngine
         public float FarPlane;
         public float NearPlane;
 
-        public Cam(Vector3 position)
+        public Camera(Vector3 position)
         {
             Position = position;
         }

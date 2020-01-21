@@ -7,7 +7,7 @@ namespace ProcEngine
 
     public class LightObject : GameObject, IRenderableObject, IPosition, ILightObject
     {
-        public Cam Camera => Context.Camera;
+        public Camera Camera => Context.Camera;
 
         public Vector3 Position { get; set; }
 
