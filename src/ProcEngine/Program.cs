@@ -1,5 +1,4 @@
-﻿using LearnOpenTK;
-using System;
+﻿using System;
 using OpenTK;
 
 namespace ProcEngine
@@ -8,7 +7,8 @@ namespace ProcEngine
     {
         public static void Main(string[] args)
         {
-            Toolkit.Init(new ToolkitOptions {
+            Toolkit.Init(new ToolkitOptions
+            {
                 Backend = PlatformBackend.PreferX11,
             });
 

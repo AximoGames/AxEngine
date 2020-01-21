@@ -7,7 +7,7 @@ using OpenTK.Graphics.OpenGL4;
 using ProcEngine;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 
-namespace LearnOpenTK.Common
+namespace ProcEngine
 {
     // A helper class, much like Shader, meant to simplify loading textures.
     public class Texture
@@ -113,8 +113,8 @@ namespace LearnOpenTK.Common
 
             // For this example, we're going to use .NET's built-in System.Drawing library to load textures.
 
-var imagePath=Path.Combine(DirectoryHelper.RootDir, path);
-Console.WriteLine(imagePath);
+            var imagePath = Path.Combine(DirectoryHelper.RootDir, path);
+            Console.WriteLine(imagePath);
             // Load the image
             using (var image = new Bitmap(imagePath))
             {

@@ -1,6 +1,4 @@
-﻿using LearnOpenTK;
-using LearnOpenTK.Common;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;

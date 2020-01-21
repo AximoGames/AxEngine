@@ -6,7 +6,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using ProcEngine;
 
-namespace LearnOpenTK.Common
+namespace ProcEngine
 {
     // A simple class meant to help create shaders.
     public class Shader

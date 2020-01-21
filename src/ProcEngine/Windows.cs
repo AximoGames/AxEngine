@@ -3,12 +3,11 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
-using LearnOpenTK.Common;
 using ProcEngine;
 using System.IO;
 using System.Collections.Generic;
 
-namespace LearnOpenTK
+namespace ProcEngine
 {
     // In this tutorial we set up some basic lighting and look at how the phong model works
     // For more insight into how it all works look at the web version. If you are just here for the source,
