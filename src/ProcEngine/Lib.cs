@@ -11,10 +11,15 @@ namespace ProcEngine
 {
 
 
-    public static class DirectoryHelper {
-        public static string RootDir {get{
-            return new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..")).FullName;
-        }}
+    public static class DirectoryHelper
+    {
+        public static string RootDir
+        {
+            get
+            {
+                return new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..")).FullName;
+            }
+        }
     }
 
     public interface IGameObject

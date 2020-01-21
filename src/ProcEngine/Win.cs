@@ -181,7 +181,7 @@ namespace LearnOpenTK
             var err = LastErrorCode;
             if (err != ErrorCode.NoError)
             {
-                var s = "";
+                var s = "".ToString();
             }
         }
 
