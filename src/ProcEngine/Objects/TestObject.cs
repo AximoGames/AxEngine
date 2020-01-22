@@ -63,10 +63,10 @@ namespace ProcEngine
             txt1.Use(TextureUnit.Texture1);
             Window.shadowFb.DestinationTexture.Use(TextureUnit.Texture2);
             var debugMatrix = new Matrix4(
-    new Vector4(1, 0, 0, 0),
-    new Vector4(0, 0, 1, 0),
-    new Vector4(0, 1, 0, 0),
-    new Vector4(0, 0, 0, 1));
+                new Vector4(1, 0, 0, 0),
+                new Vector4(0, 0, 1, 0),
+                new Vector4(0, 1, 0, 0),
+                new Vector4(0, 0, 0, 1));
 
             _Shader.Use();
 
@@ -81,11 +81,11 @@ namespace ProcEngine
             _Shader.SetInt("shadowMap", 2);
             _Shader.SetMatrix4("debugMatrix", debugMatrix);
 
-            ILightObject Light = Lights[0];
+            ILightObject light = Lights[0];
 
             _Shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
             _Shader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
-            _Shader.SetVector3("lightPos", Light.Position);
+            _Shader.SetVector3("lightPos", light.Position);
             _Shader.SetVector3("viewPos", Camera.Position);
 
             vao.Draw();
@@ -131,7 +131,7 @@ namespace ProcEngine
 
             var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
             {
-                NearPlane = 1f,
+                NearPlane = 0.1f,
                 FarPlane = 25f,
             };
 
@@ -157,7 +157,7 @@ namespace ProcEngine
         {
             var proj = camera.GetProjectionMatrix();
             var view = Matrix4.LookAt(camera.Position, camera.Position + direction, up);
-            CubeShadowsMatrices.Add(view);
+            CubeShadowsMatrices.Add(view * proj);
         }
 
         public override void Free()

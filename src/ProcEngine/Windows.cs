@@ -65,7 +65,7 @@ namespace ProcEngine
 
             ctx.AddObject(new LightObject()
             {
-                Position = new Vector3(1f, 0.5f, 1.5f),
+                Position = new Vector3(1f, 0.5f, 0.25f),
             });
 
             ctx.AddObject(new TestObject()
