@@ -81,17 +81,60 @@ namespace ProcEngine
             _Shader.SetInt("shadowMap", 2);
             _Shader.SetMatrix4("debugMatrix", debugMatrix);
 
-            ILightObject light = Lights[0];
-
             _Shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
             _Shader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
-            _Shader.SetVector3("lightPos", light.Position);
+            _Shader.SetVector3("lightPos", GetShadowLight().Position);
             _Shader.SetVector3("viewPos", Camera.Position);
+
+            var shadowCamera = GetCubeShadowCamera();
+            _Shader.SetFloat("far_plane", shadowCamera.FarPlane);
+            Window.shadowCubeFb.DestinationTexture.Use(TextureUnit.Texture3);
+            _Shader.SetInt("depthMap", 3);
 
             vao.Draw();
         }
 
         private Matrix4 lightSpaceMatrix;
+
+        private Camera GetShadowCamera()
+        {
+            ILightObject light = GetShadowLight();
+
+            var shadowCamera = new OrthographicCamera(light.Position)
+            {
+                NearPlane = 0.01f,
+                FarPlane = 100f,
+            };
+            shadowCamera.LookAt = new Vector3(0);
+
+            return shadowCamera;
+        }
+
+        private Camera GetCubeShadowCamera()
+        {
+            ILightObject light = GetCubeShadowLight(); // TODO
+
+            var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
+            {
+                NearPlane = 0.01f,
+                FarPlane = 100f,
+            };
+
+            return shadowCamera;
+        }
+
+        // Because of shared variables in the shaders, only one position is possible yet
+        private int TMP_LIGHT_IDX = 0; // 1= moving, 0=static light
+
+        private ILightObject GetCubeShadowLight()
+        {
+            return Lights[TMP_LIGHT_IDX];
+        }
+
+        private ILightObject GetShadowLight()
+        {
+            return Lights[TMP_LIGHT_IDX];
+        }
 
         public void OnRenderShadow()
         {
@@ -99,14 +142,7 @@ namespace ProcEngine
 
             _ShadowShader.Use();
 
-            ILightObject light = Lights[0];
-
-            var shadowCamera = new OrthographicCamera(light.Position)
-            {
-                NearPlane = 0.01f,
-                FarPlane = 7.5f,
-            };
-            shadowCamera.LookAt = new Vector3(0);
+            var shadowCamera = GetShadowCamera();
 
             var lightProjection = shadowCamera.GetProjectionMatrix();
             var lightView = shadowCamera.GetViewMatrix();
@@ -127,13 +163,7 @@ namespace ProcEngine
 
             _CubeShadowShader.Use();
 
-            ILightObject light = Lights[1]; // TODO
-
-            var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
-            {
-                NearPlane = 0.1f,
-                FarPlane = 25f,
-            };
+            var shadowCamera = GetCubeShadowCamera();
 
             CubeShadowsMatrices.Clear();
 
@@ -147,7 +177,7 @@ namespace ProcEngine
             _CubeShadowShader.SetMatrix4("model", ModelMatrix);
             for (var i = 0; i < CubeShadowsMatrices.Count; i++)
                 _CubeShadowShader.SetMatrix4($"shadowMatrices[{i}]", CubeShadowsMatrices[i]);
-            _CubeShadowShader.SetVector3("lightPos", light.Position);
+            _CubeShadowShader.SetVector3("lightPos", GetCubeShadowLight().Position);
             _CubeShadowShader.SetFloat("far_plane", shadowCamera.FarPlane);
 
             vao.Draw();

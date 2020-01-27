@@ -188,3 +188,5 @@ FakesAssemblies/
 
 packages/
 .vs/
+
+mono_crash*
