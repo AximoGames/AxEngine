@@ -65,12 +65,12 @@ namespace ProcEngine
 
             ctx.AddObject(new LightObject()
             {
-                Position = new Vector3(1f, 0.5f, 0.25f),
+                Position = new Vector3(1f, 0.5f, 0.5f),
             });
 
             ctx.AddObject(new TestObject()
             {
-                ModelMatrix = Matrix4.CreateTranslation(0, 0, 0),
+                ModelMatrix = Matrix4.CreateScale(0.5f, 0.5f, 0.5f) * Matrix4.CreateRotationZ((float)Math.PI) * Matrix4.CreateTranslation(0, 0, 0),
                 Debug = true,
             });
 
@@ -128,7 +128,7 @@ namespace ProcEngine
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             CamAngle -= 0.01;
-            var pos = new Vector3((float)(Math.Cos(CamAngle) * 2f), (float)(Math.Sin(CamAngle) * 2f), 2.0f);
+            var pos = new Vector3((float)(Math.Cos(CamAngle) * 2f), (float)(Math.Sin(CamAngle) * 2f), 1.0f);
             ILightObject light = ctx.LightObjects[0];
 
             light.Position = pos;

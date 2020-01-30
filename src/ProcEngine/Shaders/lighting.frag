@@ -27,6 +27,7 @@ uniform samplerCube depthMap;
 
 float ShadowCalculation(vec4 fragPosLightSpace);
 float ShadowCalculation2(vec3 fragPos);
+float ShadowCalculation3(vec3 fragPos);
 
 // array of offset direction for sampling
 vec3 gridSamplingDisk[20] = vec3[]
@@ -40,7 +41,8 @@ vec3 gridSamplingDisk[20] = vec3[]
 
 void main()
 {
-	vec3 color = texture(material.diffuse, TexCoords).rgb;
+	//vec3 color = texture(material.diffuse, TexCoords).rgb;
+	vec3 color = vec3(1.0, 1.0, 0.0); // solid color for debugging
 	vec3 normal = normalize(Normal);
 	vec3 lightColor = vec3(0.4);
 	// ambient
@@ -59,7 +61,8 @@ void main()
 	// calculate shadow
 
 	//float shadow = ShadowCalculation(FragPosLightSpace);
-	float shadow = ShadowCalculation2(FragPos);
+	//float shadow = ShadowCalculation2(FragPos);
+	float shadow = ShadowCalculation3(FragPos);
 
 	//shadow = 0;
 	vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
@@ -118,6 +121,23 @@ float ShadowCalculation2(vec3 fragPos)
         
     return shadow;
 }
+
+float ShadowCalculation3(vec3 fragPos)
+{
+    // get vector between fragment position and light position
+    vec3 fragToLight = fragPos - lightPos;
+    // use the light to fragment vector to sample from the depth map    
+    float closestDepth = texture(depthMap, fragToLight).r;
+    // it is currently in linear range between [0,1]. Re-transform back to original value
+    closestDepth *= far_plane;
+    // now get current linear depth as the length between the fragment and light position
+    float currentDepth = length(fragToLight);
+    // now test for shadows
+    float bias = 0.05; 
+    float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+
+    return shadow;
+}  
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
