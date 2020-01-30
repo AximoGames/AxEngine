@@ -40,16 +40,18 @@ namespace ProcEngine
             GL.BindVertexArray(_Handle);
         }
 
+        public PrimitiveType PrimitiveType = PrimitiveType.Triangles;
+
         public void Draw()
         {
-            GL.DrawArrays(PrimitiveType.Triangles, 0, VertexCount);
+            GL.DrawArrays(PrimitiveType, 0, VertexCount);
         }
 
         internal void SetData(float[] vertices)
         {
             Use();
             _vbo.SetData(vertices);
-            VertexCount = (vertices.Length* sizeof(float)) / Layout.Stride;
+            VertexCount = (vertices.Length * sizeof(float)) / Layout.Stride;
         }
 
         //public void AddPosition()

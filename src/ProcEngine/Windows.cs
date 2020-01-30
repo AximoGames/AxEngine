@@ -80,6 +80,12 @@ namespace ProcEngine
                 //Debug = true,
             });
 
+            ctx.AddObject(new Lines()
+            {
+                ModelMatrix = Matrix4.CreateTranslation(0f, 0f, 0.0f),
+                //Debug = true,
+            });
+
             ctx.AddObject(new TestObject()
             {
                 ModelMatrix = Matrix4.CreateScale(8, 8, 8) * Matrix4.CreateTranslation(0f, 0f, -4.5f),

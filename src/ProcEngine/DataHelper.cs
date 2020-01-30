@@ -217,6 +217,19 @@ namespace ProcEngine
             new Vector3(0, 0, 1),
             new Vector3(0, -1, 0));
 
+        private const float LineGrayTone = 0.65f;
+        public static readonly float[] Cross =
+        {
+             // Position          Color
+             -1f, 0f, 0.0f,  LineGrayTone, LineGrayTone, LineGrayTone,  1.0f, // Line X
+             1.0f,  0.0f, 0.0f,  LineGrayTone, LineGrayTone, LineGrayTone,  1.0f,
+
+             0f, -1f, 0.0f,  LineGrayTone, LineGrayTone, LineGrayTone,  1.0f, // Line Y
+             0.0f,  1.0f, 0.0f,  LineGrayTone, LineGrayTone, LineGrayTone,  1.0f,
+
+             0f, 0f, -1.0f,  LineGrayTone, LineGrayTone, LineGrayTone,  1.0f, // Line Y
+             0.0f,  0.0f, 1.0f,  LineGrayTone, LineGrayTone, LineGrayTone,  1.0f,
+        };
 
     }
 
