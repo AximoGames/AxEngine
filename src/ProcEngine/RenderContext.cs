@@ -18,6 +18,7 @@ namespace ProcEngine
     public class RenderContext
     {
 
+        public SceneOptions SceneOpitons;
         public Camera Camera;
         public List<IGameObject> AllObjects = new List<IGameObject>();
         public List<IRenderableObject> RenderableObjects = new List<IRenderableObject>();

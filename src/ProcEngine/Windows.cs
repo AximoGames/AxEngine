@@ -50,6 +50,10 @@ namespace ProcEngine
             GL.Enable(EnableCap.CullFace);
 
             ctx = new RenderContext();
+            ctx.SceneOpitons = new SceneOptions
+            {
+
+            };
             ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), Width / (float)Height)
             {
                 NearPlane = 0.01f,
@@ -342,4 +346,8 @@ namespace ProcEngine
             base.OnUnload(e);
         }
     }
+    public class SceneOptions
+    {
+    }
+
 }
