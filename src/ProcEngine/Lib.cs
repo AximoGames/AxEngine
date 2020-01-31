@@ -25,6 +25,7 @@ namespace ProcEngine
     public interface IGameObject
     {
         int Id { get; }
+        string Name { get; set; }
         RenderContext Context { get; }
         void Init();
         void Free();

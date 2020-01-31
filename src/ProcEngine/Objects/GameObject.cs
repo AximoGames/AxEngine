@@ -5,7 +5,7 @@ namespace ProcEngine
     public abstract class GameObject : IGameObject
     {
         public int Id { get; }
-        // public string Name { get; set; }
+        public string Name { get; set; }
 
         public RenderContext Context { get; private set; }
 

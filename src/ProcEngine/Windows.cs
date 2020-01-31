@@ -74,24 +74,28 @@ namespace ProcEngine
 
             ctx.AddObject(new TestObject()
             {
+                Name = "Box1",
                 ModelMatrix = Matrix4.CreateScale(0.5f, 0.5f, 0.5f) * Matrix4.CreateRotationZ((float)Math.PI) * Matrix4.CreateTranslation(0, 0, 0),
                 Debug = true,
             });
 
             ctx.AddObject(new TestObject()
             {
+                Name = "Box2",
                 ModelMatrix = Matrix4.CreateTranslation(1.5f, 1.5f, 0.0f),
                 //Debug = true,
             });
 
             ctx.AddObject(new Lines()
             {
+                Name = "CenterCross",
                 ModelMatrix = Matrix4.CreateTranslation(0f, 0f, 0.0f),
                 //Debug = true,
             });
 
             ctx.AddObject(new TestObject()
             {
+                Name = "Ground",
                 ModelMatrix = Matrix4.CreateScale(8, 8, 8) * Matrix4.CreateTranslation(0f, 0f, -4.5f),
             });
 
