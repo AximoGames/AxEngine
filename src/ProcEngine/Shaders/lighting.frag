@@ -60,9 +60,9 @@ void main()
 	vec3 specular = spec * lightColor;
 	// calculate shadow
 
-	//float shadow = ShadowCalculation(FragPosLightSpace);
+	float shadow = ShadowCalculation(FragPosLightSpace);
 	//float shadow = ShadowCalculation2(FragPos);
-	float shadow = ShadowCalculation3(FragPos);
+	//float shadow = ShadowCalculation3(FragPos);
 
 	//shadow = 0;
 	vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;

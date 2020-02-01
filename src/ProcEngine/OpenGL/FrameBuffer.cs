@@ -63,7 +63,7 @@ namespace ProcEngine
             GL.GenFramebuffers(1, out _Handle);
             Use();
 
-            _DestinationTexture = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent, 1024, 1024, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+            _DestinationTexture = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent, Width, Height, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
             _DestinationTexture.SetNearestFilter();
             _DestinationTexture.SetClampToBordreWrap();
             _DestinationTexture.Use();
@@ -80,7 +80,7 @@ namespace ProcEngine
             GL.GenFramebuffers(1, out _Handle);
             Use();
 
-            _DestinationTexture = Texture.CreateCubeShadowMap(PixelInternalFormat.DepthComponent, 1024, 1024, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+            _DestinationTexture = Texture.CreateCubeShadowMap(PixelInternalFormat.DepthComponent, Width, Height, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
             _DestinationTexture.Use();
 
             GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, _DestinationTexture.Handle, 0);

@@ -75,7 +75,7 @@ namespace ProcEngine
             ctx.AddObject(new TestObject()
             {
                 Name = "Box1",
-                ModelMatrix = Matrix4.CreateScale(0.5f, 0.5f, 0.5f) * Matrix4.CreateRotationZ((float)Math.PI) * Matrix4.CreateTranslation(0, 0, 0),
+                ModelMatrix = Matrix4.CreateScale(1) * Matrix4.CreateRotationZ((float)Math.PI) * Matrix4.CreateTranslation(0, 0, 0),
                 Debug = true,
             });
 
@@ -105,10 +105,10 @@ namespace ProcEngine
             fb.InitNormal();
             fb.CreateRenderBuffer();
 
-            shadowFb = new FrameBuffer(Width, Height);
+            shadowFb = new FrameBuffer(1024, 1024);
             shadowFb.InitDepth();
 
-            shadowCubeFb = new FrameBuffer(Width, Height);
+            shadowCubeFb = new FrameBuffer(1024, 1024);
             shadowCubeFb.InitCubeDepth();
 
             ctx.AddObject(new ScreenObject(fb.DestinationTexture)
@@ -151,7 +151,7 @@ namespace ProcEngine
 
             //--
 
-            GL.Viewport(0, 0, 1024, 1024);
+            GL.Viewport(0, 0, shadowFb.Width, shadowFb.Height);
             shadowFb.Use();
             GL.Clear(ClearBufferMask.DepthBufferBit);
 

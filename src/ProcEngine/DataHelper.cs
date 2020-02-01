@@ -170,8 +170,8 @@ namespace ProcEngine
 
             getPixels(ptr);
 
-            var floats = new float[1024 * 1024];
-            Marshal.Copy(ptr, floats, 0, 1024 * 1024);
+            var floats = new float[width * height];
+            Marshal.Copy(ptr, floats, 0, width * height);
             Marshal.FreeHGlobal(ptr);
 
             var collection = floats.Where(v => v != 1);
@@ -181,11 +181,11 @@ namespace ProcEngine
 
             var factor = 1.0f / span;
 
-            for (var y = 0; y < 1024; y++)
+            for (var y = 0; y < height; y++)
             {
-                for (var x = 0; x < 1024; x++)
+                for (var x = 0; x < width; x++)
                 {
-                    var value = floats[y * 1024 + x];
+                    var value = floats[y * height + x];
                     if (value != 1.0f)
                     {
                         value -= min;
