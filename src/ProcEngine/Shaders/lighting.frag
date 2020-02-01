@@ -26,8 +26,8 @@ uniform float far_plane;
 uniform samplerCube depthMap;
 
 float ShadowCalculation(vec4 fragPosLightSpace);
-float ShadowCalculation2(vec3 fragPos);
-float ShadowCalculation3(vec3 fragPos);
+float ShadowCalculationCubeSoft(vec3 fragPos);
+float ShadowCalculationCubeHard(vec3 fragPos);
 
 // array of offset direction for sampling
 vec3 gridSamplingDisk[20] = vec3[]
@@ -61,16 +61,19 @@ void main()
 	// calculate shadow
 
 	float shadow = ShadowCalculation(FragPosLightSpace);
-	//float shadow = ShadowCalculation2(FragPos);
-	//float shadow = ShadowCalculation3(FragPos);
+	//float shadowCube = ShadowCalculationCubeSoft(FragPos);
+	float shadowCube = ShadowCalculationCubeHard(FragPos);
 
 	//shadow = 0;
 	vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
+	vec3 lighting2 = (ambient + (1.0 - shadowCube) * (diffuse + specular)) * color;
 	
+    lighting = (lighting + lighting2) / 2;
+
 	FragColor = vec4(lighting, 1.0);
 }
 
-float ShadowCalculation2(vec3 fragPos)
+float ShadowCalculationCubeSoft(vec3 fragPos)
 {
     // get vector between fragment position and light position
     vec3 fragToLight = fragPos - lightPos;
@@ -122,7 +125,7 @@ float ShadowCalculation2(vec3 fragPos)
     return shadow;
 }
 
-float ShadowCalculation3(vec3 fragPos)
+float ShadowCalculationCubeHard(vec3 fragPos)
 {
     // get vector between fragment position and light position
     vec3 fragToLight = fragPos - lightPos;
