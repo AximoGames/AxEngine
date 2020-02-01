@@ -47,9 +47,9 @@ namespace ProcEngine
 
     }
 
-    public abstract class Camera
+    public abstract class Camera : IPosition
     {
-        public Vector3 Position;
+        public Vector3 Position { get; set; }
         public abstract CameraType Type { get; }
         public float Pitch = -0.3f;
         protected float _fov = (float)Math.PI / 4;

@@ -70,7 +70,7 @@ namespace ProcEngine
         int[] GetIndices();
     }
 
-    public interface IPosition : IGameObject
+    public interface IPosition
     {
         Vector3 Position { get; set; }
     }

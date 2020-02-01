@@ -65,11 +65,13 @@ namespace ProcEngine
             ctx.AddObject(new LightObject()
             {
                 Position = new Vector3(0, 2, 2),
+                Name = "MovingLight",
             });
 
             ctx.AddObject(new LightObject()
             {
                 Position = new Vector3(1f, 0.5f, 0.5f),
+                Name = "StaticLight",
             });
 
             ctx.AddObject(new TestObject()
@@ -99,8 +101,8 @@ namespace ProcEngine
             ctx.AddObject(new TestObject()
             {
                 Name = "Ground",
-                Scale = new Vector3(8),
-                Position = new Vector3(0f, 0f, -4.5f),
+                Scale = new Vector3(100, 100, 1),
+                Position = new Vector3(0f, 0f, -1f),
             });
 
             //CursorVisible = false;
@@ -120,6 +122,9 @@ namespace ProcEngine
             });
 
             StartFileListener();
+
+            MovingObject = Camera;
+            //MovingObject = ctx.GetObjectByName("Box1") as IPosition;
 
             base.OnLoad(e);
         }
@@ -204,6 +209,25 @@ namespace ProcEngine
 
         public static ErrorCode LastErrorCode => GL.GetError();
 
+        private IPosition MovingObject;
+
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        {
+            var kbState = Keyboard.GetState();
+            if (kbState[Key.C])
+            {
+                MovingObject = Camera;
+            }
+            if (kbState[Key.B])
+            {
+                MovingObject = ctx.GetObjectByName("Box1") as IPosition;
+            }
+            if (kbState[Key.L])
+            {
+                MovingObject = ctx.GetObjectByName("StaticLight") as IPosition;
+            }
+        }
+
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             ProcessTaskQueue();
@@ -222,28 +246,73 @@ namespace ProcEngine
             }
 
             var kbState = Keyboard.GetState();
+
+            IPosition pos = MovingObject;
+            Camera cam = pos as Camera;
+            bool simpleMove = cam == null;
+
             if (kbState[Key.W])
             {
-                Camera.Position.X += (float)Math.Cos(Camera.Facing) * 0.1f;
-                Camera.Position.Y += (float)Math.Sin(Camera.Facing) * 0.1f;
+                if (simpleMove)
+                    pos.Position = new Vector3(
+                        pos.Position.X,
+                        pos.Position.Y + 0.1f,
+                        pos.Position.Z
+                    );
+                else
+                    pos.Position = new Vector3(
+                        pos.Position.X + (float)Math.Cos(cam.Facing) * 0.1f,
+                        pos.Position.Y + (float)Math.Sin(cam.Facing) * 0.1f,
+                        pos.Position.Z
+                    );
             }
 
             if (kbState[Key.S])
             {
-                Camera.Position.X -= (float)Math.Cos(Camera.Facing) * 0.1f;
-                Camera.Position.Y -= (float)Math.Sin(Camera.Facing) * 0.1f;
+                if (simpleMove)
+                    pos.Position = new Vector3(
+                        pos.Position.X,
+                        pos.Position.Y - 0.1f,
+                        pos.Position.Z
+                    );
+                else
+                    pos.Position = new Vector3(
+                        pos.Position.X - (float)Math.Cos(cam.Facing) * 0.1f,
+                        pos.Position.Y - (float)Math.Sin(cam.Facing) * 0.1f,
+                        pos.Position.Z
+                    );
             }
 
             if (kbState[Key.A])
             {
-                Camera.Position.X += (float)Math.Cos(Camera.Facing + Math.PI / 2) * 0.1f;
-                Camera.Position.Y += (float)Math.Sin(Camera.Facing + Math.PI / 2) * 0.1f;
+                if (simpleMove)
+                    pos.Position = new Vector3(
+                        pos.Position.X - 0.1f,
+                        pos.Position.Y,
+                        pos.Position.Z
+                    );
+                else
+                    pos.Position = new Vector3(
+                        pos.Position.X + (float)Math.Cos(cam.Facing + Math.PI / 2) * 0.1f,
+                        pos.Position.Y + (float)Math.Sin(cam.Facing + Math.PI / 2) * 0.1f,
+                        pos.Position.Z
+                    );
             }
 
             if (kbState[Key.D])
             {
-                Camera.Position.X -= (float)Math.Cos(Camera.Facing + Math.PI / 2) * 0.1f;
-                Camera.Position.Y -= (float)Math.Sin(Camera.Facing + Math.PI / 2) * 0.1f;
+                if (simpleMove)
+                    pos.Position = new Vector3(
+                        pos.Position.X + 0.1f,
+                        pos.Position.Y,
+                        pos.Position.Z
+                    );
+                else
+                    pos.Position = new Vector3(
+                        pos.Position.X - (float)Math.Cos(cam.Facing + Math.PI / 2) * 0.1f,
+                        pos.Position.Y - (float)Math.Sin(cam.Facing + Math.PI / 2) * 0.1f,
+                        pos.Position.Z
+                    );
             }
 
             if (kbState[Key.Left])
@@ -273,10 +342,24 @@ namespace ProcEngine
             MouseDelta = new Vector2();
             UpDownDelta = 0;
 
-            Camera.Facing += MouseSpeed[0] * 2;
-            Camera.Pitch += MouseSpeed[1] * 2;
+            if (cam != null)
+            {
+                cam.Facing += MouseSpeed[0] * 2;
+                cam.Pitch += MouseSpeed[1] * 2;
+            }
             //Console.WriteLine(Camera.Pitch + " : " + Math.Round(MouseSpeed[1], 3));
-            Camera.Position.Z += MouseSpeed[2] * 2;
+            if (simpleMove)
+                pos.Position = new Vector3(
+                    pos.Position.X,
+                    pos.Position.Y,
+                    pos.Position.Z + MouseSpeed[2] * 2
+                );
+            else
+                pos.Position = new Vector3(
+                    pos.Position.X,
+                    pos.Position.Y,
+                    pos.Position.Z + MouseSpeed[2] * 2
+                );
 
             if (kbState[Key.Escape])
                 Exit();

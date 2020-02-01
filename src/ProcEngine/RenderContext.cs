@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ProcEngine
 {
@@ -25,6 +26,12 @@ namespace ProcEngine
         public List<IRenderableObject> RenderableScreenObjects = new List<IRenderableObject>();
         public List<IShadowObject> ShadowObjects = new List<IShadowObject>();
         public List<ILightObject> LightObjects = new List<ILightObject>();
+
+        public IGameObject GetObjectByName(string name)
+        {
+            // TODO: Hash
+            return AllObjects.FirstOrDefault(o => o.Name == name);
+        }
 
         public void AddObject(IGameObject obj)
         {

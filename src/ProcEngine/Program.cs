@@ -11,6 +11,9 @@ namespace ProcEngine
 
         public static void Main(string[] args)
         {
+            UIThreadMain();
+            return;
+
             th = new Thread(UIThreadMain);
             th.Start();
 
