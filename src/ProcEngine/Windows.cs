@@ -83,13 +83,13 @@ namespace ProcEngine
                 Debug = true,
             });
 
-            ctx.AddObject(new TestObject()
-            {
-                Name = "Box2",
-                Scale = new Vector3(1),
-                Position = new Vector3(1.5f, 1.5f, 0.0f),
-                //Debug = true,
-            });
+            // ctx.AddObject(new TestObject()
+            // {
+            //     Name = "Box2",
+            //     Scale = new Vector3(1),
+            //     Position = new Vector3(1.5f, 1.5f, 0.0f),
+            //     //Debug = true,
+            // });
 
             ctx.AddObject(new Lines()
             {
@@ -224,7 +224,10 @@ namespace ProcEngine
             }
             if (kbState[Key.L])
             {
-                MovingObject = ctx.GetObjectByName("StaticLight") as IPosition;
+                if (kbState[Key.ShiftLeft])
+                    Camera.Position = (ctx.GetObjectByName("StaticLight") as IPosition).Position;
+                else
+                    MovingObject = ctx.GetObjectByName("StaticLight") as IPosition;
             }
         }
 
