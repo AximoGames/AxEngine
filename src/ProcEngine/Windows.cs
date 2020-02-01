@@ -75,14 +75,17 @@ namespace ProcEngine
             ctx.AddObject(new TestObject()
             {
                 Name = "Box1",
-                ModelMatrix = Matrix4.CreateScale(1) * Matrix4.CreateRotationZ((float)Math.PI) * Matrix4.CreateTranslation(0, 0, 0),
+                Rotate = new Vector3(0, 0, (float)Math.PI),
+                Scale = new Vector3(1),
+                Position = new Vector3(0, 0, 0),
                 Debug = true,
             });
 
             ctx.AddObject(new TestObject()
             {
                 Name = "Box2",
-                ModelMatrix = Matrix4.CreateTranslation(1.5f, 1.5f, 0.0f),
+                Scale = new Vector3(1),
+                Position = new Vector3(1.5f, 1.5f, 0.0f),
                 //Debug = true,
             });
 
@@ -96,7 +99,8 @@ namespace ProcEngine
             ctx.AddObject(new TestObject()
             {
                 Name = "Ground",
-                ModelMatrix = Matrix4.CreateScale(8, 8, 8) * Matrix4.CreateTranslation(0f, 0f, -4.5f),
+                Scale = new Vector3(8),
+                Position = new Vector3(0f, 0f, -4.5f),
             });
 
             //CursorVisible = false;

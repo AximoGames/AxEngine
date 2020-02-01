@@ -5,13 +5,24 @@ using System.Collections.Generic;
 
 namespace ProcEngine
 {
-    public class TestObject : GameObject, IRenderableObject, IShadowObject, IReloadable, ILightTarget
+    public class TestObject : GameObject, IRenderableObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate
     {
 
         public Camera Camera => Context.Camera;
-        public Matrix4 ModelMatrix { get; set; } = Matrix4.Identity;
+        public Vector3 Position { get; set; }
+        public Vector3 Scale { get; set; }
+        public Vector3 Rotate { get; set; }
 
         public RenderPosition RenderPosition => RenderPosition.Scene;
+
+        public Matrix4 GetModelMatrix()
+        {
+            return Matrix4.CreateScale(Scale)
+            * Matrix4.CreateRotationZ(Rotate.X)
+            * Matrix4.CreateRotationZ(Rotate.Y)
+            * Matrix4.CreateRotationZ(Rotate.Z)
+            * Matrix4.CreateTranslation(Position);
+        }
 
         public bool Debug;
 
@@ -70,7 +81,7 @@ namespace ProcEngine
 
             _Shader.Use();
 
-            _Shader.SetMatrix4("model", ModelMatrix);
+            _Shader.SetMatrix4("model", GetModelMatrix());
             _Shader.SetMatrix4("view", Camera.GetViewMatrix());
             _Shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
 
@@ -149,7 +160,7 @@ namespace ProcEngine
             var lightView = shadowCamera.GetViewMatrix();
             lightSpaceMatrix = lightView * lightProjection;
 
-            _ShadowShader.SetMatrix4("model", ModelMatrix);
+            _ShadowShader.SetMatrix4("model", GetModelMatrix());
             _ShadowShader.SetMatrix4("view", lightView);
             _ShadowShader.SetMatrix4("projection", lightProjection);
 
@@ -184,7 +195,7 @@ namespace ProcEngine
             // AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f));
             // AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f));
 
-            _CubeShadowShader.SetMatrix4("model", ModelMatrix);
+            _CubeShadowShader.SetMatrix4("model", GetModelMatrix());
             for (var i = 0; i < CubeShadowsMatrices.Count; i++)
                 _CubeShadowShader.SetMatrix4($"shadowMatrices[{i}]", CubeShadowsMatrices[i]);
             _CubeShadowShader.SetVector3("lightPos", GetCubeShadowLight().Position);

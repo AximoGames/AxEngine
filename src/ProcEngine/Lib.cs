@@ -75,6 +75,12 @@ namespace ProcEngine
         Vector3 Position { get; set; }
     }
 
+    public interface IScaleRotate : IPosition
+    {
+        Vector3 Scale { get; set; }
+        Vector3 Rotate { get; set; }
+    }
+
     public interface ILightObject : IPosition, IGameObject
     {
     }
