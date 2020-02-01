@@ -100,10 +100,11 @@ namespace ProcEngine
         {
             ILightObject light = GetShadowLight();
 
+            //var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
             var shadowCamera = new OrthographicCamera(light.Position)
             {
-                NearPlane = 0.01f,
-                FarPlane = 100f,
+                NearPlane = 0.1f,
+                FarPlane = 25f,
             };
             shadowCamera.LookAt = new Vector3(0);
 

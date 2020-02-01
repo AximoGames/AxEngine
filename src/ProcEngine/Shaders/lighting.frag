@@ -68,6 +68,7 @@ void main()
 	vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
 	vec3 lighting2 = (ambient + (1.0 - shadowCube) * (diffuse + specular)) * color;
 	
+    // Combine both shadows, for debugging
     lighting = (lighting + lighting2) / 2;
 
 	FragColor = vec4(lighting, 1.0);

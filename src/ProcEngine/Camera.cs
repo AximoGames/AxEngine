@@ -39,10 +39,10 @@ namespace ProcEngine
 
         public override Matrix4 GetProjectionMatrix()
         {
-            float near_plane = 0.01f;
-            float far_plane = 7.5f;
+            // float near_plane = 0.01f;
+            // float far_plane = 7.5f;
 
-            return Matrix4.CreateOrthographicOffCenter(-10, 10, -10, 10, near_plane, far_plane);
+            return Matrix4.CreateOrthographicOffCenter(-10, 10, -10, 10, NearPlane, FarPlane);
         }
 
     }
