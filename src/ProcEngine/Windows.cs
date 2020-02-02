@@ -67,6 +67,7 @@ namespace ProcEngine
                 Name = "Ground",
                 Scale = new Vector3(50, 50, 1),
                 Position = new Vector3(0f, 0f, -0.5f),
+                // RenderShadow = false,
             });
             ctx.AddObject(new Grid()
             {
@@ -85,7 +86,7 @@ namespace ProcEngine
             {
                 Position = new Vector3(0, 2, 2.5f),
                 Name = "MovingLight",
-                Disabled = true,
+                Enabled = false,
             });
 
             ctx.AddObject(new LightObject()
@@ -101,7 +102,7 @@ namespace ProcEngine
                 Scale = new Vector3(1),
                 Position = new Vector3(0, 0, 0.5f),
                 Debug = true,
-                // Disabled = true,
+                // Enabled = false,
             });
 
             ctx.AddObject(new TestObject()
@@ -110,7 +111,7 @@ namespace ProcEngine
                 Scale = new Vector3(1),
                 Position = new Vector3(1.5f, 1.5f, 0.5f),
                 //Debug = true,
-                Disabled = true,
+                Enabled = false,
             });
 
             //CursorVisible = false;
@@ -174,13 +175,13 @@ namespace ProcEngine
 
             // Render objects
             foreach (var obj in ctx.ShadowObjects)
-                if (!obj.Disabled)
+                if (obj.Enabled && obj.RenderShadow)
                     obj.OnRenderShadow();
 
             shadowCubeFb.Use();
             GL.Clear(ClearBufferMask.DepthBufferBit);
             foreach (var obj in ctx.ShadowObjects)
-                if (!obj.Disabled)
+                if (obj.Enabled && obj.RenderShadow)
                     obj.OnRenderCubeShadow();
 
             //--
@@ -194,12 +195,12 @@ namespace ProcEngine
 
             // Render objects
             foreach (var obj in ctx.RenderableObjects)
-                if (!obj.Disabled)
+                if (obj.Enabled)
                     obj.OnRender();
 
             // Render Screen Surface
             foreach (var obj in ctx.RenderableScreenObjects)
-                if (!obj.Disabled)
+                if (obj.Enabled)
                     obj.OnRender();
 
             //CheckForProgramError();

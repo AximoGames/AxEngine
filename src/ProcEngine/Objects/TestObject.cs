@@ -14,6 +14,7 @@ namespace ProcEngine
         public Vector3 Rotate { get; set; }
 
         public RenderPosition RenderPosition => RenderPosition.Scene;
+        public bool RenderShadow { get; set; } = true;
 
         public Matrix4 GetModelMatrix()
         {

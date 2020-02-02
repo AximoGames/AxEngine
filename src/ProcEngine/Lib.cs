@@ -26,7 +26,7 @@ namespace ProcEngine
     {
         int Id { get; }
         string Name { get; set; }
-        bool Disabled { get; set; }
+        bool Enabled { get; set; }
         RenderContext Context { get; }
         void Init();
         void Free();
@@ -59,6 +59,7 @@ namespace ProcEngine
     {
         void OnRenderShadow();
         void OnRenderCubeShadow();
+        bool RenderShadow { get; set; }
     }
 
     public interface IRenderTarget : IRenderableObject
