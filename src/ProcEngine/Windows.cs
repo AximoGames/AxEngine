@@ -62,15 +62,34 @@ namespace ProcEngine
             //ctx.Camera = new PerspectiveFieldOfViewCamera(lightPosition, Width / (float)Height);
             //ctx.Camera = new OrthographicCamera(lightPosition);
 
+            ctx.AddObject(new TestObject()
+            {
+                Name = "Ground",
+                Scale = new Vector3(50, 50, 1),
+                Position = new Vector3(0f, 0f, -0.5f),
+            });
+            ctx.AddObject(new Grid()
+            {
+                Name = "Grid",
+                ModelMatrix = Matrix4.CreateTranslation(0f, 0f, 0.01f),
+                //Debug = true,
+            });
+            ctx.AddObject(new Lines()
+            {
+                Name = "CenterCross",
+                ModelMatrix = Matrix4.CreateTranslation(0f, 0f, 0.02f),
+                //Debug = true,
+            });
+
             ctx.AddObject(new LightObject()
             {
-                Position = new Vector3(0, 2, 2),
+                Position = new Vector3(0, 2, 2.5f),
                 Name = "MovingLight",
             });
 
             ctx.AddObject(new LightObject()
             {
-                Position = new Vector3(1f, 0.5f, 0.5f),
+                Position = new Vector3(1f, 0.5f, 1f),
                 Name = "StaticLight",
             });
 
@@ -79,7 +98,7 @@ namespace ProcEngine
                 Name = "Box1",
                 Rotate = new Vector3(0, 0, (float)Math.PI),
                 Scale = new Vector3(1),
-                Position = new Vector3(0, 0, 0),
+                Position = new Vector3(0, 0, 0.5f),
                 Debug = true,
             });
 
@@ -87,23 +106,9 @@ namespace ProcEngine
             // {
             //     Name = "Box2",
             //     Scale = new Vector3(1),
-            //     Position = new Vector3(1.5f, 1.5f, 0.0f),
+            //     Position = new Vector3(1.5f, 1.5f, 0.5f),
             //     //Debug = true,
             // });
-
-            ctx.AddObject(new Lines()
-            {
-                Name = "CenterCross",
-                ModelMatrix = Matrix4.CreateTranslation(0f, 0f, 0.0f),
-                //Debug = true,
-            });
-
-            ctx.AddObject(new TestObject()
-            {
-                Name = "Ground",
-                Scale = new Vector3(100, 100, 1),
-                Position = new Vector3(0f, 0f, -1f),
-            });
 
             //CursorVisible = false;
 
@@ -151,7 +156,7 @@ namespace ProcEngine
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             CamAngle -= 0.01;
-            var pos = new Vector3((float)(Math.Cos(CamAngle) * 2f), (float)(Math.Sin(CamAngle) * 2f), 1.0f);
+            var pos = new Vector3((float)(Math.Cos(CamAngle) * 2f), (float)(Math.Sin(CamAngle) * 2f), 1.5f);
             ILightObject light = ctx.LightObjects[0];
 
             light.Position = pos;
@@ -252,6 +257,7 @@ namespace ProcEngine
 
             IPosition pos = MovingObject;
             Camera cam = pos as Camera;
+            IScaleRotate rot = MovingObject as IScaleRotate;
             bool simpleMove = cam == null;
 
             if (kbState[Key.W])
@@ -349,6 +355,14 @@ namespace ProcEngine
             {
                 cam.Facing += MouseSpeed[0] * 2;
                 cam.Pitch += MouseSpeed[1] * 2;
+            }
+            else if (rot != null)
+            {
+                rot.Rotate = new Vector3(
+                    rot.Rotate.X + MouseSpeed[1] * 2,
+                    rot.Rotate.Y,
+                    rot.Rotate.Z + MouseSpeed[0] * 2
+                );
             }
             //Console.WriteLine(Camera.Pitch + " : " + Math.Round(MouseSpeed[1], 3));
             if (simpleMove)

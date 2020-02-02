@@ -18,8 +18,8 @@ namespace ProcEngine
         public Matrix4 GetModelMatrix()
         {
             return Matrix4.CreateScale(Scale)
-            * Matrix4.CreateRotationZ(Rotate.X)
-            * Matrix4.CreateRotationZ(Rotate.Y)
+            * Matrix4.CreateRotationX(Rotate.X)
+            * Matrix4.CreateRotationY(Rotate.Y)
             * Matrix4.CreateRotationZ(Rotate.Z)
             * Matrix4.CreateTranslation(Position);
         }
@@ -114,7 +114,7 @@ namespace ProcEngine
             //var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
             var shadowCamera = new OrthographicCamera(light.Position)
             {
-                NearPlane = 0.1f,
+                NearPlane = 1f,
                 FarPlane = 25f,
             };
             shadowCamera.LookAt = (Context.GetObjectByName("Box1") as IPosition).Position;
