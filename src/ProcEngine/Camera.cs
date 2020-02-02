@@ -68,10 +68,13 @@ namespace ProcEngine
 
         public Vector3? LookAt;
 
-        public virtual Matrix4 GetViewMatrix()
+        public Matrix4 GetViewMatrix()
         {
-            var loc = new Vector3(Position.X, Position.Y, Position.Z);
+            return GetViewMatrix(Position);
+        }
 
+        public virtual Matrix4 GetViewMatrix(Vector3 loc)
+        {
             Vector3 lookatPoint;
             if (LookAt != null)
             {

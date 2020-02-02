@@ -61,6 +61,11 @@ namespace ProcEngine
             };
             //ctx.Camera = new PerspectiveFieldOfViewCamera(lightPosition, Width / (float)Height);
             //ctx.Camera = new OrthographicCamera(lightPosition);
+            // ctx.AddObject(new Skybox()
+            // {
+            //     Name = "Sky",
+            //     // RenderShadow = false,
+            // });
 
             ctx.AddObject(new TestObject()
             {

@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
 using ProcEngine;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
+using System.Collections.Generic;
 
 namespace ProcEngine
 {
@@ -44,6 +45,34 @@ namespace ProcEngine
 
             txt.SetNearestFilter();
             txt.SetClampToEdgeWrap();
+            return txt;
+        }
+
+        public static Texture LoadCubeMap(string path)
+        {
+            var faces = new string[] { "right", "left", "top", "bottom", "front", "back" };
+            var images = new List<Bitmap>();
+            foreach (var face in faces)
+                images.Add(LoadBitmap(path.Replace("#", face)));
+
+            int handle;
+            GL.GenTextures(1, out handle);
+            var txt = new Texture(handle, TextureTarget.TextureCubeMap, images[0].Width, images[0].Height);
+            txt.Use();
+
+            for (var i = 0; i < 6; i++)
+            {
+                var data = images[i].LockBits(
+                    new Rectangle(0, 0, images[i].Width, images[i].Height),
+                    ImageLockMode.ReadOnly,
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.DepthComponent, txt.Width, txt.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+
+                images[i].Dispose();
+            }
+            txt.SetNearestFilter();
+            txt.SetClampToEdgeWrap();
+            Console.WriteLine($"Loaded Cubemap #{txt.Handle} {path}");
             return txt;
         }
 
@@ -113,10 +142,8 @@ namespace ProcEngine
 
             // For this example, we're going to use .NET's built-in System.Drawing library to load textures.
 
-            var imagePath = Path.Combine(DirectoryHelper.RootDir, path);
-            Console.WriteLine(imagePath);
             // Load the image
-            using (var image = LoadBitmap(imagePath))
+            using (var image = LoadBitmap(path))
             {
                 // First, we get our pixels from the bitmap we loaded.
                 // Arguments:
@@ -175,14 +202,18 @@ namespace ProcEngine
             // OpenGL will automatically switch between mipmaps when an object gets sufficiently far away.
             // This prevents distant objects from having their colors become muddy, as well as saving on memory.
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+
+            Console.WriteLine($"Loaded Texture #{Handle} {path}");
         }
 
-        private Bitmap LoadBitmap(string path)
+        private static Bitmap LoadBitmap(string path)
         {
+            var imagePath = Path.Combine(DirectoryHelper.RootDir, path);
+            Console.WriteLine(imagePath);
             if (path.EndsWith(".tga"))
-                return TgaDecoder.FromFile(path);
+                return TgaDecoder.FromFile(imagePath);
             else
-                return new Bitmap(path);
+                return new Bitmap(imagePath);
         }
 
         // Activate texture
