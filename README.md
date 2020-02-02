@@ -1,3 +1,10 @@
+To clone this repository, you need git LFS, otherwise you need to download the Ressources folder manually.
+
+Don't forget the `--recursive` option:
+```
+git clone --recursive git@github.com:arakis/ProcEngine.git
+```
+
 ```Keymapping:
 C -> Control Camera (default)
 B -> Control Box1
