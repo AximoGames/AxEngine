@@ -116,7 +116,7 @@ namespace ProcEngine
             var imagePath = Path.Combine(DirectoryHelper.RootDir, path);
             Console.WriteLine(imagePath);
             // Load the image
-            using (var image = new Bitmap(imagePath))
+            using (var image = LoadBitmap(imagePath))
             {
                 // First, we get our pixels from the bitmap we loaded.
                 // Arguments:
@@ -175,6 +175,14 @@ namespace ProcEngine
             // OpenGL will automatically switch between mipmaps when an object gets sufficiently far away.
             // This prevents distant objects from having their colors become muddy, as well as saving on memory.
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+        }
+
+        private Bitmap LoadBitmap(string path)
+        {
+            if (path.EndsWith(".tga"))
+                return TgaDecoder.FromFile(path);
+            else
+                return new Bitmap(path);
         }
 
         // Activate texture
