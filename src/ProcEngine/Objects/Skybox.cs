@@ -22,7 +22,8 @@ namespace ProcEngine
         public override void Init()
         {
             _shader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
-            txt = Texture.LoadCubeMap("Ressources/desert-skybox/#.tga");
+            //txt = Texture.LoadCubeMap("Ressources/desert-skybox/#.tga");
+            txt = Texture.LoadCubeMap("Ressources/water-skybox/#.jpg");
 
             vbo = new VertexBufferObject();
             vbo.Create();

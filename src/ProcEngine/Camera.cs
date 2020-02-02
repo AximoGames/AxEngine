@@ -73,18 +73,18 @@ namespace ProcEngine
             return GetViewMatrix(Position);
         }
 
-        public virtual Matrix4 GetViewMatrix(Vector3 loc)
+        public virtual Matrix4 GetViewMatrix(Vector3 eye)
         {
             Vector3 lookatPoint;
             if (LookAt != null)
             {
                 lookatPoint = (Vector3)LookAt;
-                return Matrix4.LookAt(loc, lookatPoint, Up);
+                return Matrix4.LookAt(eye, lookatPoint, Up);
             }
             else
             {
                 lookatPoint = new Vector3((float)Math.Cos(Facing) * (float)Math.Cos(Pitch), (float)Math.Sin(Facing) * (float)Math.Cos(Pitch), (float)Math.Sin(Pitch));
-                return Matrix4.LookAt(loc, loc + lookatPoint, Up);
+                return Matrix4.LookAt(eye, eye + lookatPoint, Up);
             }
         }
 

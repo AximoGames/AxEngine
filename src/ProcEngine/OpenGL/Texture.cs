@@ -50,23 +50,34 @@ namespace ProcEngine
 
         public static Texture LoadCubeMap(string path)
         {
+            //var faces = new string[] { "right", "left", "back", "front", "top", "bottom" };
+            //var faces = new string[] { "left", "right", "top", "top", "top", "top" };
+            //var faces = new string[] { "top", "top", "top", "top", "left", "top" };
+            //var faces = new string[] { "right", "left", "top", "bottom", "back", "front" };
             var faces = new string[] { "right", "left", "top", "bottom", "front", "back" };
+            //var faces = new string[] { "right", "left", "front", "back", "top", "bottom" };
             var images = new List<Bitmap>();
             foreach (var face in faces)
                 images.Add(LoadBitmap(path.Replace("#", face)));
+
+            // images[1].RotateFlip(RotateFlipType.Rotate90FlipY);
+            // images[3].RotateFlip(RotateFlipType.RotateNoneFlipX);
+            // images[2].RotateFlip(RotateFlipType.Rotate180FlipX);
+            // images[0].RotateFlip(RotateFlipType.Rotate90FlipX);
+            // images[4].RotateFlip(RotateFlipType.RotateNoneFlipY);
 
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMap, images[0].Width, images[0].Height);
             txt.Use();
 
-            for (var i = 0; i < 6; i++)
+            for (var i = 0; i < images.Count; i++)
             {
                 var data = images[i].LockBits(
                     new Rectangle(0, 0, images[i].Width, images[i].Height),
                     ImageLockMode.ReadOnly,
                     System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.DepthComponent, txt.Width, txt.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.Rgba, txt.Width, txt.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
 
                 images[i].Dispose();
             }

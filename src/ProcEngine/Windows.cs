@@ -6,6 +6,7 @@ using OpenTK.Input;
 using ProcEngine;
 using System.IO;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace ProcEngine
 {
@@ -29,14 +30,34 @@ namespace ProcEngine
         //private float Pitch = -0.3f;
         //private float Facing = (float)Math.PI / 2 + 0.15f;
 
-        public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.Default) { }
+        public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 3, GraphicsContextFlags.Default) { }
 
         public Camera Camera => ctx.Camera;
 
         private double CamAngle = 0;
 
+        private DebugProc _debugProcCallback;
+        private GCHandle _debugProcCallbackHandle;
+        public static void DebugCallback(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
+        {
+            string messageString = Marshal.PtrToStringAnsi(message, length);
+
+            Console.WriteLine($"{severity} {type} | {messageString}");
+
+            if (type == DebugType.DebugTypeError)
+            {
+                throw new Exception(messageString);
+            }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
+            // _debugProcCallback = DebugCallback;
+            // _debugProcCallbackHandle = GCHandle.Alloc(_debugProcCallback);
+            // GL.DebugMessageCallback(_debugProcCallback, IntPtr.Zero);
+            // GL.Enable(EnableCap.DebugOutput);
+            // GL.Enable(EnableCap.DebugOutputSynchronous);
+
             var vendor = GL.GetString(StringName.Vendor);
             var version = GL.GetString(StringName.Version);
             var shadingLanguageVersion = GL.GetString(StringName.ShadingLanguageVersion);
@@ -54,6 +75,9 @@ namespace ProcEngine
             {
 
             };
+
+            ctx.LogInfoMessage("Window.OnLoad");
+
             ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), Width / (float)Height)
             {
                 NearPlane = 0.01f,
@@ -61,11 +85,12 @@ namespace ProcEngine
             };
             //ctx.Camera = new PerspectiveFieldOfViewCamera(lightPosition, Width / (float)Height);
             //ctx.Camera = new OrthographicCamera(lightPosition);
-            // ctx.AddObject(new Skybox()
-            // {
-            //     Name = "Sky",
-            //     // RenderShadow = false,
-            // });
+
+            ctx.AddObject(new Skybox()
+            {
+                Name = "Sky",
+                // RenderShadow = false,
+            });
 
             ctx.AddObject(new TestObject()
             {

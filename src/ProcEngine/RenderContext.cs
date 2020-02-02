@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using OpenTK.Graphics.OpenGL4;
 
 namespace ProcEngine
 {
@@ -37,6 +39,7 @@ namespace ProcEngine
         {
             obj.AssignContext(this);
 
+            LogInfoMessage($"Init Object {obj.Name}");
             obj.Init();
 
             AllObjects.Add(obj);
@@ -54,6 +57,18 @@ namespace ProcEngine
 
             if (obj is ILightObject lightObj)
                 LightObjects.Add(lightObj);
+        }
+
+        private void EmmitLogMessage(DebugType type, DebugSeverity severity, string message)
+        {
+            var handle = GCHandle.Alloc(message, GCHandleType.Pinned);
+            GL.DebugMessageInsert(DebugSourceExternal.DebugSourceApplication, type, 0, severity, message.Length, message);
+            handle.Free();
+        }
+
+        public void LogInfoMessage(string message)
+        {
+            EmmitLogMessage(DebugType.DebugTypeError, DebugSeverity.DebugSeverityNotification, message);
         }
     }
 

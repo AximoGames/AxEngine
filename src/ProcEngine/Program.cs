@@ -1,6 +1,8 @@
 ﻿using System;
+using OpenTK.Graphics.OpenGL4;
 using System.Threading;
 using OpenTK;
+using System.Runtime.InteropServices;
 
 namespace ProcEngine
 {
@@ -45,6 +47,8 @@ namespace ProcEngine
         }
 
         private static Window demo;
+        private static DebugProc _debugProcCallback = DebugCallback;
+        private static GCHandle _debugProcCallbackHandle;
 
         private static void UIThreadMain()
         {
@@ -53,6 +57,11 @@ namespace ProcEngine
                 Backend = PlatformBackend.PreferX11,
             });
 
+            // _debugProcCallbackHandle = GCHandle.Alloc(_debugProcCallback);
+            // GL.DebugMessageCallback(_debugProcCallback, IntPtr.Zero);
+            // GL.Enable(EnableCap.DebugOutput);
+            // GL.Enable(EnableCap.DebugOutputSynchronous);
+
             demo = new Window(800, 600, "ProcEngine");
             demo.Location = new System.Drawing.Point(1920 / 2 + 10, 10);
 
@@ -60,5 +69,16 @@ namespace ProcEngine
             demo.Run(60.0);
         }
 
+        public static void DebugCallback(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
+        {
+            string messageString = Marshal.PtrToStringAnsi(message, length);
+
+            Console.WriteLine($"{severity} {type} | {messageString}");
+
+            if (type == DebugType.DebugTypeError)
+            {
+                throw new Exception(messageString);
+            }
+        }
     }
 }
