@@ -85,11 +85,12 @@ namespace ProcEngine
             {
                 Position = new Vector3(0, 2, 2.5f),
                 Name = "MovingLight",
+                Disabled = true,
             });
 
             ctx.AddObject(new LightObject()
             {
-                Position = new Vector3(1f, 0.5f, 1f),
+                Position = new Vector3(1f, 0.5f, 1.25f),
                 Name = "StaticLight",
             });
 
@@ -100,15 +101,17 @@ namespace ProcEngine
                 Scale = new Vector3(1),
                 Position = new Vector3(0, 0, 0.5f),
                 Debug = true,
+                // Disabled = true,
             });
 
-            // ctx.AddObject(new TestObject()
-            // {
-            //     Name = "Box2",
-            //     Scale = new Vector3(1),
-            //     Position = new Vector3(1.5f, 1.5f, 0.5f),
-            //     //Debug = true,
-            // });
+            ctx.AddObject(new TestObject()
+            {
+                Name = "Box2",
+                Scale = new Vector3(1),
+                Position = new Vector3(1.5f, 1.5f, 0.5f),
+                //Debug = true,
+                Disabled = true,
+            });
 
             //CursorVisible = false;
 
@@ -171,12 +174,14 @@ namespace ProcEngine
 
             // Render objects
             foreach (var obj in ctx.ShadowObjects)
-                obj.OnRenderShadow();
+                if (!obj.Disabled)
+                    obj.OnRenderShadow();
 
             shadowCubeFb.Use();
             GL.Clear(ClearBufferMask.DepthBufferBit);
             foreach (var obj in ctx.ShadowObjects)
-                obj.OnRenderCubeShadow();
+                if (!obj.Disabled)
+                    obj.OnRenderCubeShadow();
 
             //--
 
@@ -189,11 +194,13 @@ namespace ProcEngine
 
             // Render objects
             foreach (var obj in ctx.RenderableObjects)
-                obj.OnRender();
+                if (!obj.Disabled)
+                    obj.OnRender();
 
             // Render Screen Surface
             foreach (var obj in ctx.RenderableScreenObjects)
-                obj.OnRender();
+                if (!obj.Disabled)
+                    obj.OnRender();
 
             //CheckForProgramError();
 

@@ -117,7 +117,11 @@ namespace ProcEngine
                 NearPlane = 1f,
                 FarPlane = 25f,
             };
-            shadowCamera.LookAt = (Context.GetObjectByName("Box1") as IPosition).Position;
+            var box = Context.GetObjectByName("Box1");
+            if (box != null)
+                shadowCamera.LookAt = (box as IPosition).Position;
+            else
+                shadowCamera.LookAt = new Vector3(0, 0, 0);
 
             return shadowCamera;
         }

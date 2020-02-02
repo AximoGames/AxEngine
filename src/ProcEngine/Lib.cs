@@ -26,6 +26,7 @@ namespace ProcEngine
     {
         int Id { get; }
         string Name { get; set; }
+        bool Disabled { get; set; }
         RenderContext Context { get; }
         void Init();
         void Free();

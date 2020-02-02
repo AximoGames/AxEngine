@@ -6,6 +6,7 @@ namespace ProcEngine
     {
         public int Id { get; }
         public string Name { get; set; }
+        public bool Disabled { get; set; }
 
         public RenderContext Context { get; private set; }
 
