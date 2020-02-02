@@ -249,10 +249,11 @@ namespace ProcEngine
             }
             if (kbState[Key.L])
             {
-                if (kbState[Key.ShiftLeft])
-                    Camera.Position = (ctx.GetObjectByName("StaticLight") as IPosition).Position;
-                else
-                    MovingObject = ctx.GetObjectByName("StaticLight") as IPosition;
+                MovingObject = ctx.GetObjectByName("StaticLight") as IPosition;
+            }
+            if (kbState[Key.J])
+            {
+                Camera.Position = MovingObject.Position;
             }
         }
 
