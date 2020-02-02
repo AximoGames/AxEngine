@@ -75,10 +75,22 @@ namespace ProcEngine
                 ModelMatrix = Matrix4.CreateTranslation(0f, 0f, 0.01f),
                 //Debug = true,
             });
+            ctx.AddObject(new Grid()
+            {
+                Name = "Grid",
+                ModelMatrix = Matrix4.CreateRotationY((float)Math.PI / 2) * Matrix4.CreateTranslation(-10f, 0f, 0.01f),
+                //Debug = true,
+            });
+            ctx.AddObject(new Grid()
+            {
+                Name = "Grid",
+                ModelMatrix = Matrix4.CreateRotationX((float)Math.PI / 2) * Matrix4.CreateTranslation(0f, 10f, 0.01f),
+                //Debug = true,
+            });
             ctx.AddObject(new Lines()
             {
                 Name = "CenterCross",
-                ModelMatrix = Matrix4.CreateTranslation(0f, 0f, 0.02f),
+                ModelMatrix = Matrix4.CreateScale(2.0f) * Matrix4.CreateTranslation(0f, 0f, 0.02f),
                 //Debug = true,
             });
 

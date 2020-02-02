@@ -133,8 +133,8 @@ namespace ProcEngine
 
             var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
             {
-                NearPlane = 0.01f,
-                FarPlane = 100f,
+                NearPlane = 1f,
+                FarPlane = 25f,
             };
 
             return shadowCamera;
