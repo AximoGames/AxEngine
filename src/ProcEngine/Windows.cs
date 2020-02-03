@@ -133,7 +133,7 @@ namespace ProcEngine
 
             ctx.AddObject(new LightObject()
             {
-                Position = new Vector3(1f, 0.5f, 1.25f),
+                Position = new Vector3(2f, 0.5f, 1.25f),
                 Name = "StaticLight",
             });
 

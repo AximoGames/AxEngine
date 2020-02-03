@@ -135,6 +135,7 @@ namespace ProcEngine
             {
                 NearPlane = 1f,
                 FarPlane = 25f,
+                Fov = 90f,
             };
 
             return shadowCamera;

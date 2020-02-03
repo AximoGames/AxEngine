@@ -98,7 +98,7 @@ namespace ProcEngine
             get => MathHelper.RadiansToDegrees(_fov);
             set
             {
-                var angle = MathHelper.Clamp(value, 1f, 45f);
+                var angle = MathHelper.Clamp(value, 1f, 90f);
                 _fov = MathHelper.DegreesToRadians(angle);
             }
         }
