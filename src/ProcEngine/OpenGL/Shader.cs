@@ -6,6 +6,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using ProcEngine;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace ProcEngine
 {
@@ -16,10 +17,25 @@ namespace ProcEngine
 
         private Dictionary<string, int> _uniformLocations;
 
-        public string FragSourcePath { get; private set; }
-        public string VertSourcePath { get; private set; }
-        public string GeomSourcePath { get; private set; }
-        public string VertSource { get; private set; }
+        // public string FragSourcePath { get; private set; }
+        // public string VertSourcePath { get; private set; }
+        // public string GeomSourcePath { get; private set; }
+        // public string VertSource { get; private set; }
+
+        public List<ShaderCompilation> Sources = new List<ShaderCompilation>();
+
+        public void AddSource(string path, ShaderType type)
+        {
+            ShaderCompilation comp = Sources.FirstOrDefault(c => c.Type == type);
+            if (comp == null)
+                Sources.Add(comp = new ShaderCompilation { Type = type });
+
+            comp.Sources.Add(new ShaderSource
+            {
+                Path = path,
+                Source = LoadSource(path),
+            });
+        }
 
         // This is how you create a simple shader.
         // Shaders are written in GLSL, which is a language very similar to C in its semantics.
@@ -27,9 +43,19 @@ namespace ProcEngine
         // A commented example of GLSL can be found in shader.vert
         public Shader(string vertPath, string fragPath, string geomPath = null)
         {
-            VertSourcePath = vertPath;
-            FragSourcePath = fragPath;
-            GeomSourcePath = geomPath;
+            AddSource(vertPath, ShaderType.VertexShader);
+            AddSource(fragPath, ShaderType.FragmentShader);
+            if (geomPath != null)
+                AddSource(geomPath, ShaderType.GeometryShader);
+
+            // foreach (var comp in Sources)
+            // {
+            //     comp.Sources.Insert(0, new ShaderSource
+            //     {
+            //         Path = "Shaders/lib.frag",
+            //         Source = LoadSource("Shaders/lib.frag"),
+            //     });
+            // }
 
             // There are several different types of shaders, but the only two you need for basic rendering are the vertex and fragment shaders.
             // The vertex shader is responsible for moving around vertices, and uploading that data to the fragment shader.
@@ -37,33 +63,19 @@ namespace ProcEngine
             // The fragment shader is responsible for then converting the vertices to "fragments", which represent all the data OpenGL needs to draw a pixel.
             //   The fragment shader is what we'll be using the most here.
 
-            // Load vertex shader and compile
-            // LoadSource is a simple function that just loads all text from the file whose path is given.
-            var shaderSource = LoadSource(vertPath);
-            VertSource = shaderSource;
-
             // GL.CreateShader will create an empty shader (obviously). The ShaderType enum denotes which type of shader will be created.
-            var vertexShader = GL.CreateShader(ShaderType.VertexShader);
-
-            // Now, bind the GLSL source code
-            GL.ShaderSource(vertexShader, shaderSource);
-
-            // And then compile
-            CompileShader(vertexShader);
-
-            // We do the same for the fragment shader
-            shaderSource = LoadSource(fragPath);
-            var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-            GL.ShaderSource(fragmentShader, shaderSource);
-            CompileShader(fragmentShader);
-
-            int geomShader = 0;
-            if (!string.IsNullOrEmpty(geomPath))
+            foreach (var comp in Sources)
             {
-                shaderSource = LoadSource(geomPath);
-                geomShader = GL.CreateShader(ShaderType.GeometryShader);
-                GL.ShaderSource(geomShader, shaderSource);
-                CompileShader(geomShader);
+                comp.Handle = GL.CreateShader(comp.Type);
+                var shaderSources = comp.Sources.Select(s => s.Source).ToArray();
+
+                var len = shaderSources.Select(s => s.Length).ToArray();
+
+                // Now, bind the GLSL source code
+                GL.ShaderSource(comp.Handle, shaderSources.Length, shaderSources, len);
+
+                // And then compile
+                CompileShader(comp.Handle);
             }
 
             // These two shaders must then be merged into a shader program, which can then be used by OpenGL.
@@ -71,10 +83,9 @@ namespace ProcEngine
             Handle = GL.CreateProgram();
 
             // Attach both shaders...
-            GL.AttachShader(Handle, vertexShader);
-            if (geomShader > 0)
-                GL.AttachShader(Handle, geomShader);
-            GL.AttachShader(Handle, fragmentShader);
+
+            foreach (var comp in Sources)
+                GL.AttachShader(Handle, comp.Handle);
 
             // And then link them together.
             LinkProgram(Handle);
@@ -83,17 +94,12 @@ namespace ProcEngine
 
             // When the shader program is linked, it no longer needs the individual shaders attacked to it; the compiled code is copied into the shader program.
             // Detach them, and then delete them.
-            GL.DetachShader(Handle, vertexShader);
-            GL.DetachShader(Handle, fragmentShader);
-            GL.DeleteShader(fragmentShader);
-            GL.DeleteShader(vertexShader);
 
-            if (geomShader > 0)
+            foreach (var comp in Sources)
             {
-                GL.DetachShader(Handle, geomShader);
-                GL.DeleteShader(geomShader);
+                GL.DetachShader(Handle, comp.Handle);
+                GL.DeleteShader(comp.Handle);
             }
-
             // The shader is now ready to go, but first, we're going to cache all the shader uniform locations.
             // Querying this from the shader is very slow, so we do it once on initialization and reuse those values
             // later.
@@ -134,8 +140,8 @@ namespace ProcEngine
         {
             try
             {
-                var sh = new Shader(VertSourcePath, FragSourcePath);
-                SetFrom(sh);
+                // var sh = new Shader(VertSourcePath, FragSourcePath);
+                // SetFrom(sh);
             }
             catch (Exception ex)
             {
@@ -146,11 +152,11 @@ namespace ProcEngine
 
         private void SetFrom(Shader source)
         {
-            Handle = source.Handle;
-            FragSourcePath = source.FragSourcePath;
-            VertSourcePath = source.VertSourcePath;
-            VertSource = source.VertSource;
-            _uniformLocations = source._uniformLocations;
+            // Handle = source.Handle;
+            // FragSourcePath = source.FragSourcePath;
+            // VertSourcePath = source.VertSourcePath;
+            // VertSource = source.VertSource;
+            // _uniformLocations = source._uniformLocations;
         }
 
         private static void CompileShader(int shader)
@@ -204,7 +210,7 @@ namespace ProcEngine
             var attrHandle = GL.GetAttribLocation(Handle, attribName);
             if (attrHandle < 0)
             {
-                Console.WriteLine($"GetAttribLocation({attribName}): attrib in '{VertSourcePath}' not found");
+                Console.WriteLine($"GetAttribLocation({attribName}): attrib not found");
             }
             return attrHandle;
         }
@@ -301,4 +307,18 @@ namespace ProcEngine
             }
         }
     }
+
+    public class ShaderCompilation
+    {
+        public List<ShaderSource> Sources = new List<ShaderSource>();
+        public ShaderType Type;
+        public int Handle;
+    }
+
+    public class ShaderSource
+    {
+        public string Path;
+        public string Source;
+    }
+
 }
