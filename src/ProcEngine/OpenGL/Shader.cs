@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using ProcEngine;
+using System.Text.RegularExpressions;
 
 namespace ProcEngine
 {
@@ -209,12 +210,25 @@ namespace ProcEngine
         }
 
         // Just loads the entire file into a string.
-        private static string LoadSource(string path)
+        private static string LoadFile(string path)
         {
             using (var sr = new StreamReader(Path.Combine(DirectoryHelper.RootDir, path), Encoding.UTF8))
             {
                 return sr.ReadToEnd();
             }
+        }
+
+        private static Regex FileFinder = new Regex(@"#include <[\w\.\/-]>", RegexOptions.RightToLeft);
+
+        // Just loads the entire file into a string.
+        private static string LoadSource(string path)
+        {
+            var sb = new StringBuilder(LoadFile(path));
+            foreach (Match match in FileFinder.Matches(sb.ToString()))
+            {
+                sb.Replace(match.Value, LoadSource(match.Groups[1].Value), match.Index, match.Length);
+            }
+            return sb.ToString();
         }
 
         // Uniform setters
