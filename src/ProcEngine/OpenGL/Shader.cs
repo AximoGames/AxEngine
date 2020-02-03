@@ -17,18 +17,13 @@ namespace ProcEngine
 
         private Dictionary<string, int> _uniformLocations;
 
-        // public string FragSourcePath { get; private set; }
-        // public string VertSourcePath { get; private set; }
-        // public string GeomSourcePath { get; private set; }
-        // public string VertSource { get; private set; }
-
-        public List<ShaderCompilation> Sources = new List<ShaderCompilation>();
+        public List<ShaderCompilation> Compilations = new List<ShaderCompilation>();
 
         public void AddSource(string path, ShaderType type)
         {
-            ShaderCompilation comp = Sources.FirstOrDefault(c => c.Type == type);
+            ShaderCompilation comp = Compilations.FirstOrDefault(c => c.Type == type);
             if (comp == null)
-                Sources.Add(comp = new ShaderCompilation { Type = type });
+                Compilations.Add(comp = new ShaderCompilation { Type = type });
 
             comp.Sources.Add(new ShaderSource
             {
@@ -64,7 +59,7 @@ namespace ProcEngine
             //   The fragment shader is what we'll be using the most here.
 
             // GL.CreateShader will create an empty shader (obviously). The ShaderType enum denotes which type of shader will be created.
-            foreach (var comp in Sources)
+            foreach (var comp in Compilations)
             {
                 comp.Handle = GL.CreateShader(comp.Type);
                 var shaderSources = comp.Sources.Select(s => s.Source).ToArray();
@@ -84,7 +79,7 @@ namespace ProcEngine
 
             // Attach both shaders...
 
-            foreach (var comp in Sources)
+            foreach (var comp in Compilations)
                 GL.AttachShader(Handle, comp.Handle);
 
             // And then link them together.
@@ -95,7 +90,7 @@ namespace ProcEngine
             // When the shader program is linked, it no longer needs the individual shaders attacked to it; the compiled code is copied into the shader program.
             // Detach them, and then delete them.
 
-            foreach (var comp in Sources)
+            foreach (var comp in Compilations)
             {
                 GL.DetachShader(Handle, comp.Handle);
                 GL.DeleteShader(comp.Handle);
