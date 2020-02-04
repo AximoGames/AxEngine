@@ -8,6 +8,15 @@ vec3 gridSamplingDisk[20] = vec3[]
    vec3(0, 1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0, 1, -1)
 );
 
+vec3 ShadowCubeCoords(vec3 fragToLight)
+{
+#ifdef CUBE_MAP_SHADOW_ROTATED
+    return fragToLight;
+#else
+    return fragToLight.xzy;
+#endif
+}
+
 float ShadowCalculationCubeSoft(vec3 fragPos)
 {
     // get vector between fragment position and light position
@@ -47,7 +56,7 @@ float ShadowCalculationCubeSoft(vec3 fragPos)
     float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
     for(int i = 0; i < samples; ++i)
     {
-        float closestDepth = texture(depthMap, fragToLight + gridSamplingDisk[i] * diskRadius).r;
+        float closestDepth = texture(depthMap, ShadowCubeCoords(fragToLight + gridSamplingDisk[i] * diskRadius)).r;
         closestDepth *= far_plane;   // undo mapping [0;1]
         if(currentDepth - bias > closestDepth)
             shadow += 1.0;
@@ -65,7 +74,7 @@ float ShadowCalculationCubeHard(vec3 fragPos)
     // get vector between fragment position and light position
     vec3 fragToLight = fragPos - lightPos;
     // use the light to fragment vector to sample from the depth map    
-    float closestDepth = texture(depthMap, fragToLight.xzy).r;
+    float closestDepth = texture(depthMap, ShadowCubeCoords(fragToLight)).r;
     // it is currently in linear range between [0,1]. Re-transform back to original value
     closestDepth *= far_plane;
     // now get current linear depth as the length between the fragment and light position
