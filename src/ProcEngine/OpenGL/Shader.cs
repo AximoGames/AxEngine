@@ -219,7 +219,7 @@ namespace ProcEngine
             }
         }
 
-        private static Regex FileFinder = new Regex(@"#include <[\w\.\/-]>", RegexOptions.RightToLeft);
+        private static Regex FileFinder = new Regex(@"#include ""([\w\.\/-]+)""", RegexOptions.RightToLeft);
 
         // Just loads the entire file into a string.
         private static string LoadSource(string path)
@@ -227,7 +227,8 @@ namespace ProcEngine
             var sb = new StringBuilder(LoadFile(path));
             foreach (Match match in FileFinder.Matches(sb.ToString()))
             {
-                sb.Replace(match.Value, LoadSource(match.Groups[1].Value), match.Index, match.Length);
+                var includePath = Path.Combine(Path.GetDirectoryName(path), match.Groups[1].Value);
+                sb.Replace(match.Value, LoadSource(includePath), match.Index, match.Length);
             }
             return sb.ToString();
         }

@@ -1,11 +1,16 @@
 #version 330 core
+#extension GL_GOOGLE_include_directive : enable
+
 out vec4 FragColor;
+
+#include "lib.frag"
 
 struct Material {
 	sampler2D diffuse;
 	sampler2D specular;
 	float shininess;
 };
+
 
 //In order to calculate some basic lighting we need a few things per model basis, and a few things per fragment basis:
 uniform vec3 objectColor; //The color of the object.

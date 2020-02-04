@@ -32,7 +32,7 @@ namespace ProcEngine
             while (true)
             {
                 var cmd = Console.ReadLine();
-                var args = cmd.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                var args = cmd.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 if (args.Length == 0)
                     continue;
                 switch (cmd)
