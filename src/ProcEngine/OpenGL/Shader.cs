@@ -32,6 +32,10 @@ namespace ProcEngine
             });
         }
 
+        public Shader()
+        {
+        }
+
         // This is how you create a simple shader.
         // Shaders are written in GLSL, which is a language very similar to C in its semantics.
         // The GLSL source is compiled *at runtime*, so it can optimize itself for the graphics card it's currently being used on.
@@ -52,7 +56,11 @@ namespace ProcEngine
             //     });
             // }
 
-            // There are several different types of shaders, but the only two you need for basic rendering are the vertex and fragment shaders.
+            Compile();
+        }
+
+        public void Compile()
+        {             // There are several different types of shaders, but the only two you need for basic rendering are the vertex and fragment shaders.
             // The vertex shader is responsible for moving around vertices, and uploading that data to the fragment shader.
             //   The vertex shader won't be too important here, but they'll be more important later.
             // The fragment shader is responsible for then converting the vertices to "fragments", which represent all the data OpenGL needs to draw a pixel.
@@ -135,8 +143,13 @@ namespace ProcEngine
         {
             try
             {
-                // var sh = new Shader(VertSourcePath, FragSourcePath);
-                // SetFrom(sh);
+                var sh = new Shader();
+                foreach (var comp in Compilations)
+                    foreach (var src in comp.Sources)
+                        sh.AddSource(src.Path, comp.Type);
+
+                sh.Compile();
+                SetFrom(sh);
             }
             catch (Exception ex)
             {
@@ -147,11 +160,9 @@ namespace ProcEngine
 
         private void SetFrom(Shader source)
         {
-            // Handle = source.Handle;
-            // FragSourcePath = source.FragSourcePath;
-            // VertSourcePath = source.VertSourcePath;
-            // VertSource = source.VertSource;
-            // _uniformLocations = source._uniformLocations;
+            Handle = source.Handle;
+            Compilations = source.Compilations;
+            _uniformLocations = source._uniformLocations;
         }
 
         private static void CompileShader(int shader)
