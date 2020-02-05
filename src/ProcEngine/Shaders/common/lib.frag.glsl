@@ -86,6 +86,11 @@ float ShadowCalculationCubeHard(vec3 fragPos)
     return shadow;
 }  
 
+vec2 GetShadowCoords(vec2 projCoords) {
+    return projCoords;
+    //return vec2(projCoords.x, projCoords.y);
+}
+
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
 	// perform perspective divide
@@ -93,7 +98,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 	// transform to [0,1] range
 	projCoords = projCoords * 0.5 + 0.5;
 	// get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-	float closestDepth = texture(shadowMap, projCoords.xy).r;
+	float closestDepth = texture(shadowMap, GetShadowCoords(projCoords.xy)).r;
 	// get depth of current fragment from light's perspective
 	float currentDepth = projCoords.z;
 	// calculate bias (based on depth map resolution and slope)
@@ -109,7 +114,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 	{
 		for(int y =- 1; y <= 1; ++ y)
 		{
-			float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+			float pcfDepth = texture(shadowMap, GetShadowCoords(projCoords.xy + vec2(x, y) * texelSize)).r;
 			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
 		}
 	}

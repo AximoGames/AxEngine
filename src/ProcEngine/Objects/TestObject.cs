@@ -120,7 +120,7 @@ namespace ProcEngine
             var shadowCamera = new OrthographicCamera(light.Position)
             {
                 NearPlane = 1f,
-                FarPlane = 25f,
+                FarPlane = 7.5f,
             };
             var box = Context.GetObjectByName("Box1");
             if (box != null)
@@ -171,8 +171,7 @@ namespace ProcEngine
             lightSpaceMatrix = lightView * lightProjection;
 
             _ShadowShader.SetMatrix4("model", GetModelMatrix());
-            _ShadowShader.SetMatrix4("view", lightView);
-            _ShadowShader.SetMatrix4("projection", lightProjection);
+            _ShadowShader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
             vao.Draw();
         }
