@@ -6,7 +6,6 @@
 out vec4 FragColor;
 
 //In order to calculate some basic lighting we need a few things per model basis, and a few things per fragment basis:
-uniform vec3 objectColor; //The color of the object.
 uniform vec3 lightColor; //The color of the light.
 uniform vec3 lightPos; //The position of the light.
 uniform vec3 viewPos; //The position of the view and/or of the player.
@@ -27,11 +26,10 @@ uniform samplerCube depthMap;
 void main()
 {
 	//vec3 color = texture(material.diffuse, TexCoords).rgb;
-	vec3 color = vec3(1.0, 1.0, 0.0); // solid color for debugging
+	vec3 color = material.color; // solid color for debugging
 	vec3 normal = normalize(Normal);
-	vec3 lightColor = vec3(0.4);
 	// ambient
-	vec3 ambient = 0.3 * color;
+	vec3 ambient = material.ambient * color;
 	// diffuse
 	vec3 lightDir = normalize(lightPos - FragPos);
 	float diff = max(dot(lightDir, normal), 0.0);
@@ -41,8 +39,8 @@ void main()
 	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = 0.0;
 	vec3 halfwayDir = normalize(lightDir + viewDir);
-	spec = pow(max(dot(normal, halfwayDir), 0.0), 64.0);
-	vec3 specular = spec * lightColor;
+	spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
+	vec3 specular = material.specularStrength * spec * lightColor;
 	// calculate shadow
 
 	float shadow = ShadowCalculation(FragPosLightSpace);

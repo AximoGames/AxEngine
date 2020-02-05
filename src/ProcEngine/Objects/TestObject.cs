@@ -88,13 +88,17 @@ namespace ProcEngine
 
             _Shader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
-            _Shader.SetInt("material.diffuse", 0);
-            _Shader.SetInt("material.specular", 1);
             _Shader.SetInt("shadowMap", 2);
             _Shader.SetMatrix4("debugMatrix", debugMatrix);
 
-            _Shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
-            _Shader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
+            _Shader.SetVector3("material.color", new Vector3(1.0f, 1.0f, 0f));
+            _Shader.SetInt("material.diffuse", 0);
+            _Shader.SetInt("material.specular", 1);
+            _Shader.SetFloat("material.ambient", 0.3f);
+            _Shader.SetFloat("material.shininess", 32f);
+            _Shader.SetFloat("material.specularStrength", 0.5f);
+
+            _Shader.SetVector3("lightColor", new Vector3(0.5f, 0.5f, 0.5f));
             _Shader.SetVector3("lightPos", GetShadowLight().Position);
             _Shader.SetVector3("viewPos", Camera.Position);
 
