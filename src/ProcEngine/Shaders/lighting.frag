@@ -25,8 +25,8 @@ uniform samplerCube depthMap;
 
 void main()
 {
-	//vec3 color = texture(material.diffuse, TexCoords).rgb;
-	vec3 color = material.color; // solid color for debugging
+	vec3 color = texture(material.diffuse, TexCoords).rgb;
+	//vec3 color = material.color; // solid color for debugging
 	vec3 normal = normalize(Normal);
 	// ambient
 	vec3 ambient = material.ambient * color;

@@ -120,7 +120,7 @@ namespace ProcEngine
             var shadowCamera = new OrthographicCamera(light.Position)
             {
                 NearPlane = 1f,
-                FarPlane = 7.5f,
+                FarPlane = 25f,
             };
             var box = Context.GetObjectByName("Box1");
             if (box != null)
@@ -173,7 +173,9 @@ namespace ProcEngine
             _ShadowShader.SetMatrix4("model", GetModelMatrix());
             _ShadowShader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
+            //GL.CullFace(CullFaceMode.Front);
             vao.Draw();
+            //GL.CullFace(CullFaceMode.Back);
         }
 
         private List<Matrix4> CubeShadowsMatrices = new List<Matrix4>();
