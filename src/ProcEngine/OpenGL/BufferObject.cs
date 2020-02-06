@@ -1,6 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System;
 
 namespace ProcEngine
 {
@@ -11,7 +12,7 @@ namespace ProcEngine
         {
         }
 
-        private BufferTarget Target = BufferTarget.ArrayBuffer;
+        protected BufferTarget Target = BufferTarget.ArrayBuffer;
 
         private int _Handle;
         public int Handle => _Handle;
@@ -66,23 +67,31 @@ namespace ProcEngine
         public int Number => _Number;
 
         private static HashSet<int> UsedNumbers = new HashSet<int>();
-        private static List<int> FreeNumbers = new List<int>();
+        private static List<int> FreeNumbers;
 
         static BindingPoint()
         {
+            FreeNumbers = new List<int>();
             for (var i = 1; i < 16; i++)
             {
                 FreeNumbers.Add(i);
             }
         }
 
-        public static BindingPoint Default { get; private set; } = new BindingPoint { _Number = 0 };
+        public static BindingPoint Default { get; private set; } = new BindingPoint(false) { _Number = 0 };
 
-        public BindingPoint()
+        public BindingPoint() : this(true)
         {
-            _Number = FreeNumbers[FreeNumbers.Count - 1];
-            FreeNumbers.Remove(_Number);
-            UsedNumbers.Add(_Number);
+        }
+
+        private BindingPoint(bool alloc)
+        {
+            if (alloc)
+            {
+                _Number = FreeNumbers[FreeNumbers.Count - 1];
+                FreeNumbers.Remove(_Number);
+                UsedNumbers.Add(_Number);
+            }
         }
 
         public void Free()
@@ -91,6 +100,24 @@ namespace ProcEngine
             FreeNumbers.Add(_Number);
             _Number = -1;
         }
+    }
+
+    public class UniformBufferObject : BufferObject
+    {
+
+        public UniformBufferObject()
+        {
+            Target = BufferTarget.UniformBuffer;
+        }
+
+        public void SetBindingPoint(BindingPoint bindingPoint)
+        {
+            if (Target != BufferTarget.UniformBuffer)
+                throw new InvalidOperationException();
+
+            GL.BindBufferBase(BufferRangeTarget.UniformBuffer, bindingPoint.Number, Handle);
+        }
+
     }
 
 }

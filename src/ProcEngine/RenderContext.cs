@@ -20,6 +20,7 @@ namespace ProcEngine
 
     public class RenderContext
     {
+        public BindingPoint LightBinding;
 
         public SceneOptions SceneOpitons;
         public Camera Camera;

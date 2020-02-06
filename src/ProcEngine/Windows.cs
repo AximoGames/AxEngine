@@ -78,6 +78,8 @@ namespace ProcEngine
 
             ctx.LogInfoMessage("Window.OnLoad");
 
+            ctx.LightBinding = new BindingPoint();
+
             ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), Width / (float)Height)
             {
                 NearPlane = 0.01f,
@@ -207,6 +209,19 @@ namespace ProcEngine
 
             light.Position = pos;
 
+            //--
+            var ubo = new UniformBufferObject();
+            ubo.Create();
+            var lightsData = new GglsLight[2];
+            lightsData[0].Position = ctx.LightObjects[0].Position;
+            lightsData[0].Color = new Vector3(1, 0, 0);
+            lightsData[1].Position = ctx.LightObjects[1].Position;
+            lightsData[1].Color = new Vector3(1, 1, 0);
+            ubo.SetData(lightsData);
+
+            ubo.SetBindingPoint(ctx.LightBinding);
+
+            //--
             GL.Enable(EnableCap.DepthTest);
 
             //--
@@ -250,7 +265,15 @@ namespace ProcEngine
             // Commit result
             SwapBuffers();
 
+            ubo.Free();
+
             base.OnRenderFrame(e);
+        }
+
+        private struct GglsLight
+        {
+            public Vector3 Position;
+            public Vector3 Color;
         }
 
         private void CheckForProgramError()

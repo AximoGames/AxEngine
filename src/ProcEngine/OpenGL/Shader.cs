@@ -334,6 +334,15 @@ namespace ProcEngine
                 GL.Uniform3(location, data);
             }
         }
+
+        public void BindBlock(string blockName, BindingPoint bindingPoint)
+        {
+            if (_uniformBlockLocations.TryGetValue(blockName, out var location))
+            {
+                GL.UniformBlockBinding(Handle, location, bindingPoint.Number);
+            }
+        }
+
     }
 
     public class ShaderCompilation
