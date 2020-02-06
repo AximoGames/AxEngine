@@ -2,10 +2,10 @@
 
 namespace ProcEngine
 {
-    public class VertexBufferObject
+    public class BufferObject
     {
 
-        public VertexBufferObject()
+        public BufferObject()
         {
         }
 
@@ -17,13 +17,13 @@ namespace ProcEngine
             _Handle = GL.GenBuffer();
         }
 
-        internal void SetData(float[] vertices)
+        internal void SetData(float[] data)
         {
             Use();
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
         }
 
-        public static int CurrentHandle;
+        private static int CurrentHandle;
 
         public void Use()
         {

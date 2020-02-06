@@ -12,7 +12,7 @@ namespace ProcEngine
         private float[] _vertices = DataHelper.Quad;
 
         private VertexArrayObject vao;
-        private VertexBufferObject vbo;
+        private BufferObject vbo;
 
         private Texture _SourceTexture;
         private Texture SourceTexture => _SourceTexture;
@@ -28,7 +28,7 @@ namespace ProcEngine
         {
             _shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag");
 
-            vbo = new VertexBufferObject();
+            vbo = new BufferObject();
             vbo.Create();
             vbo.Use();
 

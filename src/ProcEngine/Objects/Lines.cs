@@ -18,13 +18,13 @@ namespace ProcEngine
         private float[] _vertices = DataHelper.Cross;
 
         private VertexArrayObject vao;
-        private VertexBufferObject vbo;
+        private BufferObject vbo;
 
         public override void Init()
         {
             _Shader = new Shader("Shaders/lines.vert", "Shaders/lines.frag");
 
-            vbo = new VertexBufferObject();
+            vbo = new BufferObject();
             vbo.Create();
             vbo.Use();
 

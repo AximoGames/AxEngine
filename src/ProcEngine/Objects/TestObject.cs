@@ -34,7 +34,7 @@ namespace ProcEngine
         private float[] _vertices = DataHelper.Cube;
 
         private VertexArrayObject vao;
-        private VertexBufferObject vbo;
+        private BufferObject vbo;
 
         private Texture txt0;
         private Texture txt1;
@@ -52,7 +52,7 @@ namespace ProcEngine
             _ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag");
             _CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
 
-            vbo = new VertexBufferObject();
+            vbo = new BufferObject();
             vbo.Create();
             vbo.Use();
 

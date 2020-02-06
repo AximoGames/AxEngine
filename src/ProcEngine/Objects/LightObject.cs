@@ -14,7 +14,7 @@ namespace ProcEngine
 
         private Shader _shader;
         private VertexArrayObject vao;
-        private VertexBufferObject vbo;
+        private BufferObject vbo;
 
         private float[] _vertices = DataHelper.Cube;
 
@@ -22,7 +22,7 @@ namespace ProcEngine
         {
             _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
 
-            vbo = new VertexBufferObject();
+            vbo = new BufferObject();
             vbo.Create();
             vbo.Use();
 

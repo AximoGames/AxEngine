@@ -13,7 +13,7 @@ namespace ProcEngine
 
         private Shader _shader;
         private VertexArrayObject vao;
-        private VertexBufferObject vbo;
+        private BufferObject vbo;
 
         private Texture txt;
 
@@ -25,7 +25,7 @@ namespace ProcEngine
             //txt = Texture.LoadCubeMap("Ressources/desert-skybox/#.tga");
             txt = Texture.LoadCubeMap("Ressources/water-skybox/#.jpg");
 
-            vbo = new VertexBufferObject();
+            vbo = new BufferObject();
             vbo.Create();
             vbo.Use();
 

@@ -14,10 +14,10 @@ namespace ProcEngine
 
         public VertexLayout Layout { get; private set; }
 
-        private VertexBufferObject _vbo;
-        public VertexBufferObject VertextBufferObject;
+        private BufferObject _vbo;
+        public BufferObject VertextBufferObject;
 
-        public VertexArrayObject(VertexLayout layout, VertexBufferObject vbo)
+        public VertexArrayObject(VertexLayout layout, BufferObject vbo)
         {
             Layout = layout;
             _vbo = vbo;
