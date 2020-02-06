@@ -1,6 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace ProcEngine
 {
@@ -52,6 +53,14 @@ namespace ProcEngine
             Use();
             _vbo.SetData(vertices);
             VertexCount = (vertices.Length * sizeof(float)) / Layout.Stride;
+        }
+
+        internal void SetData<T>(T[] vertices)
+        where T : struct
+        {
+            Use();
+            _vbo.SetData<T>(vertices);
+            VertexCount = (vertices.Length * Marshal.SizeOf(typeof(T))) / Layout.Stride;
         }
 
         //public void AddPosition()

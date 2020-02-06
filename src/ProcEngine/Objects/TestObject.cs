@@ -67,6 +67,12 @@ namespace ProcEngine
             vao.SetData(_vertices);
         }
 
+        private struct GglsLight
+        {
+            public Vector3 Position;
+            public Vector3 Color;
+        }
+
         public void OnRender()
         {
             vao.Use();
@@ -107,7 +113,23 @@ namespace ProcEngine
             Window.shadowCubeFb.DestinationTexture.Use(TextureUnit.Texture3);
             _Shader.SetInt("depthMap", 3);
 
+            //--
+            var ubo = new BufferObject();
+            ubo.Create();
+            ubo.Use();
+            var lightsData = new GglsLight[2];
+            lightsData[0].Position = Context.LightObjects[0].Position;
+            lightsData[0].Color = new Vector3(1, 0, 0);
+            lightsData[1].Position = Context.LightObjects[1].Position;
+            lightsData[1].Color = new Vector3(1, 1, 0);
+            ubo.SetData(lightsData);
+            //--
+            //             _Shader.SetInt("depthMap", 3);
+            // GL.GetUniformBlockIndex();
+            //--
             vao.Draw();
+
+            ubo.Free();
         }
 
         private Matrix4 lightSpaceMatrix;

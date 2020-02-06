@@ -15,7 +15,8 @@ namespace ProcEngine
     {
         public int Handle { get; private set; }
 
-        private Dictionary<string, int> _uniformLocations;
+        private Dictionary<string, int> _uniformLocations = new Dictionary<string, int>();
+        private Dictionary<string, int> _uniformBlockLocations = new Dictionary<string, int>();
 
         public List<ShaderCompilation> Compilations = new List<ShaderCompilation>();
 
@@ -110,9 +111,6 @@ namespace ProcEngine
             // First, we have to get the number of active uniforms in the shader.
             GL.GetProgram(Handle, GetProgramParameterName.ActiveUniforms, out var numberOfUniforms);
 
-            // Next, allocate the dictionary to hold the locations.
-            _uniformLocations = new Dictionary<string, int>();
-
             // Loop over all the uniforms,
             for (var i = 0; i < numberOfUniforms; i++)
             {
@@ -137,6 +135,23 @@ namespace ProcEngine
                 }
 
             }
+
+            // First, we have to get the number of active uniforms in the shader.
+            GL.GetProgram(Handle, GetProgramParameterName.ActiveUniformBlocks, out var numberOfUniformBlocks);
+            // Loop over all the uniforms,
+            for (var i = 0; i < numberOfUniformBlocks; i++)
+            {
+                // get the name of this uniform,
+                GL.GetActiveUniformBlock(Handle, i, ActiveUniformBlockParameter.UniformBlockNameLength, out var blockNameLen);
+                GL.GetActiveUniformBlockName(Handle, i, blockNameLen, out var len, out var key);
+
+                // get the location,
+                var location = GL.GetUniformBlockIndex(Handle, key);
+
+                // and then add it to the dictionary.
+                _uniformBlockLocations.Add(key, location);
+            }
+
         }
 
         public void Reload()
