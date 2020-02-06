@@ -30,16 +30,16 @@ void main()
 	// ambient
 	vec3 ambient = material.ambient * color;
 	// diffuse
-	vec3 lightDir = normalize(light.lightPos - FragPos);
+	vec3 lightDir = normalize(light.position - FragPos);
 	float diff = max(dot(lightDir, normal), 0.0);
-	vec3 diffuse = diff * light.lightColor;
+	vec3 diffuse = diff * light.color;
 	// specular
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = 0.0;
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
-	vec3 specular = material.specularStrength * spec * light.lightColor;
+	vec3 specular = material.specularStrength * spec * light.color;
 	// calculate shadow
 
 	float shadow = ShadowCalculation(FragPosLightSpace, light);
@@ -47,8 +47,8 @@ void main()
 	//float shadowCube = ShadowCalculationCubeHard(FragPos, light);
 
 	//shadow = 0;
-	vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
-	//vec3 lighting = (ambient + (1.0 - shadowCube) * (diffuse + specular)) * color;
+	//vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
+	vec3 lighting = (ambient + (1.0 - shadowCube) * (diffuse + specular)) * color;
 	
     // Combine both shadows, for debugging
     //lighting = (lighting + lighting2) / 2;

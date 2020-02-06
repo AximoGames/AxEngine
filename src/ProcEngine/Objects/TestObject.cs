@@ -98,8 +98,8 @@ namespace ProcEngine
             _Shader.SetFloat("material.shininess", 32f);
             _Shader.SetFloat("material.specularStrength", 0.5f);
 
-            _Shader.SetVector3("light.lightColor", new Vector3(0.5f, 0.5f, 0.5f));
-            _Shader.SetVector3("light.lightPos", GetShadowLight().Position);
+            _Shader.SetVector3("light.position", GetShadowLight().Position);
+            _Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));
             _Shader.SetVector3("viewPos", Camera.Position);
 
             var shadowCamera = GetCubeShadowCamera();
@@ -212,7 +212,7 @@ namespace ProcEngine
             _CubeShadowShader.SetMatrix4("model", GetModelMatrix());
             for (var i = 0; i < CubeShadowsMatrices.Count; i++)
                 _CubeShadowShader.SetMatrix4($"shadowMatrices[{i}]", CubeShadowsMatrices[i]);
-            _CubeShadowShader.SetVector3("lightPos", GetCubeShadowLight().Position);
+            _CubeShadowShader.SetVector3("light.position", GetCubeShadowLight().Position);
             _CubeShadowShader.SetFloat("far_plane", shadowCamera.FarPlane);
 
             vao.Draw();
