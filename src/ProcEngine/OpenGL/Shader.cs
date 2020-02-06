@@ -78,7 +78,7 @@ namespace ProcEngine
                 GL.ShaderSource(comp.Handle, shaderSources.Length, shaderSources, len);
 
                 // And then compile
-                CompileShader(comp.Handle);
+                CompileShader(comp);
             }
 
             // These two shaders must then be merged into a shader program, which can then be used by OpenGL.

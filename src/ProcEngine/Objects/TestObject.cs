@@ -98,8 +98,8 @@ namespace ProcEngine
             _Shader.SetFloat("material.shininess", 32f);
             _Shader.SetFloat("material.specularStrength", 0.5f);
 
-            _Shader.SetVector3("lightColor", new Vector3(0.5f, 0.5f, 0.5f));
-            _Shader.SetVector3("lightPos", GetShadowLight().Position);
+            _Shader.SetVector3("light.lightColor", new Vector3(0.5f, 0.5f, 0.5f));
+            _Shader.SetVector3("light.lightPos", GetShadowLight().Position);
             _Shader.SetVector3("viewPos", Camera.Position);
 
             var shadowCamera = GetCubeShadowCamera();

@@ -6,8 +6,7 @@
 out vec4 FragColor;
 
 //In order to calculate some basic lighting we need a few things per model basis, and a few things per fragment basis:
-uniform vec3 lightColor; //The color of the light.
-uniform vec3 lightPos; //The position of the light.
+uniform Light light;
 uniform vec3 viewPos; //The position of the view and/or of the player.
 uniform Material material;
 
@@ -31,21 +30,21 @@ void main()
 	// ambient
 	vec3 ambient = material.ambient * color;
 	// diffuse
-	vec3 lightDir = normalize(lightPos - FragPos);
+	vec3 lightDir = normalize(light.lightPos - FragPos);
 	float diff = max(dot(lightDir, normal), 0.0);
-	vec3 diffuse = diff * lightColor;
+	vec3 diffuse = diff * light.lightColor;
 	// specular
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = 0.0;
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
-	vec3 specular = material.specularStrength * spec * lightColor;
+	vec3 specular = material.specularStrength * spec * light.lightColor;
 	// calculate shadow
 
-	float shadow = ShadowCalculation(FragPosLightSpace);
-	float shadowCube = ShadowCalculationCubeSoft(FragPos);
-	//float shadowCube = ShadowCalculationCubeHard(FragPos);
+	float shadow = ShadowCalculation(FragPosLightSpace, light);
+	float shadowCube = ShadowCalculationCubeSoft(FragPos, light);
+	//float shadowCube = ShadowCalculationCubeHard(FragPos, light);
 
 	//shadow = 0;
 	vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;

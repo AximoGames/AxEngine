@@ -128,7 +128,7 @@ namespace ProcEngine
             {
                 Position = new Vector3(0, 2, 2.5f),
                 Name = "MovingLight",
-                Enabled = false,
+                //Enabled = false,
             });
 
             ctx.AddObject(new LightObject()
@@ -153,7 +153,7 @@ namespace ProcEngine
                 Scale = new Vector3(1),
                 Position = new Vector3(1.5f, 1.5f, 0.5f),
                 //Debug = true,
-                Enabled = false,
+                //Enabled = false,
             });
 
             //CursorVisible = false;
