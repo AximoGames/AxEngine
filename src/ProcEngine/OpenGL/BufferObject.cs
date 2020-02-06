@@ -9,6 +9,8 @@ namespace ProcEngine
         {
         }
 
+        private BufferTarget Target = BufferTarget.ArrayBuffer;
+
         private int _Handle;
         public int Handle => _Handle;
 
@@ -20,7 +22,7 @@ namespace ProcEngine
         internal void SetData(float[] data)
         {
             Use();
-            GL.BufferData(BufferTarget.ArrayBuffer, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
+            GL.BufferData(Target, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
         }
 
         private static int CurrentHandle;
@@ -31,7 +33,12 @@ namespace ProcEngine
                 return;
             CurrentHandle = _Handle;
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _Handle);
+            GL.BindBuffer(Target, _Handle);
+        }
+
+        private void UseDefault()
+        {
+            GL.BindBuffer(Target, 0);
         }
 
         public void Free()
