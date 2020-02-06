@@ -165,8 +165,10 @@ namespace ProcEngine
             _uniformLocations = source._uniformLocations;
         }
 
-        private static void CompileShader(int shader)
+        private static void CompileShader(ShaderCompilation comp)
         {
+            var shader = comp.Handle;
+
             // Try to compile the shader
             GL.CompileShader(shader);
 
@@ -177,9 +179,12 @@ namespace ProcEngine
                 // We can use `GL.GetShaderInfoLog(shader)` to get information about the error.
                 var msg = GL.GetShaderInfoLog(shader);
                 Console.WriteLine(msg);
+                File.WriteAllText("/tmp/error.glsl", comp.AllSources());
                 throw new Exception($"Error occurred whilst compiling Shader({shader}): {msg}");
             }
         }
+
+
 
         private static void LinkProgram(int program)
         {
@@ -193,6 +198,7 @@ namespace ProcEngine
                 // We can use `GL.GetProgramInfoLog(program)` to get information about the error.
                 var msg = GL.GetProgramInfoLog(program);
                 Console.WriteLine(msg);
+
                 throw new Exception($"Error occurred whilst linking Program({program}): {msg}");
             }
         }
@@ -320,6 +326,8 @@ namespace ProcEngine
         public List<ShaderSource> Sources = new List<ShaderSource>();
         public ShaderType Type;
         public int Handle;
+
+        public string AllSources() => string.Join("\n", Sources.Select(s => s.Source));
     }
 
     public class ShaderSource
