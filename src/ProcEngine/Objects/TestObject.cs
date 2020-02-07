@@ -98,8 +98,8 @@ namespace ProcEngine
             _Shader.SetFloat("material.shininess", 32f);
             _Shader.SetFloat("material.specularStrength", 0.5f);
 
-            _Shader.SetVector3("light.position", GetShadowLight().Position);
-            _Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));
+            //_Shader.SetVector3("light.position", GetShadowLight().Position);
+            //_Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));
             _Shader.SetVector3("viewPos", Camera.Position);
 
             var shadowCamera = GetCubeShadowCamera();
@@ -121,7 +121,7 @@ namespace ProcEngine
             //var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
             var shadowCamera = new OrthographicCamera(light.Position)
             {
-                NearPlane = 1f,
+                NearPlane = 0.1f,
                 FarPlane = 25f,
             };
             var box = Context.GetObjectByName("Box1");
@@ -139,7 +139,7 @@ namespace ProcEngine
 
             var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
             {
-                NearPlane = 1f,
+                NearPlane = 0.1f,
                 FarPlane = 25f,
                 Fov = 90f,
             };
@@ -148,7 +148,7 @@ namespace ProcEngine
         }
 
         // Because of shared variables in the shaders, only one position is possible yet
-        private int TMP_LIGHT_IDX = 1; // 1= moving, 0=static light
+        private int TMP_LIGHT_IDX = 0; // 1= moving, 0=static light
 
         private ILightObject GetCubeShadowLight()
         {

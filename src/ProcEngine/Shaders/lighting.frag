@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 #extension GL_GOOGLE_include_directive : enable
 
 #include "common/header.glsl"
@@ -6,7 +6,6 @@
 out vec4 FragColor;
 
 //In order to calculate some basic lighting we need a few things per model basis, and a few things per fragment basis:
-uniform Light light;
 uniform vec3 viewPos; //The position of the view and/or of the player.
 uniform Material material;
 
@@ -20,30 +19,35 @@ in vec4 FragPosLightSpace;
 uniform float far_plane;
 uniform samplerCube depthMap;
 uniform int lightCount;
-layout(std140) uniform lightsArray { Light lights[MAX_NUM_TOTAL_LIGHTS]; };
+layout(std140, binding = 15) uniform lightsArray { Light lights[MAX_NUM_TOTAL_LIGHTS]; };
 
 #include "common/lib.frag.glsl"
 
+
+
 void main()
 {
-    Light l = lights[0];
+	vec3 viewDir = normalize(viewPos - FragPos);
+
+    Light light = lights[0];
 
 	vec3 color = texture(material.diffuse, TexCoords).rgb;
 	//vec3 color = material.color; // solid color for debugging
 	vec3 normal = normalize(Normal);
 	// ambient
 	vec3 ambient = material.ambient * color;
+
 	// diffuse
 	vec3 lightDir = normalize(light.position - FragPos);
 	float diff = max(dot(lightDir, normal), 0.0);
 	vec3 diffuse = diff * light.color;
 	// specular
-	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = 0.0;
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
 	vec3 specular = material.specularStrength * spec * light.color;
+    
 	// calculate shadow
 
 	float shadow = ShadowCalculation(FragPosLightSpace, light);

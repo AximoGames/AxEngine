@@ -33,7 +33,8 @@ namespace ProcEngine
             where T : struct
         {
             Use();
-            GL.BufferData(Target, data.Length * Marshal.SizeOf(typeof(T)), data, BufferUsageHint.StaticDraw);
+            var structSize = Marshal.SizeOf(typeof(T));
+            GL.BufferData(Target, data.Length * structSize, data, BufferUsageHint.StaticDraw);
             UseDefault();
         }
 

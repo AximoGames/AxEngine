@@ -79,6 +79,7 @@ namespace ProcEngine
             ctx.LogInfoMessage("Window.OnLoad");
 
             ctx.LightBinding = new BindingPoint();
+            Console.WriteLine("LightBinding: " + ctx.LightBinding.Number);
 
             ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), Width / (float)Height)
             {
@@ -214,9 +215,9 @@ namespace ProcEngine
             ubo.Create();
             var lightsData = new GglsLight[2];
             lightsData[0].Position = ctx.LightObjects[0].Position;
-            lightsData[0].Color = new Vector3(1, 0, 0);
+            lightsData[0].Color = new Vector3(0.5f, 0.5f, 0.5f);
             lightsData[1].Position = ctx.LightObjects[1].Position;
-            lightsData[1].Color = new Vector3(1, 1, 0);
+            lightsData[1].Color = new Vector3(0.5f, 0.5f, 0.5f);
             ubo.SetData(lightsData);
 
             ubo.SetBindingPoint(ctx.LightBinding);
@@ -270,9 +271,13 @@ namespace ProcEngine
             base.OnRenderFrame(e);
         }
 
+        [Serializable]
+        [StructLayout(LayoutKind.Explicit, Size = 32)]
         private struct GglsLight
         {
+            [FieldOffset(0)]
             public Vector3 Position;
+            [FieldOffset(16)]
             public Vector3 Color;
         }
 
