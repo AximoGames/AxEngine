@@ -108,6 +108,7 @@ namespace ProcEngine
             _Shader.SetInt("depthMap", 3);
 
             _Shader.BindBlock("lightData", Context.LightBinding);
+            _Shader.SetInt("lightCount", Lights.Count);
 
             vao.Draw();
         }
