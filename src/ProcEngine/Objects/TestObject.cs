@@ -107,7 +107,7 @@ namespace ProcEngine
             Window.shadowCubeFb.DestinationTexture.Use(TextureUnit.Texture3);
             _Shader.SetInt("depthMap", 3);
 
-            _Shader.BindBlock("lightData", Context.LightBinding);
+            _Shader.BindBlock("lightsArray", Context.LightBinding);
             _Shader.SetInt("lightCount", Lights.Count);
 
             vao.Draw();

@@ -19,7 +19,7 @@ in vec4 FragPosLightSpace;
 uniform float far_plane;
 uniform samplerCube depthMap;
 uniform int lightCount;
-layout(std140, binding = 15) uniform lightsArray { Light lights[MAX_NUM_TOTAL_LIGHTS]; };
+layout(std140) uniform lightsArray { Light lights[MAX_NUM_TOTAL_LIGHTS]; };
 
 #include "common/lib.frag.glsl"
 
