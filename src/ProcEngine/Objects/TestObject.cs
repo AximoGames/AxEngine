@@ -122,7 +122,7 @@ namespace ProcEngine
             //var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
             var shadowCamera = new OrthographicCamera(light.Position)
             {
-                NearPlane = 0.1f,
+                NearPlane = 1.0f,
                 FarPlane = 25f,
             };
             var box = Context.GetObjectByName("Box1");
@@ -217,6 +217,7 @@ namespace ProcEngine
                 _CubeShadowShader.SetMatrix4($"shadowMatrices[{i}]", CubeShadowsMatrices[i]);
             _CubeShadowShader.SetVector3("light.position", GetCubeShadowLight().Position);
             _CubeShadowShader.SetFloat("far_plane", shadowCamera.FarPlane);
+            _CubeShadowShader.SetInt("shadowLayer", 0);
 
             vao.Draw();
         }
