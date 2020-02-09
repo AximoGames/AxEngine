@@ -80,7 +80,9 @@ namespace ProcEngine
             GL.GenFramebuffers(1, out _Handle);
             Use();
 
-            _DestinationTexture = Texture.CreateCubeShadowMap(PixelInternalFormat.DepthComponent, Width, Height, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+            var layers = 2;
+
+            _DestinationTexture = Texture.CreateCubeArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
             _DestinationTexture.Use();
 
             GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, _DestinationTexture.Handle, 0);

@@ -17,7 +17,7 @@ in vec2 TexCoords;
 in vec4 FragPosLightSpace;
 
 uniform float far_plane;
-uniform samplerCube depthMap;
+uniform samplerCubeArray depthMap;
 uniform int lightCount;
 layout(std140) uniform lightsArray { Light lights[MAX_NUM_TOTAL_LIGHTS]; };
 
@@ -35,6 +35,7 @@ void main()
 
     vec3 finalColor = ambient;
 
+    int lightCount = 1;
 	for(int x = 0; x < lightCount; x++) {
         Light light = lights[x];
 

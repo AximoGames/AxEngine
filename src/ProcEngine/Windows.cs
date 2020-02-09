@@ -216,8 +216,10 @@ namespace ProcEngine
             var lightsData = new GglsLight[2];
             lightsData[0].Position = ctx.LightObjects[0].Position;
             lightsData[0].Color = new Vector3(0.5f, 0.5f, 0.5f);
+            lightsData[0].ShadowLayer = 0;
             lightsData[1].Position = ctx.LightObjects[1].Position;
             lightsData[1].Color = new Vector3(0.5f, 0.5f, 0.5f);
+            lightsData[1].ShadowLayer = 1;
             ubo.SetData(lightsData);
 
             ubo.SetBindingPoint(ctx.LightBinding);
@@ -277,8 +279,12 @@ namespace ProcEngine
         {
             [FieldOffset(0)]
             public Vector3 Position;
+
             [FieldOffset(16)]
             public Vector3 Color;
+
+            [FieldOffset(28)]
+            public int ShadowLayer;
         }
 
         private void CheckForProgramError()

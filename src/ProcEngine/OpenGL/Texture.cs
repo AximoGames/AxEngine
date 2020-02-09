@@ -48,6 +48,19 @@ namespace ProcEngine
             return txt;
         }
 
+        public static Texture CreateCubeArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        {
+            int handle;
+            GL.GenTextures(1, out handle);
+            var txt = new Texture(handle, TextureTarget.TextureCubeMapArray, width, height);
+            txt.Use();
+            GL.TexImage3D(TextureTarget.TextureCubeMapArray, 0, PixelInternalFormat.DepthComponent, width, height, layers * 6, border, format, type, pixels);
+
+            txt.SetNearestFilter();
+            txt.SetClampToEdgeWrap();
+            return txt;
+        }
+
         public static Texture LoadCubeMap(string path)
         {
             //var faces = new string[] { "right", "left", "back", "front", "top", "bottom" };
