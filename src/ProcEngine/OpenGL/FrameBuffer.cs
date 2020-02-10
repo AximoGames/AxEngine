@@ -63,12 +63,12 @@ namespace ProcEngine
             GL.GenFramebuffers(1, out _Handle);
             Use();
 
-            _DestinationTexture = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent, Width, Height, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
-            _DestinationTexture.SetNearestFilter();
-            _DestinationTexture.SetClampToBordreWrap();
+            var layers = 1;
+
+            _DestinationTexture = Texture.CreateArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
             _DestinationTexture.Use();
 
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, _DestinationTexture.Handle, 0);
+            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, _DestinationTexture.Handle, 0);
             GL.DrawBuffer(DrawBufferMode.None);
             GL.ReadBuffer(ReadBufferMode.None);
 

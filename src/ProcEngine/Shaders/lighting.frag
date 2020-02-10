@@ -52,14 +52,13 @@ void main()
 
         // calculate shadow
    
-   
         float shadow = ShadowCalculation(FragPosLightSpace, light);
         float shadowCube = ShadowCalculationCubeSoft(FragPos, light);
         //float shadowCube = ShadowCalculationCubeHard(FragPos, light);
 
         //shadow = 0;
-        //vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
-        vec3 lighting = (ambient + (1.0 - shadowCube) * (diffuse + specular)) * color;
+        vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
+        //vec3 lighting = (ambient + (1.0 - shadowCube) * (diffuse + specular)) * color;
 
         finalColor = finalColor + lighting;
     }
