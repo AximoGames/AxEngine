@@ -17,8 +17,8 @@ vec4 ShadowCubeCoords(vec3 fragToLight, int layer)
 #endif
 }
 
-vec2 GetShadowCoords(vec2 projCoords, int layer) {
-    return projCoords;
+vec3 GetShadowCoords(vec2 projCoords, int layer) {
+    return vec3(projCoords.xy, layer);
     //return vec2(projCoords.x, projCoords.y);
 }
 
@@ -109,7 +109,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, Light light)
 	// float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
 	// PCF
 	float shadow = 0.0;
-	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+	vec2 texelSize = 1.0 / textureSize(shadowMap, 0).xy;
 	for(int x =- 1; x <= 1; ++ x)
 	{
 		for(int y =- 1; y <= 1; ++ y)

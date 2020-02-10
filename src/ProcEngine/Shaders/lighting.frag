@@ -9,7 +9,7 @@ out vec4 FragColor;
 uniform vec3 viewPos; //The position of the view and/or of the player.
 uniform Material material;
 
-uniform sampler2D shadowMap;
+uniform sampler2DArray shadowMap;
 
 in vec3 Normal; //The normal of the fragment is calculated in the vertex shader.
 in vec3 FragPos; //The fragment position.
@@ -51,7 +51,8 @@ void main()
         vec3 specular = material.specularStrength * spec * light.color;
 
         // calculate shadow
-
+   
+   
         float shadow = ShadowCalculation(FragPosLightSpace, light);
         float shadowCube = ShadowCalculationCubeSoft(FragPos, light);
         //float shadowCube = ShadowCalculationCubeHard(FragPos, light);
