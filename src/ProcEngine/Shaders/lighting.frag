@@ -39,6 +39,8 @@ void main()
 	for(int x = 0; x < lightCount; x++) {
         Light light = lights[x];
 
+        bool isDirLight = false;
+
         // diffuse
         vec3 lightDir = normalize(light.position - FragPos);
         float diff = max(dot(lightDir, normal), 0.0);
@@ -52,8 +54,14 @@ void main()
 
         // calculate shadow
    
-        float shadow = ShadowCalculation(FragPosLightSpace, light);
-        float shadowCube = ShadowCalculationCubeSoft(FragPos, light);
+        float shadow;
+        if(isDirLight) {
+            shadow = ShadowCalculation(FragPosLightSpace, light);
+        }
+        else {
+            shadow = ShadowCalculationCubeSoft(FragPos, light);
+        }
+
         //float shadowCube = ShadowCalculationCubeHard(FragPos, light);
 
         //shadow = 0;
