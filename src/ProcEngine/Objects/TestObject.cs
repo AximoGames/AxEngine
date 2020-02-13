@@ -28,6 +28,7 @@ namespace ProcEngine
         public bool Debug;
 
         private Shader _Shader;
+        private Shader _DefShader;
         private Shader _ShadowShader;
         private Shader _CubeShadowShader;
 
@@ -45,6 +46,7 @@ namespace ProcEngine
                 _vertices = DataHelper.CubeDebug;
 
             _Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
+            _DefShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
 
             txt0 = new Texture("Ressources/woodenbox.png");
             txt1 = new Texture("Ressources/woodenbox_specular.png");
@@ -67,49 +69,61 @@ namespace ProcEngine
             vao.SetData(_vertices);
         }
 
+        public const bool Forward = true;
+
         public void OnRender()
         {
             vao.Use();
 
-            txt0.Use(TextureUnit.Texture0);
-            txt1.Use(TextureUnit.Texture1);
-            Window.shadowFb.DestinationTexture.Use(TextureUnit.Texture2);
-            var debugMatrix = new Matrix4(
-                new Vector4(1, 0, 0, 0),
-                new Vector4(0, 0, 1, 0),
-                new Vector4(0, 1, 0, 0),
-                new Vector4(0, 0, 0, 1));
+            if (Forward)
+            {
+                txt0.Use(TextureUnit.Texture0);
+                txt1.Use(TextureUnit.Texture1);
+                Window.shadowFb.DestinationTexture.Use(TextureUnit.Texture2);
 
-            _Shader.Use();
+                _Shader.Use();
 
-            _Shader.SetMatrix4("model", GetModelMatrix());
-            _Shader.SetMatrix4("view", Camera.GetViewMatrix());
-            _Shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+                _Shader.SetMatrix4("model", GetModelMatrix());
+                _Shader.SetMatrix4("view", Camera.GetViewMatrix());
+                _Shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
 
-            _Shader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+                _Shader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
-            _Shader.SetInt("shadowMap", 2);
-            _Shader.SetMatrix4("debugMatrix", debugMatrix);
+                _Shader.SetInt("shadowMap", 2);
 
-            _Shader.SetVector3("material.color", new Vector3(1.0f, 1.0f, 0f));
-            _Shader.SetInt("material.diffuse", 0);
-            _Shader.SetInt("material.specular", 1);
-            _Shader.SetFloat("material.ambient", 0.3f);
-            _Shader.SetFloat("material.shininess", 32f);
-            _Shader.SetFloat("material.specularStrength", 0.5f);
+                _Shader.SetVector3("material.color", new Vector3(1.0f, 1.0f, 0f));
+                _Shader.SetInt("material.diffuse", 0);
+                _Shader.SetInt("material.specular", 1);
+                _Shader.SetFloat("material.ambient", 0.3f);
+                _Shader.SetFloat("material.shininess", 32f);
+                _Shader.SetFloat("material.specularStrength", 0.5f);
 
-            //_Shader.SetVector3("light.position", GetShadowLight().Position);
-            //_Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));
-            _Shader.SetVector3("viewPos", Camera.Position);
+                //_Shader.SetVector3("light.position", GetShadowLight().Position);
+                //_Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));
+                _Shader.SetVector3("viewPos", Camera.Position);
 
-            var shadowCamera = GetCubeShadowCamera();
-            _Shader.SetFloat("far_plane", shadowCamera.FarPlane);
-            Window.shadowCubeFb.DestinationTexture.Use(TextureUnit.Texture3);
-            _Shader.SetInt("depthMap", 3);
+                var shadowCamera = GetCubeShadowCamera();
+                _Shader.SetFloat("far_plane", shadowCamera.FarPlane);
+                Window.shadowCubeFb.DestinationTexture.Use(TextureUnit.Texture3);
+                _Shader.SetInt("depthMap", 3);
 
-            _Shader.BindBlock("lightsArray", Context.LightBinding);
-            _Shader.SetInt("lightCount", Lights.Count);
-
+                _Shader.BindBlock("lightsArray", Context.LightBinding);
+                _Shader.SetInt("lightCount", Lights.Count);
+            }
+            else
+            {
+                Window.gBuffer.Use();
+                _DefShader.Use();
+                _DefShader.SetMatrix4("model", GetModelMatrix());
+                _DefShader.SetMatrix4("view", Camera.GetViewMatrix());
+                _DefShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+                // _DefShader.SetInt("gPosition", 0);
+                // _DefShader.SetInt("gNormal", 1);
+                // _DefShader.SetInt("gAlbedoSpec", 2);
+                // Window.gPosition.Use(TextureUnit.Texture0);
+                // Window.gNormal.Use(TextureUnit.Texture1);
+                // Window.gAlbedoSpec.Use(TextureUnit.Texture2);
+            }
             vao.Draw();
         }
 

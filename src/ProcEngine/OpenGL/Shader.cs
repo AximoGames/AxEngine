@@ -11,9 +11,12 @@ using System.Linq;
 namespace ProcEngine
 {
     // A simple class meant to help create shaders.
-    public class Shader
+    public class Shader : IObjectLabel
     {
         public int Handle { get; private set; }
+        public string ObjectLabel { get { return Compilations.FirstOrDefault()?.ObjectLabel ?? ""; } set { } }
+
+        public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Program;
 
         private Dictionary<string, int> _uniformLocations = new Dictionary<string, int>();
         private Dictionary<string, int> _uniformBlockLocations = new Dictionary<string, int>();
@@ -71,6 +74,7 @@ namespace ProcEngine
             foreach (var comp in Compilations)
             {
                 comp.Handle = GL.CreateShader(comp.Type);
+                ObjectManager.SetLabel(comp);
                 var shaderSources = comp.Sources.Select(s => s.Source).ToArray();
 
                 var len = shaderSources.Select(s => s.Length).ToArray();
@@ -93,6 +97,8 @@ namespace ProcEngine
 
             // And then link them together.
             LinkProgram(Handle);
+
+            ObjectManager.SetLabel(this);
 
             //if(
 
@@ -345,11 +351,14 @@ namespace ProcEngine
 
     }
 
-    public class ShaderCompilation
+    public class ShaderCompilation : IObjectLabel
     {
         public List<ShaderSource> Sources = new List<ShaderSource>();
         public ShaderType Type;
-        public int Handle;
+        public int Handle { get; internal set; }
+        public string ObjectLabel { get { return Path.GetFileName(Sources.First().Path); } set { } }
+
+        public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Program;
 
         public string AllSources() => string.Join("\n", Sources.Select(s => s.Source));
     }
@@ -358,6 +367,30 @@ namespace ProcEngine
     {
         public string Path;
         public string Source;
+    }
+
+    public interface IObjectHandle
+    {
+        int Handle { get; }
+    }
+
+    public interface IObjectIdentifier : IObjectHandle
+    {
+        ObjectLabelIdentifier ObjectLabelIdentifier { get; }
+    }
+
+    public interface IObjectLabel : IObjectIdentifier
+    {
+        string ObjectLabel { get; set; }
+    }
+
+    public static class ObjectManager
+    {
+        public static void SetLabel(IObjectLabel obj)
+        {
+            var name = obj.ObjectLabelIdentifier.ToString() + " " + obj.Handle.ToString() + " [" + obj.ObjectLabel + "]";
+            GL.ObjectLabel(obj.ObjectLabelIdentifier, obj.Handle, name.Length, name);
+        }
     }
 
 }

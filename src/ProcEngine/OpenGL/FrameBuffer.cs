@@ -8,7 +8,9 @@ namespace ProcEngine
 
     public class FrameBuffer
     {
+        [Obsolete("Framebuffer can have multiple Targets")]
         private Texture _DestinationTexture;
+        [Obsolete("Framebuffer can have multiple Targets")]
         public Texture DestinationTexture => _DestinationTexture;
 
         private int _Handle;
@@ -58,6 +60,12 @@ namespace ProcEngine
             Check();
         }
 
+        public void BindTexture(Texture txt)
+        {
+            Use();
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, txt.Handle, 0);
+        }
+
         public void InitDepth()
         {
             GL.GenFramebuffers(1, out _Handle);
@@ -92,7 +100,7 @@ namespace ProcEngine
             Check();
         }
 
-        private void Check()
+        public void Check()
         {
             var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
             if (status != FramebufferErrorCode.FramebufferComplete)

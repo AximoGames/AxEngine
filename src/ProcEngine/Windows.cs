@@ -89,6 +89,31 @@ namespace ProcEngine
             //ctx.Camera = new PerspectiveFieldOfViewCamera(lightPosition, Width / (float)Height);
             //ctx.Camera = new OrthographicCamera(lightPosition);
 
+            SetupScene();
+
+            //CursorVisible = false;
+
+            fb = new FrameBuffer(Width, Height);
+            fb.InitNormal();
+            fb.CreateRenderBuffer();
+
+            InitDeferred();
+            InitShadows();
+
+            ctx.AddObject(new ScreenObject(fb.DestinationTexture)
+            {
+            });
+
+            StartFileListener();
+
+            MovingObject = Camera;
+            //MovingObject = ctx.GetObjectByName("Box1") as IPosition;
+
+            base.OnLoad(e);
+        }
+
+        private void SetupScene()
+        {
             ctx.AddObject(new Skybox()
             {
                 Name = "Sky",
@@ -158,29 +183,46 @@ namespace ProcEngine
                 //Debug = true,
                 //Enabled = false,
             });
+        }
 
-            //CursorVisible = false;
-
-            fb = new FrameBuffer(Width, Height);
-            fb.InitNormal();
-            fb.CreateRenderBuffer();
-
+        private void InitShadows()
+        {
             shadowFb = new FrameBuffer(1024, 1024);
             shadowFb.InitDepth();
 
             shadowCubeFb = new FrameBuffer(1024, 1024);
             shadowCubeFb.InitCubeDepth();
+        }
 
-            ctx.AddObject(new ScreenObject(fb.DestinationTexture)
-            {
-            });
+        public static FrameBuffer gBuffer;
+        public static Texture gPosition;
+        public static Texture gNormal;
+        public static Texture gAlbedoSpec;
 
-            StartFileListener();
+        private void InitDeferred()
+        {
+            gBuffer = new FrameBuffer(Width, Height);
 
-            MovingObject = Camera;
-            //MovingObject = ctx.GetObjectByName("Box1") as IPosition;
+            gPosition = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, Width, Height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            gPosition.SetNearestFilter();
+            gBuffer.BindTexture(gPosition);
 
-            base.OnLoad(e);
+            gNormal = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, Width, Height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            gNormal.SetNearestFilter();
+            gBuffer.BindTexture(gNormal);
+
+            gAlbedoSpec = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            gAlbedoSpec.SetNearestFilter();
+            gBuffer.BindTexture(gAlbedoSpec);
+
+            GL.DrawBuffers(3, new DrawBuffersEnum[] {
+                DrawBuffersEnum.ColorAttachment0,
+                DrawBuffersEnum.ColorAttachment1,
+                DrawBuffersEnum.ColorAttachment2 });
+
+            var rboDepth = new RenderBuffer(gBuffer);
+
+            gBuffer.Check();
         }
 
         private FileSystemWatcher ShaderWatcher;
