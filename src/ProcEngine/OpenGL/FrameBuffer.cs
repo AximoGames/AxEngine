@@ -6,7 +6,7 @@ using System.Drawing;
 namespace ProcEngine
 {
 
-    public class FrameBuffer
+    public class FrameBuffer : IObjectLabel
     {
         [Obsolete("Framebuffer can have multiple Targets")]
         private Texture _DestinationTexture;
@@ -15,6 +15,11 @@ namespace ProcEngine
 
         private int _Handle;
         public int Handle => _Handle;
+
+        private string _ObjectLabel;
+        public string ObjectLabel { get => _ObjectLabel; set { _ObjectLabel = value; ObjectManager.SetLabel(this); } }
+
+        public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Framebuffer;
 
         public int Width { get; private set; }
         public int Height { get; private set; }

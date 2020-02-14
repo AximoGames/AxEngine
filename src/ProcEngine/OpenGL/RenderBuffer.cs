@@ -3,11 +3,16 @@
 
 namespace ProcEngine
 {
-    public class RenderBuffer
+    public class RenderBuffer : IObjectLabel
     {
 
         private int _Handle;
         public int Handle => _Handle;
+
+        private string _ObjectLabel;
+        public string ObjectLabel { get => _ObjectLabel; set { _ObjectLabel = value; ObjectManager.SetLabel(this); } }
+
+        public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Renderbuffer;
 
         public RenderBuffer(FrameBuffer fb)
         {

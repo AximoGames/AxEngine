@@ -202,17 +202,21 @@ namespace ProcEngine
         private void InitDeferred()
         {
             gBuffer = new FrameBuffer(Width, Height);
+            gBuffer.ObjectLabel = nameof(gBuffer);
 
             gPosition = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, Width, Height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            gPosition.ObjectLabel = nameof(gPosition);
             gPosition.SetNearestFilter();
             gBuffer.BindTexture(gPosition);
 
             gNormal = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, Width, Height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            gNormal.ObjectLabel = nameof(gNormal);
             gNormal.SetNearestFilter();
             gBuffer.BindTexture(gNormal);
 
             gAlbedoSpec = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             gAlbedoSpec.SetNearestFilter();
+            gAlbedoSpec.ObjectLabel = nameof(gAlbedoSpec);
             gBuffer.BindTexture(gAlbedoSpec);
 
             GL.DrawBuffers(3, new DrawBuffersEnum[] {
@@ -221,6 +225,7 @@ namespace ProcEngine
                 DrawBuffersEnum.ColorAttachment2 });
 
             var rboDepth = new RenderBuffer(gBuffer);
+            rboDepth.ObjectLabel = nameof(rboDepth);
 
             gBuffer.Check();
         }

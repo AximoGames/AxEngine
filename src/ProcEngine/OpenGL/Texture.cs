@@ -11,9 +11,9 @@ using System.Collections.Generic;
 namespace ProcEngine
 {
     // A helper class, much like Shader, meant to simplify loading textures.
-    public class Texture
+    public class Texture : IObjectLabel
     {
-        public readonly int Handle;
+        public int Handle { get; private set; }
         private TextureTarget Target = TextureTarget.Texture2D;
 
         public Texture(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
@@ -21,7 +21,9 @@ namespace ProcEngine
             Width = width;
             Height = height;
             Target = target;
-            GL.GenTextures(1, out Handle);
+            int handle;
+            GL.GenTextures(1, out handle);
+            Handle = handle;
             Use();
             GL.TexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
         }
@@ -95,6 +97,7 @@ namespace ProcEngine
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMap, images[0].Width, images[0].Height);
+            txt.ObjectLabel = Path.GetFileName(path);
             txt.Use();
 
             for (var i = 0; i < images.Count; i++)
@@ -109,12 +112,18 @@ namespace ProcEngine
             }
             txt.SetNearestFilter();
             txt.SetClampToEdgeWrap();
+
             Console.WriteLine($"Loaded Cubemap #{txt.Handle} {path}");
             return txt;
         }
 
         public int Width { get; private set; }
         public int Height { get; private set; }
+
+        private string _ObjectLabel;
+        public string ObjectLabel { get => _ObjectLabel; set { _ObjectLabel = value; ObjectManager.SetLabel(this); } }
+
+        public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Texture;
 
         public Bitmap GetTexture()
         {
@@ -173,6 +182,7 @@ namespace ProcEngine
             Target = TextureTarget.Texture2D;
             // Generate handle
             Handle = GL.GenTexture();
+            ObjectLabel = Path.GetFileName(path);
 
             // Bind the handle
             Use();
