@@ -69,7 +69,7 @@ namespace ProcEngine
             vao.SetData(_vertices);
         }
 
-        public const bool Forward = false;
+        public const bool Forward = true;
 
         public void OnRender()
         {

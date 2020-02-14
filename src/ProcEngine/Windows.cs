@@ -71,6 +71,7 @@ namespace ProcEngine
             GL.Enable(EnableCap.CullFace);
 
             ctx = new RenderContext();
+            RenderContext.Current = ctx;
             ctx.SceneOpitons = new SceneOptions
             {
 
@@ -302,13 +303,25 @@ namespace ProcEngine
 
             // Render objects
             foreach (var obj in ctx.RenderableObjects)
+            {
                 if (obj.Enabled)
+                {
+                    ObjectManager.PushDebugGroup("OnRender", obj);
                     obj.OnRender();
+                    ObjectManager.PopDebugGroup();
+                }
+            }
 
             // Render Screen Surface
             foreach (var obj in ctx.RenderableScreenObjects)
+            {
                 if (obj.Enabled)
+                {
+                    ObjectManager.PushDebugGroup("OnRender", obj);
                     obj.OnRender();
+                    ObjectManager.PopDebugGroup();
+                }
+            }
 
             //CheckForProgramError();
 

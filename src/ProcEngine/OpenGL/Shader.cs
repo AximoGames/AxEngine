@@ -224,9 +224,14 @@ namespace ProcEngine
             }
         }
 
+        internal static int CurrentHandle { get; private set; }
+
         // A wrapper function that enables the shader program.
         public void Use()
         {
+            if (CurrentHandle == Handle)
+                return;
+            CurrentHandle = Handle;
             GL.UseProgram(Handle);
         }
 
@@ -289,7 +294,7 @@ namespace ProcEngine
         {
             if (_uniformLocations.TryGetValue(name, out var location))
             {
-                GL.UseProgram(Handle);
+                Use();
                 GL.Uniform1(location, data);
             }
         }
@@ -303,7 +308,7 @@ namespace ProcEngine
         {
             if (_uniformLocations.TryGetValue(name, out var location))
             {
-                GL.UseProgram(Handle);
+                Use();
                 GL.Uniform1(location, data);
             }
         }
@@ -322,7 +327,7 @@ namespace ProcEngine
         {
             if (_uniformLocations.TryGetValue(name, out var location))
             {
-                GL.UseProgram(Handle);
+                Use();
                 GL.UniformMatrix4(location, true, ref data);
             }
         }
@@ -336,7 +341,7 @@ namespace ProcEngine
         {
             if (_uniformLocations.TryGetValue(name, out var location))
             {
-                GL.UseProgram(Handle);
+                Use();
                 GL.Uniform3(location, data);
             }
         }
@@ -389,8 +394,21 @@ namespace ProcEngine
         public static void SetLabel(IObjectLabel obj)
         {
             var name = obj.ObjectLabelIdentifier.ToString() + " " + obj.Handle.ToString() + " [" + obj.ObjectLabel + "]";
+            RenderContext.Current.LogInfoMessage("Label:" + name);
             GL.ObjectLabel(obj.ObjectLabelIdentifier, obj.Handle, name.Length, name);
         }
+
+        public static void PushDebugGroup(string verb, IGameObject obj)
+        {
+            var name = $"{verb} GameObject {obj.Id} [{obj.Name}]";
+            GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, obj.Id, name.Length, name);
+        }
+
+        public static void PopDebugGroup()
+        {
+            GL.PopDebugGroup();
+        }
+
     }
 
 }
