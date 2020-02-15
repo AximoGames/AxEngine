@@ -74,7 +74,6 @@ namespace ProcEngine
             foreach (var comp in Compilations)
             {
                 comp.Handle = GL.CreateShader(comp.Type);
-                ObjectManager.SetLabel(comp);
                 var shaderSources = comp.Sources.Select(s => s.Source).ToArray();
 
                 var len = shaderSources.Select(s => s.Length).ToArray();
@@ -98,6 +97,7 @@ namespace ProcEngine
             // And then link them together.
             LinkProgram(Handle);
 
+            Use();
             ObjectManager.SetLabel(this);
 
             //if(
@@ -203,9 +203,9 @@ namespace ProcEngine
                 File.WriteAllText("/tmp/error.glsl", comp.AllSources());
                 throw new Exception($"Error occurred whilst compiling Shader({shader}): {msg}");
             }
+
+            ObjectManager.SetLabel(comp);
         }
-
-
 
         private static void LinkProgram(int program)
         {
@@ -363,7 +363,7 @@ namespace ProcEngine
         public int Handle { get; internal set; }
         public string ObjectLabel { get { return Path.GetFileName(Sources.First().Path); } set { } }
 
-        public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Program;
+        public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Shader;
 
         public string AllSources() => string.Join("\n", Sources.Select(s => s.Source));
     }
@@ -372,43 +372,6 @@ namespace ProcEngine
     {
         public string Path;
         public string Source;
-    }
-
-    public interface IObjectHandle
-    {
-        int Handle { get; }
-    }
-
-    public interface IObjectIdentifier : IObjectHandle
-    {
-        ObjectLabelIdentifier ObjectLabelIdentifier { get; }
-    }
-
-    public interface IObjectLabel : IObjectIdentifier
-    {
-        string ObjectLabel { get; set; }
-    }
-
-    public static class ObjectManager
-    {
-        public static void SetLabel(IObjectLabel obj)
-        {
-            var name = obj.ObjectLabelIdentifier.ToString() + " " + obj.Handle.ToString() + " [" + obj.ObjectLabel + "]";
-            RenderContext.Current.LogInfoMessage("Label:" + name);
-            GL.ObjectLabel(obj.ObjectLabelIdentifier, obj.Handle, name.Length, name);
-        }
-
-        public static void PushDebugGroup(string verb, IGameObject obj)
-        {
-            var name = $"{verb} GameObject {obj.Id} [{obj.Name}]";
-            GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, obj.Id, name.Length, name);
-        }
-
-        public static void PopDebugGroup()
-        {
-            GL.PopDebugGroup();
-        }
-
     }
 
 }

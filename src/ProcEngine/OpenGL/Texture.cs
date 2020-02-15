@@ -97,8 +97,9 @@ namespace ProcEngine
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMap, images[0].Width, images[0].Height);
-            txt.ObjectLabel = Path.GetFileName(path);
+            //txt.ObjectLabel = Path.GetFileName(path);
             txt.Use();
+            txt.ObjectLabel = Path.GetFileName(path);
 
             for (var i = 0; i < images.Count; i++)
             {
@@ -182,10 +183,10 @@ namespace ProcEngine
             Target = TextureTarget.Texture2D;
             // Generate handle
             Handle = GL.GenTexture();
-            ObjectLabel = Path.GetFileName(path);
 
             // Bind the handle
             Use();
+            ObjectLabel = Path.GetFileName(path);
 
             // For this example, we're going to use .NET's built-in System.Drawing library to load textures.
 
