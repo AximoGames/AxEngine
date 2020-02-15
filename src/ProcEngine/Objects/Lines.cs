@@ -43,8 +43,6 @@ namespace ProcEngine
         {
             vao.Use();
 
-            Window.shadowFb.DestinationTexture.Use(TextureUnit.Texture0);
-
             _Shader.Use();
 
             _Shader.SetMatrix4("model", ModelMatrix);

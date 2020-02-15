@@ -79,7 +79,7 @@ namespace ProcEngine
             {
                 txt0.Use(TextureUnit.Texture0);
                 txt1.Use(TextureUnit.Texture1);
-                Window.shadowFb.DestinationTexture.Use(TextureUnit.Texture2);
+                Context.GetPipeline<DirectionalShadowRenderPipeline>().ShadowFb.DestinationTexture.Use(TextureUnit.Texture2);
 
                 _Shader.Use();
 
@@ -104,7 +104,7 @@ namespace ProcEngine
 
                 var shadowCamera = GetCubeShadowCamera();
                 _Shader.SetFloat("far_plane", shadowCamera.FarPlane);
-                Window.shadowCubeFb.DestinationTexture.Use(TextureUnit.Texture3);
+                Context.GetPipeline<PointShadowRenderPipeline>().ShadowCubeFb.DestinationTexture.Use(TextureUnit.Texture3);
                 _Shader.SetInt("depthMap", 3);
 
                 _Shader.BindBlock("lightsArray", Context.LightBinding);

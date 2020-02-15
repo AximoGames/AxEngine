@@ -21,6 +21,15 @@ namespace ProcEngine
     public class RenderContext
     {
 
+
+        public List<IRenderPipeline> RenderPipelines = new List<IRenderPipeline>();
+
+        public T GetPipeline<T>()
+            where T : class, IRenderPipeline
+        {
+            return (T)RenderPipelines.FirstOrDefault(p => p is T);
+        }
+
         public static RenderContext Current;
 
         public BindingPoint LightBinding;

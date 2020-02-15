@@ -92,6 +92,8 @@ namespace ProcEngine
 
             ctx.LogInfoMessage("Window.OnLoad");
 
+            SetupPipelines();
+
             ctx.LightBinding = new BindingPoint();
             Console.WriteLine("LightBinding: " + ctx.LightBinding.Number);
 
@@ -112,7 +114,6 @@ namespace ProcEngine
             fb.CreateRenderBuffer(RenderbufferStorage.Depth24Stencil8, FramebufferAttachment.DepthStencilAttachment);
 
             InitDeferred();
-            InitShadows();
 
             ctx.AddObject(new ScreenObject(fb.DestinationTexture)
             {
@@ -124,6 +125,17 @@ namespace ProcEngine
             //MovingObject = ctx.GetObjectByName("Box1") as IPosition;
 
             base.OnLoad(e);
+        }
+
+        public void SetupPipelines()
+        {
+            var shadowPipeline = new DirectionalShadowRenderPipeline();
+            shadowPipeline.Init();
+            ctx.RenderPipelines.Add(shadowPipeline);
+
+            var shadowCubePipeline = new PointShadowRenderPipeline();
+            shadowCubePipeline.Init();
+            ctx.RenderPipelines.Add(shadowCubePipeline);
         }
 
         private void SetupScene()
@@ -199,15 +211,6 @@ namespace ProcEngine
             });
         }
 
-        private void InitShadows()
-        {
-            shadowFb = new FrameBuffer(1024, 1024);
-            shadowFb.InitDepth();
-
-            shadowCubeFb = new FrameBuffer(1024, 1024);
-            shadowCubeFb.InitCubeDepth();
-        }
-
         public static FrameBuffer gBuffer;
         public static Texture gPosition;
         public static Texture gNormal;
@@ -260,9 +263,6 @@ namespace ProcEngine
         }
 
         private FrameBuffer fb;
-        public static FrameBuffer shadowFb;
-        public static FrameBuffer shadowCubeFb;
-
         private RenderContext ctx;
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -291,22 +291,10 @@ namespace ProcEngine
             GL.Enable(EnableCap.DepthTest);
 
             //--
-
-            GL.Viewport(0, 0, shadowFb.Width, shadowFb.Height);
-            shadowFb.Use();
-            GL.Clear(ClearBufferMask.DepthBufferBit);
-
-            // Render objects
-            foreach (var obj in ctx.ShadowObjects)
-                if (obj.Enabled && obj.RenderShadow)
-                    obj.OnRenderShadow();
-
-            shadowCubeFb.Use();
-            GL.Clear(ClearBufferMask.DepthBufferBit);
-            foreach (var obj in ctx.ShadowObjects)
-                if (obj.Enabled && obj.RenderShadow)
-                    obj.OnRenderCubeShadow();
-
+            foreach (var pipeline in ctx.RenderPipelines)
+            {
+                pipeline.Render(ctx, null); // TODO: Camera
+            }
             //--
 
             // Configure
@@ -546,10 +534,10 @@ namespace ProcEngine
                 Reload();
             }
 
-            if (kbState[Key.F12])
-            {
-                shadowFb.DestinationTexture.GetDepthTexture().Save("test.png");
-            }
+            // if (kbState[Key.F12])
+            // {
+            //     shadowFb.DestinationTexture.GetDepthTexture().Save("test.png");
+            // }
 
             base.OnUpdateFrame(e);
         }

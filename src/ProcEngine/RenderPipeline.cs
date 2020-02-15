@@ -20,16 +20,22 @@ namespace ProcEngine
     public class PointShadowRenderPipeline : RenderPipeline
     {
 
-        public static FrameBuffer shadowCubeFb;
+        public FrameBuffer ShadowCubeFb;
 
         public override void Init()
         {
-            shadowCubeFb = new FrameBuffer(1024, 1024);
-            shadowCubeFb.InitCubeDepth();
+            ShadowCubeFb = new FrameBuffer(1024, 1024);
+            ShadowCubeFb.InitCubeDepth();
         }
 
         public override void Render(RenderContext context, Camera camera)
         {
+            GL.Viewport(0, 0, ShadowCubeFb.Width, ShadowCubeFb.Height);
+            ShadowCubeFb.Use();
+            GL.Clear(ClearBufferMask.DepthBufferBit);
+            foreach (var obj in context.ShadowObjects)
+                if (obj.Enabled && obj.RenderShadow)
+                    obj.OnRenderCubeShadow();
         }
 
     }
@@ -37,12 +43,23 @@ namespace ProcEngine
     public class DirectionalShadowRenderPipeline : RenderPipeline
     {
 
+        public FrameBuffer ShadowFb;
+
         public override void Init()
         {
+            ShadowFb = new FrameBuffer(1024, 1024);
+            ShadowFb.InitDepth();
         }
 
         public override void Render(RenderContext context, Camera camera)
         {
+            GL.Viewport(0, 0, ShadowFb.Width, ShadowFb.Height);
+            ShadowFb.Use();
+            GL.Clear(ClearBufferMask.DepthBufferBit);
+
+            foreach (var obj in context.ShadowObjects)
+                if (obj.Enabled && obj.RenderShadow)
+                    obj.OnRenderShadow();
         }
 
     }
