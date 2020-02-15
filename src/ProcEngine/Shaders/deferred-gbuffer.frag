@@ -16,6 +16,7 @@ void main()
     gPosition = FragPos;
     // also store the per-fragment normals into the gbuffer
     gNormal = normalize(Normal);
+    //gNormal = normalize(vec3(Normal.x, Normal.z, -Normal.y));
     // and the diffuse per-fragment color
     gAlbedoSpec.rgb = texture(texture_diffuse1, TexCoords).rgb;
     // store specular intensity in gAlbedoSpec's alpha component
