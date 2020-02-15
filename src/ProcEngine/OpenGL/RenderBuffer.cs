@@ -14,7 +14,7 @@ namespace ProcEngine
 
         public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Renderbuffer;
 
-        public RenderBuffer(FrameBuffer fb)
+        public RenderBuffer(FrameBuffer fb, RenderbufferStorage renderbufferStorage, FramebufferAttachment framebufferAttachment)
         {
             fb.Use();
 

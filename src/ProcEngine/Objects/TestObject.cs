@@ -113,16 +113,17 @@ namespace ProcEngine
             else
             {
                 Window.gBuffer.Use();
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
                 _DefShader.Use();
                 _DefShader.SetMatrix4("model", GetModelMatrix());
                 _DefShader.SetMatrix4("view", Camera.GetViewMatrix());
                 _DefShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
-                // _DefShader.SetInt("gPosition", 0);
-                // _DefShader.SetInt("gNormal", 1);
-                // _DefShader.SetInt("gAlbedoSpec", 2);
-                // Window.gPosition.Use(TextureUnit.Texture0);
-                // Window.gNormal.Use(TextureUnit.Texture1);
-                // Window.gAlbedoSpec.Use(TextureUnit.Texture2);
+                _DefShader.SetInt("gPosition", 0);
+                _DefShader.SetInt("gNormal", 1);
+                _DefShader.SetInt("gAlbedoSpec", 2);
+                Window.gPosition.Use(TextureUnit.Texture0);
+                Window.gNormal.Use(TextureUnit.Texture1);
+                Window.gAlbedoSpec.Use(TextureUnit.Texture2);
             }
             vao.Draw();
         }

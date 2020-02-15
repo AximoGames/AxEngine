@@ -29,7 +29,7 @@ namespace ProcEngine
             //     MaxLabelLength = GL.GetInteger((GetIndexedPName)(int)All.MaxLabelLength);
 
             var name = obj.ObjectLabelIdentifier.ToString() + " " + obj.Handle.ToString() + " [" + obj.ObjectLabel + "]";
-            RenderContext.Current.LogInfoMessage("Label:" + name);
+            //RenderContext.Current.LogInfoMessage("Label:" + name);
             //name = "xxx\0";
             GL.ObjectLabel(obj.ObjectLabelIdentifier, obj.Handle, -1, name);
         }

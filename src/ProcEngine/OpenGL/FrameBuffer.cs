@@ -49,13 +49,13 @@ namespace ProcEngine
         {
             Width = width;
             Height = height;
+
+            GL.GenFramebuffers(1, out _Handle);
+            Use();
         }
 
         public void InitNormal()
         {
-            GL.GenFramebuffers(1, out _Handle);
-            Use();
-
             _DestinationTexture = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, Width, Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, IntPtr.Zero);
             _DestinationTexture.SetLinearFilter();
             _DestinationTexture.Use();
@@ -65,17 +65,14 @@ namespace ProcEngine
             Check();
         }
 
-        public void BindTexture(Texture txt)
+        public void BindTexture(Texture txt, FramebufferAttachment attachment)
         {
             Use();
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, txt.Handle, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachment, TextureTarget.Texture2D, txt.Handle, 0);
         }
 
         public void InitDepth()
         {
-            GL.GenFramebuffers(1, out _Handle);
-            Use();
-
             var layers = 1;
 
             _DestinationTexture = Texture.CreateArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
@@ -90,9 +87,6 @@ namespace ProcEngine
 
         public void InitCubeDepth()
         {
-            GL.GenFramebuffers(1, out _Handle);
-            Use();
-
             var layers = 2;
 
             _DestinationTexture = Texture.CreateCubeArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
@@ -114,9 +108,9 @@ namespace ProcEngine
 
         public RenderBuffer RenderBuffer { get; private set; }
 
-        public void CreateRenderBuffer()
+        public void CreateRenderBuffer(RenderbufferStorage renderbufferStorage, FramebufferAttachment framebufferAttachment)
         {
-            RenderBuffer = new RenderBuffer(this);
+            RenderBuffer = new RenderBuffer(this, renderbufferStorage, framebufferAttachment);
         }
 
         public void Use()

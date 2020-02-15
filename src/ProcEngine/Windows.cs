@@ -50,6 +50,17 @@ namespace ProcEngine
             }
         }
 
+        private static void PrintExtensions()
+        {
+            int numExtensions;
+            GL.GetInteger(GetPName.NumExtensions, out numExtensions);
+            for (var i = 0; i < numExtensions; i++)
+            {
+                var extName = GL.GetString(StringNameIndexed.Extensions, i);
+                Console.WriteLine(extName);
+            }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             // _debugProcCallback = DebugCallback;
@@ -64,6 +75,8 @@ namespace ProcEngine
             var renderer = GL.GetString(StringName.Renderer);
 
             Console.WriteLine($"Vendor: {vendor}, version: {version}, shadinglangVersion: {shadingLanguageVersion}, renderer: {renderer}");
+
+            //PrintExtensions();
 
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -96,7 +109,7 @@ namespace ProcEngine
 
             fb = new FrameBuffer(Width, Height);
             fb.InitNormal();
-            fb.CreateRenderBuffer();
+            fb.CreateRenderBuffer(RenderbufferStorage.Depth24Stencil8, FramebufferAttachment.DepthStencilAttachment);
 
             InitDeferred();
             InitShadows();
@@ -203,29 +216,31 @@ namespace ProcEngine
         private void InitDeferred()
         {
             gBuffer = new FrameBuffer(Width, Height);
+            gBuffer.InitNormal();
+
             gBuffer.ObjectLabel = nameof(gBuffer);
 
             gPosition = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, Width, Height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             gPosition.ObjectLabel = nameof(gPosition);
             gPosition.SetNearestFilter();
-            gBuffer.BindTexture(gPosition);
+            gBuffer.BindTexture(gPosition, FramebufferAttachment.ColorAttachment0);
 
             gNormal = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, Width, Height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             gNormal.ObjectLabel = nameof(gNormal);
             gNormal.SetNearestFilter();
-            gBuffer.BindTexture(gNormal);
+            gBuffer.BindTexture(gNormal, FramebufferAttachment.ColorAttachment1);
 
             gAlbedoSpec = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             gAlbedoSpec.SetNearestFilter();
             gAlbedoSpec.ObjectLabel = nameof(gAlbedoSpec);
-            gBuffer.BindTexture(gAlbedoSpec);
+            gBuffer.BindTexture(gAlbedoSpec, FramebufferAttachment.ColorAttachment2);
 
             GL.DrawBuffers(3, new DrawBuffersEnum[] {
                 DrawBuffersEnum.ColorAttachment0,
                 DrawBuffersEnum.ColorAttachment1,
                 DrawBuffersEnum.ColorAttachment2 });
 
-            var rboDepth = new RenderBuffer(gBuffer);
+            var rboDepth = new RenderBuffer(gBuffer, RenderbufferStorage.DepthComponent, FramebufferAttachment.DepthAttachment);
             rboDepth.ObjectLabel = nameof(rboDepth);
 
             gBuffer.Check();
