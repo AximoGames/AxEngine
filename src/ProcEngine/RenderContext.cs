@@ -24,6 +24,11 @@ namespace ProcEngine
 
         public List<IRenderPipeline> RenderPipelines = new List<IRenderPipeline>();
 
+        public IRenderPipeline CurrentPipeline { get; internal set; }
+
+        public int ScreenWidth;
+        public int ScreenHeight;
+
         public T GetPipeline<T>()
             where T : class, IRenderPipeline
         {

@@ -83,7 +83,11 @@ namespace ProcEngine
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
 
-            ctx = new RenderContext();
+            ctx = new RenderContext()
+            {
+                ScreenWidth = Width,
+                ScreenHeight = Height,
+            };
             RenderContext.Current = ctx;
             ctx.SceneOpitons = new SceneOptions
             {
@@ -109,13 +113,7 @@ namespace ProcEngine
 
             //CursorVisible = false;
 
-            fb = new FrameBuffer(Width, Height);
-            fb.InitNormal();
-            fb.CreateRenderBuffer(RenderbufferStorage.Depth24Stencil8, FramebufferAttachment.DepthStencilAttachment);
-
-            InitDeferred();
-
-            ctx.AddObject(new ScreenObject(fb.DestinationTexture)
+            ctx.AddObject(new ScreenObject(ctx.GetPipeline<ForwardRenderPipeline>().FrameBuffer.DestinationTexture)
             {
             });
 
@@ -136,6 +134,14 @@ namespace ProcEngine
             var shadowCubePipeline = new PointShadowRenderPipeline();
             shadowCubePipeline.Init();
             ctx.RenderPipelines.Add(shadowCubePipeline);
+
+            var deferredPipeline = new DeferredRenderPipeline();
+            deferredPipeline.Init();
+            ctx.RenderPipelines.Add(deferredPipeline);
+
+            var forwardPipeline = new ForwardRenderPipeline();
+            forwardPipeline.Init();
+            ctx.RenderPipelines.Add(forwardPipeline);
         }
 
         private void SetupScene()
@@ -211,44 +217,6 @@ namespace ProcEngine
             });
         }
 
-        public static FrameBuffer gBuffer;
-        public static Texture gPosition;
-        public static Texture gNormal;
-        public static Texture gAlbedoSpec;
-
-        private void InitDeferred()
-        {
-            gBuffer = new FrameBuffer(Width, Height);
-            gBuffer.InitNormal();
-
-            gBuffer.ObjectLabel = nameof(gBuffer);
-
-            gPosition = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, Width, Height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-            gPosition.ObjectLabel = nameof(gPosition);
-            gPosition.SetNearestFilter();
-            gBuffer.BindTexture(gPosition, FramebufferAttachment.ColorAttachment0);
-
-            gNormal = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, Width, Height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-            gNormal.ObjectLabel = nameof(gNormal);
-            gNormal.SetNearestFilter();
-            gBuffer.BindTexture(gNormal, FramebufferAttachment.ColorAttachment1);
-
-            gAlbedoSpec = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
-            gAlbedoSpec.SetNearestFilter();
-            gAlbedoSpec.ObjectLabel = nameof(gAlbedoSpec);
-            gBuffer.BindTexture(gAlbedoSpec, FramebufferAttachment.ColorAttachment2);
-
-            GL.DrawBuffers(3, new DrawBuffersEnum[] {
-                DrawBuffersEnum.ColorAttachment0,
-                DrawBuffersEnum.ColorAttachment1,
-                DrawBuffersEnum.ColorAttachment2 });
-
-            var rboDepth = new RenderBuffer(gBuffer, RenderbufferStorage.DepthComponent, FramebufferAttachment.DepthAttachment);
-            rboDepth.ObjectLabel = nameof(rboDepth);
-
-            gBuffer.Check();
-        }
-
         private FileSystemWatcher ShaderWatcher;
 
         private void StartFileListener()
@@ -262,7 +230,6 @@ namespace ProcEngine
             ShaderWatcher.EnableRaisingEvents = true;
         }
 
-        private FrameBuffer fb;
         private RenderContext ctx;
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -293,38 +260,16 @@ namespace ProcEngine
             //--
             foreach (var pipeline in ctx.RenderPipelines)
             {
+                ctx.CurrentPipeline = pipeline;
                 pipeline.Render(ctx, null); // TODO: Camera
             }
             //--
 
             // Configure
-            GL.Viewport(0, 0, Width, Height);
-            fb.Use();
-            GL.Enable(EnableCap.DepthTest);
-            GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             // Render objects
-            foreach (var obj in ctx.RenderableObjects)
-            {
-                if (obj.Enabled)
-                {
-                    ObjectManager.PushDebugGroup("OnRender", obj);
-                    obj.OnRender();
-                    ObjectManager.PopDebugGroup();
-                }
-            }
 
             // Render Screen Surface
-            foreach (var obj in ctx.RenderableScreenObjects)
-            {
-                if (obj.Enabled)
-                {
-                    ObjectManager.PushDebugGroup("OnRender", obj);
-                    obj.OnRender();
-                    ObjectManager.PopDebugGroup();
-                }
-            }
 
             //CheckForProgramError();
 
