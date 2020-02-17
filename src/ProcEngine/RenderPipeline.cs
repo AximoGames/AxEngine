@@ -151,6 +151,14 @@ namespace ProcEngine
             gBuffer.Check();
         }
 
+        public DeferredPass Pass;
+
+        public enum DeferredPass
+        {
+            Pass1,
+            Pass2,
+        }
+
         public override void Render(RenderContext context, Camera camera)
         {
             GL.Viewport(0, 0, context.ScreenWidth, context.ScreenHeight);
@@ -159,6 +167,19 @@ namespace ProcEngine
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            Pass = DeferredPass.Pass1;
+            foreach (var obj in context.RenderableObjects)
+            {
+                if (obj.Enabled)
+                {
+                    ObjectManager.PushDebugGroup("OnRender", obj);
+                    obj.OnRender();
+                    ObjectManager.PopDebugGroup();
+                }
+            }
+
+            Pass = DeferredPass.Pass2;
+            context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Use();
             foreach (var obj in context.RenderableObjects)
             {
                 if (obj.Enabled)

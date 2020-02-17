@@ -2,6 +2,7 @@
 
 namespace ProcEngine
 {
+
     public abstract class GameObject : IGameObject
     {
         public int Id { get; }
@@ -9,6 +10,8 @@ namespace ProcEngine
         public bool Enabled { get; set; } = true;
 
         public RenderContext Context { get; private set; }
+
+        public virtual IRenderPipeline RenderPipeline { get; set; }
 
         public void AssignContext(RenderContext ctx)
         {

@@ -37,6 +37,7 @@ namespace ProcEngine
     {
         void OnRender();
         RenderPosition RenderPosition { get; }
+        IRenderPipeline RenderPipeline { get; set; }
     }
 
     public interface ILightTarget
