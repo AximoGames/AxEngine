@@ -9,8 +9,6 @@ namespace ProcEngine
     {
         public Camera Camera => Context.Camera;
 
-        public RenderPosition RenderPosition => RenderPosition.Scene;
-
         private Shader _shader;
         private VertexArrayObject vao;
         private BufferObject vbo;

@@ -11,8 +11,6 @@ namespace ProcEngine
         public Camera Camera => Context.Camera;
         public Matrix4 ModelMatrix { get; set; } = Matrix4.Identity;
 
-        public RenderPosition RenderPosition => RenderPosition.Scene;
-
         private Shader _Shader;
 
         private VertexArrayObject vao;

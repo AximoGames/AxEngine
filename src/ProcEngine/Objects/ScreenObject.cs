@@ -17,8 +17,6 @@ namespace ProcEngine
         private Texture _SourceTexture;
         private Texture SourceTexture => _SourceTexture;
 
-        public RenderPosition RenderPosition => RenderPosition.Screen;
-
         public ScreenObject(Texture sourceTexture)
         {
             _SourceTexture = sourceTexture;

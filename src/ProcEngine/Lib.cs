@@ -36,8 +36,17 @@ namespace ProcEngine
     public interface IRenderableObject : IGameObject
     {
         void OnRender();
-        RenderPosition RenderPosition { get; }
         IRenderPipeline RenderPipeline { get; set; }
+    }
+
+    public interface IForwardRenderable : IRenderableObject
+    {
+        void OnForwardRender();
+    }
+
+    public interface IDeferredRenderable : IRenderableObject
+    {
+        void OnDeferredRender();
     }
 
     public interface ILightTarget
@@ -45,18 +54,12 @@ namespace ProcEngine
         List<ILightObject> Lights { get; }
     }
 
-    public enum RenderPosition
-    {
-        Scene,
-        Screen,
-    }
-
     public interface IReloadable : IGameObject
     {
         void OnReload();
     }
 
-    public interface IShadowObject : IGameObject
+    public interface IShadowObject : IGameObject, IRenderableObject
     {
         void OnRenderShadow();
         void OnRenderCubeShadow();

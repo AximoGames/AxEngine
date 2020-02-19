@@ -5,7 +5,24 @@ using System.Collections.Generic;
 
 namespace ProcEngine
 {
-    public class TestObject : GameObject, IRenderableObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate
+
+    public abstract class RenderableObject : GameObject, IRenderableObject
+    {
+        public void OnRender()
+        {
+            if (Context.CurrentPipeline is ForwardRenderPipeline && this is IForwardRenderable m1)
+                m1.OnForwardRender();
+            else if (Context.CurrentPipeline is DeferredRenderPipeline && this is IDeferredRenderable m2)
+                m2.OnDeferredRender();
+            else if (Context.CurrentPipeline is DirectionalShadowRenderPipeline && this is IShadowObject m3)
+                m3.OnRenderShadow();
+            else if (Context.CurrentPipeline is PointShadowRenderPipeline && this is IShadowObject m4)
+                m4.OnRenderCubeShadow();
+        }
+    }
+
+    public class TestObject : RenderableObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
+    IForwardRenderable, IDeferredRenderable
     {
 
         public Camera Camera => Context.Camera;
@@ -13,7 +30,6 @@ namespace ProcEngine
         public Vector3 Scale { get; set; }
         public Vector3 Rotate { get; set; }
 
-        public RenderPosition RenderPosition => RenderPosition.Scene;
         public bool RenderShadow { get; set; } = true;
 
         public Matrix4 GetModelMatrix()
@@ -69,24 +85,10 @@ namespace ProcEngine
             vao.SetData(_vertices);
         }
 
-        public void OnRender()
+        public void OnForwardRender()
         {
             vao.Use();
 
-            if (Context.CurrentPipeline is ForwardRenderPipeline)
-                OnRenderForward();
-            else if (Context.CurrentPipeline is DeferredRenderPipeline)
-                OnRenderDeferred();
-            else if (Context.CurrentPipeline is DirectionalShadowRenderPipeline)
-                OnRenderShadow();
-            else if (Context.CurrentPipeline is PointShadowRenderPipeline)
-                OnRenderCubeShadow();
-
-            vao.Draw();
-        }
-
-        private void OnRenderForward()
-        {
             txt0.Use(TextureUnit.Texture0);
             txt1.Use(TextureUnit.Texture1);
             Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.DestinationTexture.Use(TextureUnit.Texture2);
@@ -119,10 +121,14 @@ namespace ProcEngine
 
             _Shader.BindBlock("lightsArray", Context.LightBinding);
             _Shader.SetInt("lightCount", Lights.Count);
+
+            vao.Draw();
         }
 
-        private void OnRenderDeferred()
+        public void OnDeferredRender()
         {
+            vao.Use();
+
             var pipe = Context.GetPipeline<DeferredRenderPipeline>();
             pipe.gBuffer.Use();
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -136,6 +142,8 @@ namespace ProcEngine
             pipe.gPosition.Use(TextureUnit.Texture0);
             pipe.gNormal.Use(TextureUnit.Texture1);
             pipe.gAlbedoSpec.Use(TextureUnit.Texture2);
+
+            vao.Draw();
         }
 
         private Matrix4 lightSpaceMatrix;

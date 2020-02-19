@@ -35,7 +35,7 @@ namespace ProcEngine
             GL.Clear(ClearBufferMask.DepthBufferBit);
             foreach (var obj in context.ShadowObjects)
                 if (obj.Enabled && obj.RenderShadow)
-                    obj.OnRenderCubeShadow();
+                    obj.OnRender();
         }
 
     }
@@ -59,7 +59,7 @@ namespace ProcEngine
 
             foreach (var obj in context.ShadowObjects)
                 if (obj.Enabled && obj.RenderShadow)
-                    obj.OnRenderShadow();
+                    obj.OnRender();
         }
 
     }
@@ -85,16 +85,6 @@ namespace ProcEngine
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             foreach (var obj in context.RenderableObjects)
-            {
-                if (obj.Enabled)
-                {
-                    ObjectManager.PushDebugGroup("OnRender", obj);
-                    obj.OnRender();
-                    ObjectManager.PopDebugGroup();
-                }
-            }
-
-            foreach (var obj in context.RenderableScreenObjects)
             {
                 if (obj.Enabled)
                 {

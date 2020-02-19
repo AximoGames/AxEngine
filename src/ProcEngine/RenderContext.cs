@@ -43,7 +43,6 @@ namespace ProcEngine
         public Camera Camera;
         public List<IGameObject> AllObjects = new List<IGameObject>();
         public List<IRenderableObject> RenderableObjects = new List<IRenderableObject>();
-        public List<IRenderableObject> RenderableScreenObjects = new List<IRenderableObject>();
         public List<IShadowObject> ShadowObjects = new List<IShadowObject>();
         public List<ILightObject> LightObjects = new List<ILightObject>();
 
@@ -67,10 +66,7 @@ namespace ProcEngine
 
             if (obj is IRenderableObject renderableObj)
             {
-                if (renderableObj.RenderPosition == RenderPosition.Scene)
-                    RenderableObjects.Add(renderableObj);
-                if (renderableObj.RenderPosition == RenderPosition.Screen)
-                    RenderableScreenObjects.Add(renderableObj);
+                RenderableObjects.Add(renderableObj);
             }
 
             if (obj is ILightObject lightObj)
