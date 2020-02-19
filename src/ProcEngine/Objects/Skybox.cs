@@ -38,6 +38,8 @@ namespace ProcEngine
 
         public void OnRender()
         {
+            UsePipeline<ForwardRenderPipeline>();
+
             vao.Use();
             _shader.Use();
 

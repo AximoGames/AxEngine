@@ -40,6 +40,12 @@ namespace ProcEngine
             GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, obj.Id, name.Length, name);
         }
 
+        public static void PushDebugGroup(string verb, IRenderPipeline obj)
+        {
+            var name = $"{verb} RenderPipeline {obj.GetType().Name}]";
+            GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, -1, name.Length, name);
+        }
+
         public static void PopDebugGroup()
         {
             GL.PopDebugGroup();

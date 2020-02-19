@@ -113,7 +113,7 @@ namespace ProcEngine
 
             //CursorVisible = false;
 
-            ctx.AddObject(new ScreenObject(ctx.GetPipeline<ForwardRenderPipeline>().FrameBuffer.DestinationTexture)
+            ctx.AddObject(new ScreenObject()
             {
             });
 
@@ -142,6 +142,10 @@ namespace ProcEngine
             var forwardPipeline = new ForwardRenderPipeline();
             forwardPipeline.Init();
             ctx.RenderPipelines.Add(forwardPipeline);
+
+            var screenPipeline = new ScreenPipeline();
+            screenPipeline.Init();
+            ctx.RenderPipelines.Add(screenPipeline);
         }
 
         private void SetupScene()
@@ -260,8 +264,10 @@ namespace ProcEngine
             //--
             foreach (var pipeline in ctx.RenderPipelines)
             {
+                ObjectManager.PushDebugGroup("Render", pipeline);
                 ctx.CurrentPipeline = pipeline;
                 pipeline.Render(ctx, null); // TODO: Camera
+                ObjectManager.PopDebugGroup();
             }
             //--
 

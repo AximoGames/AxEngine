@@ -9,12 +9,20 @@ namespace ProcEngine
     public interface IRenderPipeline
     {
         void Render(RenderContext context, Camera camera);
+        IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera);
     }
 
     public abstract class RenderPipeline : IRenderPipeline
     {
         public virtual void Init() { }
         public abstract void Render(RenderContext context, Camera camera);
+        public virtual IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
+        {
+            foreach (var obj in context.RenderableObjects)
+                if (obj.Enabled)
+                    if (obj.RenderPipelines.Contains(this))
+                        yield return obj;
+        }
     }
 
     public class PointShadowRenderPipeline : RenderPipeline
@@ -33,9 +41,16 @@ namespace ProcEngine
             GL.Viewport(0, 0, FrameBuffer.Width, FrameBuffer.Height);
             FrameBuffer.Use();
             GL.Clear(ClearBufferMask.DepthBufferBit);
-            foreach (var obj in context.ShadowObjects)
-                if (obj.Enabled && obj.RenderShadow)
-                    obj.OnRender();
+            foreach (var obj in GetRenderObjects(context, camera))
+                obj.OnRender();
+        }
+
+        public override IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
+        {
+            foreach (var obj in base.GetRenderObjects(context, camera))
+                if (obj is IShadowObject m)
+                    if (m.RenderShadow)
+                        yield return m;
         }
 
     }
@@ -57,9 +72,16 @@ namespace ProcEngine
             FrameBuffer.Use();
             GL.Clear(ClearBufferMask.DepthBufferBit);
 
-            foreach (var obj in context.ShadowObjects)
-                if (obj.Enabled && obj.RenderShadow)
-                    obj.OnRender();
+            foreach (var obj in GetRenderObjects(context, camera))
+                obj.OnRender();
+        }
+
+        public override IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
+        {
+            foreach (var obj in base.GetRenderObjects(context, camera))
+                if (obj is IShadowObject m)
+                    if (m.RenderShadow)
+                        yield return m;
         }
 
     }
@@ -84,14 +106,11 @@ namespace ProcEngine
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            foreach (var obj in context.RenderableObjects)
+            foreach (var obj in GetRenderObjects(context, camera))
             {
-                if (obj.Enabled)
-                {
-                    ObjectManager.PushDebugGroup("OnRender", obj);
-                    obj.OnRender();
-                    ObjectManager.PopDebugGroup();
-                }
+                ObjectManager.PushDebugGroup("OnRender", obj);
+                obj.OnRender();
+                ObjectManager.PopDebugGroup();
             }
         }
 
@@ -170,16 +189,34 @@ namespace ProcEngine
 
             Pass = DeferredPass.Pass2;
             context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Use();
-            foreach (var obj in context.RenderableObjects)
+            foreach (var obj in GetRenderObjects(context, camera))
             {
-                if (obj.Enabled)
-                {
-                    ObjectManager.PushDebugGroup("OnRender", obj);
-                    obj.OnRender();
-                    ObjectManager.PopDebugGroup();
-                }
+                ObjectManager.PushDebugGroup("OnRender", obj);
+                obj.OnRender();
+                ObjectManager.PopDebugGroup();
             }
         }
+
+    }
+
+    public class ScreenPipeline : RenderPipeline
+    {
+
+
+        public override void Init()
+        {
+        }
+
+        public override void Render(RenderContext context, Camera camera)
+        {
+            foreach (var obj in GetRenderObjects(context, camera))
+            {
+                ObjectManager.PushDebugGroup("OnRender", obj);
+                obj.OnRender();
+                ObjectManager.PopDebugGroup();
+            }
+        }
+
     }
 
 }

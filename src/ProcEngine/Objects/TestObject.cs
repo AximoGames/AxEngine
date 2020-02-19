@@ -58,6 +58,10 @@ namespace ProcEngine
 
         public override void Init()
         {
+            UsePipeline<PointShadowRenderPipeline>();
+            UsePipeline<DirectionalShadowRenderPipeline>();
+            UsePipeline<ForwardRenderPipeline>();
+
             if (Debug)
                 _vertices = DataHelper.CubeDebug;
 
@@ -130,8 +134,6 @@ namespace ProcEngine
             vao.Use();
 
             var pipe = Context.GetPipeline<DeferredRenderPipeline>();
-            pipe.gBuffer.Use();
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             _DefShader.Use();
             _DefShader.SetMatrix4("model", GetModelMatrix());
             _DefShader.SetMatrix4("view", Camera.GetViewMatrix());

@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using System.Collections.Generic;
 
 namespace ProcEngine
 {
@@ -11,7 +12,13 @@ namespace ProcEngine
 
         public RenderContext Context { get; private set; }
 
-        public virtual IRenderPipeline RenderPipeline { get; set; }
+        public virtual List<IRenderPipeline> RenderPipelines { get; set; } = new List<IRenderPipeline>();
+
+        public void UsePipeline<T>()
+            where T : class, IRenderPipeline
+        {
+            RenderPipelines.Add(Context.GetPipeline<T>());
+        }
 
         public void AssignContext(RenderContext ctx)
         {

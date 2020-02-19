@@ -14,17 +14,15 @@ namespace ProcEngine
         private VertexArrayObject vao;
         private BufferObject vbo;
 
-        private Texture _SourceTexture;
-        private Texture SourceTexture => _SourceTexture;
-
-        public ScreenObject(Texture sourceTexture)
-        {
-            _SourceTexture = sourceTexture;
-        }
+        private Texture SourceTexture;
 
         public override void Init()
         {
+            UsePipeline<ScreenPipeline>();
+
             _shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag");
+
+            SourceTexture = Context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.DestinationTexture;
 
             vbo = new BufferObject();
             vbo.Create();
@@ -42,10 +40,10 @@ namespace ProcEngine
 
         public void OnRender()
         {
-            vao.Use();
+            if (!(Context.CurrentPipeline is ScreenPipeline))
+                return;
 
-            //txt0.Use(TextureUnit.Texture0);
-            //txt1.Use(TextureUnit.Texture1);
+            vao.Use();
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             GL.Disable(EnableCap.DepthTest);
@@ -53,9 +51,7 @@ namespace ProcEngine
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             _shader.Use();
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, SourceTexture.Handle);
-            //GL.BindTexture(TextureTarget.Texture2D, Window.shadowFb.DestinationTexture.Handle);
+            SourceTexture.Use();
 
             //GL.Disable(EnableCap.CullFace);
             vao.Draw();

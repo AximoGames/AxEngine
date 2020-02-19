@@ -18,6 +18,8 @@ namespace ProcEngine
 
         public override void Init()
         {
+            UsePipeline<ForwardRenderPipeline>();
+
             _Shader = new Shader("Shaders/lines.vert", "Shaders/lines.frag");
 
             vbo = new BufferObject();

@@ -36,7 +36,7 @@ namespace ProcEngine
     public interface IRenderableObject : IGameObject
     {
         void OnRender();
-        IRenderPipeline RenderPipeline { get; set; }
+        List<IRenderPipeline> RenderPipelines { get; set; }
     }
 
     public interface IForwardRenderable : IRenderableObject
