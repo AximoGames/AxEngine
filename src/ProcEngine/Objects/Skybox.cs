@@ -19,6 +19,8 @@ namespace ProcEngine
 
         public override void Init()
         {
+            UsePipeline<ForwardRenderPipeline>();
+
             _shader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
             //txt = Texture.LoadCubeMap("Ressources/desert-skybox/#.tga");
             txt = Texture.LoadCubeMap("Ressources/water-skybox/#.jpg");

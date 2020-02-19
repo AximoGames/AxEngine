@@ -177,14 +177,11 @@ namespace ProcEngine
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             Pass = DeferredPass.Pass1;
-            foreach (var obj in context.RenderableObjects)
+            foreach (var obj in GetRenderObjects(context, camera))
             {
-                if (obj.Enabled)
-                {
-                    ObjectManager.PushDebugGroup("OnRender", obj);
-                    obj.OnRender();
-                    ObjectManager.PopDebugGroup();
-                }
+                ObjectManager.PushDebugGroup("OnRender", obj);
+                obj.OnRender();
+                ObjectManager.PopDebugGroup();
             }
 
             Pass = DeferredPass.Pass2;

@@ -60,6 +60,7 @@ namespace ProcEngine
         {
             UsePipeline<PointShadowRenderPipeline>();
             UsePipeline<DirectionalShadowRenderPipeline>();
+            UsePipeline<DeferredRenderPipeline>();
             UsePipeline<ForwardRenderPipeline>();
 
             if (Debug)
