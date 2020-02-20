@@ -119,6 +119,7 @@ namespace ProcEngine
 
             _DefLightShader.SetVector3("viewPos", camera.Position);
 
+            context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Use();
             vao.Use();
             vao.Draw();
 

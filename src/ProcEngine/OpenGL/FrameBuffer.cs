@@ -57,6 +57,7 @@ namespace ProcEngine
         public void InitNormal()
         {
             _DestinationTexture = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, Width, Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, IntPtr.Zero);
+            _DestinationTexture.ObjectLabel = ObjectLabel;
             _DestinationTexture.SetLinearFilter();
             _DestinationTexture.Use();
 
