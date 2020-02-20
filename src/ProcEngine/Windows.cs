@@ -96,7 +96,9 @@ namespace ProcEngine
 
             ctx.LogInfoMessage("Window.OnLoad");
 
+            ObjectManager.PushDebugGroup("Setup", "Pipelines");
             SetupPipelines();
+            ObjectManager.PopDebugGroup();
 
             ctx.LightBinding = new BindingPoint();
             Console.WriteLine("LightBinding: " + ctx.LightBinding.Number);
@@ -109,7 +111,10 @@ namespace ProcEngine
             //ctx.Camera = new PerspectiveFieldOfViewCamera(lightPosition, Width / (float)Height);
             //ctx.Camera = new OrthographicCamera(lightPosition);
 
+
+            ObjectManager.PushDebugGroup("Setup", "Scene");
             SetupScene();
+            ObjectManager.PopDebugGroup();
 
             //CursorVisible = false;
 
@@ -127,25 +132,11 @@ namespace ProcEngine
 
         public void SetupPipelines()
         {
-            var shadowPipeline = new DirectionalShadowRenderPipeline();
-            shadowPipeline.Init();
-            ctx.RenderPipelines.Add(shadowPipeline);
-
-            var shadowCubePipeline = new PointShadowRenderPipeline();
-            shadowCubePipeline.Init();
-            ctx.RenderPipelines.Add(shadowCubePipeline);
-
-            var deferredPipeline = new DeferredRenderPipeline();
-            deferredPipeline.Init();
-            ctx.RenderPipelines.Add(deferredPipeline);
-
-            var forwardPipeline = new ForwardRenderPipeline();
-            forwardPipeline.Init();
-            ctx.RenderPipelines.Add(forwardPipeline);
-
-            var screenPipeline = new ScreenPipeline();
-            screenPipeline.Init();
-            ctx.RenderPipelines.Add(screenPipeline);
+            ctx.AddPipeline(new DirectionalShadowRenderPipeline());
+            ctx.AddPipeline(new PointShadowRenderPipeline());
+            ctx.AddPipeline(new DeferredRenderPipeline());
+            ctx.AddPipeline(new ForwardRenderPipeline());
+            ctx.AddPipeline(new ScreenPipeline());
         }
 
         private void SetupScene()

@@ -34,9 +34,18 @@ namespace ProcEngine
             GL.ObjectLabel(obj.ObjectLabelIdentifier, obj.Handle, -1, name);
         }
 
+        public static void PushDebugGroup(string verb, string nome)
+        {
+            var name = $"{verb} {nome}]";
+            GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, -1, name.Length, name);
+        }
+
         public static void PushDebugGroup(string verb, IGameObject obj)
         {
-            var name = $"{verb} GameObject {obj.Id} [{obj.Name}]";
+            var objName = obj.Name;
+            if (string.IsNullOrEmpty(objName))
+                objName = obj.GetType().Name;
+            var name = $"{verb} GameObject {obj.Id} [{objName}]";
             GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, obj.Id, name.Length, name);
         }
 

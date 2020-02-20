@@ -8,6 +8,7 @@ namespace ProcEngine
 
     public interface IRenderPipeline
     {
+        void Init();
         void Render(RenderContext context, Camera camera);
         IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera);
     }
@@ -16,6 +17,12 @@ namespace ProcEngine
     {
         public virtual void Init() { }
         public abstract void Render(RenderContext context, Camera camera);
+        protected virtual void Render(RenderContext context, Camera camera, IRenderableObject obj)
+        {
+            ObjectManager.PushDebugGroup("OnRender", obj);
+            obj.OnRender();
+            ObjectManager.PopDebugGroup();
+        }
         public virtual IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
         {
             foreach (var obj in context.RenderableObjects)
@@ -42,7 +49,7 @@ namespace ProcEngine
             FrameBuffer.Use();
             GL.Clear(ClearBufferMask.DepthBufferBit);
             foreach (var obj in GetRenderObjects(context, camera))
-                obj.OnRender();
+                Render(context, camera, obj);
         }
 
         public override IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
@@ -73,7 +80,7 @@ namespace ProcEngine
             GL.Clear(ClearBufferMask.DepthBufferBit);
 
             foreach (var obj in GetRenderObjects(context, camera))
-                obj.OnRender();
+                Render(context, camera, obj);
         }
 
         public override IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
@@ -107,11 +114,7 @@ namespace ProcEngine
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             foreach (var obj in GetRenderObjects(context, camera))
-            {
-                ObjectManager.PushDebugGroup("OnRender", obj);
-                obj.OnRender();
-                ObjectManager.PopDebugGroup();
-            }
+                Render(context, camera, obj);
         }
 
     }
@@ -178,20 +181,12 @@ namespace ProcEngine
 
             Pass = DeferredPass.Pass1;
             foreach (var obj in GetRenderObjects(context, camera))
-            {
-                ObjectManager.PushDebugGroup("OnRender", obj);
-                obj.OnRender();
-                ObjectManager.PopDebugGroup();
-            }
+                Render(context, camera, obj);
 
             Pass = DeferredPass.Pass2;
             context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Use();
             foreach (var obj in GetRenderObjects(context, camera))
-            {
-                ObjectManager.PushDebugGroup("OnRender", obj);
-                obj.OnRender();
-                ObjectManager.PopDebugGroup();
-            }
+                Render(context, camera, obj);
         }
 
     }
@@ -207,11 +202,7 @@ namespace ProcEngine
         public override void Render(RenderContext context, Camera camera)
         {
             foreach (var obj in GetRenderObjects(context, camera))
-            {
-                ObjectManager.PushDebugGroup("OnRender", obj);
-                obj.OnRender();
-                ObjectManager.PopDebugGroup();
-            }
+                Render(context, camera, obj);
         }
 
     }

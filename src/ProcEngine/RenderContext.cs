@@ -52,12 +52,22 @@ namespace ProcEngine
             return AllObjects.FirstOrDefault(o => o.Name == name);
         }
 
+        public void AddPipeline(IRenderPipeline pipeline)
+        {
+            ObjectManager.PushDebugGroup("Init", pipeline);
+            pipeline.Init();
+            ObjectManager.PopDebugGroup();
+            RenderPipelines.Add(pipeline);
+        }
+
         public void AddObject(IGameObject obj)
         {
             obj.AssignContext(this);
 
             LogInfoMessage($"Init Object {obj.Name}");
+            ObjectManager.PushDebugGroup("Init", obj);
             obj.Init();
+            ObjectManager.PopDebugGroup();
 
             AllObjects.Add(obj);
 
