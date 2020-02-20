@@ -20,8 +20,8 @@ namespace ProcEngine
 
             GL.GenRenderbuffers(1, out _Handle);
             Use();
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Depth24Stencil8, fb.Width, fb.Height);
-            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, RenderbufferTarget.Renderbuffer, _Handle);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, renderbufferStorage, fb.Width, fb.Height);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, framebufferAttachment, RenderbufferTarget.Renderbuffer, _Handle);
         }
 
         public void Use()

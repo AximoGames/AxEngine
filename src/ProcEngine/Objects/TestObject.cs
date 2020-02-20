@@ -44,7 +44,7 @@ namespace ProcEngine
         public bool Debug;
 
         private Shader _Shader;
-        private Shader _DefShader;
+        private Shader _DefGeometryShader;
         private Shader _ShadowShader;
         private Shader _CubeShadowShader;
 
@@ -67,7 +67,7 @@ namespace ProcEngine
                 _vertices = DataHelper.CubeDebug;
 
             _Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
-            _DefShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
+            _DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
 
             txt0 = new Texture("Ressources/woodenbox.png");
             txt1 = new Texture("Ressources/woodenbox_specular.png");
@@ -132,21 +132,22 @@ namespace ProcEngine
 
         public void OnDeferredRender()
         {
-            vao.Use();
-
             var pipe = Context.GetPipeline<DeferredRenderPipeline>();
-            _DefShader.Use();
-            _DefShader.SetMatrix4("model", GetModelMatrix());
-            _DefShader.SetMatrix4("view", Camera.GetViewMatrix());
-            _DefShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
-            _DefShader.SetInt("gPosition", 0);
-            _DefShader.SetInt("gNormal", 1);
-            _DefShader.SetInt("gAlbedoSpec", 2);
-            pipe.gPosition.Use(TextureUnit.Texture0);
-            pipe.gNormal.Use(TextureUnit.Texture1);
-            pipe.gAlbedoSpec.Use(TextureUnit.Texture2);
+            if (pipe.Pass == DeferredPass.Pass1)
+            {
+                vao.Use();
 
-            vao.Draw();
+                _DefGeometryShader.Use();
+                _DefGeometryShader.SetMatrix4("model", GetModelMatrix());
+                _DefGeometryShader.SetMatrix4("view", Camera.GetViewMatrix());
+                _DefGeometryShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+
+                vao.Draw();
+            }
+
+            if (pipe.Pass == DeferredPass.Pass2)
+            {
+            }
         }
 
         private Matrix4 lightSpaceMatrix;

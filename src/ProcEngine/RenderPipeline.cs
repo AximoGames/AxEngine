@@ -127,6 +127,12 @@ namespace ProcEngine
         public Texture gNormal;
         public Texture gAlbedoSpec;
 
+        private Shader _DefLightShader;
+        private float[] _vertices = DataHelper.Quad;
+
+        private VertexArrayObject vao;
+        private BufferObject vbo;
+
         public override void Init()
         {
             var width = RenderContext.Current.ScreenWidth;
@@ -161,15 +167,27 @@ namespace ProcEngine
             rboDepth.ObjectLabel = nameof(rboDepth);
 
             gBuffer.Check();
+
+            _DefLightShader = new Shader("Shaders/deferred-shading.vert", "Shaders/deferred-shading.frag");
+            _DefLightShader.SetInt("gPosition", 0);
+            _DefLightShader.SetInt("gNormal", 1);
+            _DefLightShader.SetInt("gAlbedoSpec", 2);
+
+            vbo = new BufferObject();
+            vbo.Create();
+            vbo.Use();
+
+            var layout = new VertexLayout();
+            layout.AddAttribute<float>(_DefLightShader.GetAttribLocation("aPos"), 2);
+            layout.AddAttribute<float>(_DefLightShader.GetAttribLocation("aTexCoords"), 2);
+
+            vao = new VertexArrayObject(layout, vbo);
+            vao.Create();
+
+            vao.SetData(_vertices);
         }
 
         public DeferredPass Pass;
-
-        public enum DeferredPass
-        {
-            Pass1,
-            Pass2,
-        }
 
         public override void Render(RenderContext context, Camera camera)
         {
@@ -183,10 +201,25 @@ namespace ProcEngine
             foreach (var obj in GetRenderObjects(context, camera))
                 Render(context, camera, obj);
 
+            // Needed?
             Pass = DeferredPass.Pass2;
-            context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Use();
-            foreach (var obj in GetRenderObjects(context, camera))
-                Render(context, camera, obj);
+            // context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Use();
+            // foreach (var obj in GetRenderObjects(context, camera))
+            //     Render(context, camera, obj);
+
+            // Pass2
+
+            ObjectManager.PushDebugGroup("OnRenderPass2", this);
+
+            _DefLightShader.Use();
+
+            gPosition.Use(TextureUnit.Texture0);
+            gNormal.Use(TextureUnit.Texture1);
+            gAlbedoSpec.Use(TextureUnit.Texture2);
+
+            _DefLightShader.SetVector3("viewPos", camera.Position);
+
+            ObjectManager.PopDebugGroup();
         }
 
     }
@@ -205,6 +238,12 @@ namespace ProcEngine
                 Render(context, camera, obj);
         }
 
+    }
+
+    public enum DeferredPass
+    {
+        Pass1,
+        Pass2,
     }
 
 }

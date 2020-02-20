@@ -257,7 +257,7 @@ namespace ProcEngine
             {
                 ObjectManager.PushDebugGroup("Render", pipeline);
                 ctx.CurrentPipeline = pipeline;
-                pipeline.Render(ctx, null); // TODO: Camera
+                pipeline.Render(ctx, ctx.Camera);
                 ObjectManager.PopDebugGroup();
             }
             //--
