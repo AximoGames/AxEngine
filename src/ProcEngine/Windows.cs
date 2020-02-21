@@ -180,6 +180,7 @@ namespace ProcEngine
                 Scale = new Vector3(50, 50, 1),
                 Position = new Vector3(0f, 0f, -0.5f),
                 // RenderShadow = false,
+                PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
             });
             ctx.AddObject(new Grid()
             {
@@ -236,6 +237,16 @@ namespace ProcEngine
                 Position = new Vector3(1.5f, 1.5f, 0.5f),
                 //Debug = true,
                 //Enabled = false,
+            });
+
+            ctx.AddObject(new TestObject()
+            {
+                Name = "Box3",
+                Scale = new Vector3(1),
+                Position = new Vector3(3f, 3f, 0.5f),
+                //Debug = true,
+                //Enabled = false,
+                PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
             });
         }
 

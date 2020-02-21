@@ -22,7 +22,7 @@ namespace ProcEngine
     }
 
     public class TestObject : RenderableObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
-    IForwardRenderable, IDeferredRenderable
+        IForwardRenderable, IDeferredRenderable
     {
 
         public Camera Camera => Context.Camera;
@@ -56,12 +56,17 @@ namespace ProcEngine
         private Texture txt0;
         private Texture txt1;
 
+        public IRenderPipeline PrimaryRenderPipeline;
+
         public override void Init()
         {
             UsePipeline<PointShadowRenderPipeline>();
             UsePipeline<DirectionalShadowRenderPipeline>();
-            UsePipeline<DeferredRenderPipeline>();
-            //UsePipeline<ForwardRenderPipeline>();
+
+            if (PrimaryRenderPipeline == null)
+                PrimaryRenderPipeline = Context.GetPipeline<DeferredRenderPipeline>();
+
+            UsePipeline(PrimaryRenderPipeline);
 
             if (Debug)
                 _vertices = DataHelper.CubeDebug;

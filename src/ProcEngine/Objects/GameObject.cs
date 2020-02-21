@@ -17,7 +17,12 @@ namespace ProcEngine
         public void UsePipeline<T>()
             where T : class, IRenderPipeline
         {
-            RenderPipelines.Add(Context.GetPipeline<T>());
+            UsePipeline(Context.GetPipeline<T>());
+        }
+
+        public void UsePipeline(IRenderPipeline pipeline)
+        {
+            RenderPipelines.Add(pipeline);
         }
 
         public void AssignContext(RenderContext ctx)
