@@ -307,6 +307,7 @@ namespace ProcEngine
                 pipeline.Render(ctx, ctx.Camera);
                 ObjectManager.PopDebugGroup();
             }
+
             //--
 
             // Configure
