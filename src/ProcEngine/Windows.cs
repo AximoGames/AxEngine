@@ -253,6 +253,15 @@ namespace ProcEngine
             GL.Enable(EnableCap.DepthTest);
 
             //--
+
+            foreach (var pipeline in ctx.RenderPipelines)
+            {
+                ObjectManager.PushDebugGroup("InitRender", pipeline);
+                ctx.CurrentPipeline = pipeline;
+                pipeline.InitRender(ctx, ctx.Camera);
+                ObjectManager.PopDebugGroup();
+            }
+
             foreach (var pipeline in ctx.RenderPipelines)
             {
                 ObjectManager.PushDebugGroup("Render", pipeline);

@@ -95,14 +95,13 @@ namespace ProcEngine
             Pass = DeferredPass.Pass1;
             foreach (var obj in GetRenderObjects(context, camera))
                 Render(context, camera, obj);
-
         }
 
         private void RenderPass2(RenderContext context, Camera camera)
         {
             Pass = DeferredPass.Pass2;
-            GL.ClearColor(0.1f, 0.3f, 0.3f, 1.0f);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            // GL.ClearColor(0.1f, 0.3f, 0.3f, 1.0f);
+            // GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             // Needed?
             // context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Use();
@@ -121,7 +120,9 @@ namespace ProcEngine
 
             context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Use();
             vao.Use();
+            GL.Disable(EnableCap.DepthTest);
             vao.Draw();
+            GL.Enable(EnableCap.DepthTest);
 
             ObjectManager.PopDebugGroup();
         }
