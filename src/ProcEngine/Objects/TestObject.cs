@@ -61,7 +61,7 @@ namespace ProcEngine
             UsePipeline<PointShadowRenderPipeline>();
             UsePipeline<DirectionalShadowRenderPipeline>();
             UsePipeline<DeferredRenderPipeline>();
-            UsePipeline<ForwardRenderPipeline>();
+            //UsePipeline<ForwardRenderPipeline>();
 
             if (Debug)
                 _vertices = DataHelper.CubeDebug;
@@ -137,6 +137,8 @@ namespace ProcEngine
             {
                 vao.Use();
 
+                txt0.Use();
+                txt1.Use();
                 _DefGeometryShader.Use();
                 _DefGeometryShader.SetMatrix4("model", GetModelMatrix());
                 _DefGeometryShader.SetMatrix4("view", Camera.GetViewMatrix());

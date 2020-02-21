@@ -47,8 +47,12 @@ namespace ProcEngine
                 DrawBuffersEnum.ColorAttachment1,
                 DrawBuffersEnum.ColorAttachment2 });
 
-            var rboDepth = new RenderBuffer(gBuffer, RenderbufferStorage.DepthComponent, FramebufferAttachment.DepthAttachment);
-            rboDepth.ObjectLabel = nameof(rboDepth);
+            // var rboDepth = new RenderBuffer(gBuffer, RenderbufferStorage.DepthComponent, FramebufferAttachment.DepthAttachment);
+            // rboDepth.ObjectLabel = nameof(rboDepth);
+
+            // Attach default Forward Depth Buffer to this Framebuffer, so both share the same depth informations.
+            var fwPipe = RenderContext.Current.GetPipeline<ForwardRenderPipeline>();
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, fwPipe.FrameBuffer.RenderBuffer.Handle);
 
             gBuffer.Check();
 

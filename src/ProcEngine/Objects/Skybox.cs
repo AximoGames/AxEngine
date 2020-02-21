@@ -40,7 +40,7 @@ namespace ProcEngine
 
         public void OnRender()
         {
-            UsePipeline<ForwardRenderPipeline>();
+            return;
 
             vao.Use();
             _shader.Use();

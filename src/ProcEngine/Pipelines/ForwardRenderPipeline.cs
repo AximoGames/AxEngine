@@ -7,13 +7,17 @@ namespace ProcEngine
 
         public FrameBuffer FrameBuffer;
 
-        public override void Init()
+        public override void BeforeInit()
         {
             FrameBuffer = new FrameBuffer(RenderContext.Current.ScreenWidth, RenderContext.Current.ScreenHeight);
             FrameBuffer.ObjectLabel = "Forward";
             FrameBuffer.InitNormal();
             //FrameBuffer.CreateRenderBuffer(RenderbufferStorage.Depth24Stencil8, FramebufferAttachment.DepthStencilAttachment);
             FrameBuffer.CreateRenderBuffer(RenderbufferStorage.DepthComponent32f, FramebufferAttachment.DepthAttachment);
+        }
+
+        public override void Init()
+        {
         }
 
         public override void InitRender(RenderContext context, Camera camera)
