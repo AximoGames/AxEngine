@@ -54,9 +54,6 @@ namespace ProcEngine
 
         public void AddPipeline(IRenderPipeline pipeline)
         {
-            ObjectManager.PushDebugGroup("Init", pipeline);
-            pipeline.Init();
-            ObjectManager.PopDebugGroup();
             RenderPipelines.Add(pipeline);
         }
 

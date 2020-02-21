@@ -137,6 +137,33 @@ namespace ProcEngine
             ctx.AddPipeline(new DeferredRenderPipeline());
             ctx.AddPipeline(new ForwardRenderPipeline());
             ctx.AddPipeline(new ScreenPipeline());
+
+            ObjectManager.PushDebugGroup("BeforeInit", "Pipelines");
+            foreach (var pipe in ctx.RenderPipelines)
+            {
+                ObjectManager.PushDebugGroup("BeforeInit", pipe);
+                pipe.BeforeInit();
+                ObjectManager.PopDebugGroup();
+            }
+            ObjectManager.PopDebugGroup();
+
+            ObjectManager.PushDebugGroup("Init", "Pipelines");
+            foreach (var pipe in ctx.RenderPipelines)
+            {
+                ObjectManager.PushDebugGroup("Init", pipe);
+                pipe.Init();
+                ObjectManager.PopDebugGroup();
+            }
+            ObjectManager.PopDebugGroup();
+
+            ObjectManager.PushDebugGroup("AfterInit", "Pipelines");
+            foreach (var pipe in ctx.RenderPipelines)
+            {
+                ObjectManager.PushDebugGroup("AfterInit", pipe);
+                pipe.AfterInit();
+                ObjectManager.PopDebugGroup();
+            }
+            ObjectManager.PopDebugGroup();
         }
 
         private void SetupScene()
