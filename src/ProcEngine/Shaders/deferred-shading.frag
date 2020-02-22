@@ -48,6 +48,9 @@ void main()
         // attenuation
         float distance = length(lights[i].position - FragPos);
         float attenuation = 1.0 / (1.0 + lights[i].linear * distance + lights[i].quadratic * distance * distance);
+
+        attenuation=1.0; // debug
+
         diffuse *= attenuation;
         specular *= attenuation;
         lighting += diffuse + specular;        

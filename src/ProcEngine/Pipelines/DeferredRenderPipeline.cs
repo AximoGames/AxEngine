@@ -1,3 +1,4 @@
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 
@@ -121,6 +122,18 @@ namespace ProcEngine
             gAlbedoSpec.Use(TextureUnit.Texture2);
 
             _DefLightShader.SetVector3("viewPos", camera.Position);
+
+            _DefLightShader.SetVector3("material.color", new Vector3(1.0f, 1.0f, 0f));
+            _DefLightShader.SetInt("material.diffuse", 0);
+            _DefLightShader.SetInt("material.specular", 1);
+            _DefLightShader.SetFloat("material.ambient", 0.3f);
+            _DefLightShader.SetFloat("material.shininess", 32f);
+            _DefLightShader.SetFloat("material.specularStrength", 0.5f);
+
+            _DefLightShader.SetInt("shadowMap", 2);
+            _DefLightShader.SetInt("depthMap", 3);
+            _DefLightShader.BindBlock("lightsArray", context.LightBinding);
+            _DefLightShader.SetInt("lightCount", context.LightObjects.Count);
 
             context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Use();
             vao.Use();
