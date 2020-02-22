@@ -1,4 +1,8 @@
-#version 330 core
+#version 430 core
+#extension GL_GOOGLE_include_directive : enable
+
+#include "common/header.glsl"
+
 out vec4 FragColor;
 
 in vec2 TexCoords;
@@ -7,16 +11,17 @@ uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gAlbedoSpec;
 
-struct Light {
-    vec3 Position;
-    vec3 Color;
+// struct Light {
+//     vec3 Position;
+//     vec3 Color;
     
-    float Linear;
-    float Quadratic;
-};
-const int NR_LIGHTS = 32;
-uniform Light lights[NR_LIGHTS];
+//     float Linear;
+//     float Quadratic;
+// };
+
 uniform vec3 viewPos;
+uniform int lightCount;
+layout(std140) uniform lightsArray { Light lights[MAX_NUM_TOTAL_LIGHTS]; };
 
 void main()
 {             
@@ -29,18 +34,20 @@ void main()
     // then calculate lighting as usual
     vec3 lighting  = Diffuse * 0.5; // hard-coded ambient component
     vec3 viewDir  = normalize(viewPos - FragPos);
-    for(int i = 0; i < NR_LIGHTS; ++i)
+    for(int i = 0; i < lightCount; ++i)
     {
+        Light light = lights[i];
+
         // diffuse
-        vec3 lightDir = normalize(lights[i].Position - FragPos);
-        vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * lights[i].Color;
+        vec3 lightDir = normalize(lights[i].position - FragPos);
+        vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * lights[i].color;
         // specular
         vec3 halfwayDir = normalize(lightDir + viewDir);  
         float spec = pow(max(dot(Normal, halfwayDir), 0.0), 16.0);
-        vec3 specular = lights[i].Color * spec * Specular;
+        vec3 specular = lights[i].color * spec * Specular;
         // attenuation
-        float distance = length(lights[i].Position - FragPos);
-        float attenuation = 1.0 / (1.0 + lights[i].Linear * distance + lights[i].Quadratic * distance * distance);
+        float distance = length(lights[i].position - FragPos);
+        float attenuation = 1.0 / (1.0 + lights[i].linear * distance + lights[i].quadratic * distance * distance);
         diffuse *= attenuation;
         specular *= attenuation;
         lighting += diffuse + specular;        

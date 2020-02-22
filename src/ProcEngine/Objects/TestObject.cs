@@ -144,7 +144,9 @@ namespace ProcEngine
 
                 txt0.Use(TextureUnit.Texture0);
                 txt1.Use(TextureUnit.Texture1);
+
                 _DefGeometryShader.Use();
+
                 _DefGeometryShader.SetMatrix4("model", GetModelMatrix());
                 _DefGeometryShader.SetMatrix4("view", Camera.GetViewMatrix());
                 _DefGeometryShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
