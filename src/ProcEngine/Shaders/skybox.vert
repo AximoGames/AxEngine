@@ -11,4 +11,5 @@ void main()
     TexCoords = aPos;
     //TexCoords = aPos.xzy;
     gl_Position = vec4(aPos, 1.0) * view * projection;
+    gl_Position.z = gl_Position.w; // Force Depth Test at specific position
 }
