@@ -74,7 +74,7 @@ namespace ProcEngine
 
         public void InitDepth()
         {
-            var layers = 1;
+            var layers = 2;
 
             _DestinationTexture = Texture.CreateArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
             _DestinationTexture.Use();

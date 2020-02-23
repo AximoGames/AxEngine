@@ -9,7 +9,7 @@ layout(std140) struct Light {
 	vec3 color; //The color of the light.
 	int shadowLayer;
 
-	int DirectionalLight;
+	int directionalLight;
     float linear;
     float quadratic;
 };

@@ -48,8 +48,6 @@ void main()
     {
         Light light = lights[i];
 
-        bool isDirLight = false;
-
         // diffuse
         vec3 lightDir = normalize(lights[i].position - FragPos);
         vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * lights[i].color;
@@ -64,9 +62,9 @@ void main()
         attenuation=1.0; // debug
 
         float shadow;
-        if(isDirLight) {
+        if(light.directionalLight == 1) {
             //shadow = ShadowCalculation(FragPosLightSpace, light);
-            shadow=0;
+            shadow = 0;
         }
         else {
             shadow = ShadowCalculationCubeSoft(FragPos, light);
@@ -74,7 +72,7 @@ void main()
 
         diffuse *= attenuation;
         specular *= attenuation;
-        lighting += (diffuse + specular)*(1.0-shadow);        
+        lighting += (diffuse + specular) * (1.0 - shadow);        
     }
     FragColor = vec4(lighting, 1.0);
 }

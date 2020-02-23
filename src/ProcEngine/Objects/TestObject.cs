@@ -77,7 +77,7 @@ namespace ProcEngine
             txt0 = new Texture("Ressources/woodenbox.png");
             txt1 = new Texture("Ressources/woodenbox_specular.png");
 
-            _ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag");
+            _ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
             _CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
 
             vbo = new BufferObject();
