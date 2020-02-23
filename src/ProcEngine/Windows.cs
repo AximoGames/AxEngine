@@ -212,6 +212,7 @@ namespace ProcEngine
                 Position = new Vector3(0, 2, 2.5f),
                 Name = "MovingLight",
                 LightType = LightType.Point,
+                ShadowTextureIndex = 0,
                 //Enabled = false,
             });
 
@@ -220,6 +221,7 @@ namespace ProcEngine
                 Position = new Vector3(2f, 0.5f, 1.25f),
                 Name = "StaticLight",
                 LightType = LightType.Point,
+                ShadowTextureIndex = 1,
             });
 
             ctx.AddObject(new TestObject()
