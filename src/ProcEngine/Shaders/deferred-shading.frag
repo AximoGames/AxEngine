@@ -64,7 +64,7 @@ void main()
 
         float shadow;
         if(isDirLight) {
-            shadow = ShadowCalculation(FragPosLightSpace, light);
+            //shadow = ShadowCalculation(FragPosLightSpace, light);
             shadow=0;
         }
         else {
