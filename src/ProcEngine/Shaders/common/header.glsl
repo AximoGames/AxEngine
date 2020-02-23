@@ -7,6 +7,7 @@
 layout(std140) struct Light {
 	vec3 position; //The position of the light.
 	vec3 color; //The color of the light.
+	mat4 lightSpaceMatrix;
 	int shadowLayer;
 
 	int directionalLight;

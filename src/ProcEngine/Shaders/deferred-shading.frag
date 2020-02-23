@@ -43,7 +43,7 @@ void main()
     // then calculate lighting as usual
     vec3 lighting  = Diffuse * 0.5; // hard-coded ambient component
     vec3 viewDir  = normalize(viewPos - FragPos);
-    int lightCount = 2;
+    int lightCount = 1;
     for(int i = 0; i < lightCount; ++i)
     {
         Light light = lights[i];

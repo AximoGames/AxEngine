@@ -211,16 +211,16 @@ namespace ProcEngine
             {
                 Position = new Vector3(0, 2, 2.5f),
                 Name = "MovingLight",
-                LightType = LightType.Point,
+                LightType = LightType.Directional,
                 ShadowTextureIndex = 0,
                 //Enabled = false,
             });
 
             ctx.AddObject(new LightObject()
             {
-                Position = new Vector3(2f, 0.5f, 1.25f),
+                Position = new Vector3(2f, 0.5f, 3.25f),
                 Name = "StaticLight",
-                LightType = LightType.Point,
+                LightType = LightType.Directional,
                 ShadowTextureIndex = 1,
             });
 
@@ -285,11 +285,13 @@ namespace ProcEngine
             lightsData[0].Color = new Vector3(0.5f, 0.5f, 0.5f);
             lightsData[0].ShadowLayer = ctx.LightObjects[0].ShadowTextureIndex;
             lightsData[0].DirectionalLight = ctx.LightObjects[0].LightType == LightType.Directional ? 1 : 0;
+            lightsData[0].LightSpaceMatrix = Matrix4.Transpose(ctx.LightObjects[0].LightCamera.GetViewMatrix() * ctx.LightObjects[0].LightCamera.GetProjectionMatrix());
 
             lightsData[1].Position = ctx.LightObjects[1].Position;
             lightsData[1].Color = new Vector3(0.5f, 0.5f, 0.5f);
             lightsData[1].ShadowLayer = ctx.LightObjects[1].ShadowTextureIndex;
             lightsData[1].DirectionalLight = ctx.LightObjects[1].LightType == LightType.Directional ? 1 : 0;
+            lightsData[1].LightSpaceMatrix = Matrix4.Transpose(ctx.LightObjects[1].LightCamera.GetViewMatrix() * ctx.LightObjects[1].LightCamera.GetProjectionMatrix());
             ubo.SetData(lightsData);
 
             ubo.SetBindingPoint(ctx.LightBinding);
@@ -334,7 +336,7 @@ namespace ProcEngine
         }
 
         [Serializable]
-        [StructLayout(LayoutKind.Explicit, Size = 48)]
+        [StructLayout(LayoutKind.Explicit, Size = 112)]
         private struct GlslLight
         {
             [FieldOffset(0)]
@@ -343,16 +345,19 @@ namespace ProcEngine
             [FieldOffset(16)]
             public Vector3 Color;
 
-            [FieldOffset(28)]
+            [FieldOffset(32)]
+            public Matrix4 LightSpaceMatrix;
+
+            [FieldOffset(96)]
             public int ShadowLayer;
 
-            [FieldOffset(32)]
+            [FieldOffset(100)]
             public int DirectionalLight; // Bool
 
-            [FieldOffset(36)]
+            [FieldOffset(104)]
             public int Linear;
 
-            [FieldOffset(40)]
+            [FieldOffset(108)]
             public int Quadric;
         }
 

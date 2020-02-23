@@ -35,7 +35,7 @@ void main()
 
     vec3 finalColor = ambient;
 
-    int lightCount = 2;
+    int lightCount = 1;
 	for(int x = 0; x < lightCount; x++) {
         Light light = lights[x];
 
@@ -54,7 +54,7 @@ void main()
    
         float shadow;
         if(light.directionalLight == 1) {
-            shadow = ShadowCalculation(FragPosLightSpace, light);
+            shadow = ShadowCalculation(vec4(FragPos, 1.0) * light.lightSpaceMatrix, light);
         }
         else {
             shadow = ShadowCalculationCubeSoft(FragPos, light);
