@@ -12,6 +12,39 @@ namespace ProcEngine
 
         public bool Shadows { get; set; }
         public int ShadowTextureIndex { get; set; }
+        public LightType LightType { get; set; }
+
+        public Camera LightCamera
+        {
+            get
+            {
+                if (LightType == LightType.Directional)
+                {
+                    //var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
+                    var shadowCamera = new OrthographicCamera(Position)
+                    {
+                        NearPlane = 1.0f,
+                        FarPlane = 25f,
+                    };
+                    var box = Context.GetObjectByName("Box1"); // TODO: Remove Debug
+                    if (box != null)
+                        shadowCamera.LookAt = (box as IPosition).Position;
+                    else
+                        shadowCamera.LookAt = new Vector3(0, 0, 0);
+
+                    return shadowCamera;
+                }
+                else
+                {
+                    return new PerspectiveFieldOfViewCamera(Position, 1.0f)
+                    {
+                        NearPlane = 0.1f,
+                        FarPlane = 25f,
+                        Fov = 90f,
+                    };
+                }
+            }
+        }
 
         private Shader _shader;
         private VertexArrayObject vao;

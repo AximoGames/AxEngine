@@ -211,6 +211,7 @@ namespace ProcEngine
             {
                 Position = new Vector3(0, 2, 2.5f),
                 Name = "MovingLight",
+                LightType = LightType.Point,
                 //Enabled = false,
             });
 
@@ -218,6 +219,7 @@ namespace ProcEngine
             {
                 Position = new Vector3(2f, 0.5f, 1.25f),
                 Name = "StaticLight",
+                LightType = LightType.Point,
             });
 
             ctx.AddObject(new TestObject()
@@ -279,10 +281,13 @@ namespace ProcEngine
             var lightsData = new GlslLight[2];
             lightsData[0].Position = ctx.LightObjects[0].Position;
             lightsData[0].Color = new Vector3(0.5f, 0.5f, 0.5f);
-            lightsData[0].ShadowLayer = 0;
+            lightsData[0].ShadowLayer = ctx.LightObjects[0].ShadowTextureIndex;
+            lightsData[0].DirectionalLight = ctx.LightObjects[0].LightType == LightType.Directional ? 1 : 0;
+
             lightsData[1].Position = ctx.LightObjects[1].Position;
             lightsData[1].Color = new Vector3(0.5f, 0.5f, 0.5f);
-            lightsData[1].ShadowLayer = 1;
+            lightsData[1].ShadowLayer = ctx.LightObjects[1].ShadowTextureIndex;
+            lightsData[1].DirectionalLight = ctx.LightObjects[1].LightType == LightType.Directional ? 1 : 0;
             ubo.SetData(lightsData);
 
             ubo.SetBindingPoint(ctx.LightBinding);

@@ -91,6 +91,14 @@ namespace ProcEngine
     {
         bool Shadows { get; set; }
         int ShadowTextureIndex { get; set; }
+        Camera LightCamera { get; }
+        LightType LightType { get; set; }
+    }
+
+    public enum LightType
+    {
+        Directional,
+        Point,
     }
 
 }
