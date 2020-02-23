@@ -35,7 +35,7 @@ void main()
 
     vec3 finalColor = ambient;
 
-    int lightCount = 1;
+    int lightCount = 2;
 	for(int x = 0; x < lightCount; x++) {
         Light light = lights[x];
 

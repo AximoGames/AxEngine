@@ -343,16 +343,16 @@ namespace ProcEngine
             [FieldOffset(16)]
             public Vector3 Color;
 
-            [FieldOffset(32)]
+            [FieldOffset(28)]
             public int ShadowLayer;
 
-            [FieldOffset(36)]
+            [FieldOffset(32)]
             public int DirectionalLight; // Bool
 
-            [FieldOffset(40)]
+            [FieldOffset(36)]
             public int Linear;
 
-            [FieldOffset(44)]
+            [FieldOffset(40)]
             public int Quadric;
         }
 
