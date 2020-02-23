@@ -168,12 +168,6 @@ namespace ProcEngine
 
         private void SetupScene()
         {
-            ctx.AddObject(new Skybox()
-            {
-                Name = "Sky",
-                // RenderShadow = false,
-            });
-
             ctx.AddObject(new TestObject()
             {
                 Name = "Ground",
@@ -251,6 +245,46 @@ namespace ProcEngine
                 //Debug = true,
                 //Enabled = false,
                 PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
+            });
+
+            ctx.AddObject(new TestObject()
+            {
+                Name = "BoxFar1",
+                Scale = new Vector3(1),
+                Position = new Vector3(18, 0, 0.5f),
+                Debug = true,
+                // Enabled = false,
+            });
+            ctx.AddObject(new TestObject()
+            {
+                Name = "BoxFar2",
+                Scale = new Vector3(1),
+                Position = new Vector3(16, 1, 0.5f),
+                Debug = true,
+                // Enabled = false,
+            });
+            ctx.AddObject(new TestObject()
+            {
+                Name = "BoxFar3",
+                Scale = new Vector3(1),
+                Position = new Vector3(0, 18, 0.5f),
+                Debug = true,
+                // Enabled = false,
+            });
+            ctx.AddObject(new TestObject()
+            {
+                Name = "BoxFar4",
+                Scale = new Vector3(1),
+                Position = new Vector3(-1, 16, 0.5f),
+                Debug = true,
+                // Enabled = false,
+            });
+
+            // For performance reasons, skybox should rendered as last
+            ctx.AddObject(new Skybox()
+            {
+                Name = "Sky",
+                // RenderShadow = false,
             });
         }
 

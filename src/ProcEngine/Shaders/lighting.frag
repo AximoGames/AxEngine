@@ -14,7 +14,6 @@ uniform sampler2DArray shadowMap;
 in vec3 Normal; //The normal of the fragment is calculated in the vertex shader.
 in vec3 FragPos; //The fragment position.
 in vec2 TexCoords;
-in vec4 FragPosLightSpace;
 
 uniform float far_plane;
 uniform samplerCubeArray depthMap;
