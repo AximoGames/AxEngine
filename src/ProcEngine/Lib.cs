@@ -89,6 +89,8 @@ namespace ProcEngine
 
     public interface ILightObject : IPosition, IGameObject
     {
+        bool Shadows { get; set; }
+        int ShadowTextureIndex { get; set; }
     }
 
 }

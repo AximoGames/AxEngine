@@ -10,6 +10,9 @@ namespace ProcEngine
 
         public Vector3 Position { get; set; }
 
+        public bool Shadows { get; set; }
+        public int ShadowTextureIndex { get; set; }
+
         private Shader _shader;
         private VertexArrayObject vao;
         private BufferObject vbo;

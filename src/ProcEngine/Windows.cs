@@ -327,7 +327,7 @@ namespace ProcEngine
         }
 
         [Serializable]
-        [StructLayout(LayoutKind.Explicit, Size = 32)]
+        [StructLayout(LayoutKind.Explicit, Size = 44)]
         private struct GlslLight
         {
             [FieldOffset(0)]
@@ -338,6 +338,15 @@ namespace ProcEngine
 
             [FieldOffset(28)]
             public int ShadowLayer;
+
+            [FieldOffset(32)]
+            public int DirectionalLight; // Bool
+
+            [FieldOffset(36)]
+            public int Linear;
+
+            [FieldOffset(40)]
+            public int Quadric;
         }
 
         private void CheckForProgramError()
