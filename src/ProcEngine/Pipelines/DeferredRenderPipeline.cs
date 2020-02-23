@@ -121,6 +121,9 @@ namespace ProcEngine
             gNormal.Use(TextureUnit.Texture1);
             gAlbedoSpec.Use(TextureUnit.Texture2);
 
+            context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.DestinationTexture.Use(TextureUnit.Texture3);
+            context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.DestinationTexture.Use(TextureUnit.Texture4);
+
             _DefLightShader.SetVector3("viewPos", camera.Position);
 
             _DefLightShader.SetVector3("material.color", new Vector3(1.0f, 1.0f, 0f));
@@ -131,8 +134,8 @@ namespace ProcEngine
             _DefLightShader.SetFloat("material.specularStrength", 0.5f);
             _DefLightShader.SetFloat("far_plane", 25f);
 
-            _DefLightShader.SetInt("shadowMap", 2);
-            _DefLightShader.SetInt("depthMap", 3);
+            _DefLightShader.SetInt("shadowMap", 3);
+            _DefLightShader.SetInt("depthMap", 4);
             _DefLightShader.BindBlock("lightsArray", context.LightBinding);
             _DefLightShader.SetInt("lightCount", context.LightObjects.Count);
 
