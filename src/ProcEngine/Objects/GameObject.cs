@@ -10,6 +10,23 @@ namespace ProcEngine
         public string Name { get; set; }
         public bool Enabled { get; set; } = true;
 
+        private Dictionary<string, object> Data = new Dictionary<string, object>();
+
+        public T GetData<T>(string name, T defaultValue = default)
+        {
+            return IDataHelper.GetData(Data, name, defaultValue);
+        }
+
+        public bool HasData(string name)
+        {
+            return IDataHelper.HasData(Data, name);
+        }
+
+        public bool SetData<T>(string name, T value, T defaultValue = default)
+        {
+            return IDataHelper.SetData(Data, name, value, defaultValue);
+        }
+
         public RenderContext Context { get; private set; }
 
         public virtual List<IRenderPipeline> RenderPipelines { get; set; } = new List<IRenderPipeline>();

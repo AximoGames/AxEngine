@@ -22,7 +22,7 @@ namespace ProcEngine
         }
     }
 
-    public interface IGameObject
+    public interface IGameObject : IData
     {
         int Id { get; }
         string Name { get; set; }
@@ -31,6 +31,57 @@ namespace ProcEngine
         void Init();
         void Free();
         void AssignContext(RenderContext ctx);
+    }
+
+    public interface IData
+    {
+        T GetData<T>(string name, T defaultValue = default);
+        bool HasData(string name);
+        bool SetData<T>(string name, T value, T defaultValue = default);
+    }
+
+    internal static class IDataHelper
+    {
+        public static T GetData<T>(Dictionary<string, object> data, string name, T defaultValue = default)
+        {
+            if (data.TryGetValue(name, out object value))
+                return (T)value;
+            return default;
+        }
+
+        public static bool HasData(Dictionary<string, object> data, string name)
+        {
+            return data.ContainsKey(name);
+        }
+
+        public static bool SetData<T>(Dictionary<string, object> data, string name, T value, T defaultValue = default)
+        {
+            if (data.TryGetValue(name, out object currentValue))
+            {
+                if (object.Equals(value, defaultValue))
+                {
+                    data.Remove(name);
+                    return true;
+                }
+                else
+                {
+                    if (object.Equals(currentValue, value))
+                        return false;
+
+                    data[name] = value;
+                    return true;
+                }
+            }
+            else
+            {
+                if (object.Equals(value, defaultValue))
+                    return false;
+
+                data.Add(name, value);
+                return true;
+            }
+        }
+
     }
 
     public interface IRenderableObject : IGameObject

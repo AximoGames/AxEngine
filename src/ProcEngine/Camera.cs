@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OpenTK;
 
 namespace ProcEngine
@@ -47,8 +48,25 @@ namespace ProcEngine
 
     }
 
-    public abstract class Camera : IPosition
+    public abstract class Camera : IPosition, IData
     {
+        private Dictionary<string, object> Data = new Dictionary<string, object>();
+
+        public T GetData<T>(string name, T defaultValue = default)
+        {
+            return IDataHelper.GetData(Data, name, defaultValue);
+        }
+
+        public bool HasData(string name)
+        {
+            return IDataHelper.HasData(Data, name);
+        }
+
+        public bool SetData<T>(string name, T value, T defaultValue = default)
+        {
+            return IDataHelper.SetData(Data, name, value, defaultValue);
+        }
+
         public Vector3 Position { get; set; }
         public abstract CameraType Type { get; }
         public float Pitch = -0.3f;

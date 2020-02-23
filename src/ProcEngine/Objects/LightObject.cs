@@ -32,16 +32,20 @@ namespace ProcEngine
                     else
                         shadowCamera.LookAt = new Vector3(0, 0, 0);
 
+                    shadowCamera.SetData("Light", this);
+
                     return shadowCamera;
                 }
                 else
                 {
-                    return new PerspectiveFieldOfViewCamera(Position, 1.0f)
+                    var cam = new PerspectiveFieldOfViewCamera(Position, 1.0f)
                     {
                         NearPlane = 0.1f,
                         FarPlane = 25f,
                         Fov = 90f,
                     };
+                    cam.SetData("Light", this);
+                    return cam;
                 }
             }
         }

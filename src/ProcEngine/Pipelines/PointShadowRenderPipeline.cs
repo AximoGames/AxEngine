@@ -19,6 +19,7 @@ namespace ProcEngine
             GL.Viewport(0, 0, FrameBuffer.Width, FrameBuffer.Height);
             FrameBuffer.Use();
             GL.Clear(ClearBufferMask.DepthBufferBit);
+
             foreach (var obj in GetRenderObjects(context, camera))
                 Render(context, camera, obj);
         }
