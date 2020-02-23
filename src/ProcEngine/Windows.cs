@@ -276,7 +276,7 @@ namespace ProcEngine
             //--
             var ubo = new UniformBufferObject();
             ubo.Create();
-            var lightsData = new GglsLight[2];
+            var lightsData = new GlslLight[2];
             lightsData[0].Position = ctx.LightObjects[0].Position;
             lightsData[0].Color = new Vector3(0.5f, 0.5f, 0.5f);
             lightsData[0].ShadowLayer = 0;
@@ -328,7 +328,7 @@ namespace ProcEngine
 
         [Serializable]
         [StructLayout(LayoutKind.Explicit, Size = 32)]
-        private struct GglsLight
+        private struct GlslLight
         {
             [FieldOffset(0)]
             public Vector3 Position;
