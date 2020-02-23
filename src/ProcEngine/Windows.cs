@@ -320,12 +320,16 @@ namespace ProcEngine
             lightsData[0].ShadowLayer = ctx.LightObjects[0].ShadowTextureIndex;
             lightsData[0].DirectionalLight = ctx.LightObjects[0].LightType == LightType.Directional ? 1 : 0;
             lightsData[0].LightSpaceMatrix = Matrix4.Transpose(ctx.LightObjects[0].LightCamera.GetViewMatrix() * ctx.LightObjects[0].LightCamera.GetProjectionMatrix());
+            lightsData[0].Linear = 0.1f;
+            lightsData[0].Quadric = 0f;
 
             lightsData[1].Position = ctx.LightObjects[1].Position;
             lightsData[1].Color = new Vector3(0.5f, 0.5f, 0.5f);
             lightsData[1].ShadowLayer = ctx.LightObjects[1].ShadowTextureIndex;
             lightsData[1].DirectionalLight = ctx.LightObjects[1].LightType == LightType.Directional ? 1 : 0;
             lightsData[1].LightSpaceMatrix = Matrix4.Transpose(ctx.LightObjects[1].LightCamera.GetViewMatrix() * ctx.LightObjects[1].LightCamera.GetProjectionMatrix());
+            lightsData[1].Linear = 0.1f;
+            lightsData[1].Quadric = 0f;
             ubo.SetData(lightsData);
 
             ubo.SetBindingPoint(ctx.LightBinding);
@@ -389,10 +393,10 @@ namespace ProcEngine
             public int DirectionalLight; // Bool
 
             [FieldOffset(104)]
-            public int Linear;
+            public float Linear;
 
             [FieldOffset(108)]
-            public int Quadric;
+            public float Quadric;
         }
 
         private void CheckForProgramError()
