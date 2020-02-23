@@ -124,8 +124,8 @@ namespace ProcEngine
             //_Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));
             _Shader.SetVector3("viewPos", Camera.Position);
 
-            var shadowCamera = GetShadowLight().LightCamera;
-            _Shader.SetFloat("far_plane", shadowCamera.FarPlane);
+            //var shadowCamera = GetShadowLight().LightCamera;
+            _Shader.SetFloat("far_plane", 25f);
             Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.DestinationTexture.Use(TextureUnit.Texture3);
             _Shader.SetInt("depthMap", 3);
 
@@ -162,17 +162,17 @@ namespace ProcEngine
         private Matrix4 lightSpaceMatrix;
 
         // Because of shared variables in the shaders, only one position is possible yet
-        private int TMP_LIGHT_IDX = 0; // 1= moving, 0=static light
+        // private int TMP_LIGHT_IDX = 0; // 1= moving, 0=static light
 
-        private ILightObject GetCubeShadowLight()
-        {
-            return Lights[TMP_LIGHT_IDX];
-        }
+        // private ILightObject GetCubeShadowLight()
+        // {
+        //     return Lights[TMP_LIGHT_IDX];
+        // }
 
-        private ILightObject GetShadowLight()
-        {
-            return Lights[TMP_LIGHT_IDX];
-        }
+        // private ILightObject GetShadowLight()
+        // {
+        //     return Lights[TMP_LIGHT_IDX];
+        // }
 
         public void OnRenderShadow()
         {
@@ -180,18 +180,22 @@ namespace ProcEngine
 
             _ShadowShader.Use();
 
-            var shadowCamera = GetShadowLight().LightCamera;
+            foreach (var light in Lights)
+            {
+                var shadowCamera = light.LightCamera;
 
-            var lightProjection = shadowCamera.GetProjectionMatrix();
-            var lightView = shadowCamera.GetViewMatrix();
-            lightSpaceMatrix = lightView * lightProjection;
+                var lightProjection = shadowCamera.GetProjectionMatrix();
+                var lightView = shadowCamera.GetViewMatrix();
+                lightSpaceMatrix = lightView * lightProjection;
 
-            _ShadowShader.SetMatrix4("model", GetModelMatrix());
-            _ShadowShader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+                _ShadowShader.SetMatrix4("model", GetModelMatrix());
+                _ShadowShader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+                _ShadowShader.SetInt("shadowLayer", light.ShadowTextureIndex);
 
-            //GL.CullFace(CullFaceMode.Front);
-            vao.Draw();
-            //GL.CullFace(CullFaceMode.Back);
+                //GL.CullFace(CullFaceMode.Front);
+                vao.Draw();
+                //GL.CullFace(CullFaceMode.Back);}
+            }
         }
 
         private List<Matrix4> CubeShadowsMatrices = new List<Matrix4>();
