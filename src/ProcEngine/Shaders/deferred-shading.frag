@@ -43,7 +43,7 @@ void main()
     // then calculate lighting as usual
     vec3 lighting  = Diffuse * 0.5; // hard-coded ambient component
     vec3 viewDir  = normalize(viewPos - FragPos);
-    int lightCount = 1;
+    int lightCount = 2;
     for(int i = 0; i < lightCount; ++i)
     {
         Light light = lights[i];
@@ -63,8 +63,8 @@ void main()
 
         float shadow;
         if(light.directionalLight == 1) {
-            //shadow = ShadowCalculation(FragPosLightSpace, light);
-            shadow = 0;
+            shadow = ShadowCalculation(vec4(FragPos, 1.0) * light.lightSpaceMatrix, light);
+            //shadow = 0;
         }
         else {
             shadow = ShadowCalculationCubeSoft(FragPos, light);
