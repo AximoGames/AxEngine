@@ -34,7 +34,7 @@ void main()
 
     vec3 finalColor = ambient;
 
-    int lightCount = 2;
+    int lightCount = 1;
 	for(int x = 0; x < lightCount; x++) {
         Light light = lights[x];
 
@@ -47,7 +47,7 @@ void main()
         float spec = 0.0;
         vec3 halfwayDir = normalize(lightDir + viewDir);
         spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
-        vec3 specular = material.specularStrength * spec * light.color;
+        vec3 specular = light.color * spec * material.specularStrength;
 
         // calculate shadow
    

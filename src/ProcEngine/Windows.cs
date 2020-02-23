@@ -246,6 +246,15 @@ namespace ProcEngine
                 //Enabled = false,
                 PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
             });
+            ctx.AddObject(new TestObject()
+            {
+                Name = "Box4",
+                Scale = new Vector3(1),
+                Position = new Vector3(4f, 3f, 0.5f),
+                //Debug = true,
+                //Enabled = false,
+                //PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
+            });
 
             ctx.AddObject(new TestObject()
             {
