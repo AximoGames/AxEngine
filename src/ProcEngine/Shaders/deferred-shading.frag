@@ -19,15 +19,24 @@ uniform sampler2D gAlbedoSpec;
 //     float Quadratic;
 // };
 
+uniform samplerCubeArray depthMap;
+uniform float far_plane;
+uniform sampler2DArray shadowMap;
+
 uniform vec3 viewPos;
 uniform int lightCount;
 layout(std140) uniform lightsArray { Light lights[MAX_NUM_TOTAL_LIGHTS]; };
 
+vec3 Normal;
+vec3 FragPos;
+
+#include "common/lib.frag.glsl"
+
 void main()
 {             
     // retrieve data from gbuffer
-    vec3 FragPos = texture(gPosition, TexCoords).rgb;
-    vec3 Normal = texture(gNormal, TexCoords).rgb;
+    FragPos = texture(gPosition, TexCoords).rgb;
+    Normal = texture(gNormal, TexCoords).rgb;
     vec3 Diffuse = texture(gAlbedoSpec, TexCoords).rgb;
     float Specular = texture(gAlbedoSpec, TexCoords).a;
     
@@ -37,6 +46,8 @@ void main()
     for(int i = 0; i < lightCount; ++i)
     {
         Light light = lights[i];
+
+        bool isDirLight = false;
 
         // diffuse
         vec3 lightDir = normalize(lights[i].position - FragPos);
@@ -51,9 +62,18 @@ void main()
 
         attenuation=1.0; // debug
 
+        float shadow;
+        if(isDirLight) {
+            shadow = ShadowCalculation(FragPosLightSpace, light);
+            shadow=0;
+        }
+        else {
+            shadow = ShadowCalculationCubeSoft(FragPos, light);
+        }
+
         diffuse *= attenuation;
         specular *= attenuation;
-        lighting += diffuse + specular;        
+        lighting += (diffuse + specular)*(1.0-shadow);        
     }
     FragColor = vec4(lighting, 1.0);
 }
