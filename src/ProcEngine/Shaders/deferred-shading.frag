@@ -61,7 +61,7 @@ void main()
         float distance = length(lights[i].position - FragPos);
         float attenuation = 1.0 / (1.0 + lights[i].linear * distance + lights[i].quadratic * distance * distance);
 
-        attenuation=1.0; // debug
+        attenuation = 1.0; // debug
 
         float shadow;
         if(light.directionalLight == 1) {
