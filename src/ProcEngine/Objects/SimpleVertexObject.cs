@@ -117,12 +117,7 @@ namespace ProcEngine
 
             _Shader.SetInt("shadowMap", 2);
 
-            _Shader.SetVector3("material.color", Material.Color);
-            _Shader.SetInt("material.diffuse", 0);
-            _Shader.SetInt("material.specular", 1);
-            _Shader.SetFloat("material.ambient", Material.Ambient);
-            _Shader.SetFloat("material.shininess", Material.Shininess);
-            _Shader.SetFloat("material.specularStrength", Material.SpecularStrength);
+            _Shader.SetMaterial("material", Material);
 
             //_Shader.SetVector3("light.position", GetShadowLight().Position);
             //_Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));

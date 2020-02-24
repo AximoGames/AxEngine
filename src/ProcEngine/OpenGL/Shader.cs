@@ -299,6 +299,17 @@ namespace ProcEngine
             }
         }
 
+        public void SetMaterial(string name, Material material)
+        {
+            var prefix = name += ".";
+            SetVector3(prefix + "color", material.Color);
+            SetInt(prefix + "diffuse", 0);
+            SetInt(prefix + "specular", 1);
+            SetFloat(prefix + "ambient", material.Ambient);
+            SetFloat(prefix + "shininess", material.Shininess);
+            SetFloat(prefix + "specularStrength", material.SpecularStrength);
+        }
+
         /// <summary>
         /// Set a uniform float on this shader.
         /// </summary>
