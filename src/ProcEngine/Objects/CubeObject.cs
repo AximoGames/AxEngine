@@ -11,7 +11,6 @@ namespace ProcEngine
 
         public override void Init()
         {
-            SetTexture("Ressources/woodenbox.png", "Ressources/woodenbox_specular.png");
             SetVertices(DataHelper.Cube);
 
             base.Init();

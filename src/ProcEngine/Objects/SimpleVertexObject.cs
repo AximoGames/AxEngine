@@ -32,6 +32,8 @@ namespace ProcEngine
 
         public bool RenderShadow { get; set; } = true;
 
+        public Material Material { get; set; } = Material.GetDefault();
+
         public Matrix4 GetModelMatrix()
         {
             return Matrix4.CreateScale(Scale)
@@ -58,9 +60,6 @@ namespace ProcEngine
 
         public IRenderPipeline PrimaryRenderPipeline;
 
-        private string _DiffusePath;
-        private string _SpecularPath;
-
         public override void Init()
         {
             UsePipeline<PointShadowRenderPipeline>();
@@ -74,8 +73,8 @@ namespace ProcEngine
             _Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
             _DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
 
-            txt0 = new Texture(_DiffusePath);
-            txt1 = new Texture(_SpecularPath);
+            txt0 = new Texture(Material.DiffuseImagePath);
+            txt1 = new Texture(Material.SpecularImagePath);
 
             _ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
             _CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
@@ -100,12 +99,6 @@ namespace ProcEngine
             _vertices = vertices;
         }
 
-        public void SetTexture(string diffusePath, string specularPath)
-        {
-            _DiffusePath = diffusePath;
-            _SpecularPath = specularPath;
-        }
-
         public void OnForwardRender()
         {
             vao.Use();
@@ -124,12 +117,12 @@ namespace ProcEngine
 
             _Shader.SetInt("shadowMap", 2);
 
-            _Shader.SetVector3("material.color", new Vector3(1.0f, 1.0f, 0f));
+            _Shader.SetVector3("material.color", Material.Color);
             _Shader.SetInt("material.diffuse", 0);
             _Shader.SetInt("material.specular", 1);
-            _Shader.SetFloat("material.ambient", 0.3f);
-            _Shader.SetFloat("material.shininess", 32f);
-            _Shader.SetFloat("material.specularStrength", 0.5f);
+            _Shader.SetFloat("material.ambient", Material.Ambient);
+            _Shader.SetFloat("material.shininess", Material.Shininess);
+            _Shader.SetFloat("material.specularStrength", Material.SpecularStrength);
 
             //_Shader.SetVector3("light.position", GetShadowLight().Position);
             //_Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));

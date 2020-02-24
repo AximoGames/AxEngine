@@ -4,6 +4,7 @@ using OpenTK;
 
 namespace ProcEngine
 {
+
     public enum CameraType
     {
         PerspectiveFieldOfView,
