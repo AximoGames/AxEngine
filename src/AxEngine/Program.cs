@@ -62,7 +62,7 @@ namespace AxEngine
             // GL.Enable(EnableCap.DebugOutput);
             // GL.Enable(EnableCap.DebugOutputSynchronous);
 
-            demo = new Window(800, 600, "ProcEngine");
+            demo = new Window(800, 600, "AxEngine");
             demo.Location = new System.Drawing.Point(1920 / 2 + 10, 10);
 
             // Run the game at 60 updates per second
