@@ -2,7 +2,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 
-namespace ProcEngine
+namespace AxEngine
 {
     public class DeferredRenderPipeline : RenderPipeline
     {

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Collections.Generic;
 
-namespace ProcEngine
+namespace AxEngine
 {
 
     public abstract class GameObject : IGameObject

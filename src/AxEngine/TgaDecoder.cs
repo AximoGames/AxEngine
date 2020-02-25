@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Drawing;
 
-namespace ProcEngine
+namespace AxEngine
 {
     public class TgaDecoder
     {

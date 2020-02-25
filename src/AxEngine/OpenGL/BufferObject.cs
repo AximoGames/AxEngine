@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System;
 
-namespace ProcEngine
+namespace AxEngine
 {
     public class BufferObject
     {

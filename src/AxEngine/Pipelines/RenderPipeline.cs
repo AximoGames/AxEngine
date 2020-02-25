@@ -1,7 +1,7 @@
 using OpenTK;
 using System.Collections.Generic;
 
-namespace ProcEngine
+namespace AxEngine
 {
 
     public interface IRenderPipeline

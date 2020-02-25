@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace ProcEngine
+namespace AxEngine
 {
     internal static class DataHelper
     {

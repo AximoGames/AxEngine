@@ -4,7 +4,7 @@ using System.Threading;
 using OpenTK;
 using System.Runtime.InteropServices;
 
-namespace ProcEngine
+namespace AxEngine
 {
     class MainClass
     {

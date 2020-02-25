@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using OpenTK;
 
-namespace ProcEngine
+namespace AxEngine
 {
     public class Material
     {

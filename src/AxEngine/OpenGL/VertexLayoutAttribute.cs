@@ -1,6 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 
-namespace ProcEngine
+namespace AxEngine
 {
     public class VertexLayoutAttribute
     {

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
 
-namespace ProcEngine
+namespace AxEngine
 {
     //public class MeshObject : GameObject, IMeshObject
     //{

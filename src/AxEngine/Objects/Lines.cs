@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 
-namespace ProcEngine
+namespace AxEngine
 {
     public class Lines : GameObject, IRenderableObject
     {

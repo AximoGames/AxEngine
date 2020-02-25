@@ -3,7 +3,7 @@ using System;
 using System.Drawing;
 //using System.Drawing.Imaging;
 
-namespace ProcEngine
+namespace AxEngine
 {
 
     public class FrameBuffer : IObjectLabel

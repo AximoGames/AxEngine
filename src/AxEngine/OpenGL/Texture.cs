@@ -4,11 +4,11 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
-using ProcEngine;
+using AxEngine;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 using System.Collections.Generic;
 
-namespace ProcEngine
+namespace AxEngine
 {
     // A helper class, much like Shader, meant to simplify loading textures.
     public class Texture : IObjectLabel

@@ -4,11 +4,11 @@ using System.Text;
 using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
-using ProcEngine;
+using AxEngine;
 using System.Text.RegularExpressions;
 using System.Linq;
 
-namespace ProcEngine
+namespace AxEngine
 {
     // A simple class meant to help create shaders.
     public class Shader : IObjectLabel

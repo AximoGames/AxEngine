@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using OpenTK;
 
-namespace ProcEngine
+namespace AxEngine
 {
 
     public enum CameraType

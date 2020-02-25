@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL4;
 
-namespace ProcEngine
+namespace AxEngine
 {
 
     public class VertexLayout

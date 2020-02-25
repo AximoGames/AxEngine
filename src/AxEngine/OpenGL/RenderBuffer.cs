@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 //using System.Drawing.Imaging;
 
-namespace ProcEngine
+namespace AxEngine
 {
     public class RenderBuffer : IObjectLabel
     {
