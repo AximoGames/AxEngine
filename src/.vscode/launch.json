@@ -8,7 +8,7 @@
             "name": "Launch",
             "type": "mono",
             "request": "launch",
-            "program": "${workspaceRoot}/ProcEngine/bin/Debug/net472/ProcEngine.exe",
+            "program": "${workspaceRoot}/AxEngine/bin/Debug/net472/AxEngine.exe",
             "cwd": "${workspaceRoot}"
         },
         {

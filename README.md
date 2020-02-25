@@ -2,7 +2,7 @@ To clone this repository, you need git LFS, otherwise you need to download the R
 
 Don't forget the `--recursive` option:
 ```
-git clone --recursive git@github.com:arakis/ProcEngine.git
+git clone --recursive git@github.com:AximoGames/AxEngine.git
 ```
 
 ```Keymapping:
