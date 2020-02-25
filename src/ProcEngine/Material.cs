@@ -25,6 +25,17 @@ namespace ProcEngine
                 SpecularStrength = 0.5f,
             };
         }
+
+        public void WriteToShader(string name, Shader shader)
+        {
+            var prefix = name += ".";
+            shader.SetVector3(prefix + "color", Color);
+            shader.SetInt(prefix + "diffuse", 0);
+            shader.SetInt(prefix + "specular", 1);
+            shader.SetFloat(prefix + "ambient", Ambient);
+            shader.SetFloat(prefix + "shininess", Shininess);
+            shader.SetFloat(prefix + "specularStrength", SpecularStrength);
+        }
     }
 
 }
