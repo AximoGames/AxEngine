@@ -10,10 +10,7 @@ using System.Runtime.InteropServices;
 
 namespace AxEngine
 {
-    // In this tutorial we set up some basic lighting and look at how the phong model works
-    // For more insight into how it all works look at the web version. If you are just here for the source,
-    // most of the changes are in the shaders, specifically most of the changes are in the fragment shader as this is
-    // where the lighting calculations happens.
+
     public class Window : GameWindow
     {
 
