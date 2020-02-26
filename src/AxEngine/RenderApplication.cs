@@ -14,6 +14,11 @@ namespace AxEngine
     public class RenderApplication
     {
 
+        public static RenderApplication Current { get; private set; }
+
+        public int ScreenWidth => window.Width;
+        public int ScreenHeight => window.Height;
+
         private RenderApplicationStartup _startup;
 
         private float[] MouseSpeed = new float[3];
@@ -58,10 +63,13 @@ namespace AxEngine
 
         public void Run()
         {
+            Current = this;
+
             Toolkit.Init(new ToolkitOptions
             {
                 Backend = PlatformBackend.PreferX11,
             });
+
             Init();
             window.Run(60.0);
         }
@@ -85,6 +93,7 @@ namespace AxEngine
             window.KeyDown += (s, e) => OnKeyDown(e);
             window.MouseWheel += (s, e) => OnMouseWheel(e);
             window.Unload += (s, e) => OnUnload(e);
+            window.Resize += (s, e) => OnScreenResize();
 
             var vendor = GL.GetString(StringName.Vendor);
             var version = GL.GetString(StringName.Version);
@@ -316,6 +325,11 @@ namespace AxEngine
             {
                 Camera.Position = MovingObject.Position;
             }
+        }
+
+        protected void OnScreenResize()
+        {
+            ctx.OnScreenResize();
         }
 
         protected void OnUpdateFrame(FrameEventArgs e)

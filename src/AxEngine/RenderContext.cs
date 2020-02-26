@@ -35,7 +35,7 @@ namespace AxEngine
             return (T)RenderPipelines.FirstOrDefault(p => p is T);
         }
 
-        public static RenderContext Current;
+        public static RenderContext Current { get; set; }
 
         public BindingPoint LightBinding;
 
@@ -90,6 +90,15 @@ namespace AxEngine
         public void LogInfoMessage(string message)
         {
             EmmitLogMessage(DebugType.DebugTypeError, DebugSeverity.DebugSeverityNotification, message);
+        }
+
+        public void OnScreenResize()
+        {
+            ScreenWidth = RenderApplication.Current.ScreenWidth;
+            ScreenHeight = RenderApplication.Current.ScreenHeight;
+
+            foreach (var pipe in RenderPipelines)
+                pipe.OnScreenResize();
         }
     }
 

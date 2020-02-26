@@ -9,6 +9,7 @@ namespace AxEngine
         void BeforeInit();
         void Init();
         void AfterInit();
+        void OnScreenResize();
         void InitRender(RenderContext context, Camera camera);
         void Render(RenderContext context, Camera camera);
         IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera);
@@ -37,6 +38,10 @@ namespace AxEngine
                 if (obj.Enabled)
                     if (obj.RenderPipelines.Contains(this))
                         yield return obj;
+        }
+
+        public virtual void OnScreenResize()
+        {
         }
     }
 
