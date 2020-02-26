@@ -60,6 +60,16 @@ namespace AxEngine
         {
         }
 
+        public void Dispose()
+        {
+            window.Dispose();
+        }
+
+        public void Close()
+        {
+            window.Close();
+        }
+
     }
 
     public class RenderDemo : RenderApplication

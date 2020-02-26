@@ -46,20 +46,17 @@ namespace AxEngine
             }
         }
 
-        private static Window demo;
+        private static RenderApplication demo;
 
         private static void UIThreadMain()
         {
-            Toolkit.Init(new ToolkitOptions
+            demo = new RenderDemo(new RenderApplicationStartup
             {
-                Backend = PlatformBackend.PreferX11,
+                WindowWidth = 800,
+                WindowHeight = 600,
+                WindowTitle = "AxEngine",
             });
-
-            demo = new Window(800, 600, "AxEngine");
-            demo.Location = new System.Drawing.Point(1920 / 2 + 10, 10);
-
-            // Run the game at 60 updates per second
-            demo.Run(60.0);
+            demo.Run();
         }
 
     }
