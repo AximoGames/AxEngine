@@ -588,8 +588,8 @@ namespace AxEngine
             // Currently, it's fixed to 0 (Plane is at Z=0).
             var plane = new Plane(new Vector3(0, 0, 1), new Vector3(0, 0, 0));
 
-            var pos1 = UnProject(normalizedScreenCoordinates, 0);
-            var pos2 = UnProject(normalizedScreenCoordinates, 1);
+            var pos1 = UnProject(normalizedScreenCoordinates, 0.0f);
+            var pos2 = UnProject(normalizedScreenCoordinates, 1.0f);
 
             var ray = new Ray(pos1, pos2);
             if (plane.Raycast(ray, out float result))
@@ -609,14 +609,7 @@ namespace AxEngine
 
             vec = Vector4.Transform(vec, Camera.GetInvertedViewProjectionMatrix());
 
-            if (vec.W > float.Epsilon || vec.W < float.Epsilon)
-            {
-                vec.X /= vec.W;
-                vec.Y /= vec.W;
-                vec.Z /= vec.W;
-            }
-
-            return vec.Xyz;
+            return vec.Xyz / vec.W;
         }
     }
 
