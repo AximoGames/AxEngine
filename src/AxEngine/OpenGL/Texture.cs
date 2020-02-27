@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AxEngine
 {
-    // A helper class, much like Shader, meant to simplify loading textures.
+
     public class Texture : IObjectLabel
     {
         public int Handle { get; private set; }

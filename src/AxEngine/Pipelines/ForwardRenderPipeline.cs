@@ -7,13 +7,18 @@ namespace AxEngine
 
         public FrameBuffer FrameBuffer;
 
-        public override void BeforeInit()
+        private void CreateFrameBuffer()
         {
             FrameBuffer = new FrameBuffer(RenderContext.Current.ScreenWidth, RenderContext.Current.ScreenHeight);
             FrameBuffer.ObjectLabel = "Forward";
             FrameBuffer.InitNormal();
             //FrameBuffer.CreateRenderBuffer(RenderbufferStorage.Depth24Stencil8, FramebufferAttachment.DepthStencilAttachment);
             FrameBuffer.CreateRenderBuffer(RenderbufferStorage.DepthComponent32f, FramebufferAttachment.DepthAttachment);
+        }
+
+        public override void BeforeInit()
+        {
+            CreateFrameBuffer();
         }
 
         public override void Init()
@@ -36,6 +41,11 @@ namespace AxEngine
 
             foreach (var obj in GetRenderObjects(context, camera))
                 Render(context, camera, obj);
+        }
+
+        public override void OnScreenResize()
+        {
+            //CreateFrameBuffer();
         }
 
     }

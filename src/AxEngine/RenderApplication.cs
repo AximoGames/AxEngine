@@ -517,6 +517,13 @@ namespace AxEngine
         {
             if (e.Mouse.LeftButton == ButtonState.Pressed)
                 MouseDelta = new Vector2(e.XDelta, e.YDelta);
+
+            var x = (float)((((double)e.X / (double)ScreenWidth) * 2.0) - 1.0);
+            var y = (float)((((double)e.Y / (double)ScreenHeight) * 2.0) - 1.0);
+
+            CurrentMousePosition = new Vector2(x, y);
+            Console.WriteLine(CurrentMouseWorldPosition.ToString());
+            //Console.WriteLine(CurrentMousePosition.ToString());
         }
 
         protected void OnMouseWheel(MouseWheelEventArgs e)
@@ -550,6 +557,78 @@ namespace AxEngine
             window.Close();
         }
 
+        private Vector2 _CurrentMousePosition;
+        public Vector2 CurrentMousePosition
+        {
+            get
+            {
+                return _CurrentMousePosition;
+            }
+            set
+            {
+                _CurrentMousePosition = value;
+                _CurrentMouseWorldPosition = null;
+            }
+        }
+
+        private Vector3? _CurrentMouseWorldPosition;
+        public Vector3 CurrentMouseWorldPosition
+        {
+            get
+            {
+                if (_CurrentMouseWorldPosition == null)
+                    _CurrentMouseWorldPosition = ScreenPositionToWorldPosition(CurrentMousePosition);
+                return (Vector3)_CurrentMouseWorldPosition;
+            }
+        }
+
+        protected Vector3? ScreenPositionToWorldPosition(Vector2 normalizedScreenCoordinates)
+        {
+            var plane = new Plane(new Vector3(0, 0, 1), new Vector3(0, 0, 0));
+
+            // var pos1 = Vector3.Unproject(new Vector3(normalizedScreenCoordinates.X, normalizedScreenCoordinates.Y, 0f), -1, -1, 2, 2, 0.0f, 1.0f, Matrix4.Invert(ctx.Camera.GetViewProjectionMatrix()));
+            // var pos2 = Vector3.Unproject(new Vector3(normalizedScreenCoordinates.X, normalizedScreenCoordinates.Y, 1f), -1, -1, 2, 2, 0.0f, 1.0f, Matrix4.Invert(ctx.Camera.GetViewProjectionMatrix()));
+            // //var ray = new Ray(Camera.Position, pos);
+
+            var pos1 = UnProject(normalizedScreenCoordinates, 0, Camera.GetProjectionMatrix(), Camera.GetViewMatrix());
+            var pos2 = UnProject(normalizedScreenCoordinates, 1, Camera.GetProjectionMatrix(), Camera.GetViewMatrix());
+
+            var ray = new Ray(pos1, pos2);
+            if (plane.Raycast(ray, out float result))
+            {
+                return ray.GetPoint(result);
+            }
+            return null;
+        }
+
+        public static Vector3 UnProject(Vector2 mouse, float z, Matrix4 projection, Matrix4 view)
+        {
+            Vector4 vec;
+
+
+            vec.X = mouse.X;
+            vec.Y = -mouse.Y;
+            vec.Z = z;
+            vec.W = 1.0f;
+
+            Matrix4 viewInv = Matrix4.Invert(view);
+            Matrix4 projInv = Matrix4.Invert(projection);
+
+
+            Vector4.Transform(ref vec, ref projInv, out vec);
+            Vector4.Transform(ref vec, ref viewInv, out vec);
+
+
+            if (vec.W > float.Epsilon || vec.W < float.Epsilon)
+            {
+                vec.X /= vec.W;
+                vec.Y /= vec.W;
+                vec.Z /= vec.W;
+            }
+
+
+            return vec.Xyz;
+        }
     }
 
     public class RenderApplicationStartup
