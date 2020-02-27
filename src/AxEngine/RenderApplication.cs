@@ -584,40 +584,30 @@ namespace AxEngine
 
         protected Vector3? ScreenPositionToWorldPosition(Vector2 normalizedScreenCoordinates)
         {
+            // FUTURE: Read Dept-Buffer to get the avoid ray-Cast and get adaptive Z-Position
+            // Currently, it's fixed to 0 (Plane is at Z=0).
             var plane = new Plane(new Vector3(0, 0, 1), new Vector3(0, 0, 0));
 
-            // var pos1 = Vector3.Unproject(new Vector3(normalizedScreenCoordinates.X, normalizedScreenCoordinates.Y, 0f), -1, -1, 2, 2, 0.0f, 1.0f, Matrix4.Invert(ctx.Camera.GetViewProjectionMatrix()));
-            // var pos2 = Vector3.Unproject(new Vector3(normalizedScreenCoordinates.X, normalizedScreenCoordinates.Y, 1f), -1, -1, 2, 2, 0.0f, 1.0f, Matrix4.Invert(ctx.Camera.GetViewProjectionMatrix()));
-            // //var ray = new Ray(Camera.Position, pos);
-
-            var pos1 = UnProject(normalizedScreenCoordinates, 0, Camera.GetProjectionMatrix(), Camera.GetViewMatrix());
-            var pos2 = UnProject(normalizedScreenCoordinates, 1, Camera.GetProjectionMatrix(), Camera.GetViewMatrix());
+            var pos1 = UnProject(normalizedScreenCoordinates, 0);
+            var pos2 = UnProject(normalizedScreenCoordinates, 1);
 
             var ray = new Ray(pos1, pos2);
             if (plane.Raycast(ray, out float result))
-            {
                 return ray.GetPoint(result);
-            }
+
             return null;
         }
 
-        public static Vector3 UnProject(Vector2 mouse, float z, Matrix4 projection, Matrix4 view)
+        public Vector3 UnProject(Vector2 mouse, float z)
         {
             Vector4 vec;
-
 
             vec.X = mouse.X;
             vec.Y = -mouse.Y;
             vec.Z = z;
             vec.W = 1.0f;
 
-            Matrix4 viewInv = Matrix4.Invert(view);
-            Matrix4 projInv = Matrix4.Invert(projection);
-
-
-            Vector4.Transform(ref vec, ref projInv, out vec);
-            Vector4.Transform(ref vec, ref viewInv, out vec);
-
+            vec = Vector4.Transform(vec, Camera.GetInvertedViewProjectionMatrix());
 
             if (vec.W > float.Epsilon || vec.W < float.Epsilon)
             {
@@ -625,7 +615,6 @@ namespace AxEngine
                 vec.Y /= vec.W;
                 vec.Z /= vec.W;
             }
-
 
             return vec.Xyz;
         }

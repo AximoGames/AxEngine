@@ -114,6 +114,11 @@ namespace AxEngine
             return GetViewMatrix() * GetProjectionMatrix();
         }
 
+        public Matrix4 GetInvertedViewProjectionMatrix()
+        {
+            return Matrix4.Invert(GetViewProjectionMatrix());
+        }
+
         // The field of view (FOV) is the vertical angle of the camera view, this has been discussed more in depth in a
         // previous tutorial, but in this tutorial you have also learned how we can use this to simulate a zoom feature.
         // We convert from degrees to radians as soon as the property is set to improve performance
