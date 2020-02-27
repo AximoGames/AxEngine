@@ -157,8 +157,11 @@ namespace AxEngine
 
         public override void OnRenderFrame(FrameEventArgs e)
         {
-            var cursor = ctx.GetObjectByName<IPosition>("GroundCursor");
-            cursor.Position = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.Position.Z);
+            if (CurrentMouseWorldPositionIsValid)
+            {
+                var cursor = ctx.GetObjectByName<IPosition>("GroundCursor");
+                cursor.Position = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.Position.Z);
+            }
             base.OnRenderFrame(e);
         }
 

@@ -127,12 +127,15 @@ namespace AxEngine
                 NearPlane = 0.01f,
                 FarPlane = 100.0f,
             };
+            // ctx.Camera = new OrthographicCamera(new Vector3(1f, -5f, 2f))
+            // {
+            //     NearPlane = 0.01f,
+            //     FarPlane = 100.0f,
+            // };
             ctx.Camera.CameraChangedInternal += () =>
             {
-                ResetMouseWorldPosition();
+                UpdateMouseWorldPosition();
             };
-            //ctx.Camera = new PerspectiveFieldOfViewCamera(lightPosition, Width / (float)Height);
-            //ctx.Camera = new OrthographicCamera(lightPosition);
 
 
             ObjectManager.PushDebugGroup("Setup", "Scene");
@@ -571,24 +574,30 @@ namespace AxEngine
             set
             {
                 _CurrentMousePosition = value;
-                ResetMouseWorldPosition();
+                UpdateMouseWorldPosition();
             }
         }
 
-        internal void ResetMouseWorldPosition()
+        public bool CurrentMouseWorldPositionIsValid { get; private set; }
+
+        internal void UpdateMouseWorldPosition()
         {
-            _CurrentMouseWorldPosition = null;
+            var pos = ScreenPositionToWorldPosition(CurrentMousePosition);
+            if (pos != null)
+            {
+                _CurrentMouseWorldPosition = (Vector3)pos;
+                CurrentMouseWorldPositionIsValid = true;
+            }
+            else
+            {
+                CurrentMouseWorldPositionIsValid = false;
+            }
         }
 
-        private Vector3? _CurrentMouseWorldPosition;
+        private Vector3 _CurrentMouseWorldPosition;
         public Vector3 CurrentMouseWorldPosition
         {
-            get
-            {
-                if (_CurrentMouseWorldPosition == null)
-                    _CurrentMouseWorldPosition = ScreenPositionToWorldPosition(CurrentMousePosition);
-                return (Vector3)_CurrentMouseWorldPosition;
-            }
+            get { return _CurrentMouseWorldPosition; }
         }
 
         protected Vector3? ScreenPositionToWorldPosition(Vector2 normalizedScreenCoordinates)
