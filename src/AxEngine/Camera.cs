@@ -68,13 +68,28 @@ namespace AxEngine
             return IDataHelper.SetData(Data, name, value, defaultValue);
         }
 
-        public Vector3 Position { get; set; }
+        private Vector3 _Position;
+        public Vector3 Position
+        {
+            get { return _Position; }
+            set { _Position = value; TriggerCameraChanged(); }
+        }
+
         public abstract CameraType Type { get; }
         public float Pitch = -0.3f;
         protected float _fov = (float)Math.PI / 4;
 
         public float FarPlane;
         public float NearPlane;
+
+        protected void TriggerCameraChanged()
+        {
+            CameraChangedInternal?.Invoke();
+        }
+
+        internal event CameraChangedDelegate CameraChangedInternal;
+
+        internal delegate void CameraChangedDelegate();
 
         public Camera(Vector3 position)
         {

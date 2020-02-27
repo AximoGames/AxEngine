@@ -127,6 +127,10 @@ namespace AxEngine
                 NearPlane = 0.01f,
                 FarPlane = 100.0f,
             };
+            ctx.Camera.CameraChangedInternal += () =>
+            {
+                ResetMouseWorldPosition();
+            };
             //ctx.Camera = new PerspectiveFieldOfViewCamera(lightPosition, Width / (float)Height);
             //ctx.Camera = new OrthographicCamera(lightPosition);
 
@@ -567,8 +571,13 @@ namespace AxEngine
             set
             {
                 _CurrentMousePosition = value;
-                _CurrentMouseWorldPosition = null;
+                ResetMouseWorldPosition();
             }
+        }
+
+        internal void ResetMouseWorldPosition()
+        {
+            _CurrentMouseWorldPosition = null;
         }
 
         private Vector3? _CurrentMouseWorldPosition;
