@@ -27,7 +27,7 @@ namespace AxEngine
 
         public Camera Camera => Context.Camera;
         public Vector3 Position { get; set; }
-        public Vector3 Scale { get; set; }
+        public Vector3 Scale { get; set; } = new Vector3(1.0f);
         public Vector3 Rotate { get; set; }
 
         public bool RenderShadow { get; set; } = true;

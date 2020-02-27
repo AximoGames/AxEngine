@@ -522,7 +522,7 @@ namespace AxEngine
             var y = (float)((((double)e.Y / (double)ScreenHeight) * 2.0) - 1.0);
 
             CurrentMousePosition = new Vector2(x, y);
-            Console.WriteLine(CurrentMouseWorldPosition.ToString());
+            //Console.WriteLine(CurrentMouseWorldPosition.ToString());
             //Console.WriteLine(CurrentMousePosition.ToString());
         }
 

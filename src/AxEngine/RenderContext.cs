@@ -52,6 +52,15 @@ namespace AxEngine
             return AllObjects.FirstOrDefault(o => o.Name == name);
         }
 
+        public T GetObjectByName<T>(string name)
+        {
+            var obj = GetObjectByName(name);
+            if (obj == null || !(obj is T))
+                return default;
+
+            return (T)obj;
+        }
+
         public void AddPipeline(IRenderPipeline pipeline)
         {
             RenderPipelines.Add(pipeline);

@@ -70,6 +70,14 @@ namespace AxEngine
 
             ctx.AddObject(new TestObject()
             {
+                Name = "GroundCursor",
+                Position = new Vector3(0, 1, 0.05f),
+                Scale = new Vector3(1.0f, 1.0f, 0.1f),
+                // Enabled = false,
+            });
+
+            ctx.AddObject(new TestObject()
+            {
                 Name = "Box1",
                 Rotate = new Vector3(0, 0, (float)Math.PI),
                 Scale = new Vector3(1),
@@ -145,6 +153,13 @@ namespace AxEngine
                 Name = "Sky",
                 // RenderShadow = false,
             });
+        }
+
+        public override void OnRenderFrame(FrameEventArgs e)
+        {
+            var cursor = ctx.GetObjectByName<IPosition>("GroundCursor");
+            cursor.Position = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.Position.Z);
+            base.OnRenderFrame(e);
         }
 
     }
