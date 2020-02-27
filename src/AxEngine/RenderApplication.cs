@@ -587,6 +587,7 @@ namespace AxEngine
             {
                 _CurrentMouseWorldPosition = (Vector3)pos;
                 CurrentMouseWorldPositionIsValid = true;
+                //Console.WriteLine(_CurrentMouseWorldPosition);
             }
             else
             {
@@ -606,8 +607,10 @@ namespace AxEngine
             // Currently, it's fixed to 0 (Plane is at Z=0).
             var plane = new Plane(new Vector3(0, 0, 1), new Vector3(0, 0, 0));
 
-            var pos1 = UnProject(normalizedScreenCoordinates, 0.0f);
-            var pos2 = UnProject(normalizedScreenCoordinates, 1.0f);
+            var pos1 = UnProject(normalizedScreenCoordinates, -1); // -1 requied for ortho. With z=0, perspective will not work, but no ortho
+            var pos2 = UnProject(normalizedScreenCoordinates, 1);
+
+            //Console.WriteLine($"{pos1} + {pos2}");
 
             var ray = new Ray(pos1, pos2);
             if (plane.Raycast(ray, out float result))
