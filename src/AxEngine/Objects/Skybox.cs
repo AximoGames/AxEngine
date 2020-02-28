@@ -51,7 +51,7 @@ namespace AxEngine
             _shader.Use();
 
             _shader.SetMatrix4("view", Camera.GetViewMatrix(Vector3.Zero));
-            _shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+            _shader.SetMatrix4("projection", Camera.ProjectionMatrix);
 
             txt.Use(TextureUnit.Texture0);
             _shader.SetInt("skybox", 0);

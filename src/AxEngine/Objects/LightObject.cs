@@ -87,8 +87,8 @@ namespace AxEngine
             lampMatrix *= Matrix4.CreateTranslation(Position);
 
             _shader.SetMatrix4("model", lampMatrix);
-            _shader.SetMatrix4("view", Camera.GetViewMatrix());
-            _shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+            _shader.SetMatrix4("view", Camera.ViewMatrix);
+            _shader.SetMatrix4("projection", Camera.ProjectionMatrix);
 
             vao.Draw();
         }

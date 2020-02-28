@@ -24,9 +24,9 @@ namespace AxEngine
         {
         }
 
-        public override Matrix4 GetProjectionMatrix()
+        protected override Matrix4 GetProjectionMatrix()
         {
-            return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, NearPlane, FarPlane);
+            return Matrix4.CreatePerspectiveFieldOfView(FovInternal, AspectRatio, NearPlane, FarPlane);
         }
 
     }
@@ -39,7 +39,7 @@ namespace AxEngine
         {
         }
 
-        public override Matrix4 GetProjectionMatrix()
+        protected override Matrix4 GetProjectionMatrix()
         {
             // float near_plane = 0.01f;
             // float far_plane = 7.5f;
@@ -68,22 +68,47 @@ namespace AxEngine
             return IDataHelper.SetData(Data, name, value, defaultValue);
         }
 
-        private Vector3 _Position;
+        protected Vector3 _Position;
         public Vector3 Position
         {
             get { return _Position; }
-            set { _Position = value; TriggerCameraChanged(); }
+            set { if (_Position == value) return; _Position = value; OnCameraChanged(); }
         }
 
         public abstract CameraType Type { get; }
-        public float Pitch = -0.3f;
-        protected float _fov = (float)Math.PI / 4;
 
-        public float FarPlane;
-        public float NearPlane;
-
-        protected void TriggerCameraChanged()
+        public float _Pitch = -0.3f;
+        public float Pitch
         {
+            get { return _Pitch; }
+            set { if (_Pitch == value) return; _Pitch = value; OnCameraChanged(); }
+        }
+
+        protected float _FovInternal = (float)Math.PI / 4;
+        internal float FovInternal
+        {
+            get { return _FovInternal; }
+            set { if (_FovInternal == value) return; _FovInternal = value; OnCameraChanged(); }
+        }
+
+        private float _NearPlane = 1;
+        public float NearPlane
+        {
+            get { return _NearPlane; }
+            set { if (_NearPlane == value) return; _NearPlane = value; OnCameraChanged(); }
+        }
+
+        private float _FarPlane = 100;
+        public float FarPlane
+        {
+            get { return _FarPlane; }
+            set { if (_FarPlane == value) return; _FarPlane = value; OnCameraChanged(); }
+        }
+
+        protected void OnCameraChanged()
+        {
+            ViewMatrix = GetViewMatrix(Position);
+            ProjectionMatrix = GetProjectionMatrix();
             CameraChangedInternal?.Invoke();
         }
 
@@ -96,16 +121,37 @@ namespace AxEngine
             Position = position;
         }
 
-        public Vector3 Up = Vector3.UnitZ;
-        public float Facing = (float)Math.PI / 2 + 0.15f;
-        public float AspectRatio;
-
-        public Vector3? LookAt;
-
-        public Matrix4 GetViewMatrix()
+        public Vector3 _Up = Vector3.UnitZ;
+        public Vector3 Up
         {
-            return GetViewMatrix(Position);
+            get { return _Up; }
+            set { if (_Up == value) return; _Up = value; OnCameraChanged(); }
         }
+
+        public float _Facing = (float)Math.PI / 2 + 0.15f;
+        public float Facing
+        {
+            get { return _Facing; }
+            set { if (_Facing == value) return; _Facing = value; OnCameraChanged(); }
+        }
+
+        public float _AspectRatio = 1.0f;
+        public float AspectRatio
+        {
+            get { return _AspectRatio; }
+            set { if (_AspectRatio == value) return; _AspectRatio = value; OnCameraChanged(); }
+        }
+
+        public Vector3? _LookAt;
+        public Vector3? LookAt
+        {
+            get { return _LookAt; }
+            set { if (_LookAt == value) return; _LookAt = value; OnCameraChanged(); }
+        }
+
+        public Matrix4 ViewMatrix { get; private set; }
+
+        public Matrix4 ProjectionMatrix { get; private set; }
 
         public virtual Matrix4 GetViewMatrix(Vector3 eye)
         {
@@ -122,11 +168,11 @@ namespace AxEngine
             }
         }
 
-        public abstract Matrix4 GetProjectionMatrix();
+        protected abstract Matrix4 GetProjectionMatrix();
 
         public Matrix4 GetViewProjectionMatrix()
         {
-            return GetViewMatrix() * GetProjectionMatrix();
+            return ViewMatrix * GetProjectionMatrix();
         }
 
         public Matrix4 GetInvertedViewProjectionMatrix()
@@ -139,11 +185,11 @@ namespace AxEngine
         // We convert from degrees to radians as soon as the property is set to improve performance
         public float Fov
         {
-            get => MathHelper.RadiansToDegrees(_fov);
+            get => MathHelper.RadiansToDegrees(FovInternal);
             set
             {
                 var angle = MathHelper.Clamp(value, 1f, 90f);
-                _fov = MathHelper.DegreesToRadians(angle);
+                FovInternal = MathHelper.DegreesToRadians(angle);
             }
         }
 

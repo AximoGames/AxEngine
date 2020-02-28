@@ -110,8 +110,8 @@ namespace AxEngine
             _Shader.Use();
 
             _Shader.SetMatrix4("model", GetModelMatrix());
-            _Shader.SetMatrix4("view", Camera.GetViewMatrix());
-            _Shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+            _Shader.SetMatrix4("view", Camera.ViewMatrix);
+            _Shader.SetMatrix4("projection", Camera.ProjectionMatrix);
 
             _Shader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
@@ -147,8 +147,8 @@ namespace AxEngine
                 _DefGeometryShader.Use();
 
                 _DefGeometryShader.SetMatrix4("model", GetModelMatrix());
-                _DefGeometryShader.SetMatrix4("view", Camera.GetViewMatrix());
-                _DefGeometryShader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+                _DefGeometryShader.SetMatrix4("view", Camera.ViewMatrix);
+                _DefGeometryShader.SetMatrix4("projection", Camera.ProjectionMatrix);
 
                 vao.Draw();
             }
@@ -183,8 +183,8 @@ namespace AxEngine
             {
                 var shadowCamera = light.LightCamera;
 
-                var lightProjection = shadowCamera.GetProjectionMatrix();
-                var lightView = shadowCamera.GetViewMatrix();
+                var lightProjection = shadowCamera.ProjectionMatrix;
+                var lightView = shadowCamera.ViewMatrix;
                 lightSpaceMatrix = lightView * lightProjection;
 
                 _ShadowShader.SetMatrix4("model", GetModelMatrix());
@@ -245,7 +245,7 @@ namespace AxEngine
 
         private void AddShadowCubeMatrix(Camera camera, Vector3 direction, Vector3 up)
         {
-            var proj = camera.GetProjectionMatrix();
+            var proj = camera.ProjectionMatrix;
             var view = Matrix4.LookAt(camera.Position, camera.Position + direction, up);
             if (CUBE_MAP_SHADOW_ROTATED)
                 CubeShadowsMatrices.Add(view * proj);

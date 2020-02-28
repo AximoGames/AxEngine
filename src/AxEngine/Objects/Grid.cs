@@ -64,8 +64,8 @@ namespace AxEngine
             _Shader.Use();
 
             _Shader.SetMatrix4("model", ModelMatrix);
-            _Shader.SetMatrix4("view", Camera.GetViewMatrix());
-            _Shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+            _Shader.SetMatrix4("view", Camera.ViewMatrix);
+            _Shader.SetMatrix4("projection", Camera.ProjectionMatrix);
 
             _Shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
             _Shader.SetVector3("viewPos", Camera.Position);
