@@ -9,7 +9,7 @@ namespace AxEngine
 
         private void CreateFrameBuffer()
         {
-            FrameBuffer = new FrameBuffer(RenderContext.Current.ScreenWidth, RenderContext.Current.ScreenHeight);
+            FrameBuffer = new FrameBuffer(RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
             FrameBuffer.ObjectLabel = "Forward";
             FrameBuffer.InitNormal();
             //FrameBuffer.CreateRenderBuffer(RenderbufferStorage.Depth24Stencil8, FramebufferAttachment.DepthStencilAttachment);
@@ -27,7 +27,7 @@ namespace AxEngine
 
         public override void InitRender(RenderContext context, Camera camera)
         {
-            GL.Viewport(0, 0, context.ScreenWidth, context.ScreenHeight);
+            GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
             FrameBuffer.Use();
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -35,7 +35,7 @@ namespace AxEngine
 
         public override void Render(RenderContext context, Camera camera)
         {
-            GL.Viewport(0, 0, context.ScreenWidth, context.ScreenHeight);
+            GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
             FrameBuffer.Use();
             GL.Enable(EnableCap.DepthTest);
 

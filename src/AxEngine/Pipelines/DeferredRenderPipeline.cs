@@ -20,8 +20,8 @@ namespace AxEngine
 
         public override void Init()
         {
-            var width = RenderContext.Current.ScreenWidth;
-            var height = RenderContext.Current.ScreenHeight;
+            var width = RenderContext.Current.ScreenSize.X;
+            var height = RenderContext.Current.ScreenSize.Y;
 
             gBuffer = new FrameBuffer(width, height);
             gBuffer.InitNormal();
@@ -91,7 +91,7 @@ namespace AxEngine
 
         private void RenderPass1(RenderContext context, Camera camera)
         {
-            GL.Viewport(0, 0, context.ScreenWidth, context.ScreenHeight);
+            GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
             gBuffer.Use();
             GL.Enable(EnableCap.DepthTest);
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);

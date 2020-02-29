@@ -7,6 +7,7 @@ using AxEngine;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace AxEngine
 {
@@ -49,6 +50,13 @@ namespace AxEngine
                 Name = "CenterCross",
                 ModelMatrix = Matrix4.CreateScale(2.0f) * Matrix4.CreateTranslation(0f, 0f, 0.02f),
                 //Debug = true,
+            });
+            ctx.AddObject(new ScreenTextureObject()
+            {
+                Name = "ScreenTexture1",
+                TexturePath = "Ressources/woodenbox.png",
+                //Rectangle2 = new RectangleF(0, 0, 0.2f, 0.2f),
+                RectanglePixels = new RectangleF(000, 0, 600f, 600f),
             });
             ctx.AddObject(new LineObject()
             {

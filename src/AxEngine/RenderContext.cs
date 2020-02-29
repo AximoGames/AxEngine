@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace AxEngine
@@ -26,8 +27,19 @@ namespace AxEngine
 
         public IRenderPipeline CurrentPipeline { get; internal set; }
 
-        public int ScreenWidth;
-        public int ScreenHeight;
+        public Vector2i _ScreenSize;
+        public Vector2i ScreenSize
+        {
+            get { return _ScreenSize; }
+            set
+            {
+                _ScreenSize = value;
+                PixelToUVFactor = new Vector2(1.0f / _ScreenSize.X, 1.0f / _ScreenSize.Y);
+                PixelToNDCFactor = PixelToUVFactor * 2;
+            }
+        }
+        public Vector2 PixelToUVFactor { get; private set; }
+        public Vector2 PixelToNDCFactor { get; private set; }
 
         public T GetPipeline<T>()
             where T : class, IRenderPipeline
@@ -103,8 +115,7 @@ namespace AxEngine
 
         public void OnScreenResize()
         {
-            ScreenWidth = RenderApplication.Current.ScreenWidth;
-            ScreenHeight = RenderApplication.Current.ScreenHeight;
+            ScreenSize = RenderApplication.Current.ScreenSize;
 
             foreach (var pipe in RenderPipelines)
                 pipe.OnScreenResize();

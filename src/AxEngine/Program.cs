@@ -52,8 +52,7 @@ namespace AxEngine
         {
             demo = new RenderDemo(new RenderApplicationStartup
             {
-                WindowWidth = 800,
-                WindowHeight = 600,
+                WindowSize = new Vector2i(800, 600),
                 WindowTitle = "AxEngine",
             });
             demo.Run();

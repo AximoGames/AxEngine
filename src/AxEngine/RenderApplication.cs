@@ -16,8 +16,7 @@ namespace AxEngine
 
         public static RenderApplication Current { get; private set; }
 
-        public int ScreenWidth => window.Width;
-        public int ScreenHeight => window.Height;
+        public Vector2i ScreenSize => new Vector2i(window.Width, window.Height);
 
         private RenderApplicationStartup _startup;
 
@@ -80,12 +79,11 @@ namespace AxEngine
         {
             ctx = new RenderContext()
             {
-                ScreenWidth = _startup.WindowWidth,
-                ScreenHeight = _startup.WindowHeight,
+                ScreenSize = _startup.WindowSize,
             };
             RenderContext.Current = ctx;
 
-            window = new Window(_startup.WindowWidth, _startup.WindowHeight, _startup.WindowTitle);
+            window = new Window(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle);
             window.Location = new System.Drawing.Point(1920 / 2 + 10, 10);
             window.RenderFrame += (s, e) => OnRenderFrame(e);
             window.UpdateFrame += (s, e) => OnUpdateFrame(e);
@@ -122,7 +120,7 @@ namespace AxEngine
             ctx.LightBinding = new BindingPoint();
             Console.WriteLine("LightBinding: " + ctx.LightBinding.Number);
 
-            ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), ctx.ScreenWidth / (float)ctx.ScreenHeight)
+            ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), ctx.ScreenSize.X / (float)ctx.ScreenSize.Y)
             {
                 NearPlane = 0.1f,
                 FarPlane = 100.0f,
@@ -137,16 +135,15 @@ namespace AxEngine
                 UpdateMouseWorldPosition();
             };
 
+            ctx.AddObject(new ScreenSceneObject()
+            {
+            });
 
             ObjectManager.PushDebugGroup("Setup", "Scene");
             SetupScene();
             ObjectManager.PopDebugGroup();
 
             //CursorVisible = false;
-
-            ctx.AddObject(new ScreenSceneObject()
-            {
-            });
 
             StartFileListener();
 
@@ -540,8 +537,8 @@ namespace AxEngine
             if (e.Mouse.LeftButton == ButtonState.Pressed)
                 MouseDelta = new Vector2(e.XDelta, e.YDelta);
 
-            var x = (float)((((double)e.X / (double)ScreenWidth) * 2.0) - 1.0);
-            var y = (float)((((double)e.Y / (double)ScreenHeight) * 2.0) - 1.0);
+            var x = (float)((((double)e.X / (double)ScreenSize.X) * 2.0) - 1.0);
+            var y = (float)((((double)e.Y / (double)ScreenSize.Y) * 2.0) - 1.0);
 
             CurrentMousePosition = new Vector2(x, y);
             // Console.WriteLine(CurrentMouseWorldPosition.ToString());
@@ -555,8 +552,8 @@ namespace AxEngine
 
         protected void OnResize(EventArgs e)
         {
-            GL.Viewport(0, 0, ctx.ScreenWidth, ctx.ScreenHeight);
-            Camera.AspectRatio = ctx.ScreenWidth / (float)ctx.ScreenHeight;
+            GL.Viewport(0, 0, ctx.ScreenSize.X, ctx.ScreenSize.Y);
+            Camera.AspectRatio = ctx.ScreenSize.X / (float)ctx.ScreenSize.Y;
         }
 
         protected void OnUnload(EventArgs e)
@@ -663,8 +660,7 @@ namespace AxEngine
 
     public class RenderApplicationStartup
     {
-        public int WindowWidth { get; set; }
-        public int WindowHeight { get; set; }
+        public Vector2i WindowSize { get; set; }
         public string WindowTitle { get; set; }
     }
 
