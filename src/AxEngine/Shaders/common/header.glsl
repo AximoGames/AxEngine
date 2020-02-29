@@ -22,5 +22,6 @@ struct Material {
 	float specularStrength;
 	vec3 color;
 	float ambient; // 0.3
+	int colorBlendMode;
 };
 

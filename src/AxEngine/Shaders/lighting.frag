@@ -22,11 +22,28 @@ layout(std140) uniform lightsArray { Light lights[MAX_NUM_TOTAL_LIGHTS]; };
 
 #include "common/lib.frag.glsl"
 
+vec3 BlendColor(vec3 textureColor, vec3 color, int blendMode) {
+    switch(blendMode)
+    {
+        case 0:
+            return textureColor;
+        case 1:
+            return color;
+        case 2:
+            return textureColor * color;
+        case 3:
+            return textureColor + color;
+        case 4:
+            return textureColor - color;
+    }
+}
+
 void main()
 {
 	vec3 viewDir = normalize(viewPos - FragPos);
 
-    vec3 color = texture(material.diffuse, TexCoords).rgb;
+    vec3 color = BlendColor(texture(material.diffuse, TexCoords).rgb, material.color, material.colorBlendMode);
+
     //vec3 color = material.color; // solid color for debugging
     vec3 normal = normalize(Normal);
     // ambient

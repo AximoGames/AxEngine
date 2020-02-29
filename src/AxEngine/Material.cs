@@ -4,6 +4,15 @@ using OpenTK;
 
 namespace AxEngine
 {
+    public enum MaterialColorBlendMode
+    {
+        None = 0,
+        Set = 1,
+        Multiply = 2,
+        Add = 3,
+        Sub = 4,
+    }
+
     public class Material
     {
         public string DiffuseImagePath { get; set; }
@@ -12,6 +21,7 @@ namespace AxEngine
         public float Ambient { get; set; }
         public float Shininess { get; set; }
         public float SpecularStrength { get; set; }
+        public MaterialColorBlendMode ColorBlendMode { get; set; }
 
         public static Material GetDefault()
         {
@@ -35,6 +45,7 @@ namespace AxEngine
             shader.SetFloat(prefix + "ambient", Ambient);
             shader.SetFloat(prefix + "shininess", Shininess);
             shader.SetFloat(prefix + "specularStrength", SpecularStrength);
+            shader.SetInt(prefix + "colorBlendMode", (int)ColorBlendMode);
         }
     }
 

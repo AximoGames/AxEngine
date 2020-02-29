@@ -11,6 +11,9 @@ namespace AxEngine
         public Camera Camera => Context.Camera;
         public Matrix4 ModelMatrix { get; set; } = Matrix4.Identity;
 
+        public int Size = 10;
+        public bool Center = true;
+
         private Shader _Shader;
 
         private VertexArrayObject vao;
@@ -36,21 +39,40 @@ namespace AxEngine
 
             var _vertices = new List<float>();
 
-            var size = 10;
+            var size = Size;
             var color = new float[] { 0.45f, 0.45f, 0.0f, 1.0f };
 
-            for (var i = -size; i <= size; i++)
+            int start;
+            int end;
+            float startPos;
+            float endPos;
+            if (Center)
             {
-                _vertices.AddRange(new float[] { -size, i, 0 });
+                start = -size;
+                end = size;
+                startPos = -size;
+                endPos = size;
+            }
+            else
+            {
+                start = 0;
+                end = size;
+                startPos = 0f;
+                endPos = size;
+            }
+
+            for (var i = start; i <= end; i++)
+            {
+                _vertices.AddRange(new float[] { startPos, i, 0 });
                 _vertices.AddRange(color);
 
-                _vertices.AddRange(new float[] { size, i, 0 });
+                _vertices.AddRange(new float[] { endPos, i, 0 });
                 _vertices.AddRange(color);
 
-                _vertices.AddRange(new float[] { i, -size, 0 });
+                _vertices.AddRange(new float[] { i, startPos, 0 });
                 _vertices.AddRange(color);
 
-                _vertices.AddRange(new float[] { i, size, 0 });
+                _vertices.AddRange(new float[] { i, endPos, 0 });
                 _vertices.AddRange(color);
             }
 

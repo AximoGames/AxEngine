@@ -344,7 +344,7 @@ namespace AxEngine
             ctx.OnScreenResize();
         }
 
-        protected void OnUpdateFrame(FrameEventArgs e)
+        protected virtual void OnUpdateFrame(FrameEventArgs e)
         {
             ProcessTaskQueue();
 
