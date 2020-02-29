@@ -124,7 +124,7 @@ namespace AxEngine
 
             ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), ctx.ScreenWidth / (float)ctx.ScreenHeight)
             {
-                NearPlane = 0.01f,
+                NearPlane = 0.1f,
                 FarPlane = 100.0f,
             };
             // ctx.Camera = new OrthographicCamera(new Vector3(1f, -5f, 2f))
@@ -313,12 +313,23 @@ namespace AxEngine
 
         private IPosition MovingObject;
 
+        private bool DebugCamera;
         protected void OnKeyDown(KeyboardKeyEventArgs e)
         {
             var kbState = Keyboard.GetState();
             if (kbState[Key.C])
             {
-                MovingObject = Camera;
+                if (e.Shift)
+                {
+                    DebugCamera = !DebugCamera;
+                    var debugLine = ctx.GetObjectByName("DebugLine") as Line;
+                    debugLine.Enabled = DebugCamera;
+                    Console.WriteLine($"DebugCamera: {DebugCamera}");
+                }
+                else
+                {
+                    MovingObject = Camera;
+                }
             }
             if (kbState[Key.B])
             {
@@ -364,18 +375,22 @@ namespace AxEngine
             IScaleRotate rot = MovingObject as IScaleRotate;
             bool simpleMove = cam == null;
 
+            var stepSize = 0.1f;
+            if (kbState[Key.ControlLeft])
+                stepSize = 0.01f;
+
             if (kbState[Key.W])
             {
                 if (simpleMove)
                     pos.Position = new Vector3(
                         pos.Position.X,
-                        pos.Position.Y + 0.1f,
+                        pos.Position.Y + stepSize,
                         pos.Position.Z
                     );
                 else
                     pos.Position = new Vector3(
-                        pos.Position.X + (float)Math.Cos(cam.Facing) * 0.1f,
-                        pos.Position.Y + (float)Math.Sin(cam.Facing) * 0.1f,
+                        pos.Position.X + (float)Math.Cos(cam.Facing) * stepSize,
+                        pos.Position.Y + (float)Math.Sin(cam.Facing) * stepSize,
                         pos.Position.Z
                     );
             }
@@ -385,13 +400,13 @@ namespace AxEngine
                 if (simpleMove)
                     pos.Position = new Vector3(
                         pos.Position.X,
-                        pos.Position.Y - 0.1f,
+                        pos.Position.Y - stepSize,
                         pos.Position.Z
                     );
                 else
                     pos.Position = new Vector3(
-                        pos.Position.X - (float)Math.Cos(cam.Facing) * 0.1f,
-                        pos.Position.Y - (float)Math.Sin(cam.Facing) * 0.1f,
+                        pos.Position.X - (float)Math.Cos(cam.Facing) * stepSize,
+                        pos.Position.Y - (float)Math.Sin(cam.Facing) * stepSize,
                         pos.Position.Z
                     );
             }
@@ -400,14 +415,14 @@ namespace AxEngine
             {
                 if (simpleMove)
                     pos.Position = new Vector3(
-                        pos.Position.X - 0.1f,
+                        pos.Position.X - stepSize,
                         pos.Position.Y,
                         pos.Position.Z
                     );
                 else
                     pos.Position = new Vector3(
-                        pos.Position.X + (float)Math.Cos(cam.Facing + Math.PI / 2) * 0.1f,
-                        pos.Position.Y + (float)Math.Sin(cam.Facing + Math.PI / 2) * 0.1f,
+                        pos.Position.X + (float)Math.Cos(cam.Facing + Math.PI / 2) * stepSize,
+                        pos.Position.Y + (float)Math.Sin(cam.Facing + Math.PI / 2) * stepSize,
                         pos.Position.Z
                     );
             }
@@ -416,14 +431,14 @@ namespace AxEngine
             {
                 if (simpleMove)
                     pos.Position = new Vector3(
-                        pos.Position.X + 0.1f,
+                        pos.Position.X + stepSize,
                         pos.Position.Y,
                         pos.Position.Z
                     );
                 else
                     pos.Position = new Vector3(
-                        pos.Position.X - (float)Math.Cos(cam.Facing + Math.PI / 2) * 0.1f,
-                        pos.Position.Y - (float)Math.Sin(cam.Facing + Math.PI / 2) * 0.1f,
+                        pos.Position.X - (float)Math.Cos(cam.Facing + Math.PI / 2) * stepSize,
+                        pos.Position.Y - (float)Math.Sin(cam.Facing + Math.PI / 2) * stepSize,
                         pos.Position.Z
                     );
             }
@@ -529,8 +544,8 @@ namespace AxEngine
             var y = (float)((((double)e.Y / (double)ScreenHeight) * 2.0) - 1.0);
 
             CurrentMousePosition = new Vector2(x, y);
-            Console.WriteLine(CurrentMouseWorldPosition.ToString());
-            Console.WriteLine(CurrentMousePosition.ToString());
+            // Console.WriteLine(CurrentMouseWorldPosition.ToString());
+            // Console.WriteLine(CurrentMousePosition.ToString());
         }
 
         protected void OnMouseWheel(MouseWheelEventArgs e)
@@ -612,9 +627,19 @@ namespace AxEngine
             var pos1 = UnProject(normalizedScreenCoordinates, -1); // -1 requied for ortho. With z=0, perspective will not work, but no ortho
             var pos2 = UnProject(normalizedScreenCoordinates, 1);
 
+            // if (!DebugCamera)
+            // {
+            //     var debugLine = ctx.GetObjectByName("DebugLine") as Line;
+            //     // debugLine.SetPoint1(new Vector3(0, 0, 1));
+            //     // debugLine.SetPoint2(new Vector3(3, 3, 1));
+            //     debugLine.SetPoint1(pos1);
+            //     debugLine.SetPoint2(pos2);
+            //     debugLine.UpdateData();
+            // }
+
             //Console.WriteLine($"{pos1} + {pos2}");
 
-            var ray = new Ray(pos1, pos2);
+            var ray = Ray.FromPoints(pos1, pos2);
             if (plane.Raycast(ray, out float result))
                 return ray.GetPoint(result);
 

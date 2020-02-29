@@ -275,7 +275,14 @@ namespace AxEngine
              0.0f,  1.0f, 0.0f,  0f, 1f, 0f,  1.0f,
 
              0f, 0f, -1.0f,  0f, 0f, 0.5f,  1.0f, // Line Z
-             0.0f,  0.0f, 1.0f,  0f, 0f, 1f,  1.0f,
+             0.0f,  0.0f, 1.0f,  0f, 0f, 1f,  1.0f
+        };
+
+        public static readonly float[] Line =
+        {
+             // Position          Color
+             -1.0f,  0.0f, 0.0f,  0.6f, 0.05f, 0.6f, 1.0f, // X-Aligned line
+              1.0f,  0.0f, 0.0f,  1.0f, 0,0f, 1.0f, 1.0f
         };
 
         public static readonly float[] SkyBox =

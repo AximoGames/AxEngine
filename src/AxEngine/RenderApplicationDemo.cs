@@ -50,6 +50,11 @@ namespace AxEngine
                 ModelMatrix = Matrix4.CreateScale(2.0f) * Matrix4.CreateTranslation(0f, 0f, 0.02f),
                 //Debug = true,
             });
+            ctx.AddObject(new Line()
+            {
+                Name = "DebugLine",
+                //Enabled = false,
+            });
 
             ctx.AddObject(new LightObject()
             {

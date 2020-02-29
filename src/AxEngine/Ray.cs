@@ -15,6 +15,11 @@ namespace AxEngine
             _Direction = direction.Normalized();
         }
 
+        public static Ray FromPoints(Vector3 origin, Vector3 destination)
+        {
+            return new Ray(origin, destination - origin);
+        }
+
         public Vector3 Origin
         {
             get { return _Origin; }
