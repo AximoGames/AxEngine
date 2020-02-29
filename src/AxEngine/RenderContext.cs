@@ -47,6 +47,8 @@ namespace AxEngine
             return (T)RenderPipelines.FirstOrDefault(p => p is T);
         }
 
+        public IRenderPipeline PrimaryRenderPipeline => RenderApplication.Current.PrimaryRenderPipeline;
+
         public static RenderContext Current { get; set; }
 
         public BindingPoint LightBinding;

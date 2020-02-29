@@ -66,7 +66,7 @@ namespace AxEngine
             UsePipeline<DirectionalShadowRenderPipeline>();
 
             if (PrimaryRenderPipeline == null)
-                PrimaryRenderPipeline = Context.GetPipeline<DeferredRenderPipeline>();
+                PrimaryRenderPipeline = Context.PrimaryRenderPipeline;
 
             UsePipeline(PrimaryRenderPipeline);
 

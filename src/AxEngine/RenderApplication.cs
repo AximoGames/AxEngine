@@ -26,12 +26,12 @@ namespace AxEngine
 
         public Camera Camera => ctx.Camera;
 
-        private double CamAngle = 0;
-
         public RenderApplication(RenderApplicationStartup startup)
         {
             _startup = startup;
         }
+
+        public virtual IRenderPipeline PrimaryRenderPipeline => ctx.GetPipeline<DeferredRenderPipeline>();
 
         private static void PrintExtensions()
         {
@@ -205,34 +205,31 @@ namespace AxEngine
 
         public virtual void OnRenderFrame(FrameEventArgs e)
         {
-            CamAngle -= 0.01;
-            var pos = new Vector3((float)(Math.Cos(CamAngle) * 2f), (float)(Math.Sin(CamAngle) * 2f), 1.5f);
-            ILightObject light = ctx.LightObjects[0];
-
-            light.Position = pos;
-
             //--
             var ubo = new UniformBufferObject();
             ubo.Create();
-            var lightsData = new GlslLight[2];
-            lightsData[0].Position = ctx.LightObjects[0].Position;
-            lightsData[0].Color = new Vector3(0.5f, 0.5f, 0.5f);
-            lightsData[0].ShadowLayer = ctx.LightObjects[0].ShadowTextureIndex;
-            lightsData[0].DirectionalLight = ctx.LightObjects[0].LightType == LightType.Directional ? 1 : 0;
-            lightsData[0].LightSpaceMatrix = Matrix4.Transpose(ctx.LightObjects[0].LightCamera.ViewMatrix * ctx.LightObjects[0].LightCamera.ProjectionMatrix);
-            lightsData[0].Linear = 0.1f;
-            lightsData[0].Quadric = 0f;
+            if (ctx.LightObjects.Count >= 2)
+            {
+                var lightsData = new GlslLight[2];
+                lightsData[0].Position = ctx.LightObjects[0].Position;
+                lightsData[0].Color = new Vector3(0.5f, 0.5f, 0.5f);
+                lightsData[0].ShadowLayer = ctx.LightObjects[0].ShadowTextureIndex;
+                lightsData[0].DirectionalLight = ctx.LightObjects[0].LightType == LightType.Directional ? 1 : 0;
+                lightsData[0].LightSpaceMatrix = Matrix4.Transpose(ctx.LightObjects[0].LightCamera.ViewMatrix * ctx.LightObjects[0].LightCamera.ProjectionMatrix);
+                lightsData[0].Linear = 0.1f;
+                lightsData[0].Quadric = 0f;
 
-            lightsData[1].Position = ctx.LightObjects[1].Position;
-            lightsData[1].Color = new Vector3(0.5f, 0.5f, 0.5f);
-            lightsData[1].ShadowLayer = ctx.LightObjects[1].ShadowTextureIndex;
-            lightsData[1].DirectionalLight = ctx.LightObjects[1].LightType == LightType.Directional ? 1 : 0;
-            lightsData[1].LightSpaceMatrix = Matrix4.Transpose(ctx.LightObjects[1].LightCamera.ViewMatrix * ctx.LightObjects[1].LightCamera.ProjectionMatrix);
-            lightsData[1].Linear = 0.1f;
-            lightsData[1].Quadric = 0f;
-            ubo.SetData(lightsData);
+                lightsData[1].Position = ctx.LightObjects[1].Position;
+                lightsData[1].Color = new Vector3(0.5f, 0.5f, 0.5f);
+                lightsData[1].ShadowLayer = ctx.LightObjects[1].ShadowTextureIndex;
+                lightsData[1].DirectionalLight = ctx.LightObjects[1].LightType == LightType.Directional ? 1 : 0;
+                lightsData[1].LightSpaceMatrix = Matrix4.Transpose(ctx.LightObjects[1].LightCamera.ViewMatrix * ctx.LightObjects[1].LightCamera.ProjectionMatrix);
+                lightsData[1].Linear = 0.1f;
+                lightsData[1].Quadric = 0f;
+                ubo.SetData(lightsData);
 
-            ubo.SetBindingPoint(ctx.LightBinding);
+                ubo.SetBindingPoint(ctx.LightBinding);
+            }
 
             //--
             GL.Enable(EnableCap.DepthTest);

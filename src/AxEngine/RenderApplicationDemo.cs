@@ -168,8 +168,16 @@ namespace AxEngine
             });
         }
 
+        private double CamAngle = 0;
+
         public override void OnRenderFrame(FrameEventArgs e)
         {
+            CamAngle -= 0.01;
+            var pos = new Vector3((float)(Math.Cos(CamAngle) * 2f), (float)(Math.Sin(CamAngle) * 2f), 1.5f);
+            ILightObject light = ctx.LightObjects[0];
+
+            light.Position = pos;
+
             if (CurrentMouseWorldPositionIsValid)
             {
                 var cursor = ctx.GetObjectByName<IPosition>("GroundCursor");
