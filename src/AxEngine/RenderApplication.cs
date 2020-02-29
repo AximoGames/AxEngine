@@ -130,10 +130,6 @@ namespace AxEngine
             //     NearPlane = 0.01f,
             //     FarPlane = 100.0f,
             // };
-            ctx.Camera.CameraChangedInternal += () =>
-            {
-                UpdateMouseWorldPosition();
-            };
 
             ctx.AddObject(new ScreenSceneObject()
             {
@@ -148,6 +144,10 @@ namespace AxEngine
             StartFileListener();
 
             MovingObject = Camera;
+            ctx.Camera.CameraChangedInternal += () =>
+            {
+                UpdateMouseWorldPosition();
+            };
         }
 
         public void SetupPipelines()
