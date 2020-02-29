@@ -109,6 +109,8 @@ namespace AxEngine
         {
             ViewMatrix = GetViewMatrix(Position);
             ProjectionMatrix = GetProjectionMatrix();
+            ViewProjectionMatrix = ViewMatrix * ProjectionMatrix;
+            InvertedViewProjectionMatrix = Matrix4.Invert(ViewProjectionMatrix);
             CameraChangedInternal?.Invoke();
         }
 
@@ -150,8 +152,9 @@ namespace AxEngine
         }
 
         public Matrix4 ViewMatrix { get; private set; }
-
         public Matrix4 ProjectionMatrix { get; private set; }
+        public Matrix4 ViewProjectionMatrix { get; private set; }
+        public Matrix4 InvertedViewProjectionMatrix { get; private set; }
 
         public virtual Matrix4 GetViewMatrix(Vector3 eye)
         {
@@ -169,16 +172,6 @@ namespace AxEngine
         }
 
         protected abstract Matrix4 GetProjectionMatrix();
-
-        public Matrix4 GetViewProjectionMatrix()
-        {
-            return ViewMatrix * GetProjectionMatrix();
-        }
-
-        public Matrix4 GetInvertedViewProjectionMatrix()
-        {
-            return Matrix4.Invert(GetViewProjectionMatrix());
-        }
 
         // The field of view (FOV) is the vertical angle of the camera view, this has been discussed more in depth in a
         // previous tutorial, but in this tutorial you have also learned how we can use this to simulate a zoom feature.

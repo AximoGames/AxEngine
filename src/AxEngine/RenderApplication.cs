@@ -529,8 +529,8 @@ namespace AxEngine
             var y = (float)((((double)e.Y / (double)ScreenHeight) * 2.0) - 1.0);
 
             CurrentMousePosition = new Vector2(x, y);
-            //Console.WriteLine(CurrentMouseWorldPosition.ToString());
-            //Console.WriteLine(CurrentMousePosition.ToString());
+            Console.WriteLine(CurrentMouseWorldPosition.ToString());
+            Console.WriteLine(CurrentMousePosition.ToString());
         }
 
         protected void OnMouseWheel(MouseWheelEventArgs e)
@@ -573,6 +573,8 @@ namespace AxEngine
             }
             set
             {
+                if (_CurrentMousePosition == value)
+                    return;
                 _CurrentMousePosition = value;
                 UpdateMouseWorldPosition();
             }
@@ -628,7 +630,7 @@ namespace AxEngine
             vec.Z = z;
             vec.W = 1.0f;
 
-            vec = Vector4.Transform(vec, Camera.GetInvertedViewProjectionMatrix());
+            vec = Vector4.Transform(vec, Camera.InvertedViewProjectionMatrix);
 
             return vec.Xyz / vec.W;
         }
