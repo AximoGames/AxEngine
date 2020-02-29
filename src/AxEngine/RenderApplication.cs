@@ -144,7 +144,7 @@ namespace AxEngine
 
             //CursorVisible = false;
 
-            ctx.AddObject(new ScreenObject()
+            ctx.AddObject(new ScreenSceneObject()
             {
             });
 

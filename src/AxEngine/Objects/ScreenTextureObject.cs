@@ -5,24 +5,26 @@ using System.Collections.Generic;
 
 namespace AxEngine
 {
-    public class ScreenObject : GameObject, IRenderTarget
+    public class ScreenTextureObject : GameObject, IRenderTarget, IScaleRotate, IPosition
     {
         private Shader _shader;
+
+        public Vector3 Scale { get; set; } = Vector3.One;
+        public Vector3 Rotate { get; set; }
+        public Vector3 Position { get; set; }
 
         private float[] _vertices = DataHelper.Quad;
 
         private VertexArrayObject vao;
         private BufferObject vbo;
 
-        private Texture SourceTexture;
+        protected Texture SourceTexture;
 
         public override void Init()
         {
             UsePipeline<ScreenPipeline>();
 
             _shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag");
-
-            SourceTexture = Context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.GetDestinationTexture();
 
             vbo = new BufferObject();
             vbo.Create();
@@ -38,6 +40,15 @@ namespace AxEngine
             vao.SetData(_vertices);
         }
 
+        public Matrix4 GetModelMatrix()
+        {
+            return Matrix4.CreateScale(Scale)
+            * Matrix4.CreateRotationX(Rotate.X)
+            * Matrix4.CreateRotationY(Rotate.Y)
+            * Matrix4.CreateRotationZ(Rotate.Z)
+            * Matrix4.CreateTranslation(Position);
+        }
+
         public void OnRender()
         {
             if (!(Context.CurrentPipeline is ScreenPipeline))
@@ -45,13 +56,9 @@ namespace AxEngine
 
             vao.Use();
 
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            GL.Disable(EnableCap.DepthTest);
-            GL.ClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-
             _shader.Use();
             SourceTexture.Use();
+            _shader.SetMatrix4("model", GetModelMatrix());
 
             //GL.Disable(EnableCap.CullFace);
             vao.Draw();
