@@ -256,7 +256,7 @@ namespace AxEngine
         // Just loads the entire file into a string.
         private static string LoadFile(string path)
         {
-            using (var sr = new StreamReader(Path.Combine(DirectoryHelper.RootDir, path), Encoding.UTF8))
+            using (var sr = new StreamReader(DirectoryHelper.GetPath(path), Encoding.UTF8))
             {
                 return sr.ReadToEnd();
             }
