@@ -1,5 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 //using System.Drawing.Imaging;
 
@@ -8,10 +9,17 @@ namespace AxEngine
 
     public class FrameBuffer : IObjectLabel
     {
-        [Obsolete("Framebuffer can have multiple Targets")]
-        private Texture _DestinationTexture;
-        [Obsolete("Framebuffer can have multiple Targets")]
-        public Texture DestinationTexture => _DestinationTexture;
+        public List<Texture> DestinationTextures = new List<Texture>();
+
+        public Texture GetDestinationTexture()
+        {
+            return DestinationTextures[0];
+        }
+
+        public Texture GetDestinationTexture(int attachmentIndex)
+        {
+            return DestinationTextures[attachmentIndex];
+        }
 
         private int _Handle;
         public int Handle => _Handle;
@@ -56,12 +64,13 @@ namespace AxEngine
 
         public void InitNormal()
         {
-            _DestinationTexture = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, Width, Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, IntPtr.Zero);
-            _DestinationTexture.ObjectLabel = ObjectLabel;
-            _DestinationTexture.SetLinearFilter();
-            _DestinationTexture.Use();
+            var txt = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, Width, Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, IntPtr.Zero);
+            txt.ObjectLabel = ObjectLabel;
+            txt.SetLinearFilter();
+            txt.Use();
+            DestinationTextures.Add(txt);
 
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _DestinationTexture.Handle, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, txt.Handle, 0);
 
             Check();
         }
@@ -76,10 +85,11 @@ namespace AxEngine
         {
             var layers = 2;
 
-            _DestinationTexture = Texture.CreateArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
-            _DestinationTexture.Use();
+            var txt = Texture.CreateArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+            txt.Use();
+            DestinationTextures.Add(txt);
 
-            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, _DestinationTexture.Handle, 0);
+            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, txt.Handle, 0);
             GL.DrawBuffer(DrawBufferMode.None);
             GL.ReadBuffer(ReadBufferMode.None);
 
@@ -90,10 +100,11 @@ namespace AxEngine
         {
             var layers = 2;
 
-            _DestinationTexture = Texture.CreateCubeArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
-            _DestinationTexture.Use();
+            var txt = Texture.CreateCubeArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+            txt.Use();
+            DestinationTextures.Add(txt);
 
-            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, _DestinationTexture.Handle, 0);
+            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, txt.Handle, 0);
             GL.DrawBuffer(DrawBufferMode.None);
             GL.ReadBuffer(ReadBufferMode.None);
 

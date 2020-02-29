@@ -105,7 +105,7 @@ namespace AxEngine
 
             txt0.Use(TextureUnit.Texture0);
             txt1.Use(TextureUnit.Texture1);
-            Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.DestinationTexture.Use(TextureUnit.Texture2);
+            Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Use(TextureUnit.Texture2);
 
             _Shader.Use();
 
@@ -125,7 +125,7 @@ namespace AxEngine
 
             //var shadowCamera = GetShadowLight().LightCamera;
             _Shader.SetFloat("far_plane", 25f);
-            Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.DestinationTexture.Use(TextureUnit.Texture3);
+            Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Use(TextureUnit.Texture3);
             _Shader.SetInt("depthMap", 3);
 
             _Shader.BindBlock("lightsArray", Context.LightBinding);

@@ -22,7 +22,7 @@ namespace AxEngine
 
             _shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag");
 
-            SourceTexture = Context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.DestinationTexture;
+            SourceTexture = Context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.GetDestinationTexture();
 
             vbo = new BufferObject();
             vbo.Create();

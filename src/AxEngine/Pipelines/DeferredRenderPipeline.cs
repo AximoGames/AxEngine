@@ -121,8 +121,8 @@ namespace AxEngine
             gNormal.Use(TextureUnit.Texture1);
             gAlbedoSpec.Use(TextureUnit.Texture2);
 
-            context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.DestinationTexture.Use(TextureUnit.Texture3);
-            context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.DestinationTexture.Use(TextureUnit.Texture4);
+            context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Use(TextureUnit.Texture3);
+            context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Use(TextureUnit.Texture4);
 
             _DefLightShader.SetVector3("viewPos", camera.Position);
 
