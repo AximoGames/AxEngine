@@ -57,7 +57,7 @@ namespace AxEngine
             * Matrix4.CreateTranslation(Position);
         }
 
-        public RectangleF RectangleNDC
+        public RectangleF RectangleUV
         {
             set
             {
@@ -78,17 +78,9 @@ namespace AxEngine
                 var pos1 = (new Vector2(value.X, value.Y) * RenderContext.Current.PixelToUVFactor);
                 var pos2 = new Vector2(value.Right, value.Bottom) * RenderContext.Current.PixelToUVFactor;
 
-                RectangleNDC = new RectangleF(pos1.X, pos1.Y, pos2.X - pos1.X, pos2.Y - pos1.Y);
+                RectangleUV = new RectangleF(pos1.X, pos1.Y, pos2.X - pos1.X, pos2.Y - pos1.Y);
             }
         }
-
-        // private Vector2 GetPos(float x, float y)
-        // {
-        //     // float scaleX = 1 / (float)RenderContext.Current.ScreenSize.X;
-        //     // float scaleY = 1 / (float)RenderContext.Current.ScreenSize.Y;
-        //     // return new Vector2(x * scaleX, y * scaleY);
-        //     return 
-        // }
 
         public void OnRender()
         {
