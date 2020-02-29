@@ -322,7 +322,7 @@ namespace AxEngine
                 if (e.Shift)
                 {
                     DebugCamera = !DebugCamera;
-                    var debugLine = ctx.GetObjectByName("DebugLine") as Line;
+                    var debugLine = ctx.GetObjectByName("DebugLine") as LineObject;
                     debugLine.Enabled = DebugCamera;
                     Console.WriteLine($"DebugCamera: {DebugCamera}");
                 }

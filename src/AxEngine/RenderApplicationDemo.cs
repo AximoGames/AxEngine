@@ -26,31 +26,31 @@ namespace AxEngine
                 // RenderShadow = false,
                 //PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
             });
-            ctx.AddObject(new Grid()
+            ctx.AddObject(new GridObject()
             {
                 Name = "Grid",
                 ModelMatrix = Matrix4.CreateTranslation(0f, 0f, 0.01f),
                 //Debug = true,
             });
-            ctx.AddObject(new Grid()
+            ctx.AddObject(new GridObject()
             {
                 Name = "Grid",
                 ModelMatrix = Matrix4.CreateRotationY((float)Math.PI / 2) * Matrix4.CreateTranslation(-10f, 0f, 0.01f),
                 //Debug = true,
             });
-            ctx.AddObject(new Grid()
+            ctx.AddObject(new GridObject()
             {
                 Name = "Grid",
                 ModelMatrix = Matrix4.CreateRotationX((float)Math.PI / 2) * Matrix4.CreateTranslation(0f, 10f, 0.01f),
                 //Debug = true,
             });
-            ctx.AddObject(new Lines()
+            ctx.AddObject(new CrossLinesObject()
             {
                 Name = "CenterCross",
                 ModelMatrix = Matrix4.CreateScale(2.0f) * Matrix4.CreateTranslation(0f, 0f, 0.02f),
                 //Debug = true,
             });
-            ctx.AddObject(new Line()
+            ctx.AddObject(new LineObject()
             {
                 Name = "DebugLine",
                 //Enabled = false,
@@ -153,7 +153,7 @@ namespace AxEngine
             });
 
             // For performance reasons, skybox should rendered as last
-            ctx.AddObject(new Skybox()
+            ctx.AddObject(new SkyboxObject()
             {
                 Name = "Sky",
                 // RenderShadow = false,

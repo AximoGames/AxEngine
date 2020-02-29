@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace AxEngine
 {
-    public class Lines : GameObject, IRenderableObject
+    public class CrossLinesObject : GameObject, IRenderableObject
     {
 
         public Camera Camera => Context.Camera;
