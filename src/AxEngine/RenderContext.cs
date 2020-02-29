@@ -34,12 +34,14 @@ namespace AxEngine
             set
             {
                 _ScreenSize = value;
+                ScreenAspectRatio = (float)value.X / (float)value.Y;
                 PixelToUVFactor = new Vector2(1.0f / _ScreenSize.X, 1.0f / _ScreenSize.Y);
                 PixelToNDCFactor = PixelToUVFactor * 2;
             }
         }
         public Vector2 PixelToUVFactor { get; private set; }
         public Vector2 PixelToNDCFactor { get; private set; }
+        public float ScreenAspectRatio { get; private set; }
 
         public T GetPipeline<T>()
             where T : class, IRenderPipeline

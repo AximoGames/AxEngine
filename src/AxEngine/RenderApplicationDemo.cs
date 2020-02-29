@@ -55,8 +55,7 @@ namespace AxEngine
             {
                 Name = "ScreenTexture1",
                 TexturePath = "Ressources/woodenbox.png",
-                //Rectangle2 = new RectangleF(0, 0, 0.2f, 0.2f),
-                RectanglePixels = new RectangleF(000, 0, 600f, 600f),
+                RectanglePixels = new RectangleF(000, 0, 30f, 30f),
             });
             ctx.AddObject(new LineObject()
             {

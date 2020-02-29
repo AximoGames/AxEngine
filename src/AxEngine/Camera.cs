@@ -35,6 +35,13 @@ namespace AxEngine
     {
         public override CameraType Type => CameraType.Orthographic;
 
+        private Vector2 _Size = new Vector2(20, 20);
+        public Vector2 Size
+        {
+            get { return _Size; }
+            set { if (_Size == value) return; _Size = value; OnCameraChanged(); }
+        }
+
         public OrthographicCamera(Vector3 position) : base(position)
         {
         }
@@ -44,7 +51,8 @@ namespace AxEngine
             // float near_plane = 0.01f;
             // float far_plane = 7.5f;
 
-            return Matrix4.CreateOrthographicOffCenter(-10, 10, -10, 10, NearPlane, FarPlane);
+            //return Matrix4.CreateOrthographicOffCenter(0, 10 * (800 / (float)600), -10, 0, NearPlane, FarPlane);
+            return Matrix4.CreateOrthographic(Size.X, Size.Y, NearPlane, FarPlane);
         }
 
     }
