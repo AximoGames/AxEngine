@@ -111,6 +111,22 @@ namespace AxEngine
                 LightObjects.Add(lightObj);
         }
 
+        public void RemoveObject(IGameObject obj)
+        {
+            AllObjects.Remove(obj);
+
+            if (obj is IShadowObject shadowObj)
+                ShadowObjects.Remove(shadowObj);
+
+            if (obj is IRenderableObject renderableObj)
+            {
+                RenderableObjects.Remove(renderableObj);
+            }
+
+            if (obj is ILightObject lightObj)
+                LightObjects.Remove(lightObj);
+        }
+
         private void EmmitLogMessage(DebugType type, DebugSeverity severity, string message)
         {
             var handle = GCHandle.Alloc(message, GCHandleType.Pinned);
