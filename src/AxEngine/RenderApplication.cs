@@ -362,6 +362,9 @@ namespace AxEngine
 
         private void OnUpdateFrameInternal(FrameEventArgs e)
         {
+            foreach (var anim in ctx.Animations)
+                anim.ProcessAnimation();
+
             OnUpdateFrame(e);
 
             ProcessTaskQueue();

@@ -4,6 +4,7 @@ using OpenTK;
 
 namespace AxEngine
 {
+    public delegate void AnimationFinishedDelegate();
 
     public enum CameraType
     {
