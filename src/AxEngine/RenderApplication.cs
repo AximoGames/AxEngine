@@ -319,33 +319,35 @@ namespace AxEngine
         private void OnKeyDownInternal(KeyboardKeyEventArgs e)
         {
             OnKeyDown(e);
-
-            var kbState = Keyboard.GetState();
-            if (kbState[Key.C])
+            if (DefaultKeyBindings)
             {
-                if (e.Shift)
+                var kbState = Keyboard.GetState();
+                if (kbState[Key.C])
                 {
-                    DebugCamera = !DebugCamera;
-                    var debugLine = ctx.GetObjectByName("DebugLine") as LineObject;
-                    debugLine.Enabled = DebugCamera;
-                    Console.WriteLine($"DebugCamera: {DebugCamera}");
+                    if (e.Shift)
+                    {
+                        DebugCamera = !DebugCamera;
+                        var debugLine = ctx.GetObjectByName("DebugLine") as LineObject;
+                        debugLine.Enabled = DebugCamera;
+                        Console.WriteLine($"DebugCamera: {DebugCamera}");
+                    }
+                    else
+                    {
+                        MovingObject = Camera;
+                    }
                 }
-                else
+                if (kbState[Key.B])
                 {
-                    MovingObject = Camera;
+                    MovingObject = ctx.GetObjectByName("Box1") as IPosition;
                 }
-            }
-            if (kbState[Key.B])
-            {
-                MovingObject = ctx.GetObjectByName("Box1") as IPosition;
-            }
-            if (kbState[Key.L])
-            {
-                MovingObject = ctx.GetObjectByName("StaticLight") as IPosition;
-            }
-            if (kbState[Key.J])
-            {
-                Camera.Position = MovingObject.Position;
+                if (kbState[Key.L])
+                {
+                    MovingObject = ctx.GetObjectByName("StaticLight") as IPosition;
+                }
+                if (kbState[Key.J])
+                {
+                    Camera.Position = MovingObject.Position;
+                }
             }
         }
 
@@ -355,6 +357,8 @@ namespace AxEngine
         }
 
         protected virtual void OnUpdateFrame(FrameEventArgs e) { }
+
+        public bool DefaultKeyBindings = true;
 
         private void OnUpdateFrameInternal(FrameEventArgs e)
         {
@@ -367,147 +371,151 @@ namespace AxEngine
                 return;
             }
 
-            var input = Keyboard.GetState();
-
-            if (input.IsKeyDown(Key.Escape))
+            if (DefaultKeyBindings)
             {
-                window.Exit();
-                Environment.Exit(0);
-                return;
-            }
 
-            var kbState = Keyboard.GetState();
+                var input = Keyboard.GetState();
 
-            IPosition pos = MovingObject;
-            Camera cam = pos as Camera;
-            IScaleRotate rot = MovingObject as IScaleRotate;
-            bool simpleMove = cam == null;
+                if (input.IsKeyDown(Key.Escape))
+                {
+                    window.Exit();
+                    Environment.Exit(0);
+                    return;
+                }
 
-            var stepSize = 0.1f;
-            if (kbState[Key.ControlLeft])
-                stepSize = 0.01f;
+                var kbState = Keyboard.GetState();
 
-            if (kbState[Key.W])
-            {
+                IPosition pos = MovingObject;
+                Camera cam = pos as Camera;
+                IScaleRotate rot = MovingObject as IScaleRotate;
+                bool simpleMove = cam == null;
+
+                var stepSize = 0.1f;
+                if (kbState[Key.ControlLeft])
+                    stepSize = 0.01f;
+
+                if (kbState[Key.W])
+                {
+                    if (simpleMove)
+                        pos.Position = new Vector3(
+                            pos.Position.X,
+                            pos.Position.Y + stepSize,
+                            pos.Position.Z
+                        );
+                    else
+                        pos.Position = new Vector3(
+                            pos.Position.X + (float)Math.Cos(cam.Facing) * stepSize,
+                            pos.Position.Y + (float)Math.Sin(cam.Facing) * stepSize,
+                            pos.Position.Z
+                        );
+                }
+
+                if (kbState[Key.S])
+                {
+                    if (simpleMove)
+                        pos.Position = new Vector3(
+                            pos.Position.X,
+                            pos.Position.Y - stepSize,
+                            pos.Position.Z
+                        );
+                    else
+                        pos.Position = new Vector3(
+                            pos.Position.X - (float)Math.Cos(cam.Facing) * stepSize,
+                            pos.Position.Y - (float)Math.Sin(cam.Facing) * stepSize,
+                            pos.Position.Z
+                        );
+                }
+
+                if (kbState[Key.A])
+                {
+                    if (simpleMove)
+                        pos.Position = new Vector3(
+                            pos.Position.X - stepSize,
+                            pos.Position.Y,
+                            pos.Position.Z
+                        );
+                    else
+                        pos.Position = new Vector3(
+                            pos.Position.X + (float)Math.Cos(cam.Facing + Math.PI / 2) * stepSize,
+                            pos.Position.Y + (float)Math.Sin(cam.Facing + Math.PI / 2) * stepSize,
+                            pos.Position.Z
+                        );
+                }
+
+                if (kbState[Key.D])
+                {
+                    if (simpleMove)
+                        pos.Position = new Vector3(
+                            pos.Position.X + stepSize,
+                            pos.Position.Y,
+                            pos.Position.Z
+                        );
+                    else
+                        pos.Position = new Vector3(
+                            pos.Position.X - (float)Math.Cos(cam.Facing + Math.PI / 2) * stepSize,
+                            pos.Position.Y - (float)Math.Sin(cam.Facing + Math.PI / 2) * stepSize,
+                            pos.Position.Z
+                        );
+                }
+
+                if (kbState[Key.Left])
+                    MouseDelta.X = -2;
+
+                if (kbState[Key.Right])
+                    MouseDelta.X = 2;
+
+                if (kbState[Key.Up])
+                    MouseDelta.Y = -1;
+
+                if (kbState[Key.Down])
+                    MouseDelta.Y = 1;
+
+                if (kbState[Key.PageUp])
+                    UpDownDelta = -3;
+
+                if (kbState[Key.PageDown])
+                    UpDownDelta = 3;
+
+                MouseSpeed[0] *= 0.9f;
+                MouseSpeed[1] *= 0.9f;
+                MouseSpeed[2] *= 0.9f;
+                MouseSpeed[0] -= MouseDelta.X / 1000f;
+                MouseSpeed[1] -= MouseDelta.Y / 1000f;
+                MouseSpeed[2] -= UpDownDelta / 1000f;
+                MouseDelta = new Vector2();
+                UpDownDelta = 0;
+
+                if (cam != null)
+                {
+                    cam.Facing += MouseSpeed[0] * 2;
+                    cam.Pitch += MouseSpeed[1] * 2;
+                }
+                else if (rot != null)
+                {
+                    rot.Rotate = new Vector3(
+                        rot.Rotate.X + MouseSpeed[1] * 2,
+                        rot.Rotate.Y,
+                        rot.Rotate.Z + MouseSpeed[0] * 2
+                    );
+                }
+                //Console.WriteLine(Camera.Pitch + " : " + Math.Round(MouseSpeed[1], 3));
                 if (simpleMove)
                     pos.Position = new Vector3(
                         pos.Position.X,
-                        pos.Position.Y + stepSize,
-                        pos.Position.Z
+                        pos.Position.Y,
+                        pos.Position.Z + MouseSpeed[2] * 2
                     );
                 else
-                    pos.Position = new Vector3(
-                        pos.Position.X + (float)Math.Cos(cam.Facing) * stepSize,
-                        pos.Position.Y + (float)Math.Sin(cam.Facing) * stepSize,
-                        pos.Position.Z
-                    );
-            }
-
-            if (kbState[Key.S])
-            {
-                if (simpleMove)
                     pos.Position = new Vector3(
                         pos.Position.X,
-                        pos.Position.Y - stepSize,
-                        pos.Position.Z
-                    );
-                else
-                    pos.Position = new Vector3(
-                        pos.Position.X - (float)Math.Cos(cam.Facing) * stepSize,
-                        pos.Position.Y - (float)Math.Sin(cam.Facing) * stepSize,
-                        pos.Position.Z
-                    );
-            }
-
-            if (kbState[Key.A])
-            {
-                if (simpleMove)
-                    pos.Position = new Vector3(
-                        pos.Position.X - stepSize,
                         pos.Position.Y,
-                        pos.Position.Z
+                        pos.Position.Z + MouseSpeed[2] * 2
                     );
-                else
-                    pos.Position = new Vector3(
-                        pos.Position.X + (float)Math.Cos(cam.Facing + Math.PI / 2) * stepSize,
-                        pos.Position.Y + (float)Math.Sin(cam.Facing + Math.PI / 2) * stepSize,
-                        pos.Position.Z
-                    );
-            }
 
-            if (kbState[Key.D])
-            {
-                if (simpleMove)
-                    pos.Position = new Vector3(
-                        pos.Position.X + stepSize,
-                        pos.Position.Y,
-                        pos.Position.Z
-                    );
-                else
-                    pos.Position = new Vector3(
-                        pos.Position.X - (float)Math.Cos(cam.Facing + Math.PI / 2) * stepSize,
-                        pos.Position.Y - (float)Math.Sin(cam.Facing + Math.PI / 2) * stepSize,
-                        pos.Position.Z
-                    );
-            }
-
-            if (kbState[Key.Left])
-                MouseDelta.X = -2;
-
-            if (kbState[Key.Right])
-                MouseDelta.X = 2;
-
-            if (kbState[Key.Up])
-                MouseDelta.Y = -1;
-
-            if (kbState[Key.Down])
-                MouseDelta.Y = 1;
-
-            if (kbState[Key.PageUp])
-                UpDownDelta = -3;
-
-            if (kbState[Key.PageDown])
-                UpDownDelta = 3;
-
-            MouseSpeed[0] *= 0.9f;
-            MouseSpeed[1] *= 0.9f;
-            MouseSpeed[2] *= 0.9f;
-            MouseSpeed[0] -= MouseDelta.X / 1000f;
-            MouseSpeed[1] -= MouseDelta.Y / 1000f;
-            MouseSpeed[2] -= UpDownDelta / 1000f;
-            MouseDelta = new Vector2();
-            UpDownDelta = 0;
-
-            if (cam != null)
-            {
-                cam.Facing += MouseSpeed[0] * 2;
-                cam.Pitch += MouseSpeed[1] * 2;
-            }
-            else if (rot != null)
-            {
-                rot.Rotate = new Vector3(
-                    rot.Rotate.X + MouseSpeed[1] * 2,
-                    rot.Rotate.Y,
-                    rot.Rotate.Z + MouseSpeed[0] * 2
-                );
-            }
-            //Console.WriteLine(Camera.Pitch + " : " + Math.Round(MouseSpeed[1], 3));
-            if (simpleMove)
-                pos.Position = new Vector3(
-                    pos.Position.X,
-                    pos.Position.Y,
-                    pos.Position.Z + MouseSpeed[2] * 2
-                );
-            else
-                pos.Position = new Vector3(
-                    pos.Position.X,
-                    pos.Position.Y,
-                    pos.Position.Z + MouseSpeed[2] * 2
-                );
-
-            if (kbState[Key.F11])
-            {
-                Reload();
+                if (kbState[Key.F11])
+                {
+                    Reload();
+                }
             }
 
             // if (kbState[Key.F12])
@@ -579,7 +587,8 @@ namespace AxEngine
         private void OnMouseWheelInternal(MouseWheelEventArgs e)
         {
             OnMouseWheel(e);
-            Camera.Fov -= e.DeltaPrecise;
+            if (DefaultKeyBindings)
+                Camera.Fov -= e.DeltaPrecise;
         }
 
         protected void OnResize(EventArgs e)

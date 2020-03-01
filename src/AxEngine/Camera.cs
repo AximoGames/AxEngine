@@ -51,7 +51,7 @@ namespace AxEngine
             // float near_plane = 0.01f;
             // float far_plane = 7.5f;
 
-            //return Matrix4.CreateOrthographicOffCenter(0, 10 * (800 / (float)600), -10, 0, NearPlane, FarPlane);
+            //return Matrix4.CreateOrthographicOffCenter(-Size.X / 2, Size.X / 2, -Size.Y / 2, Size.Y / 2, NearPlane, FarPlane);
             return Matrix4.CreateOrthographic(Size.X, Size.Y, NearPlane, FarPlane);
         }
 
