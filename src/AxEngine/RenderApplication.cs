@@ -85,13 +85,15 @@ namespace AxEngine
 
             window = new Window(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle);
             window.Location = new System.Drawing.Point(1920 / 2 + 10, 10);
-            window.RenderFrame += (s, e) => OnRenderFrame(e);
-            window.UpdateFrame += (s, e) => OnUpdateFrame(e);
-            window.MouseMove += (s, e) => OnMouseMove(e);
-            window.KeyDown += (s, e) => OnKeyDown(e);
-            window.MouseWheel += (s, e) => OnMouseWheel(e);
-            window.Unload += (s, e) => OnUnload(e);
-            window.Resize += (s, e) => OnScreenResize();
+            window.RenderFrame += (s, e) => OnRenderFrameInternal(e);
+            window.UpdateFrame += (s, e) => OnUpdateFrameInternal(e);
+            window.MouseMove += (s, e) => OnMouseMoveInternal(e);
+            window.KeyDown += (s, e) => OnKeyDownInternal(e);
+            window.MouseDown += (s, e) => OnMouseDownInternal(e);
+            window.MouseUp += (s, e) => OnMouseUpInternal(e);
+            window.MouseWheel += (s, e) => OnMouseWheelInternal(e);
+            window.Unload += (s, e) => OnUnloadInternal(e);
+            window.Resize += (s, e) => OnScreenResizeInternal();
 
             var vendor = GL.GetString(StringName.Vendor);
             var version = GL.GetString(StringName.Version);
@@ -203,8 +205,11 @@ namespace AxEngine
             ShaderWatcher.EnableRaisingEvents = true;
         }
 
-        public virtual void OnRenderFrame(FrameEventArgs e)
+        protected virtual void OnRenderFrame(FrameEventArgs e) { }
+
+        private void OnRenderFrameInternal(FrameEventArgs e)
         {
+            OnRenderFrame(e);
             //--
             var ubo = new UniformBufferObject();
             ubo.Create();
@@ -308,8 +313,13 @@ namespace AxEngine
         private IPosition MovingObject;
 
         private bool DebugCamera;
-        protected void OnKeyDown(KeyboardKeyEventArgs e)
+
+        protected virtual void OnKeyDown(KeyboardKeyEventArgs e) { }
+
+        private void OnKeyDownInternal(KeyboardKeyEventArgs e)
         {
+            OnKeyDown(e);
+
             var kbState = Keyboard.GetState();
             if (kbState[Key.C])
             {
@@ -339,13 +349,17 @@ namespace AxEngine
             }
         }
 
-        protected void OnScreenResize()
+        protected void OnScreenResizeInternal()
         {
             ctx.OnScreenResize();
         }
 
-        protected virtual void OnUpdateFrame(FrameEventArgs e)
+        protected virtual void OnUpdateFrame(FrameEventArgs e) { }
+
+        private void OnUpdateFrameInternal(FrameEventArgs e)
         {
+            OnUpdateFrame(e);
+
             ProcessTaskQueue();
 
             if (!window.Focused)
@@ -529,8 +543,12 @@ namespace AxEngine
                     reloadable.OnReload();
         }
 
-        protected void OnMouseMove(MouseMoveEventArgs e)
+        protected virtual void OnMouseMove(MouseMoveEventArgs e) { }
+
+        private void OnMouseMoveInternal(MouseMoveEventArgs e)
         {
+            OnMouseMove(e);
+
             if (e.Mouse.LeftButton == ButtonState.Pressed)
                 MouseDelta = new Vector2(e.XDelta, e.YDelta);
 
@@ -542,8 +560,25 @@ namespace AxEngine
             // Console.WriteLine(CurrentMousePosition.ToString());
         }
 
-        protected void OnMouseWheel(MouseWheelEventArgs e)
+        protected virtual void OnMouseDown(MouseButtonEventArgs e) { }
+
+        private void OnMouseDownInternal(MouseButtonEventArgs e)
         {
+            OnMouseDown(e);
+        }
+
+        protected virtual void OnMouseUp(MouseButtonEventArgs e) { }
+
+        private void OnMouseUpInternal(MouseButtonEventArgs e)
+        {
+            OnMouseUp(e);
+        }
+
+        protected virtual void OnMouseWheel(MouseWheelEventArgs e) { }
+
+        private void OnMouseWheelInternal(MouseWheelEventArgs e)
+        {
+            OnMouseWheel(e);
             Camera.Fov -= e.DeltaPrecise;
         }
 
@@ -553,8 +588,12 @@ namespace AxEngine
             Camera.AspectRatio = ctx.ScreenSize.X / (float)ctx.ScreenSize.Y;
         }
 
-        protected void OnUnload(EventArgs e)
+        protected virtual void OnUnload(EventArgs e) { }
+
+        private void OnUnloadInternal(EventArgs e)
         {
+            OnUnload(e);
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
             GL.UseProgram(0);
