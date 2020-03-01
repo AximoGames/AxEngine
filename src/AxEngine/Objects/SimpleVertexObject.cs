@@ -34,7 +34,7 @@ namespace AxEngine
 
         public Material Material { get; set; } = Material.GetDefault();
 
-        public Matrix4 PositionMatrix = Matrix4.Identity;
+        public Matrix4 PositionMatrix = RenderApplication.Current.WorldPositionMatrix;
 
         public Matrix4 GetModelMatrix()
         {

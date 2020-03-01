@@ -167,12 +167,12 @@ namespace AxEngine
             });
         }
 
-        private double CamAngle = 0;
+        private double LightAngle = 0;
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            CamAngle -= 0.01;
-            var pos = new Vector3((float)(Math.Cos(CamAngle) * 2f), (float)(Math.Sin(CamAngle) * 2f), 1.5f);
+            LightAngle -= 0.01;
+            var pos = new Vector3((float)(Math.Cos(LightAngle) * 2f), (float)(Math.Sin(LightAngle) * 2f), 1.5f);
             ILightObject light = ctx.LightObjects[0];
 
             light.Position = pos;
