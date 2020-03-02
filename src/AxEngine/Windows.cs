@@ -30,6 +30,20 @@ namespace AxEngine
             base.OnLoad(e);
         }
 
+        protected override void OnFocusedChanged(EventArgs e)
+        {
+            if (Focused)
+            {
+                TargetRenderFrequency = 1 / 60.0;
+                TargetUpdatePeriod = 1 / 60.0;
+            }
+            else
+            {
+                TargetRenderFrequency = 1 / 30.0;
+                TargetUpdatePeriod = 1 / 30.0;
+            }
+        }
+
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
