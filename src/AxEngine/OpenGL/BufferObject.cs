@@ -42,16 +42,21 @@ namespace AxEngine
 
         public void Use()
         {
-            if (CurrentHandle == _Handle)
-                return;
-            CurrentHandle = _Handle;
+            Use(Target, _Handle);
+        }
 
-            GL.BindBuffer(Target, _Handle);
+        protected static void Use(BufferTarget target, int handle)
+        {
+            if (CurrentHandle == handle)
+                return;
+            CurrentHandle = handle;
+
+            GL.BindBuffer(target, handle);
         }
 
         private void UseDefault()
         {
-            GL.BindBuffer(Target, 0);
+            Use(Target, 0);
         }
 
         public void Free()

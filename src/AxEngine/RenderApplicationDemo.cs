@@ -171,16 +171,20 @@ namespace AxEngine
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            LightAngle -= 0.01;
-            var pos = new Vector3((float)(Math.Cos(LightAngle) * 2f), (float)(Math.Sin(LightAngle) * 2f), 1.5f);
-            ILightObject light = ctx.LightObjects[0];
+            if (ctx.LightObjects.Count > 0)
+            {
+                LightAngle -= 0.01;
+                var pos = new Vector3((float)(Math.Cos(LightAngle) * 2f), (float)(Math.Sin(LightAngle) * 2f), 1.5f);
+                ILightObject light = ctx.LightObjects[0];
 
-            light.Position = pos;
+                light.Position = pos;
+            }
 
             if (CurrentMouseWorldPositionIsValid)
             {
                 var cursor = ctx.GetObjectByName<IPosition>("GroundCursor");
-                cursor.Position = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.Position.Z);
+                if (cursor != null)
+                    cursor.Position = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.Position.Z);
             }
         }
 

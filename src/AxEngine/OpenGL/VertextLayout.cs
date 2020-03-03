@@ -39,11 +39,13 @@ namespace AxEngine
 
         internal void InitAttributes()
         {
+            ObjectManager.PushDebugGroup("Init", "VertexLayout");
             foreach (var attr in Attributes)
             {
                 GL.EnableVertexAttribArray(attr.Index);
                 GL.VertexAttribPointer(attr.Index, attr.Size, attr.Type, attr.Normalized, attr.Stride, attr.Offset);
             }
+            ObjectManager.PopDebugGroup();
         }
 
         private static VertexAttribPointerType GetVertexAttribPointerType(Type type)
