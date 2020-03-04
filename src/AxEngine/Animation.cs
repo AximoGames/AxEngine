@@ -2,6 +2,9 @@ using System;
 
 namespace AxEngine
 {
+
+    public delegate float AnimationFunc(float position);
+
     public class Animation
     {
         public bool Enabled;
@@ -45,14 +48,42 @@ namespace AxEngine
             }
         }
 
+        public AnimationFunc AnimationFunc;
+
         public float Value
         {
             get
             {
-                return 1 - Position;
+                if (AnimationFunc == null)
+                    return Position;
+
+                return AnimationFunc(Position);
             }
         }
 
+    }
+
+    public static class AnimationFuncs
+    {
+        public static AnimationFunc Linear()
+        {
+            return (p) => { return p; };
+        }
+
+        public static AnimationFunc LinearReverse()
+        {
+            return (p) => { return 1 - p; };
+        }
+
+        public static AnimationFunc Linear(float scale)
+        {
+            return (p) => { return p * scale; };
+        }
+
+        public static AnimationFunc LinearReverse(float scale)
+        {
+            return (p) => { return scale - (p * scale); };
+        }
     }
 
 }
