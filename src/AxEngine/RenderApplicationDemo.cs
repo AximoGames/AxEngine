@@ -107,9 +107,9 @@ namespace AxEngine
                 //Enabled = false,
             });
 
-            ctx.AddObject(new TestObject()
+            ctx.AddObject(new SphereObject()
             {
-                Name = "Box3",
+                Name = "Sphere1",
                 Scale = new Vector3(1),
                 Position = new Vector3(3f, 3f, 0.5f),
                 //Debug = true,
