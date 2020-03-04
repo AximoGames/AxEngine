@@ -8,7 +8,7 @@ namespace AxEngine
 
     public class VertexArrayObject
     {
-        private int _Handle;
+        private int _Handle = -1;
         public int Handle => _Handle;
 
         public int VertexCount { get; private set; }
@@ -93,8 +93,11 @@ namespace AxEngine
         {
             if (Initialized)
                 return;
-            // if (_vbo == null)
-            //     _vbo = CreateVBO();
+            if (_Handle == -1)
+                Create();
+            Use();
+            if (_vbo == null)
+                _vbo = CreateVBO();
             // if (_ebo == null)
             //     _ebo = CreateEBO();
             Layout.InitAttributes();
@@ -103,13 +106,14 @@ namespace AxEngine
 
         internal void SetData(float[] vertices, uint[] indicies = null)
         {
-            Use();
             EnsureInitialized();
             _vbo.SetData(vertices);
             VertexCount = (vertices.Length * sizeof(float)) / Layout.Stride;
             //          UseDefault();
-            if (_ebo != null && indicies != null)
+            if (indicies != null)
             {
+                if (_ebo == null)
+                    _ebo = CreateEBO();
                 _ebo.SetData(indicies);
             }
         }
@@ -117,13 +121,14 @@ namespace AxEngine
         internal void SetData<T>(T[] vertices, uint[] indicies = null)
         where T : struct
         {
-            Use();
             EnsureInitialized();
             _vbo.SetData<T>(vertices);
             VertexCount = (vertices.Length * Marshal.SizeOf(typeof(T))) / Layout.Stride;
             //            UseDefault();
             if (_ebo != null && indicies != null)
             {
+                if (_ebo == null)
+                    _ebo = CreateEBO();
                 _ebo.SetData(indicies);
             }
         }

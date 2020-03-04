@@ -55,7 +55,6 @@ namespace AxEngine
         private float[] _vertices = DataHelper.Cube;
 
         private VertexArrayObject vao;
-        private VertexBufferObject vbo;
 
         private Texture txt0;
         private Texture txt1;
@@ -87,14 +86,7 @@ namespace AxEngine
             layout.AddAttribute<float>(_Shader.GetAttribLocation("aTexCoords"), 2);
 
             vao = new VertexArrayObject(layout);
-            vao.Create();
-
-            vbo = vao.CreateVBO();
-
-            var ebo = vao.CreateEBO();
-
             vao.SetData(_vertices);
-            ebo.SetData(new uint[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
         }
 
         public void SetVertices(float[] vertices)
@@ -259,7 +251,6 @@ namespace AxEngine
         public override void Free()
         {
             vao.Free();
-            vbo.Free();
             _Shader.Free();
             _ShadowShader.Free();
         }
