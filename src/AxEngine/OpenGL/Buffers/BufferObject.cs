@@ -23,39 +23,54 @@ namespace AxEngine
 
         internal void SetData(float[] data)
         {
+            var currentBuffer = CurrentBuffer;
             Use();
             GL.BufferData(Target, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
+
+            // if (currentBuffer == null)
+            //     UseDefault();
+            // else
+            //     currentBuffer.Use();
             UseDefault();
         }
 
         internal void SetData<T>(T[] data)
             where T : struct
         {
+            var currentBuffer = CurrentBuffer;
             Use();
             var structSize = Marshal.SizeOf(typeof(T));
             GL.BufferData(Target, data.Length * structSize, data, BufferUsageHint.StaticDraw);
+
+            // if (currentBuffer == null)
+            //     UseDefault();
+            // else
+            //     currentBuffer.Use();
             UseDefault();
         }
 
         private static int CurrentHandle;
+        private static BufferObject CurrentBuffer;
 
         public void Use()
         {
             Use(Target, _Handle);
+            CurrentBuffer = this;
         }
 
-        protected static void Use(BufferTarget target, int handle)
+        private static void Use(BufferTarget target, int handle)
         {
             if (CurrentHandle == handle)
                 return;
             CurrentHandle = handle;
-
             GL.BindBuffer(target, handle);
+
         }
 
         private void UseDefault()
         {
             Use(Target, 0);
+            CurrentBuffer = null;
         }
 
         public void Free()
