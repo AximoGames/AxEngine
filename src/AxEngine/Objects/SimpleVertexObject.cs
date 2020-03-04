@@ -55,7 +55,7 @@ namespace AxEngine
         private float[] _vertices = DataHelper.Cube;
 
         private VertexArrayObject vao;
-        private BufferObject vbo;
+        private VertexBufferObject vbo;
 
         private Texture txt0;
         private Texture txt1;
@@ -81,7 +81,7 @@ namespace AxEngine
             _ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
             _CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
 
-            vbo = new BufferObject();
+            vbo = new VertexBufferObject();
             vbo.Create();
             vbo.Use();
 

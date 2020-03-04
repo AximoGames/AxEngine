@@ -17,7 +17,7 @@ namespace AxEngine
         private float[] _vertices = DataHelper.Quad;
 
         private VertexArrayObject vao;
-        private BufferObject vbo;
+        private VertexBufferObject vbo;
 
         protected Texture SourceTexture;
 
@@ -34,7 +34,7 @@ namespace AxEngine
                 SourceTexture = new Texture(TexturePath);
             }
 
-            vbo = new BufferObject();
+            vbo = new VertexBufferObject();
             vbo.Create();
             vbo.Use();
 

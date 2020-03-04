@@ -52,7 +52,7 @@ namespace AxEngine
 
         private Shader _shader;
         private VertexArrayObject vao;
-        private BufferObject vbo;
+        private VertexBufferObject vbo;
 
         private float[] _vertices = DataHelper.Cube;
 
@@ -62,7 +62,7 @@ namespace AxEngine
 
             _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
 
-            vbo = new BufferObject();
+            vbo = new VertexBufferObject();
             vbo.Create();
             vbo.Use();
 

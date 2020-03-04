@@ -16,7 +16,7 @@ namespace AxEngine
 
         private Shader _shader;
         private VertexArrayObject vao;
-        private BufferObject vbo;
+        private VertexBufferObject vbo;
 
         private Texture txt;
 
@@ -30,7 +30,7 @@ namespace AxEngine
             //txt = Texture.LoadCubeMap("Ressources/desert-skybox/#.tga");
             txt = Texture.LoadCubeMap("Ressources/water-skybox/#.jpg");
 
-            vbo = new BufferObject();
+            vbo = new VertexBufferObject();
             vbo.Create();
             vbo.Use();
 

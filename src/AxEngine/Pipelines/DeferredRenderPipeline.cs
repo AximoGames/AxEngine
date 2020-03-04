@@ -16,7 +16,7 @@ namespace AxEngine
         private float[] _vertices = DataHelper.Quad;
 
         private VertexArrayObject vao;
-        private BufferObject vbo;
+        private VertexBufferObject vbo;
 
         public override void Init()
         {
@@ -62,7 +62,7 @@ namespace AxEngine
             _DefLightShader.SetInt("gNormal", 1);
             _DefLightShader.SetInt("gAlbedoSpec", 2);
 
-            vbo = new BufferObject();
+            vbo = new VertexBufferObject();
             vbo.Create();
             vbo.Use();
 

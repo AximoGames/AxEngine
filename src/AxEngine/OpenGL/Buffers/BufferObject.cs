@@ -1,11 +1,10 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using System;
 
 namespace AxEngine
 {
-    public class BufferObject
+    public abstract class BufferObject
     {
 
         public BufferObject()
@@ -106,24 +105,6 @@ namespace AxEngine
             FreeNumbers.Add(_Number);
             _Number = -1;
         }
-    }
-
-    public class UniformBufferObject : BufferObject
-    {
-
-        public UniformBufferObject()
-        {
-            Target = BufferTarget.UniformBuffer;
-        }
-
-        public void SetBindingPoint(BindingPoint bindingPoint)
-        {
-            if (Target != BufferTarget.UniformBuffer)
-                throw new InvalidOperationException();
-
-            GL.BindBufferBase(BufferRangeTarget.UniformBuffer, bindingPoint.Number, Handle);
-        }
-
     }
 
 }

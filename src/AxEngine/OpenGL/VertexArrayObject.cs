@@ -15,10 +15,10 @@ namespace AxEngine
 
         public VertexLayout Layout { get; private set; }
 
-        private BufferObject _vbo;
-        public BufferObject VertextBufferObject;
+        private VertexBufferObject _vbo;
+        public VertexBufferObject VertextBufferObject;
 
-        public VertexArrayObject(VertexLayout layout, BufferObject vbo)
+        public VertexArrayObject(VertexLayout layout, VertexBufferObject vbo)
         {
             Layout = layout;
             _vbo = vbo;

@@ -15,7 +15,7 @@ namespace AxEngine
 
         private float[] _vertices = DataHelper.Line;
         private VertexArrayObject vao;
-        private BufferObject vbo;
+        private VertexBufferObject vbo;
 
         public void SetPoint1(Vector3 pos)
         {
@@ -41,7 +41,7 @@ namespace AxEngine
 
             _Shader = new Shader("Shaders/lines.vert", "Shaders/lines.frag");
 
-            vbo = new BufferObject();
+            vbo = new VertexBufferObject();
             vbo.Create();
             vbo.Use();
 

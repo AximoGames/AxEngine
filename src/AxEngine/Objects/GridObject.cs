@@ -17,7 +17,7 @@ namespace AxEngine
         private Shader _Shader;
 
         private VertexArrayObject vao;
-        private BufferObject vbo;
+        private VertexBufferObject vbo;
 
         public override void Init()
         {
@@ -25,7 +25,7 @@ namespace AxEngine
 
             _Shader = new Shader("Shaders/lines.vert", "Shaders/lines.frag");
 
-            vbo = new BufferObject();
+            vbo = new VertexBufferObject();
             vbo.Create();
             vbo.Use();
 
