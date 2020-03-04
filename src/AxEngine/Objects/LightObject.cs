@@ -52,7 +52,6 @@ namespace AxEngine
 
         private Shader _shader;
         private VertexArrayObject vao;
-        private VertexBufferObject vbo;
 
         private float[] _vertices = DataHelper.Cube;
 
@@ -62,18 +61,12 @@ namespace AxEngine
 
             _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
 
-            vbo = new VertexBufferObject();
-            vbo.Create();
-            vbo.Use();
-
             var layout = new VertexLayout();
             layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 3);
             layout.AddAttribute<float>(_shader.GetAttribLocation("aNormal"), 3);
             layout.AddAttribute<float>(_shader.GetAttribLocation("aTexCoords"), 2);
 
-            vao = new VertexArrayObject(layout, vbo);
-            vao.Create();
-
+            vao = new VertexArrayObject(layout);
             vao.SetData(_vertices);
         }
 
@@ -96,7 +89,6 @@ namespace AxEngine
         public override void Free()
         {
             vao.Free();
-            vbo.Free();
             _shader.Free();
         }
 

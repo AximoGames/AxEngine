@@ -17,7 +17,6 @@ namespace AxEngine
         private float[] _vertices = DataHelper.Quad;
 
         private VertexArrayObject vao;
-        private VertexBufferObject vbo;
 
         protected Texture SourceTexture;
 
@@ -34,17 +33,11 @@ namespace AxEngine
                 SourceTexture = new Texture(TexturePath);
             }
 
-            vbo = new VertexBufferObject();
-            vbo.Create();
-            vbo.Use();
-
             var layout = new VertexLayout();
             layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 2);
             layout.AddAttribute<float>(_shader.GetAttribLocation("aTexCoords"), 2);
 
-            vao = new VertexArrayObject(layout, vbo);
-            vao.Create();
-
+            vao = new VertexArrayObject(layout);
             vao.SetData(_vertices);
         }
 
@@ -101,7 +94,6 @@ namespace AxEngine
         public override void Free()
         {
             vao.Free();
-            vbo.Free();
             _shader.Free();
         }
 

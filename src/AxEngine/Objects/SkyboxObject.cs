@@ -16,7 +16,6 @@ namespace AxEngine
 
         private Shader _shader;
         private VertexArrayObject vao;
-        private VertexBufferObject vbo;
 
         private Texture txt;
 
@@ -30,16 +29,10 @@ namespace AxEngine
             //txt = Texture.LoadCubeMap("Ressources/desert-skybox/#.tga");
             txt = Texture.LoadCubeMap("Ressources/water-skybox/#.jpg");
 
-            vbo = new VertexBufferObject();
-            vbo.Create();
-            vbo.Use();
-
             var layout = new VertexLayout();
             layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 3);
 
-            vao = new VertexArrayObject(layout, vbo);
-            vao.Create();
-
+            vao = new VertexArrayObject(layout);
             vao.SetData(_vertices);
         }
 
@@ -66,7 +59,6 @@ namespace AxEngine
         public override void Free()
         {
             vao.Free();
-            vbo.Free();
             _shader.Free();
         }
 

@@ -17,7 +17,6 @@ namespace AxEngine
         private Shader _Shader;
 
         private VertexArrayObject vao;
-        private VertexBufferObject vbo;
 
         public override void Init()
         {
@@ -25,17 +24,12 @@ namespace AxEngine
 
             _Shader = new Shader("Shaders/lines.vert", "Shaders/lines.frag");
 
-            vbo = new VertexBufferObject();
-            vbo.Create();
-            vbo.Use();
-
             var layout = new VertexLayout();
             layout.AddAttribute<float>(_Shader.GetAttribLocation("aPos"), 3);
             layout.AddAttribute<float>(_Shader.GetAttribLocation("aColor"), 4);
 
-            vao = new VertexArrayObject(layout, vbo);
+            vao = new VertexArrayObject(layout);
             vao.PrimitiveType = PrimitiveType.Lines;
-            vao.Create();
 
             var _vertices = new List<float>();
 
@@ -100,7 +94,6 @@ namespace AxEngine
         public override void Free()
         {
             vao.Free();
-            vbo.Free();
             _Shader.Free();
         }
 
