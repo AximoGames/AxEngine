@@ -31,10 +31,10 @@ namespace AxEngine
             vao = new VertexArrayObject(layout);
             vao.PrimitiveType = PrimitiveType.Lines;
 
-            var _vertices = new List<float>();
+            var _vertices = new List<VertexDataPosColor>();
 
             var size = Size;
-            var color = new float[] { 0.45f, 0.45f, 0.0f, 1.0f };
+            var color = new Vector4(0.45f, 0.45f, 0.0f, 1.0f);
 
             int start;
             int end;
@@ -57,17 +57,11 @@ namespace AxEngine
 
             for (var i = start; i <= end; i++)
             {
-                _vertices.AddRange(new float[] { startPos, i, 0 });
-                _vertices.AddRange(color);
+                _vertices.Add(new Vector3(startPos, i, 0), color);
+                _vertices.Add(new Vector3(endPos, i, 0), color);
 
-                _vertices.AddRange(new float[] { endPos, i, 0 });
-                _vertices.AddRange(color);
-
-                _vertices.AddRange(new float[] { i, startPos, 0 });
-                _vertices.AddRange(color);
-
-                _vertices.AddRange(new float[] { i, endPos, 0 });
-                _vertices.AddRange(color);
+                _vertices.Add(new Vector3(i, startPos, 0), color);
+                _vertices.Add(new Vector3(i, endPos, 0), color);
             }
 
             vao.SetData(_vertices.ToArray());
