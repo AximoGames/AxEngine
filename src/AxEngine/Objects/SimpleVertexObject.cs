@@ -86,7 +86,7 @@ namespace AxEngine
             layout.AddAttribute<float>(_Shader.GetAttribLocation("aTexCoords"), 2);
 
             vao = new VertexArrayObject(layout);
-            vao.SetData(_vertices);
+            vao.SetData(_vertices, new ushort[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
         }
 
         public void SetVertices(float[] vertices)

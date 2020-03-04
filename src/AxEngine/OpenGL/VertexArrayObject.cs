@@ -85,7 +85,7 @@ namespace AxEngine
             if (_ebo == null)
                 GL.DrawArrays(PrimitiveType, 0, VertexCount);
             else
-                GL.DrawElements(PrimitiveType, _ebo.Size, DrawElementsType.UnsignedInt, 0);
+                GL.DrawElements(PrimitiveType, _ebo.Size, DrawElementsType.UnsignedShort, 0);
         }
 
         private bool Initialized;
@@ -104,7 +104,7 @@ namespace AxEngine
             Initialized = true;
         }
 
-        internal void SetData(float[] vertices, uint[] indicies = null)
+        internal void SetData(float[] vertices, ushort[] indicies = null)
         {
             EnsureInitialized();
             _vbo.SetData(vertices);

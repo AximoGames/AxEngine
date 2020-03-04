@@ -4,9 +4,12 @@ using OpenTK;
 
 namespace AxEngine
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct VertexDataPosColor
     {
+
+        public Vector3 Position;
+        public Vector4 Color;
 
         public VertexDataPosColor(Vector3 position)
         {
@@ -25,9 +28,6 @@ namespace AxEngine
             Position = position;
             Color = color;
         }
-
-        public Vector3 Position;
-        public Vector4 Color;
     }
 
     public static partial class EngineExtensions
