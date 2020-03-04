@@ -118,14 +118,15 @@ namespace AxEngine
             }
         }
 
-        internal void SetData<T>(T[] vertices, uint[] indicies = null)
+        internal void SetData<T>(T[] vertices, ushort[] indicies = null)
         where T : struct
         {
             EnsureInitialized();
             _vbo.SetData<T>(vertices);
-            VertexCount = (vertices.Length * Marshal.SizeOf(typeof(T))) / Layout.Stride;
+            var typeSize = Marshal.SizeOf(typeof(T));
+            VertexCount = (vertices.Length * typeSize) / Layout.Stride;
             //            UseDefault();
-            if (_ebo != null && indicies != null)
+            if (indicies != null)
             {
                 if (_ebo == null)
                     _ebo = CreateEBO();

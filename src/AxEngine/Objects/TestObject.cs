@@ -16,6 +16,10 @@ namespace AxEngine
             else
                 SetVertices(DataHelper.Cube);
 
+            var ico = new Util.IcoSphere.Mesh_SphereICO(1);
+            SetVertices(ico.Vertices);
+            SetIndicies(ico.Indicies);
+
             base.Init();
         }
 

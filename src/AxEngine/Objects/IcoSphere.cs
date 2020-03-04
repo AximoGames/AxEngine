@@ -276,6 +276,11 @@ namespace Util.IcoSphere
             Vertices = vertexSoup.verticies.ToArray();
             Indicies = indexList.ToArray();
 
+            for (var i = 0; i < Vertices.Length; i++)
+            {
+                Vertices[i].Position *= 0.5f;
+            }
+
         }
 
     }

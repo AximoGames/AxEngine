@@ -53,6 +53,8 @@ namespace AxEngine
         private Shader _CubeShadowShader;
 
         private float[] _vertices = DataHelper.Cube;
+        private VertexDataPosNormalUV[] _vertices2;
+        private ushort[] _indicies = null;
 
         private VertexArrayObject vao;
 
@@ -86,12 +88,26 @@ namespace AxEngine
             layout.AddAttribute<float>(_Shader.GetAttribLocation("aTexCoords"), 2);
 
             vao = new VertexArrayObject(layout);
-            vao.SetData(_vertices, new ushort[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
+            //vao.SetData(_vertices, new ushort[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
+            if (_vertices2 == null)
+                vao.SetData(_vertices, _indicies);
+            else
+                vao.SetData(_vertices2, _indicies);
         }
 
         public void SetVertices(float[] vertices)
         {
             _vertices = vertices;
+        }
+
+        public void SetVertices(VertexDataPosNormalUV[] vertices)
+        {
+            _vertices2 = vertices;
+        }
+
+        public void SetIndicies(ushort[] indicies)
+        {
+            _indicies = indicies;
         }
 
         public void OnForwardRender()
