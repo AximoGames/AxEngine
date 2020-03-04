@@ -21,17 +21,20 @@ namespace AxEngine
             _Handle = GL.GenBuffer();
         }
 
+        public int Size { get; private set; }
+
         internal void SetData(float[] data)
         {
             var currentBuffer = CurrentBuffer;
             Use();
+            Size = data.Length;
             GL.BufferData(Target, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
 
             // if (currentBuffer == null)
             //     UseDefault();
             // else
             //     currentBuffer.Use();
-            UseDefault();
+            //UseDefault();
         }
 
         internal void SetData<T>(T[] data)
@@ -39,6 +42,7 @@ namespace AxEngine
         {
             var currentBuffer = CurrentBuffer;
             Use();
+            Size = data.Length;
             var structSize = Marshal.SizeOf(typeof(T));
             GL.BufferData(Target, data.Length * structSize, data, BufferUsageHint.StaticDraw);
 
@@ -46,7 +50,7 @@ namespace AxEngine
             //     UseDefault();
             // else
             //     currentBuffer.Use();
-            UseDefault();
+            //UseDefault();
         }
 
         private static int CurrentHandle;
@@ -60,14 +64,13 @@ namespace AxEngine
 
         private static void Use(BufferTarget target, int handle)
         {
-            if (CurrentHandle == handle)
-                return;
+            // if (CurrentHandle == handle)
+            //     return;
             CurrentHandle = handle;
             GL.BindBuffer(target, handle);
-
         }
 
-        private void UseDefault()
+        public void UseDefault()
         {
             Use(Target, 0);
             CurrentBuffer = null;
