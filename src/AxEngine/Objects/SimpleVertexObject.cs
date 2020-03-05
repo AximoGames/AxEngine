@@ -39,9 +39,9 @@ namespace AxEngine
         public Matrix4 GetModelMatrix()
         {
             return Matrix4.CreateScale(Scale)
-            * Matrix4.CreateRotationX(Rotate.X)
-            * Matrix4.CreateRotationY(Rotate.Y)
-            * Matrix4.CreateRotationZ(Rotate.Z)
+            * Matrix4.CreateRotationX(Rotate.X * (MathF.PI * 2))
+            * Matrix4.CreateRotationY(Rotate.Y * (MathF.PI * 2))
+            * Matrix4.CreateRotationZ(Rotate.Z * (MathF.PI * 2))
             * Matrix4.CreateTranslation((new Vector4(Position, 1.0f) * PositionMatrix).Xyz);
         }
 

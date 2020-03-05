@@ -91,7 +91,7 @@ namespace AxEngine
             ctx.AddObject(new TestObject()
             {
                 Name = "Box1",
-                Rotate = new Vector3(0, 0, (float)Math.PI),
+                Rotate = new Vector3(0, 0, 0.5f),
                 Scale = new Vector3(1),
                 Position = new Vector3(0, 0, 0.5f),
                 Debug = true,
