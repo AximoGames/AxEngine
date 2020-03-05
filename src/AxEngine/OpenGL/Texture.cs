@@ -7,6 +7,7 @@ using OpenTK.Graphics.OpenGL4;
 using AxEngine;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 
 namespace AxEngine
 {
