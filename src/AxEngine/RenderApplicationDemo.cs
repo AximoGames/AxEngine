@@ -61,9 +61,6 @@ namespace AxEngine
             });
 
             GfxTexture = new GraphicsTexture(100, 100);
-            GfxTexture.Graphics.Clear(Color.Transparent);
-            GfxTexture.Graphics.DrawString("test", new Font(FontFamily.GenericSansSerif, 20, GraphicsUnit.Point), Brushes.Red, new PointF(5, 5));
-            GfxTexture.UpdateTexture();
             ctx.AddObject(new ScreenTextureObject()
             {
                 Name = "ScreenTexture2",
@@ -185,6 +182,13 @@ namespace AxEngine
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+        }
+
+        private DateTime LastStatUpdate;
+        private Font DefaultFont = new Font(FontFamily.GenericSansSerif, 15, GraphicsUnit.Point);
+
+        protected override void OnUpdateFrame(FrameEventArgs e)
+        {
             if (ctx.LightObjects.Count > 0)
             {
                 LightAngle -= 0.01;
@@ -199,6 +203,16 @@ namespace AxEngine
                 var cursor = ctx.GetObjectByName<IPosition>("GroundCursor");
                 if (cursor != null)
                     cursor.Position = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.Position.Z);
+            }
+
+            if ((DateTime.UtcNow - LastStatUpdate).TotalSeconds > 1)
+            {
+                LastStatUpdate = DateTime.UtcNow;
+                GfxTexture.Graphics.Clear(Color.Transparent);
+                var txt = "FPS: " + Math.Round(RenderFrequency).ToString();
+                txt += "\nUPS: " + Math.Round(UpdateFrequency).ToString();
+                GfxTexture.Graphics.DrawString(txt, DefaultFont, Brushes.White, new PointF(5, 5));
+                GfxTexture.UpdateTexture();
             }
         }
 

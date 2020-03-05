@@ -708,6 +708,10 @@ namespace AxEngine
 
             return vec.Xyz / vec.W;
         }
+
+        public double RenderFrequency => window.RenderFrequency;
+        public double UpdateFrequency => window.UpdateFrequency;
+
     }
 
     public class RenderApplicationStartup
