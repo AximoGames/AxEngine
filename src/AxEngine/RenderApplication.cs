@@ -108,6 +108,8 @@ namespace AxEngine
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             ctx.SceneOpitons = new SceneOptions
             {

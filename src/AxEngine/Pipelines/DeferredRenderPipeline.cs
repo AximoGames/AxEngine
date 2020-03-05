@@ -80,6 +80,8 @@ namespace AxEngine
 
         public override void Render(RenderContext context, Camera camera)
         {
+            GL.Disable(EnableCap.Blend);
+
             ObjectManager.PushDebugGroup("OnRender Pass1", this);
             RenderPass1(context, camera);
             ObjectManager.PopDebugGroup();
@@ -87,6 +89,8 @@ namespace AxEngine
             ObjectManager.PushDebugGroup("OnRender Pass2", this);
             RenderPass2(context, camera);
             ObjectManager.PopDebugGroup();
+
+            GL.Enable(EnableCap.Blend);
         }
 
         private void RenderPass1(RenderContext context, Camera camera)
