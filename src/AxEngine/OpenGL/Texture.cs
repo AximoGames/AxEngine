@@ -193,17 +193,8 @@ namespace AxEngine
             InitFromBitmap(image);
         }
 
-        private void InitFromBitmap(Bitmap image)
+        public void SetData(Bitmap image)
         {
-            Target = TextureTarget.Texture2D;
-            // Generate handle
-            Handle = GL.GenTexture();
-
-            // Bind the handle
-            Use();
-
-            // For this example, we're going to use .NET's built-in System.Drawing library to load textures.
-
             // Load the image
             // First, we get our pixels from the bitmap we loaded.
             // Arguments:
@@ -239,6 +230,23 @@ namespace AxEngine
                 PixelType.UnsignedByte,
                 data.Scan0);
 
+            // Next, generate mipmaps.
+            // Mipmaps are smaller copies of the texture, scaled down. Each mipmap level is half the size of the previous one
+            // Generated mipmaps go all the way down to just one pixel.
+            // OpenGL will automatically switch between mipmaps when an object gets sufficiently far away.
+            // This prevents distant objects from having their colors become muddy, as well as saving on memory.
+            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+        }
+
+        private void InitFromBitmap(Bitmap image)
+        {
+            Target = TextureTarget.Texture2D;
+            // Generate handle
+            Handle = GL.GenTexture();
+
+            // Bind the handle
+            Use();
+
             // Now that our texture is loaded, we can set a few settings to affect how the image appears on rendering.
 
             // First, we set the min and mag filter. These are used for when the texture is scaled down and up, respectively.
@@ -255,12 +263,7 @@ namespace AxEngine
             GL.TexParameter(Target, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
             GL.TexParameter(Target, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
 
-            // Next, generate mipmaps.
-            // Mipmaps are smaller copies of the texture, scaled down. Each mipmap level is half the size of the previous one
-            // Generated mipmaps go all the way down to just one pixel.
-            // OpenGL will automatically switch between mipmaps when an object gets sufficiently far away.
-            // This prevents distant objects from having their colors become muddy, as well as saving on memory.
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+            SetData(image);
         }
 
         private static Bitmap LoadBitmap(string path)
