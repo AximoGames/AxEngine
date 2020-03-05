@@ -170,6 +170,11 @@ namespace AxEngine
     {
     }
 
+    public interface IUpdateFrame
+    {
+        void OnUpdateFrame();
+    }
+
     public interface IMeshObject : IRenderableObject
     {
         Vector3[] GetVertices();

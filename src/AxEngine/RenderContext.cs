@@ -60,6 +60,7 @@ namespace AxEngine
         public Camera Camera;
         public List<IGameObject> AllObjects = new List<IGameObject>();
         public List<IRenderableObject> RenderableObjects = new List<IRenderableObject>();
+        public List<IUpdateFrame> UpdateFrameObjects = new List<IUpdateFrame>();
         public List<IShadowObject> ShadowObjects = new List<IShadowObject>();
         public List<ILightObject> LightObjects = new List<ILightObject>();
 
@@ -103,9 +104,10 @@ namespace AxEngine
                 ShadowObjects.Add(shadowObj);
 
             if (obj is IRenderableObject renderableObj)
-            {
                 RenderableObjects.Add(renderableObj);
-            }
+
+            if (obj is IUpdateFrame updateFrameObj)
+                UpdateFrameObjects.Add(updateFrameObj);
 
             if (obj is ILightObject lightObj)
                 LightObjects.Add(lightObj);
@@ -119,9 +121,10 @@ namespace AxEngine
                 ShadowObjects.Remove(shadowObj);
 
             if (obj is IRenderableObject renderableObj)
-            {
                 RenderableObjects.Remove(renderableObj);
-            }
+
+            if (obj is IUpdateFrame updateFrameObj)
+                UpdateFrameObjects.Remove(updateFrameObj);
 
             if (obj is ILightObject lightObj)
                 LightObjects.Remove(lightObj);

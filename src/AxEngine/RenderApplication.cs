@@ -212,6 +212,7 @@ namespace AxEngine
         private void OnRenderFrameInternal(FrameEventArgs e)
         {
             OnRenderFrame(e);
+
             //--
             var ubo = new UniformBufferObject();
             ubo.Create();
@@ -366,6 +367,9 @@ namespace AxEngine
         {
             foreach (var anim in ctx.Animations)
                 anim.ProcessAnimation();
+
+            foreach (var obj in ctx.UpdateFrameObjects)
+                obj.OnUpdateFrame();
 
             OnUpdateFrame(e);
 

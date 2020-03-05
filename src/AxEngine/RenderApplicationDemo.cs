@@ -17,8 +17,6 @@ namespace AxEngine
         {
         }
 
-        public GraphicsTexture GfxTexture;
-
         protected override void SetupScene()
         {
             ctx.AddObject(new TestObject()
@@ -60,11 +58,9 @@ namespace AxEngine
                 RectanglePixels = new RectangleF(000, 0, 30f, 30f),
             });
 
-            GfxTexture = new GraphicsTexture(100, 100);
-            ctx.AddObject(new ScreenTextureObject()
+            ctx.AddObject(new StatsObject()
             {
-                Name = "ScreenTexture2",
-                SourceTexture = GfxTexture.Texture,
+                Name = "Stats",
                 RectanglePixels = new RectangleF(40, 40, 100f, 100f),
             });
 
@@ -184,9 +180,6 @@ namespace AxEngine
         {
         }
 
-        private DateTime LastStatUpdate;
-        private Font DefaultFont = new Font(FontFamily.GenericSansSerif, 15, GraphicsUnit.Point);
-
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             if (ctx.LightObjects.Count > 0)
@@ -205,15 +198,6 @@ namespace AxEngine
                     cursor.Position = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.Position.Z);
             }
 
-            if ((DateTime.UtcNow - LastStatUpdate).TotalSeconds > 1)
-            {
-                LastStatUpdate = DateTime.UtcNow;
-                GfxTexture.Graphics.Clear(Color.Transparent);
-                var txt = "FPS: " + Math.Round(RenderFrequency).ToString();
-                txt += "\nUPS: " + Math.Round(UpdateFrequency).ToString();
-                GfxTexture.Graphics.DrawString(txt, DefaultFont, Brushes.White, new PointF(5, 5));
-                GfxTexture.UpdateTexture();
-            }
         }
 
     }
