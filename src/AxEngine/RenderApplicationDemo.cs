@@ -17,6 +17,8 @@ namespace AxEngine
         {
         }
 
+        public GraphicsTexture GfxTexture;
+
         protected override void SetupScene()
         {
             ctx.AddObject(new TestObject()
@@ -57,6 +59,18 @@ namespace AxEngine
                 TexturePath = "Ressources/woodenbox.png",
                 RectanglePixels = new RectangleF(000, 0, 30f, 30f),
             });
+
+            GfxTexture = new GraphicsTexture(100, 100);
+            GfxTexture.Graphics.Clear(Color.Transparent);
+            GfxTexture.Graphics.DrawString("test", new Font(FontFamily.GenericSansSerif, 20, GraphicsUnit.Point), Brushes.Red, new PointF(5, 5));
+            GfxTexture.UpdateTexture();
+            ctx.AddObject(new ScreenTextureObject()
+            {
+                Name = "ScreenTexture2",
+                SourceTexture = GfxTexture.Texture,
+                RectanglePixels = new RectangleF(40, 40, 100f, 100f),
+            });
+
             ctx.AddObject(new LineObject()
             {
                 Name = "DebugLine",

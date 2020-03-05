@@ -231,6 +231,8 @@ namespace AxEngine
                 PixelType.UnsignedByte,
                 data.Scan0);
 
+            image.UnlockBits(data);
+
             // Next, generate mipmaps.
             // Mipmaps are smaller copies of the texture, scaled down. Each mipmap level is half the size of the previous one
             // Generated mipmaps go all the way down to just one pixel.

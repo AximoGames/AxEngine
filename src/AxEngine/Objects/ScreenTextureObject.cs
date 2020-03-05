@@ -18,7 +18,7 @@ namespace AxEngine
 
         private VertexArrayObject vao;
 
-        protected Texture SourceTexture;
+        public Texture SourceTexture;
 
         public string TexturePath;
 
