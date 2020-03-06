@@ -24,7 +24,7 @@ namespace AxEngine
             return new Vector3(MathF.Round(vec.X, digits), MathF.Round(vec.Y, digits), MathF.Round(vec.Z, digits));
         }
 
-        public static Vector2i ToVector3i(this Vector2 vec)
+        public static Vector2i ToVector2i(this Vector2 vec)
         {
             return new Vector2i((int)vec.X, (int)vec.Y);
         }
