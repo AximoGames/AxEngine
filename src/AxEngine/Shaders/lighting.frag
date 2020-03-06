@@ -41,8 +41,13 @@ vec3 BlendColor(vec3 textureColor, vec3 color, int blendMode) {
 void main()
 {
 	vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 color;
 
-    vec3 color = BlendColor(texture(material.diffuse, TexCoords).rgb, material.color, material.colorBlendMode);
+#ifndef OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
+    color = BlendColor(texture(material.diffuse, TexCoords).rgb, material.color, material.colorBlendMode);
+#else
+#include OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
+#endif
 
     //vec3 color = material.color; // solid color for debugging
     vec3 normal = normalize(Normal);

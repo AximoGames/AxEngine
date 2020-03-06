@@ -23,6 +23,17 @@ namespace AxEngine
 
         private List<ShaderCompilation> Compilations = new List<ShaderCompilation>();
 
+        public void SetDefine(string name)
+        {
+            SetDefine(name, null);
+        }
+
+        public void SetDefine(string name, object value)
+        {
+            foreach (var comp in Compilations)
+                comp.SetDefine(name, value);
+        }
+
         public void AddSource(string path, ShaderType type)
         {
             ShaderCompilation comp = Compilations.FirstOrDefault(c => c.Type == type);
@@ -32,8 +43,9 @@ namespace AxEngine
             comp.Sources.Add(new ShaderSource
             {
                 Path = path,
-                Source = LoadSource(path),
+                Compilation = comp,
             });
+            comp.SetOrdinals();
         }
 
         public Shader()
@@ -44,7 +56,7 @@ namespace AxEngine
         // Shaders are written in GLSL, which is a language very similar to C in its semantics.
         // The GLSL source is compiled *at runtime*, so it can optimize itself for the graphics card it's currently being used on.
         // A commented example of GLSL can be found in shader.vert
-        public Shader(string vertPath, string fragPath, string geomPath = null)
+        public Shader(string vertPath, string fragPath, string geomPath = null, bool compile = true)
         {
             AddSource(vertPath, ShaderType.VertexShader);
             AddSource(fragPath, ShaderType.FragmentShader);
@@ -60,7 +72,8 @@ namespace AxEngine
             //     });
             // }
 
-            Compile();
+            if (compile)
+                Compile();
         }
 
         public void Compile()
@@ -74,6 +87,8 @@ namespace AxEngine
             // GL.CreateShader will create an empty shader (obviously). The ShaderType enum denotes which type of shader will be created.
             foreach (var comp in Compilations)
             {
+                comp.GenerateSource();
+
                 comp.Handle = GL.CreateShader(comp.Type);
                 var shaderSources = comp.Sources.Select(s => s.Source).ToArray();
 
@@ -254,29 +269,6 @@ namespace AxEngine
             return attrHandle;
         }
 
-        // Just loads the entire file into a string.
-        private static string LoadFile(string path)
-        {
-            using (var sr = new StreamReader(DirectoryHelper.GetPath(path), Encoding.UTF8))
-            {
-                return sr.ReadToEnd();
-            }
-        }
-
-        private static Regex FileFinder = new Regex(@"#include ""([\w\.\/-]+)""", RegexOptions.RightToLeft);
-
-        // Just loads the entire file into a string.
-        private static string LoadSource(string path)
-        {
-            var sb = new StringBuilder(LoadFile(path));
-            foreach (Match match in FileFinder.Matches(sb.ToString()))
-            {
-                var includePath = Path.Combine(Path.GetDirectoryName(path), match.Groups[1].Value);
-                sb.Replace(match.Value, LoadSource(includePath), match.Index, match.Length);
-            }
-            return sb.ToString();
-        }
-
         // Uniform setters
         // Uniforms are variables that can be set by user code, instead of reading them from the VBO.
         // You use VBOs for vertex-related data, and uniforms for almost everything else.
@@ -372,12 +364,125 @@ namespace AxEngine
         public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Shader;
 
         public string AllSources() => string.Join("\n", Sources.Select(s => s.Source));
+
+        public void GenerateSource()
+        {
+            SetOrdinals();
+            foreach (var source in Sources)
+                source.GenerateSource();
+        }
+
+        public void SetOrdinals()
+        {
+            int ordinal = 0;
+            foreach (var source in Sources)
+                source.Ordinal = ordinal++;
+        }
+
+        public IDictionary<string, object> Defines { get; } = new Dictionary<string, object>();
+
+        public void SetDefine(string name)
+        {
+            SetDefine(name, null);
+        }
+
+        public void SetDefine(string name, object value)
+        {
+            if (Defines.ContainsKey(name))
+                Defines[name] = value;
+            else
+                Defines.Add(name, value);
+        }
     }
 
     public class ShaderSource
     {
         public string Path;
+        public string OriginalSource;
         public string Source;
+        public int Ordinal;
+        public ShaderCompilation Compilation;
+
+        private static Regex FileFinder = new Regex(@"#include ""([\w\.\/-]+)""", RegexOptions.RightToLeft);
+        private static Regex DefineFileFinder = new Regex(@"#include ([\w_]+)", RegexOptions.RightToLeft);
+
+        public void GenerateSource()
+        {
+            Source = LoadSource(Path, ref OriginalSource, this);
+        }
+
+        // Just loads the entire file into a string.
+        private static string LoadSource(string path, ref string content, ShaderSource sh, bool isIncludeFile = false)
+        {
+            var loadedContent = LoadFile(path, content);
+            content = loadedContent;
+
+            if (sh.Ordinal == 0)
+            {
+                var lines = loadedContent.Split(Environment.NewLine).ToList();
+                foreach (var entry in sh.Compilation.Defines)
+                {
+                    var defineLine = "#define " + entry.Key;
+                    if (entry.Value != null)
+                    {
+                        defineLine += " " + GetDefineLiteral(entry.Value);
+                    }
+                    lines.Insert(1, defineLine);
+                }
+                loadedContent = string.Join(Environment.NewLine, lines);
+            }
+
+            var sb = new StringBuilder(loadedContent);
+
+            // replaces #include DEFINED_MACRO
+            foreach (Match match in DefineFileFinder.Matches(sb.ToString()))
+            {
+                var filePlaceholder = match.Groups[1].Value;
+                if (sh.Compilation.Defines.ContainsKey(filePlaceholder))
+                    sb.Replace(match.Value, $"#include {GetDefineLiteral(sh.Compilation.Defines[filePlaceholder])}", match.Index, match.Length);
+            }
+
+            // replaces #include "Path to file"
+            foreach (Match match in FileFinder.Matches(sb.ToString()))
+            {
+                var includePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(path), match.Groups[1].Value);
+                var dummy = "";
+                sb.Replace(match.Value, LoadSource(includePath, ref dummy, sh, true), match.Index, match.Length);
+            }
+            return sb.ToString();
+        }
+
+        private static string GetDefineLiteral(object value)
+        {
+            if (value == null)
+                return "";
+
+            if (value is string)
+            {
+                return "\"" + value.ToString() + "\"";
+            }
+            else
+            {
+                return value.ToString();
+            }
+        }
+
+        // Just loads the entire file into a string.
+        private static string LoadFile(string path = null, string content = null)
+        {
+            if (!string.IsNullOrEmpty(content))
+                return content;
+
+            var absPath = DirectoryHelper.GetPath(path);
+            if (string.IsNullOrEmpty(absPath))
+                throw new Exception("Could not load file: " + path);
+
+            using (var sr = new StreamReader(absPath, Encoding.UTF8))
+            {
+                return sr.ReadToEnd();
+            }
+        }
+
     }
 
 }

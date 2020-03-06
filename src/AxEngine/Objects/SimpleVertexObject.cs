@@ -48,6 +48,8 @@ namespace AxEngine
         public bool Debug;
 
         private Shader _Shader;
+        public Shader Shader { get => _Shader; set => _Shader = value; }
+
         private Shader _DefGeometryShader;
         private Shader _ShadowShader;
         private Shader _CubeShadowShader;
@@ -73,7 +75,8 @@ namespace AxEngine
 
             UsePipeline(PrimaryRenderPipeline);
 
-            _Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
+            if (_Shader == null)
+                _Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
             _DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
 
             txt0 = new Texture(Material.DiffuseImagePath);
@@ -267,7 +270,7 @@ namespace AxEngine
         public override void Free()
         {
             vao.Free();
-            _Shader.Free();
+            //_Shader.Free(); // TODO
             _ShadowShader.Free();
         }
 
