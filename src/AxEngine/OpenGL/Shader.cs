@@ -21,7 +21,7 @@ namespace AxEngine
         private Dictionary<string, int> _uniformLocations = new Dictionary<string, int>();
         private Dictionary<string, int> _uniformBlockLocations = new Dictionary<string, int>();
 
-        public List<ShaderCompilation> Compilations = new List<ShaderCompilation>();
+        private List<ShaderCompilation> Compilations = new List<ShaderCompilation>();
 
         public void AddSource(string path, ShaderType type)
         {
@@ -64,7 +64,8 @@ namespace AxEngine
         }
 
         public void Compile()
-        {             // There are several different types of shaders, but the only two you need for basic rendering are the vertex and fragment shaders.
+        {
+            // There are several different types of shaders, but the only two you need for basic rendering are the vertex and fragment shaders.
             // The vertex shader is responsible for moving around vertices, and uploading that data to the fragment shader.
             //   The vertex shader won't be too important here, but they'll be more important later.
             // The fragment shader is responsible for then converting the vertices to "fragments", which represent all the data OpenGL needs to draw a pixel.
