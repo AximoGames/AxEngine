@@ -17,7 +17,7 @@ namespace AxEngine
         public override void Render(RenderContext context, Camera camera)
         {
             GL.Viewport(0, 0, FrameBuffer.Width, FrameBuffer.Height);
-            FrameBuffer.Use();
+            FrameBuffer.Bind();
             GL.Clear(ClearBufferMask.DepthBufferBit);
 
             foreach (var obj in GetRenderObjects(context, camera))

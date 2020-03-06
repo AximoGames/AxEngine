@@ -25,7 +25,7 @@ namespace AxEngine
             int handle;
             GL.GenTextures(1, out handle);
             Handle = handle;
-            Use();
+            Bind();
             GL.TexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
         }
 
@@ -42,7 +42,7 @@ namespace AxEngine
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMap, width, height);
-            txt.Use();
+            txt.Bind();
             for (var i = 0; i < 6; i++)
                 GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.DepthComponent, width, height, border, format, type, pixels);
 
@@ -56,7 +56,7 @@ namespace AxEngine
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.Texture2DArray, width, height);
-            txt.Use();
+            txt.Bind();
             GL.TexImage3D(TextureTarget.Texture2DArray, 0, PixelInternalFormat.DepthComponent, width, height, layers, border, format, type, pixels);
 
             txt.SetNearestFilter();
@@ -69,7 +69,7 @@ namespace AxEngine
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMapArray, width, height);
-            txt.Use();
+            txt.Bind();
             GL.TexImage3D(TextureTarget.TextureCubeMapArray, 0, PixelInternalFormat.DepthComponent, width, height, layers * 6, border, format, type, pixels);
 
             txt.SetNearestFilter();
@@ -99,7 +99,7 @@ namespace AxEngine
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMap, images[0].Width, images[0].Height);
             //txt.ObjectLabel = Path.GetFileName(path);
-            txt.Use();
+            txt.Bind();
             txt.ObjectLabel = Path.GetFileName(path);
 
             for (var i = 0; i < images.Count; i++)
@@ -151,28 +151,28 @@ namespace AxEngine
 
         public void SetLinearFilter()
         {
-            Use();
+            Bind();
             GL.TexParameter(Target, TextureParameterName.TextureMinFilter, (int)All.Linear);
             GL.TexParameter(Target, TextureParameterName.TextureMagFilter, (int)All.Linear);
         }
 
         public void SetNearestFilter()
         {
-            Use();
+            Bind();
             GL.TexParameter(Target, TextureParameterName.TextureMinFilter, (int)All.Nearest);
             GL.TexParameter(Target, TextureParameterName.TextureMagFilter, (int)All.Nearest);
         }
 
         public void SetClampToBordreWrap()
         {
-            Use();
+            Bind();
             GL.TexParameter(Target, TextureParameterName.TextureWrapS, (int)All.ClampToBorder);
             GL.TexParameter(Target, TextureParameterName.TextureWrapT, (int)All.ClampToBorder);
         }
 
         public void SetClampToEdgeWrap()
         {
-            Use();
+            Bind();
             GL.TexParameter(Target, TextureParameterName.TextureWrapS, (int)All.ClampToEdge);
             GL.TexParameter(Target, TextureParameterName.TextureWrapT, (int)All.ClampToEdge);
             GL.TexParameter(Target, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
@@ -248,7 +248,7 @@ namespace AxEngine
             Handle = GL.GenTexture();
 
             // Bind the handle
-            Use();
+            Bind();
 
             // Now that our texture is loaded, we can set a few settings to affect how the image appears on rendering.
 
@@ -283,7 +283,7 @@ namespace AxEngine
         // Multiple textures can be bound, if your shader needs more than just one.
         // If you want to do that, use GL.ActiveTexture to set which slot GL.BindTexture binds to.
         // The OpenGL standard requires that there be at least 16, but there can be more depending on your graphics card.
-        public void Use(TextureUnit unit = TextureUnit.Texture0)
+        public void Bind(TextureUnit unit = TextureUnit.Texture0)
         {
             GL.ActiveTexture(unit);
             GL.BindTexture(Target, Handle);

@@ -59,7 +59,7 @@ namespace AxEngine
             Height = height;
 
             GL.GenFramebuffers(1, out _Handle);
-            Use();
+            Bind();
         }
 
         public void InitNormal()
@@ -67,7 +67,7 @@ namespace AxEngine
             var txt = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, Width, Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, IntPtr.Zero);
             txt.ObjectLabel = ObjectLabel;
             txt.SetLinearFilter();
-            txt.Use();
+            txt.Bind();
             DestinationTextures.Add(txt);
 
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, txt.Handle, 0);
@@ -77,7 +77,7 @@ namespace AxEngine
 
         public void BindTexture(Texture txt, FramebufferAttachment attachment)
         {
-            Use();
+            Bind();
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachment, TextureTarget.Texture2D, txt.Handle, 0);
         }
 
@@ -86,7 +86,7 @@ namespace AxEngine
             var layers = 2;
 
             var txt = Texture.CreateArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
-            txt.Use();
+            txt.Bind();
             DestinationTextures.Add(txt);
 
             GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, txt.Handle, 0);
@@ -101,7 +101,7 @@ namespace AxEngine
             var layers = 2;
 
             var txt = Texture.CreateCubeArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
-            txt.Use();
+            txt.Bind();
             DestinationTextures.Add(txt);
 
             GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, txt.Handle, 0);
@@ -125,7 +125,7 @@ namespace AxEngine
             RenderBuffer = new RenderBuffer(this, renderbufferStorage, framebufferAttachment);
         }
 
-        public void Use()
+        public void Bind()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, _Handle);
         }

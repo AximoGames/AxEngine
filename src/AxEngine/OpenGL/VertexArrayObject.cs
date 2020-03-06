@@ -42,7 +42,7 @@ namespace AxEngine
         {
             _vbo = new VertexBufferObject();
             _vbo.Create();
-            _vbo.Use();
+            _vbo.Bind();
             return _vbo;
         }
 
@@ -50,20 +50,20 @@ namespace AxEngine
         {
             _ebo = new ElementsBufferObject();
             _ebo.Create();
-            _ebo.Use();
+            _ebo.Bind();
             return _ebo;
         }
 
         public void Create()
         {
             _Handle = GL.GenVertexArray();
-            Use();
+            Bind();
             // if (Layout != null)
             //     Layout.InitAttributes();
         }
 
         public static int CurrentHandle;
-        public void Use()
+        public void Bind()
         {
             if (CurrentHandle == _Handle)
                 return;
@@ -72,7 +72,7 @@ namespace AxEngine
             GL.BindVertexArray(_Handle);
         }
 
-        public void UseDefault()
+        public void BindDefault()
         {
             CurrentHandle = 0;
             GL.BindVertexArray(0);
@@ -95,7 +95,7 @@ namespace AxEngine
                 return;
             if (_Handle == -1)
                 Create();
-            Use();
+            Bind();
             if (_vbo == null)
                 _vbo = CreateVBO();
             // if (_ebo == null)

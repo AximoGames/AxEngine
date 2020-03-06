@@ -64,7 +64,7 @@ namespace AxEngine
 
             vbo = new VertexBufferObject();
             vbo.Create();
-            vbo.Use();
+            vbo.Bind();
 
             var layout = new VertexLayout();
             layout.AddAttribute<float>(_DefLightShader.GetAttribLocation("aPos"), 2);
@@ -96,7 +96,7 @@ namespace AxEngine
         private void RenderPass1(RenderContext context, Camera camera)
         {
             GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
-            gBuffer.Use();
+            gBuffer.Bind();
             GL.Enable(EnableCap.DepthTest);
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -119,14 +119,14 @@ namespace AxEngine
 
             ObjectManager.PushDebugGroup("OnRender LightShader", this);
 
-            _DefLightShader.Use();
+            _DefLightShader.Bind();
 
-            gPosition.Use(TextureUnit.Texture0);
-            gNormal.Use(TextureUnit.Texture1);
-            gAlbedoSpec.Use(TextureUnit.Texture2);
+            gPosition.Bind(TextureUnit.Texture0);
+            gNormal.Bind(TextureUnit.Texture1);
+            gAlbedoSpec.Bind(TextureUnit.Texture2);
 
-            context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Use(TextureUnit.Texture3);
-            context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Use(TextureUnit.Texture4);
+            context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
+            context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture4);
 
             _DefLightShader.SetVector3("viewPos", camera.Position);
 
@@ -138,8 +138,8 @@ namespace AxEngine
             _DefLightShader.BindBlock("lightsArray", context.LightBinding);
             _DefLightShader.SetInt("lightCount", context.LightObjects.Count);
 
-            context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Use();
-            vao.Use();
+            context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Bind();
+            vao.Bind();
             GL.Disable(EnableCap.DepthTest);
             vao.Draw();
             GL.Enable(EnableCap.DepthTest);

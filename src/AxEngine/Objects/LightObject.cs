@@ -72,8 +72,8 @@ namespace AxEngine
 
         public void OnRender()
         {
-            vao.Use();
-            _shader.Use();
+            vao.Bind();
+            _shader.Bind();
 
             Matrix4 lampMatrix = Matrix4.Identity;
             lampMatrix *= Matrix4.CreateScale(0.2f);

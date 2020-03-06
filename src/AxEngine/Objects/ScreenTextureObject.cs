@@ -80,10 +80,10 @@ namespace AxEngine
             if (!(Context.CurrentPipeline is ScreenPipeline))
                 return;
 
-            vao.Use();
+            vao.Bind();
 
-            _shader.Use();
-            SourceTexture.Use();
+            _shader.Bind();
+            SourceTexture.Bind();
             _shader.SetMatrix4("model", GetModelMatrix());
 
             GL.Disable(EnableCap.CullFace);

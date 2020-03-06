@@ -51,9 +51,9 @@ namespace AxEngine
 
         public void OnRender()
         {
-            vao.Use();
+            vao.Bind();
 
-            _Shader.Use();
+            _Shader.Bind();
 
             _Shader.SetMatrix4("model", ModelMatrix);
             _Shader.SetMatrix4("view", Camera.ViewMatrix);

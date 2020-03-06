@@ -40,13 +40,13 @@ namespace AxEngine
         {
             //return;
 
-            vao.Use();
-            _shader.Use();
+            vao.Bind();
+            _shader.Bind();
 
             _shader.SetMatrix4("view", Camera.GetViewMatrix(Vector3.Zero));
             _shader.SetMatrix4("projection", Camera.ProjectionMatrix);
 
-            txt.Use(TextureUnit.Texture0);
+            txt.Bind(TextureUnit.Texture0);
             _shader.SetInt("skybox", 0);
 
             GL.DepthMask(false);

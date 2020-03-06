@@ -26,7 +26,7 @@ namespace AxEngine
         internal void SetData(float[] data)
         {
             var currentBuffer = CurrentBuffer;
-            Use();
+            Bind();
             Size = data.Length;
             GL.BufferData(Target, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
 
@@ -41,7 +41,7 @@ namespace AxEngine
             where T : struct
         {
             var currentBuffer = CurrentBuffer;
-            Use();
+            Bind();
             Size = data.Length;
             var structSize = Marshal.SizeOf(typeof(T));
             GL.BufferData(Target, data.Length * structSize, data, BufferUsageHint.StaticDraw);
@@ -56,13 +56,13 @@ namespace AxEngine
         private static int CurrentHandle;
         private static BufferObject CurrentBuffer;
 
-        public void Use()
+        public void Bind()
         {
-            Use(Target, _Handle);
+            Bind(Target, _Handle);
             CurrentBuffer = this;
         }
 
-        private static void Use(BufferTarget target, int handle)
+        private static void Bind(BufferTarget target, int handle)
         {
             // if (CurrentHandle == handle)
             //     return;
@@ -70,9 +70,9 @@ namespace AxEngine
             GL.BindBuffer(target, handle);
         }
 
-        public void UseDefault()
+        public void BindDefault()
         {
-            Use(Target, 0);
+            Bind(Target, 0);
             CurrentBuffer = null;
         }
 

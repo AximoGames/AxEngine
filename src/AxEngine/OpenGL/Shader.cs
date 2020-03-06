@@ -97,7 +97,7 @@ namespace AxEngine
             // And then link them together.
             LinkProgram(Handle);
 
-            Use();
+            Bind();
             ObjectManager.SetLabel(this);
 
             //if(
@@ -227,7 +227,7 @@ namespace AxEngine
         internal static int CurrentHandle { get; private set; }
 
         // A wrapper function that enables the shader program.
-        public void Use()
+        public void Bind()
         {
             if (CurrentHandle == Handle)
                 return;
@@ -244,7 +244,7 @@ namespace AxEngine
         // you can omit the layout(location=X) lines in the vertex shader, and use this in VertexAttribPointer instead of the hardcoded values.
         public int GetAttribLocation(string attribName)
         {
-            Use();
+            Bind();
             var attrHandle = GL.GetAttribLocation(Handle, attribName);
             if (attrHandle < 0)
             {
@@ -294,7 +294,7 @@ namespace AxEngine
         {
             if (_uniformLocations.TryGetValue(name, out var location))
             {
-                Use();
+                Bind();
                 GL.Uniform1(location, data);
             }
         }
@@ -313,7 +313,7 @@ namespace AxEngine
         {
             if (_uniformLocations.TryGetValue(name, out var location))
             {
-                Use();
+                Bind();
                 GL.Uniform1(location, data);
             }
         }
@@ -332,7 +332,7 @@ namespace AxEngine
         {
             if (_uniformLocations.TryGetValue(name, out var location))
             {
-                Use();
+                Bind();
                 GL.UniformMatrix4(location, true, ref data);
             }
         }
@@ -346,7 +346,7 @@ namespace AxEngine
         {
             if (_uniformLocations.TryGetValue(name, out var location))
             {
-                Use();
+                Bind();
                 GL.Uniform3(location, data);
             }
         }

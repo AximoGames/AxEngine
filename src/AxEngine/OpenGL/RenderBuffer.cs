@@ -16,15 +16,15 @@ namespace AxEngine
 
         public RenderBuffer(FrameBuffer fb, RenderbufferStorage renderbufferStorage, FramebufferAttachment framebufferAttachment)
         {
-            fb.Use();
+            fb.Bind();
 
             GL.GenRenderbuffers(1, out _Handle);
-            Use();
+            Bind();
             GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, renderbufferStorage, fb.Width, fb.Height);
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, framebufferAttachment, RenderbufferTarget.Renderbuffer, _Handle);
         }
 
-        public void Use()
+        public void Bind()
         {
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _Handle);
         }

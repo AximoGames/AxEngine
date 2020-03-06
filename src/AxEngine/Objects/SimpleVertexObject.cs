@@ -112,13 +112,13 @@ namespace AxEngine
 
         public void OnForwardRender()
         {
-            vao.Use();
+            vao.Bind();
 
-            txt0.Use(TextureUnit.Texture0);
-            txt1.Use(TextureUnit.Texture1);
-            Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Use(TextureUnit.Texture2);
+            txt0.Bind(TextureUnit.Texture0);
+            txt1.Bind(TextureUnit.Texture1);
+            Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
 
-            _Shader.Use();
+            _Shader.Bind();
 
             _Shader.SetMatrix4("model", GetModelMatrix());
             _Shader.SetMatrix4("view", Camera.ViewMatrix);
@@ -136,7 +136,7 @@ namespace AxEngine
 
             //var shadowCamera = GetShadowLight().LightCamera;
             _Shader.SetFloat("far_plane", 25f);
-            Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Use(TextureUnit.Texture3);
+            Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
             _Shader.SetInt("depthMap", 3);
 
             _Shader.BindBlock("lightsArray", Context.LightBinding);
@@ -150,12 +150,12 @@ namespace AxEngine
             var pipe = Context.GetPipeline<DeferredRenderPipeline>();
             if (pipe.Pass == DeferredPass.Pass1)
             {
-                vao.Use();
+                vao.Bind();
 
-                txt0.Use(TextureUnit.Texture0);
-                txt1.Use(TextureUnit.Texture1);
+                txt0.Bind(TextureUnit.Texture0);
+                txt1.Bind(TextureUnit.Texture1);
 
-                _DefGeometryShader.Use();
+                _DefGeometryShader.Bind();
 
                 _DefGeometryShader.SetMatrix4("model", GetModelMatrix());
                 _DefGeometryShader.SetMatrix4("view", Camera.ViewMatrix);
@@ -186,9 +186,9 @@ namespace AxEngine
 
         public void OnRenderShadow()
         {
-            vao.Use();
+            vao.Bind();
 
-            _ShadowShader.Use();
+            _ShadowShader.Bind();
 
             foreach (var light in Lights)
             {
@@ -212,9 +212,9 @@ namespace AxEngine
 
         public void OnRenderCubeShadow()
         {
-            vao.Use();
+            vao.Bind();
 
-            _CubeShadowShader.Use();
+            _CubeShadowShader.Bind();
 
             foreach (var light in Lights)
             {

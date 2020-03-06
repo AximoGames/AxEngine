@@ -28,7 +28,7 @@ namespace AxEngine
         public override void InitRender(RenderContext context, Camera camera)
         {
             GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
-            FrameBuffer.Use();
+            FrameBuffer.Bind();
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         }
@@ -36,7 +36,7 @@ namespace AxEngine
         public override void Render(RenderContext context, Camera camera)
         {
             GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
-            FrameBuffer.Use();
+            FrameBuffer.Bind();
             GL.Enable(EnableCap.DepthTest);
 
             foreach (var obj in GetRenderObjects(context, camera))
