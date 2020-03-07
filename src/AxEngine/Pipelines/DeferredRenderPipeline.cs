@@ -31,16 +31,20 @@ namespace AxEngine
             gPosition = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             gPosition.ObjectLabel = nameof(gPosition);
             gPosition.SetNearestFilter();
+            gBuffer.DestinationTextures.Add(gPosition);
             gBuffer.BindTexture(gPosition, FramebufferAttachment.ColorAttachment0);
 
             gNormal = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             gNormal.ObjectLabel = nameof(gNormal);
             gNormal.SetNearestFilter();
+            gBuffer.DestinationTextures.Add(gNormal);
             gBuffer.BindTexture(gNormal, FramebufferAttachment.ColorAttachment1);
+
 
             gAlbedoSpec = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             gAlbedoSpec.SetNearestFilter();
             gAlbedoSpec.ObjectLabel = nameof(gAlbedoSpec);
+            gBuffer.DestinationTextures.Add(gAlbedoSpec);
             gBuffer.BindTexture(gAlbedoSpec, FramebufferAttachment.ColorAttachment2);
 
             GL.DrawBuffers(3, new DrawBuffersEnum[] {
@@ -145,6 +149,11 @@ namespace AxEngine
             GL.Enable(EnableCap.DepthTest);
 
             ObjectManager.PopDebugGroup();
+        }
+
+        public override void OnScreenResize()
+        {
+            gBuffer.Resize(RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
         }
     }
 

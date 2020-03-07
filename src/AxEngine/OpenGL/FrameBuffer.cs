@@ -75,6 +75,18 @@ namespace AxEngine
             Check();
         }
 
+        public void Resize(int width, int height)
+        {
+            //return;
+            Width = width;
+            Height = height;
+            foreach (var txt in DestinationTextures)
+                txt.Resize(width, height);
+
+            if (RenderBuffer != null)
+                RenderBuffer.Resize(this);
+        }
+
         public void BindTexture(Texture txt, FramebufferAttachment attachment)
         {
             Bind();

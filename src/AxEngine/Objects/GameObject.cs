@@ -61,6 +61,10 @@ namespace AxEngine
         public abstract void Init();
 
         public abstract void Free();
+
+        public virtual void OnScreenResize()
+        {
+        }
     }
 
 }

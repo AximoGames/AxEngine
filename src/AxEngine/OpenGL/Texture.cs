@@ -16,16 +16,33 @@ namespace AxEngine
         public int Handle { get; private set; }
         private TextureTarget Target = TextureTarget.Texture2D;
 
+        private int Level;
+        private PixelInternalFormat InternalFormat;
+        private int Border;
+        private PixelFormat Format;
+        private PixelType Type;
+
         public Texture(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
         {
             Width = width;
             Height = height;
             Target = target;
+            InternalFormat = internalformat;
+            Border = border;
+            Format = format;
+            Type = type;
+
             int handle;
             GL.GenTextures(1, out handle);
             Handle = handle;
             Bind();
-            GL.TexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+            AllocData();
+        }
+
+        private void AllocData()
+        {
+            Bind();
+            GL.TexImage2D(Target, Level, InternalFormat, Width, Height, Border, Format, Type, IntPtr.Zero);
         }
 
         private Texture(int handle, TextureTarget target, int width, int height)
@@ -36,6 +53,13 @@ namespace AxEngine
             Height = height;
         }
 
+        public void Resize(int width, int height)
+        {
+            Width = width;
+            Height = height;
+            AllocData();
+        }
+
         public static Texture CreateCubeShadowMap(PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
         {
             int handle;
@@ -43,7 +67,7 @@ namespace AxEngine
             var txt = new Texture(handle, TextureTarget.TextureCubeMap, width, height);
             txt.Bind();
             for (var i = 0; i < 6; i++)
-                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.DepthComponent, width, height, border, format, type, pixels);
+                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.DepthComponent, txt.Width, txt.Height, border, format, type, pixels);
 
             txt.SetNearestFilter();
             txt.SetClampToEdgeWrap();

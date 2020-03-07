@@ -12,10 +12,18 @@ namespace AxEngine
         private string _ObjectLabel;
         public string ObjectLabel { get => _ObjectLabel; set { _ObjectLabel = value; ObjectManager.SetLabel(this); } }
 
+        private RenderbufferTarget Target = RenderbufferTarget.Renderbuffer;
+        public RenderbufferStorage RenderBufferStorage;
+        private FramebufferAttachment FrameBufferAttachment;
+
         public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Renderbuffer;
 
         public RenderBuffer(FrameBuffer fb, RenderbufferStorage renderbufferStorage, FramebufferAttachment framebufferAttachment)
         {
+            Target = RenderbufferTarget.Renderbuffer;
+            RenderBufferStorage = renderbufferStorage;
+            FrameBufferAttachment = framebufferAttachment;
+
             fb.Bind();
 
             GL.GenRenderbuffers(1, out _Handle);
@@ -27,6 +35,12 @@ namespace AxEngine
         public void Bind()
         {
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _Handle);
+        }
+
+        public void Resize(FrameBuffer fb)
+        {
+            fb.Bind();
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderBufferStorage, fb.Width, fb.Height);
         }
 
     }

@@ -84,6 +84,7 @@ namespace AxEngine
             RenderContext.Current = ctx;
 
             window = new Window(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle);
+            window.WindowBorder = _startup.WindowBorder;
             window.Location = new System.Drawing.Point(1920 / 2 + 10, 10);
             window.RenderFrame += (s, e) => OnRenderFrameInternal(e);
             window.UpdateFrame += (s, e) => OnUpdateFrameInternal(e);
@@ -152,6 +153,8 @@ namespace AxEngine
             {
                 UpdateMouseWorldPosition();
             };
+
+            Initialized = true;
         }
 
         public void SetupPipelines()
@@ -354,8 +357,19 @@ namespace AxEngine
             }
         }
 
+        protected bool Initialized { get; private set; }
+
+        public WindowBorder WindowBorder => window.WindowBorder;
+
         protected void OnScreenResizeInternal()
         {
+            if (!Initialized)
+                return;
+
+            if (WindowBorder != WindowBorder.Resizable)
+                return;
+
+            Console.WriteLine("OnScreenResize: " + window.Width + "x" + window.Height);
             ctx.OnScreenResize();
         }
 
@@ -722,6 +736,7 @@ namespace AxEngine
     {
         public Vector2i WindowSize { get; set; }
         public string WindowTitle { get; set; }
+        public WindowBorder WindowBorder { get; set; } = WindowBorder.Resizable;
     }
 
     public class SceneOptions

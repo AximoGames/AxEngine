@@ -17,6 +17,8 @@ namespace AxEngine
         {
         }
 
+        //public override IRenderPipeline PrimaryRenderPipeline => ctx.GetPipeline<ForwardRenderPipeline>();
+
         protected override void SetupScene()
         {
             ctx.AddObject(new TestObject()

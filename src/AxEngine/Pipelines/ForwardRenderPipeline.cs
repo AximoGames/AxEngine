@@ -1,3 +1,4 @@
+using System;
 using OpenTK.Graphics.OpenGL4;
 
 namespace AxEngine
@@ -45,7 +46,9 @@ namespace AxEngine
 
         public override void OnScreenResize()
         {
-            //CreateFrameBuffer();
+            // if (RenderContext.Current.ScreenSize.X == 100)
+            //     throw new Exception();
+            FrameBuffer.Resize(RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
         }
 
     }

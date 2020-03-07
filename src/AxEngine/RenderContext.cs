@@ -144,10 +144,19 @@ namespace AxEngine
 
         public void OnScreenResize()
         {
+            //return;
             ScreenSize = RenderApplication.Current.ScreenSize;
+            GL.Viewport(0, 0, ScreenSize.X, ScreenSize.Y);
+
+            // GL.Scissor(0, 0, ScreenSize.X, ScreenSize.Y);
+            // GL.Enable(EnableCap.ScissorTest);
+            Camera.SetAspectRatio(ScreenSize.X, ScreenSize.Y);
 
             foreach (var pipe in RenderPipelines)
                 pipe.OnScreenResize();
+
+            foreach (var obj in AllObjects)
+                obj.OnScreenResize();
         }
     }
 

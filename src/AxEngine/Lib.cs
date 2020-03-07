@@ -80,6 +80,7 @@ namespace AxEngine
         void Init();
         void Free();
         void AssignContext(RenderContext ctx);
+        void OnScreenResize();
     }
 
     public interface IData
