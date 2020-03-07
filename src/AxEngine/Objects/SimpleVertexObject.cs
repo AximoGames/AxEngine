@@ -19,6 +19,37 @@ namespace AxEngine
             else if (Context.CurrentPipeline is PointShadowRenderPipeline && this is IShadowObject m4)
                 m4.OnRenderCubeShadow();
         }
+
+        protected Dictionary<string, object> ShaderParams = new Dictionary<string, object>();
+
+        public void AddShaderParam<T>(string name, T value)
+            where T : struct
+        {
+            if (ShaderParams.ContainsKey(name))
+                ShaderParams[name] = value;
+            else
+                ShaderParams.Add(name, value);
+        }
+
+        protected void ApplyShaderParams(Shader shader)
+        {
+            foreach (var entry in ShaderParams)
+            {
+                var name = entry.Key;
+                var value = entry.Value;
+                if (value == null)
+                    continue;
+
+                var type = value.GetType();
+                if (type == typeof(int))
+                    shader.SetInt(name, (int)value);
+                else if (type == typeof(Vector3))
+                    shader.SetVector3(name, (Vector3)value);
+                else
+                    throw new NotSupportedException(type.Name);
+            }
+        }
+
     }
 
     public class SimpleVertexObject : RenderableObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
@@ -132,6 +163,8 @@ namespace AxEngine
             _Shader.SetInt("shadowMap", 2);
 
             _Shader.SetMaterial("material", Material);
+
+            ApplyShaderParams(_Shader);
 
             //_Shader.SetVector3("light.position", GetShadowLight().Position);
             //_Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));
