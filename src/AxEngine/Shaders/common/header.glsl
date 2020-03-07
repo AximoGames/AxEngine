@@ -4,7 +4,7 @@
 
 #define MAX_NUM_TOTAL_LIGHTS 100
 
-layout(std140) struct Light {
+struct Light {
 	vec3 position; //The position of the light.
 	vec3 color; //The color of the light.
 	mat4 lightSpaceMatrix;
