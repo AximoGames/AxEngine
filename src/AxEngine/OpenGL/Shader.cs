@@ -216,7 +216,8 @@ namespace AxEngine
                 // We can use `GL.GetShaderInfoLog(shader)` to get information about the error.
                 var msg = GL.GetShaderInfoLog(shader);
                 Console.WriteLine(msg);
-                File.WriteAllText("/tmp/error.glsl", comp.AllSources());
+                if (Directory.Exists("/tmp"))
+                    File.WriteAllText("/tmp/error.glsl", comp.AllSources());
                 throw new Exception($"Error occurred whilst compiling Shader({shader}): {msg}");
             }
 
