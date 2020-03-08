@@ -23,7 +23,7 @@ namespace AxEngine
 
         private string GetPath(string path)
         {
-            return DirectoryHelper.GetPath(path);
+            return DirectoryHelper.GetAssetsPath(path);
         }
 
         public void PlayAsync(string path)

@@ -201,7 +201,7 @@ namespace AxEngine
 
         private void StartFileListener()
         {
-            ShaderWatcher = new FileSystemWatcher(Path.Combine(DirectoryHelper.EngineRootDir, "Shaders"));
+            ShaderWatcher = new FileSystemWatcher(Path.Combine(DirectoryHelper.EngineRootDir, "Assets", "Shaders"));
             ShaderWatcher.Changed += (sender, e) =>
             {
                 // Reload have to be in Main-Thread.

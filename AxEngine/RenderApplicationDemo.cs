@@ -56,7 +56,7 @@ namespace AxEngine
             ctx.AddObject(new ScreenTextureObject()
             {
                 Name = "ScreenTexture1",
-                TexturePath = "Ressources/woodenbox.png",
+                TexturePath = "Textures/woodenbox.png",
                 RectanglePixels = new RectangleF(000, 0, 30f, 30f),
             });
 

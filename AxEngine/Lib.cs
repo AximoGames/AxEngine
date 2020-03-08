@@ -19,7 +19,7 @@ namespace AxEngine
             get
             {
                 if (_AppRootDir == null)
-                    _AppRootDir = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..")).FullName;
+                    _AppRootDir = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..")).FullName;
                 return _AppRootDir;
             }
         }
@@ -38,7 +38,7 @@ namespace AxEngine
                     }
                     else
                     {
-                        _EngineRootDir = new DirectoryInfo(Path.Combine(AppRootDir, "..", "..", "..", "AxEngine", "src", "AxEngine")).FullName;
+                        _EngineRootDir = new DirectoryInfo(Path.Combine(AppRootDir, "..", "AxEngine")).FullName;
                     }
                 }
                 return _EngineRootDir;
@@ -56,11 +56,11 @@ namespace AxEngine
             }
         }
 
-        public static string GetPath(string subPath)
+        public static string GetAssetsPath(string subPath)
         {
             foreach (var dir in SearchDirectories)
             {
-                var path = Path.Combine(dir, subPath);
+                var path = Path.Combine(dir, "Assets", subPath);
                 if (File.Exists(path))
                     return new FileInfo(path).FullName;
                 if (Directory.Exists(path))

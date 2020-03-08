@@ -1,4 +1,4 @@
-To clone this repository, you need git LFS, otherwise you need to download the Ressources folder manually.
+To clone this repository, you need git LFS, otherwise you need to download the Assets folder manually.
 
 Don't forget the `--recursive` option:
 ```

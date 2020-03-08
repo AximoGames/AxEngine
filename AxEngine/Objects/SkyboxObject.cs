@@ -26,8 +26,8 @@ namespace AxEngine
             UsePipeline<ForwardRenderPipeline>();
 
             _shader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
-            //txt = Texture.LoadCubeMap("Ressources/desert-skybox/#.tga");
-            txt = Texture.LoadCubeMap("Ressources/water-skybox/#.jpg");
+            //txt = Texture.LoadCubeMap("Textures/desert-skybox/#.tga");
+            txt = Texture.LoadCubeMap("Textures/water-skybox/#.jpg");
 
             var layout = new VertexLayout();
             layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 3);

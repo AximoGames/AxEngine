@@ -27,8 +27,8 @@ namespace AxEngine
         {
             return new Material()
             {
-                DiffuseImagePath = "Ressources/woodenbox.png",
-                SpecularImagePath = "Ressources/woodenbox_specular.png",
+                DiffuseImagePath = "Textures/woodenbox.png",
+                SpecularImagePath = "Textures/woodenbox_specular.png",
                 Color = new Vector3(1.0f, 1.0f, 0.0f),
                 Ambient = 0.3f,
                 Shininess = 32.0f,

@@ -474,7 +474,7 @@ namespace AxEngine
             if (!string.IsNullOrEmpty(content))
                 return content;
 
-            var absPath = DirectoryHelper.GetPath(path);
+            var absPath = DirectoryHelper.GetAssetsPath(path);
             if (string.IsNullOrEmpty(absPath))
                 throw new Exception("Could not load file: " + path);
 

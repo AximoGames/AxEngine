@@ -294,7 +294,7 @@ namespace AxEngine
 
         private static Bitmap LoadBitmap(string path)
         {
-            var imagePath = DirectoryHelper.GetPath(path);
+            var imagePath = DirectoryHelper.GetAssetsPath(path);
             Console.WriteLine(imagePath);
             if (path.EndsWith(".tga"))
                 return TgaDecoder.FromFile(imagePath);

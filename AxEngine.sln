@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AxEngine", "AxEngine\AxEngine.csproj", "{303329F6-C910-4043-81E5-5080659ECB28}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net3dBool", "..\External\Net3dBool\src\Net3dBool\Net3dBool.csproj", "{09162E62-8F7B-4468-902D-C2253C45D4A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net3dBool", "External\Net3dBool\src\Net3dBool\Net3dBool.csproj", "{09162E62-8F7B-4468-902D-C2253C45D4A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
