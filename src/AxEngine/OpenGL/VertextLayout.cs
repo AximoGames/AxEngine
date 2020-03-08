@@ -1,8 +1,6 @@
-﻿
-using OpenTK;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using OpenTK.Graphics.OpenGL4;
+using OpenToolkit.Graphics.OpenGL4;
 
 namespace AxEngine
 {

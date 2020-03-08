@@ -1,12 +1,13 @@
 ﻿using System;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Input;
+using OpenToolkit.Mathematics;
+using OpenToolkit.Graphics.OpenGL4;
 using AxEngine;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using OpenToolkit.Windowing.Desktop;
+using OpenToolkit.Input;
+using OpenToolkit.Windowing.Common;
 
 namespace AxEngine
 {
@@ -23,25 +24,26 @@ namespace AxEngine
         //private float Pitch = -0.3f;
         //private float Facing = (float)Math.PI / 2 + 0.15f;
 
-        public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 3, GraphicsContextFlags.Default) { }
+        public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings) { }
 
-        protected override void OnLoad(EventArgs e)
+
+        protected override void OnLoad()
         {
-            base.OnLoad(e);
+            base.OnLoad();
         }
 
-        protected override void OnFocusedChanged(EventArgs e)
+        protected override void OnFocusedChanged(FocusedChangedEventArgs e)
         {
-            if (Focused)
-            {
-                TargetRenderFrequency = 1 / 60.0;
-                TargetUpdatePeriod = 1 / 60.0;
-            }
-            else
-            {
-                TargetRenderFrequency = 1 / 30.0;
-                TargetUpdatePeriod = 1 / 30.0;
-            }
+            //if (IsFocused)
+            //{
+            //    TargetRenderFrequency = 1 / 60.0;
+            //    TargetUpdatePeriod = 1 / 60.0;
+            //}
+            //else
+            //{
+            //    TargetRenderFrequency = 1 / 30.0;
+            //    TargetUpdatePeriod = 1 / 30.0;
+            //}
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -70,14 +72,14 @@ namespace AxEngine
             base.OnMouseWheel(e);
         }
 
-        protected override void OnResize(EventArgs e)
+        protected override void OnResize(ResizeEventArgs e)
         {
             base.OnResize(e);
         }
 
-        protected override void OnUnload(EventArgs e)
+        protected override void OnUnload()
         {
-            base.OnUnload(e);
+            base.OnUnload();
         }
     }
 }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace AxEngine
 {

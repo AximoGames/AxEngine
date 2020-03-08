@@ -1,8 +1,9 @@
 ﻿using System;
-using OpenTK.Graphics.OpenGL4;
+using OpenToolkit.Graphics.OpenGL4;
 using System.Threading;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using System.Runtime.InteropServices;
+using OpenToolkit.Windowing.Common;
 
 namespace AxEngine
 {

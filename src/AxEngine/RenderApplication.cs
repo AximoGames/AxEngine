@@ -1,12 +1,14 @@
 using System;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Input;
+using OpenToolkit.Graphics.OpenGL4;
+using OpenToolkit.Mathematics;
+using OpenToolkit.Input;
 using AxEngine;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using OpenToolkit.Windowing.Desktop;
+using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Common.Input;
 
 namespace AxEngine
 {
@@ -16,7 +18,7 @@ namespace AxEngine
 
         public static RenderApplication Current { get; private set; }
 
-        public Vector2i ScreenSize => new Vector2i(window.Width, window.Height);
+        public Vector2i ScreenSize => window.ClientSize;
 
         private RenderApplicationStartup _startup;
 
@@ -64,13 +66,12 @@ namespace AxEngine
         {
             Current = this;
 
-            Toolkit.Init(new ToolkitOptions
-            {
-                Backend = PlatformBackend.PreferX11,
-            });
+            //Toolkit.Init(new ToolkitOptions
+            //{
+            //    Backend = PlatformBackend.PreferX11,
+            //});
 
             Init();
-            window.Run(60.0);
         }
 
         public RenderContext ctx { get; private set; }
@@ -83,25 +84,42 @@ namespace AxEngine
             };
             RenderContext.Current = ctx;
 
-            window = new Window(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle);
+            //GL.LoadBindings(new OpenToolkit.GraphicsLibraryFramework.GLFWBindingsContext());
+
+            var gamewinSettings = new GameWindowSettings()
+            {
+            };
+            var nativewinSettings = new NativeWindowSettings
+            {
+                Size = _startup.WindowSize,
+                APIVersion = new Version(4, 3),
+            };
+
+            window = new Window(GameWindowSettings.Default, NativeWindowSettings.Default);
             window.WindowBorder = _startup.WindowBorder;
-            window.Location = new System.Drawing.Point(1920 / 2 + 10, 10);
-            window.RenderFrame += (s, e) => OnRenderFrameInternal(e);
-            window.UpdateFrame += (s, e) => OnUpdateFrameInternal(e);
-            window.MouseMove += (s, e) => OnMouseMoveInternal(e);
-            window.KeyDown += (s, e) => OnKeyDownInternal(e);
-            window.MouseDown += (s, e) => OnMouseDownInternal(e);
-            window.MouseUp += (s, e) => OnMouseUpInternal(e);
-            window.MouseWheel += (s, e) => OnMouseWheelInternal(e);
-            window.Unload += (s, e) => OnUnloadInternal(e);
-            window.Resize += (s, e) => OnScreenResizeInternal();
+            window.Location = new Vector2i(1920 / 2 + 10, 10);
+            window.RenderFrame += (e) => OnRenderFrameInternal(e);
+            window.UpdateFrame += (e) => OnUpdateFrameInternal(e);
+            window.MouseMove += (e) => OnMouseMoveInternal(e);
+            window.KeyDown += (e) => OnKeyDownInternal(e);
+            window.MouseDown += (e) => OnMouseDownInternal(e);
+            window.MouseUp += (e) => OnMouseUpInternal(e);
+            window.MouseWheel += (e) => OnMouseWheelInternal(e);
+            window.Unload += () => OnUnloadInternal();
+            window.Resize += (e) => OnScreenResizeInternal();
+            window.Load += () => OnLoadInternal();
 
-            var vendor = GL.GetString(StringName.Vendor);
-            var version = GL.GetString(StringName.Version);
-            var shadingLanguageVersion = GL.GetString(StringName.ShadingLanguageVersion);
-            var renderer = GL.GetString(StringName.Renderer);
+            window.Run();
+        }
 
-            Console.WriteLine($"Vendor: {vendor}, version: {version}, shadinglangVersion: {shadingLanguageVersion}, renderer: {renderer}");
+        private void OnLoadInternal()
+        {
+            //var vendor = GL.GetString(StringName.Vendor);
+            //var version = GL.GetString(StringName.Version);
+            //var shadingLanguageVersion = GL.GetString(StringName.ShadingLanguageVersion);
+            //var renderer = GL.GetString(StringName.Renderer);
+
+            //Console.WriteLine($"Vendor: {vendor}, version: {version}, shadinglangVersion: {shadingLanguageVersion}, renderer: {renderer}");
 
             //PrintExtensions();
 
@@ -327,7 +345,7 @@ namespace AxEngine
             OnKeyDown(e);
             if (DefaultKeyBindings)
             {
-                var kbState = Keyboard.GetState();
+                var kbState = window.KeyboardState;
                 if (kbState[Key.C])
                 {
                     if (e.Shift)
@@ -369,7 +387,7 @@ namespace AxEngine
             if (WindowBorder != WindowBorder.Resizable)
                 return;
 
-            Console.WriteLine("OnScreenResize: " + window.Width + "x" + window.Height);
+            Console.WriteLine("OnScreenResize: " + window.ClientSize.ToString());
             ctx.OnScreenResize();
         }
 
@@ -389,7 +407,7 @@ namespace AxEngine
 
             ProcessTaskQueue();
 
-            if (!window.Focused)
+            if (!window.IsFocused)
             {
                 return;
             }
@@ -397,16 +415,16 @@ namespace AxEngine
             if (DefaultKeyBindings)
             {
 
-                var input = Keyboard.GetState();
+                var input = window.KeyboardState;
 
                 if (input.IsKeyDown(Key.Escape))
                 {
-                    window.Exit();
+                    window.Close();
                     Environment.Exit(0);
                     return;
                 }
 
-                var kbState = Keyboard.GetState();
+                var kbState = window.KeyboardState;
 
                 IPosition pos = MovingObject;
                 Camera cam = pos as Camera;
@@ -579,9 +597,10 @@ namespace AxEngine
         private void OnMouseMoveInternal(MouseMoveEventArgs e)
         {
             OnMouseMove(e);
+            var ms = window.MouseState;
 
-            if (e.Mouse.LeftButton == ButtonState.Pressed)
-                MouseDelta = new Vector2(e.XDelta, e.YDelta);
+            if (ms[MouseButton.Left])
+                MouseDelta = new Vector2(e.DeltaX, e.DeltaY);
 
             var x = (float)((((double)e.X / (double)ScreenSize.X) * 2.0) - 1.0);
             var y = (float)((((double)e.Y / (double)ScreenSize.Y) * 2.0) - 1.0);
@@ -611,7 +630,7 @@ namespace AxEngine
         {
             OnMouseWheel(e);
             if (DefaultKeyBindings)
-                Camera.Fov -= e.DeltaPrecise;
+                Camera.Fov -= e.OffsetX;
         }
 
         protected void OnResize(EventArgs e)
@@ -620,11 +639,11 @@ namespace AxEngine
             Camera.AspectRatio = ctx.ScreenSize.X / (float)ctx.ScreenSize.Y;
         }
 
-        protected virtual void OnUnload(EventArgs e) { }
+        protected virtual void OnUnload() { }
 
-        private void OnUnloadInternal(EventArgs e)
+        private void OnUnloadInternal()
         {
-            OnUnload(e);
+            OnUnload();
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
