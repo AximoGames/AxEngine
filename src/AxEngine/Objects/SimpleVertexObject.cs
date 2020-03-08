@@ -110,8 +110,10 @@ namespace AxEngine
                 _Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
             _DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
 
-            txt0 = new Texture(Material.DiffuseImagePath);
-            txt1 = new Texture(Material.SpecularImagePath);
+            if (!string.IsNullOrEmpty(Material.DiffuseImagePath))
+                txt0 = new Texture(Material.DiffuseImagePath);
+            if (!string.IsNullOrEmpty(Material.SpecularImagePath))
+                txt1 = new Texture(Material.SpecularImagePath);
 
             _ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
             _CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
@@ -148,8 +150,10 @@ namespace AxEngine
         {
             vao.Bind();
 
-            txt0.Bind(TextureUnit.Texture0);
-            txt1.Bind(TextureUnit.Texture1);
+            if (txt0 != null)
+                txt0.Bind(TextureUnit.Texture0);
+            if (txt1 != null)
+                txt1.Bind(TextureUnit.Texture1);
             Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
 
             _Shader.Bind();

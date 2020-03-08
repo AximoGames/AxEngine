@@ -1,7 +1,7 @@
 using System;
 using OpenTK;
 
-namespace System
+namespace AxEngine
 {
     public static class MathF
     {
