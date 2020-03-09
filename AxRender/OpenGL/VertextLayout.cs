@@ -1,5 +1,5 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
-// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
@@ -14,11 +14,13 @@ namespace Aximo.Render
         private int _Stride;
         public int Stride => _Stride;
 
-        public void AddAttribute<T>(int index, int size, bool normalized = false) {
+        public void AddAttribute<T>(int index, int size, bool normalized = false)
+        {
             var type = typeof(T);
             var offset = _Stride;
             _Stride += size * GetSizeOf(type);
-            var attr = new VertexLayoutAttribute {
+            var attr = new VertexLayoutAttribute
+            {
                 Index = index,
                 Size = size,
                 Type = GetVertexAttribPointerType(type),
@@ -30,14 +32,17 @@ namespace Aximo.Render
             UpdateStride();
         }
 
-        private void UpdateStride() {
+        private void UpdateStride()
+        {
             foreach (var attr in Attributes)
                 attr.Stride = _Stride;
         }
 
-        internal void InitAttributes() {
+        internal void InitAttributes()
+        {
             ObjectManager.PushDebugGroup("Init", "VertexLayout");
-            foreach (var attr in Attributes) {
+            foreach (var attr in Attributes)
+            {
                 if (attr.Index < 0)
                     continue;
                 GL.EnableVertexAttribArray(attr.Index);
@@ -46,13 +51,15 @@ namespace Aximo.Render
             ObjectManager.PopDebugGroup();
         }
 
-        private static VertexAttribPointerType GetVertexAttribPointerType(Type type) {
+        private static VertexAttribPointerType GetVertexAttribPointerType(Type type)
+        {
             if (type == typeof(float))
                 return VertexAttribPointerType.Float;
             throw new NotImplementedException();
         }
 
-        private static int GetSizeOf(Type type) {
+        private static int GetSizeOf(Type type)
+        {
             if (type == typeof(float))
                 return 4;
             throw new NotImplementedException();

@@ -1,5 +1,5 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
-// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // Adapted from this excellent IcoSphere tutorial by Andreas Kahler
 // http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
@@ -19,7 +19,8 @@ namespace Util.IcoSphere
         public int V2;
         public int V3;
 
-        public TriangleIndices(int v1, int v2, int v3) {
+        public TriangleIndices(int v1, int v2, int v3)
+        {
             this.V1 = v1;
             this.V2 = v2;
             this.V3 = v3;
@@ -41,14 +42,16 @@ namespace Util.IcoSphere
         private Dictionary<long, int> middlePointIndexCache;
 
         // add vertex to mesh, fix position to be on unit sphere, return index
-        private int AddVertex(Vector3 p) {
+        private int AddVertex(Vector3 p)
+        {
             float length = (float)Math.Sqrt((p.X * p.X) + (p.Y * p.Y) + (p.Z * p.Z));
             geometry.Positions.Add(new Vector3(p.X / length, p.Y / length, p.Z / length));
             return index++;
         }
 
         // return index of point in the middle of p1 and p2
-        private int GetMiddlePoint(int p1, int p2) {
+        private int GetMiddlePoint(int p1, int p2)
+        {
             // first check if we have it already
             bool firstIsSmaller = p1 < p2;
             long smallerIndex = firstIsSmaller ? p1 : p2;
@@ -56,7 +59,8 @@ namespace Util.IcoSphere
             long key = (smallerIndex << 32) + greaterIndex;
 
             int ret;
-            if (this.middlePointIndexCache.TryGetValue(key, out ret)) {
+            if (this.middlePointIndexCache.TryGetValue(key, out ret))
+            {
                 return ret;
             }
 
@@ -76,7 +80,8 @@ namespace Util.IcoSphere
             return i;
         }
 
-        public MeshGeometry3D Create(int recursionLevel) {
+        public MeshGeometry3D Create(int recursionLevel)
+        {
             this.geometry = new MeshGeometry3D();
             this.middlePointIndexCache = new Dictionary<long, int>();
             this.index = 0;
@@ -131,9 +136,11 @@ namespace Util.IcoSphere
             faces.Add(new TriangleIndices(9, 8, 1));
 
             // refine triangles
-            for (int i = 0; i < recursionLevel; i++) {
+            for (int i = 0; i < recursionLevel; i++)
+            {
                 var faces2 = new List<TriangleIndices>();
-                foreach (var tri in faces) {
+                foreach (var tri in faces)
+                {
                     // replace triangle by 4 triangles
                     int a = GetMiddlePoint(tri.V1, tri.V2);
                     int b = GetMiddlePoint(tri.V2, tri.V3);
@@ -150,7 +157,8 @@ namespace Util.IcoSphere
             this.geometry.Faces = faces;
 
             // done, now add triangles to mesh
-            foreach (var tri in faces) {
+            foreach (var tri in faces)
+            {
                 this.geometry.MeshIndicies.Add(tri.V1);
                 this.geometry.MeshIndicies.Add(tri.V2);
                 this.geometry.MeshIndicies.Add(tri.V3);
@@ -167,11 +175,13 @@ namespace Util.IcoSphere
 
         private MeshGeometry3D geom;
 
-        public Mesh_SphereICO(int divisions) {
+        public Mesh_SphereICO(int divisions)
+        {
             this.Create(divisions);
         }
 
-        private void ComputeEquirectangularUVForSpherePoint(Vector3 p, out float u, out float v) {
+        private void ComputeEquirectangularUVForSpherePoint(Vector3 p, out float u, out float v)
+        {
             // http://paulbourke.net/geometry/transformationprojection/
 
             // this is the unit surface normal (and surface point)
@@ -191,7 +201,8 @@ namespace Util.IcoSphere
             // v = (float) ( Math.Log((1.0 + Math.Sin(latitude))/(1.0 - Math.Sin(latitude))) / (4.0 * Math.PI) );
         }
 
-        private void Create(int divisions) {
+        private void Create(int divisions)
+        {
             var icoSphereCreator = new IcoSphereCreator();
             geom = icoSphereCreator.Create(divisions);
             var positions = geom.Positions.ToArray();
@@ -201,7 +212,8 @@ namespace Util.IcoSphere
 
             // we have to process each face in the IcoSphere, so we can
             // properly "wrap" the texture-coordinates that fall across the left/right border
-            foreach (TriangleIndices face in geom.Faces) {
+            foreach (TriangleIndices face in geom.Faces)
+            {
                 var vp1 = positions[face.V1];
                 var vp2 = positions[face.V2];
                 var vp3 = positions[face.V3];
@@ -241,7 +253,8 @@ namespace Util.IcoSphere
                 bool v2_left = vp2.X < 0.0f;
                 bool v3_left = vp3.X < 0.0f;
                 if (vp1.Z < 0.0f && vp2.Z < 0.0f && vp3.Z < 0.0f &&
-                    ((v2_left != v1_left) || (v3_left != v1_left))) {
+                    ((v2_left != v1_left) || (v3_left != v1_left)))
+                {
                     // we need to "wrap" texture coordinates
                     if (v1.UV.X < 0.5f) { v1.UV.X += 1.0f; }
                     if (v2.UV.X < 0.5f) { v2.UV.X += 1.0f; }
@@ -262,7 +275,8 @@ namespace Util.IcoSphere
             Vertices = vertexSoup.Verticies.ToArray();
             Indicies = indexList.ToArray();
 
-            for (var i = 0; i < Vertices.Length; i++) {
+            for (var i = 0; i < Vertices.Length; i++)
+            {
                 Vertices[i].Position *= 0.5f;
             }
 
@@ -277,12 +291,15 @@ namespace Util.IcoSphere
         public List<TVertexStruct> Verticies = new List<TVertexStruct>();
         private readonly bool deDup;
 
-        public ushort DigestVertex(ref TVertexStruct vertex) {
+        public ushort DigestVertex(ref TVertexStruct vertex)
+        {
             ushort retval;
-            if (deDup && vertexToIndexMap.ContainsKey(vertex)) {
+            if (deDup && vertexToIndexMap.ContainsKey(vertex))
+            {
                 retval = vertexToIndexMap[vertex];
             }
-            else {
+            else
+            {
                 ushort nextIndex = (ushort)Verticies.Count;
                 vertexToIndexMap[vertex] = nextIndex;
                 Verticies.Add(vertex);
@@ -292,16 +309,19 @@ namespace Util.IcoSphere
             return retval;
         }
 
-        public ushort[] DigestVerticies(TVertexStruct[] vertex_list) {
+        public ushort[] DigestVerticies(TVertexStruct[] vertex_list)
+        {
             ushort[] retval = new ushort[vertex_list.Length];
 
-            for (int x = 0; x < vertex_list.Length; x++) {
+            for (int x = 0; x < vertex_list.Length; x++)
+            {
                 retval[x] = DigestVertex(ref vertex_list[x]);
             }
             return retval;
         }
 
-        public VertexSoup(bool deDup = true) {
+        public VertexSoup(bool deDup = true)
+        {
             this.deDup = deDup;
         }
     }

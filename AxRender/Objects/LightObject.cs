@@ -1,5 +1,5 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
-// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using OpenTK;
 
@@ -16,11 +16,15 @@ namespace Aximo.Render
         public int ShadowTextureIndex { get; set; }
         public LightType LightType { get; set; }
 
-        public Camera LightCamera {
-            get {
-                if (LightType == LightType.Directional) {
+        public Camera LightCamera
+        {
+            get
+            {
+                if (LightType == LightType.Directional)
+                {
                     //var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
-                    var shadowCamera = new OrthographicCamera(Position) {
+                    var shadowCamera = new OrthographicCamera(Position)
+                    {
                         NearPlane = 1.0f,
                         FarPlane = 25f,
                     };
@@ -34,8 +38,10 @@ namespace Aximo.Render
 
                     return shadowCamera;
                 }
-                else {
-                    var cam = new PerspectiveFieldOfViewCamera(Position, 1.0f) {
+                else
+                {
+                    var cam = new PerspectiveFieldOfViewCamera(Position, 1.0f)
+                    {
                         NearPlane = 0.1f,
                         FarPlane = 25f,
                         Fov = 90f,
@@ -51,7 +57,8 @@ namespace Aximo.Render
 
         private float[] _vertices = DataHelper.Cube;
 
-        public override void Init() {
+        public override void Init()
+        {
             UsePipeline<ForwardRenderPipeline>();
 
             _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
@@ -65,7 +72,8 @@ namespace Aximo.Render
             vao.SetData(_vertices);
         }
 
-        public void OnRender() {
+        public void OnRender()
+        {
             vao.Bind();
             _shader.Bind();
 
@@ -80,7 +88,8 @@ namespace Aximo.Render
             vao.Draw();
         }
 
-        public override void Free() {
+        public override void Free()
+        {
             vao.Free();
             _shader.Free();
         }

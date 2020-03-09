@@ -1,5 +1,5 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
-// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // https://github.com/wertrain/tga-decoder-cs
 // Licensed unter "The Unlicense"
@@ -29,7 +29,8 @@ namespace Aximo.Render
             private int descriptor;
             private byte[] colorData;
 
-            public TgaData(byte[] image) {
+            public TgaData(byte[] image)
+            {
                 this.idFieldLength = image[0];
                 this.colorMapType = image[1];
                 this.imageType = image[2];
@@ -49,17 +50,22 @@ namespace Aximo.Render
                     this.colorData = this.DecodeRLE();
             }
 
-            public int Width {
+            public int Width
+            {
                 get { return this.imageWidth; }
             }
 
-            public int Height {
+            public int Height
+            {
                 get { return this.imageHeight; }
             }
 
-            public int GetPixel(int x, int y) {
-                if (colorMapType == 0) {
-                    switch (this.imageType) {
+            public int GetPixel(int x, int y)
+            {
+                if (colorMapType == 0)
+                {
+                    switch (this.imageType)
+                    {
                         // Index color
                         case 1:
                         case 9:
@@ -97,35 +103,44 @@ namespace Aximo.Render
                     }
                     return 0;
                 }
-                else {
+                else
+                {
                     // not implemented
                     return 0;
                 }
             }
 
-            protected byte[] DecodeRLE() {
+            protected byte[] DecodeRLE()
+            {
                 int elementCount = this.bitPerPixel / 8;
                 byte[] elements = new byte[elementCount];
                 int decodeBufferLength = elementCount * this.imageWidth * this.imageHeight;
                 byte[] decodeBuffer = new byte[decodeBufferLength];
                 int decoded = 0;
                 int offset = 0;
-                while (decoded < decodeBufferLength) {
+                while (decoded < decodeBufferLength)
+                {
                     int packet = this.colorData[offset++] & 0xFF;
-                    if ((packet & 0x80) != 0) {
-                        for (int i = 0; i < elementCount; i++) {
+                    if ((packet & 0x80) != 0)
+                    {
+                        for (int i = 0; i < elementCount; i++)
+                        {
                             elements[i] = this.colorData[offset++];
                         }
                         int count = (packet & 0x7F) + 1;
-                        for (int i = 0; i < count; i++) {
-                            for (int j = 0; j < elementCount; j++) {
+                        for (int i = 0; i < count; i++)
+                        {
+                            for (int j = 0; j < elementCount; j++)
+                            {
                                 decodeBuffer[decoded++] = elements[j];
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         int count = (packet + 1) * elementCount;
-                        for (int i = 0; i < count; i++) {
+                        for (int i = 0; i < count; i++)
+                        {
                             decodeBuffer[decoded++] = this.colorData[offset++];
                         }
                     }
@@ -134,30 +149,38 @@ namespace Aximo.Render
             }
         }
 
-        public static Bitmap FromFile(string path) {
-            try {
-                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read)) {
+        public static Bitmap FromFile(string path)
+        {
+            try
+            {
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
                     int length = (int)fs.Length;
                     byte[] buffer = new byte[length];
                     fs.Read(buffer, 0, length);
                     return Decode(buffer);
                 }
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 return null;
             }
         }
 
-        public static Bitmap FromBinary(byte[] image) {
+        public static Bitmap FromBinary(byte[] image)
+        {
             return Decode(image);
         }
 
-        protected static Bitmap Decode(byte[] image) {
+        protected static Bitmap Decode(byte[] image)
+        {
             TgaData tga = new TgaData(image);
 
             Bitmap bitmap = new Bitmap(tga.Width, tga.Height);
-            for (int y = 0; y < tga.Height; ++y) {
-                for (int x = 0; x < tga.Width; ++x) {
+            for (int y = 0; y < tga.Height; ++y)
+            {
+                for (int x = 0; x < tga.Width; ++x)
+                {
                     bitmap.SetPixel(x, y, Color.FromArgb(tga.GetPixel(x, y)));
                 }
             }

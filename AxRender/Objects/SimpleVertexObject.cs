@@ -1,5 +1,5 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
-// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,8 @@ namespace Aximo.Render
 
     public abstract class RenderableObject : GameObject, IRenderableObject
     {
-        public void OnRender() {
+        public void OnRender()
+        {
             if (Context.CurrentPipeline is ForwardRenderPipeline && this is IForwardRenderable m1)
                 m1.OnForwardRender();
             else if (Context.CurrentPipeline is DeferredRenderPipeline && this is IDeferredRenderable m2)
@@ -25,15 +26,18 @@ namespace Aximo.Render
         protected Dictionary<string, object> ShaderParams = new Dictionary<string, object>();
 
         public void AddShaderParam<T>(string name, T value)
-            where T : struct {
+            where T : struct
+        {
             if (ShaderParams.ContainsKey(name))
                 ShaderParams[name] = value;
             else
                 ShaderParams.Add(name, value);
         }
 
-        protected void ApplyShaderParams(Shader shader) {
-            foreach (var entry in ShaderParams) {
+        protected void ApplyShaderParams(Shader shader)
+        {
+            foreach (var entry in ShaderParams)
+            {
                 var name = entry.Key;
                 var value = entry.Value;
                 if (value == null)
@@ -66,7 +70,8 @@ namespace Aximo.Render
 
         public Matrix4 PositionMatrix = RenderContext.Current.WorldPositionMatrix;
 
-        public Matrix4 GetModelMatrix() {
+        public Matrix4 GetModelMatrix()
+        {
             return Matrix4.CreateScale(Scale)
             * Matrix4.CreateRotationX(Rotate.X * (MathF.PI * 2))
             * Matrix4.CreateRotationY(Rotate.Y * (MathF.PI * 2))
@@ -94,7 +99,8 @@ namespace Aximo.Render
 
         public IRenderPipeline PrimaryRenderPipeline;
 
-        public override void Init() {
+        public override void Init()
+        {
             UsePipeline<PointShadowRenderPipeline>();
             UsePipeline<DirectionalShadowRenderPipeline>();
 
@@ -128,19 +134,23 @@ namespace Aximo.Render
                 vao.SetData(_vertices2, _indicies);
         }
 
-        public void SetVertices(float[] vertices) {
+        public void SetVertices(float[] vertices)
+        {
             _vertices = vertices;
         }
 
-        public void SetVertices(VertexDataPosNormalUV[] vertices) {
+        public void SetVertices(VertexDataPosNormalUV[] vertices)
+        {
             _vertices2 = vertices;
         }
 
-        public void SetIndicies(ushort[] indicies) {
+        public void SetIndicies(ushort[] indicies)
+        {
             _indicies = indicies;
         }
 
-        public void OnForwardRender() {
+        public void OnForwardRender()
+        {
             vao.Bind();
 
             if (txt0 != null)
@@ -178,9 +188,11 @@ namespace Aximo.Render
             vao.Draw();
         }
 
-        public void OnDeferredRender() {
+        public void OnDeferredRender()
+        {
             var pipe = Context.GetPipeline<DeferredRenderPipeline>();
-            if (pipe.Pass == DeferredPass.Pass1) {
+            if (pipe.Pass == DeferredPass.Pass1)
+            {
                 vao.Bind();
 
                 txt0.Bind(TextureUnit.Texture0);
@@ -195,7 +207,8 @@ namespace Aximo.Render
                 vao.Draw();
             }
 
-            if (pipe.Pass == DeferredPass.Pass2) {
+            if (pipe.Pass == DeferredPass.Pass2)
+            {
             }
         }
 
@@ -214,12 +227,14 @@ namespace Aximo.Render
         //     return Lights[TMP_LIGHT_IDX];
         // }
 
-        public void OnRenderShadow() {
+        public void OnRenderShadow()
+        {
             vao.Bind();
 
             _ShadowShader.Bind();
 
-            foreach (var light in Lights) {
+            foreach (var light in Lights)
+            {
                 var shadowCamera = light.LightCamera;
 
                 var lightProjection = shadowCamera.ProjectionMatrix;
@@ -238,17 +253,20 @@ namespace Aximo.Render
 
         private List<Matrix4> CubeShadowsMatrices = new List<Matrix4>();
 
-        public void OnRenderCubeShadow() {
+        public void OnRenderCubeShadow()
+        {
             vao.Bind();
 
             _CubeShadowShader.Bind();
 
-            foreach (var light in Lights) {
+            foreach (var light in Lights)
+            {
                 var shadowCamera = light.LightCamera;
 
                 CubeShadowsMatrices.Clear();
 
-                if (CUBE_MAP_SHADOW_ROTATED) {
+                if (CUBE_MAP_SHADOW_ROTATED)
+                {
                     AddShadowCubeMatrix(shadowCamera, new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f));
                     AddShadowCubeMatrix(shadowCamera, new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f));
                     AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
@@ -256,7 +274,8 @@ namespace Aximo.Render
                     AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f));
                     AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f));
                 }
-                else {
+                else
+                {
                     AddShadowCubeMatrix(shadowCamera, new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
                     AddShadowCubeMatrix(shadowCamera, new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
                     AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f));
@@ -278,7 +297,8 @@ namespace Aximo.Render
 
         public const bool CUBE_MAP_SHADOW_ROTATED = true;
 
-        private void AddShadowCubeMatrix(Camera camera, Vector3 direction, Vector3 up) {
+        private void AddShadowCubeMatrix(Camera camera, Vector3 direction, Vector3 up)
+        {
             var proj = camera.ProjectionMatrix;
             var view = Matrix4.LookAt(camera.Position, camera.Position + direction, up);
             if (CUBE_MAP_SHADOW_ROTATED)
@@ -287,13 +307,15 @@ namespace Aximo.Render
                 CubeShadowsMatrices.Add(view * proj * Matrix4.CreateScale(1, -1, 1));
         }
 
-        public override void Free() {
+        public override void Free()
+        {
             vao.Free();
             //_Shader.Free(); // TODO
             _ShadowShader.Free();
         }
 
-        public void OnReload() {
+        public void OnReload()
+        {
             _Shader.Reload();
             _ShadowShader.Reload();
         }

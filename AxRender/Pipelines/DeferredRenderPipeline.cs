@@ -1,5 +1,5 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
-// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using OpenTK.Graphics.OpenGL4;
@@ -20,7 +20,8 @@ namespace Aximo.Render
         private VertexArrayObject vao;
         private VertexBufferObject vbo;
 
-        public override void Init() {
+        public override void Init()
+        {
             var width = RenderContext.Current.ScreenSize.X;
             var height = RenderContext.Current.ScreenSize.Y;
 
@@ -84,7 +85,8 @@ namespace Aximo.Render
 
         public DeferredPass Pass;
 
-        public override void Render(RenderContext context, Camera camera) {
+        public override void Render(RenderContext context, Camera camera)
+        {
             GL.Disable(EnableCap.Blend);
 
             ObjectManager.PushDebugGroup("OnRender Pass1", this);
@@ -98,7 +100,8 @@ namespace Aximo.Render
             GL.Enable(EnableCap.Blend);
         }
 
-        private void RenderPass1(RenderContext context, Camera camera) {
+        private void RenderPass1(RenderContext context, Camera camera)
+        {
             GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
             GBuffer.Bind();
             GL.Enable(EnableCap.DepthTest);
@@ -110,7 +113,8 @@ namespace Aximo.Render
                 Render(context, camera, obj);
         }
 
-        private void RenderPass2(RenderContext context, Camera camera) {
+        private void RenderPass2(RenderContext context, Camera camera)
+        {
             Pass = DeferredPass.Pass2;
             // GL.ClearColor(0.1f, 0.3f, 0.3f, 1.0f);
             // GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -150,7 +154,8 @@ namespace Aximo.Render
             ObjectManager.PopDebugGroup();
         }
 
-        public override void OnScreenResize() {
+        public override void OnScreenResize()
+        {
             GBuffer.Resize(RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
         }
     }

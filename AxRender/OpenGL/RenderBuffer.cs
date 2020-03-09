@@ -1,5 +1,5 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
-// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using OpenTK.Graphics.OpenGL4;
 //using System.Drawing.Imaging;
@@ -21,7 +21,8 @@ namespace Aximo.Render
 
         public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Renderbuffer;
 
-        public RenderBuffer(FrameBuffer fb, RenderbufferStorage renderbufferStorage, FramebufferAttachment framebufferAttachment) {
+        public RenderBuffer(FrameBuffer fb, RenderbufferStorage renderbufferStorage, FramebufferAttachment framebufferAttachment)
+        {
             Target = RenderbufferTarget.Renderbuffer;
             RenderBufferStorage = renderbufferStorage;
             FrameBufferAttachment = framebufferAttachment;
@@ -34,11 +35,13 @@ namespace Aximo.Render
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, framebufferAttachment, Target, _Handle);
         }
 
-        public void Bind() {
+        public void Bind()
+        {
             GL.BindRenderbuffer(Target, _Handle);
         }
 
-        public void Resize(FrameBuffer fb) {
+        public void Resize(FrameBuffer fb)
+        {
             fb.Bind();
             GL.RenderbufferStorage(Target, RenderBufferStorage, fb.Width, fb.Height);
         }

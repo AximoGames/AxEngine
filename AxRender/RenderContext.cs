@@ -1,5 +1,5 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
-// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
 using System.Linq;
@@ -31,8 +31,10 @@ namespace Aximo.Render
 
         public IRenderPipeline CurrentPipeline { get; internal set; }
 
-        public void InitRender() {
-            foreach (var pipeline in RenderPipelines) {
+        public void InitRender()
+        {
+            foreach (var pipeline in RenderPipelines)
+            {
                 ObjectManager.PushDebugGroup("InitRender", pipeline);
                 CurrentPipeline = pipeline;
                 pipeline.InitRender(this, Camera);
@@ -40,8 +42,10 @@ namespace Aximo.Render
             }
         }
 
-        public void Render() {
-            foreach (var pipeline in RenderPipelines) {
+        public void Render()
+        {
+            foreach (var pipeline in RenderPipelines)
+            {
                 ObjectManager.PushDebugGroup("Render", pipeline);
                 CurrentPipeline = pipeline;
                 pipeline.Render(this, Camera);
@@ -50,9 +54,11 @@ namespace Aximo.Render
         }
 
         public Vector2i _ScreenSize;
-        public Vector2i ScreenSize {
+        public Vector2i ScreenSize
+        {
             get { return _ScreenSize; }
-            set {
+            set
+            {
                 _ScreenSize = value;
                 ScreenAspectRatio = (float)value.X / (float)value.Y;
                 PixelToUVFactor = new Vector2(1.0f / _ScreenSize.X, 1.0f / _ScreenSize.Y);
@@ -64,7 +70,8 @@ namespace Aximo.Render
         public float ScreenAspectRatio { get; private set; }
 
         public T GetPipeline<T>()
-            where T : class, IRenderPipeline {
+            where T : class, IRenderPipeline
+        {
             return (T)RenderPipelines.FirstOrDefault(p => p is T);
         }
 
@@ -82,12 +89,14 @@ namespace Aximo.Render
         public List<IShadowObject> ShadowObjects = new List<IShadowObject>();
         public List<ILightObject> LightObjects = new List<ILightObject>();
 
-        public IGameObject GetObjectByName(string name) {
+        public IGameObject GetObjectByName(string name)
+        {
             // TODO: Hash
             return AllObjects.FirstOrDefault(o => o.Name == name);
         }
 
-        public T GetObjectByName<T>(string name) {
+        public T GetObjectByName<T>(string name)
+        {
             var obj = GetObjectByName(name);
             if (obj == null || !(obj is T))
                 return default;
@@ -95,11 +104,13 @@ namespace Aximo.Render
             return (T)obj;
         }
 
-        public void AddPipeline(IRenderPipeline pipeline) {
+        public void AddPipeline(IRenderPipeline pipeline)
+        {
             RenderPipelines.Add(pipeline);
         }
 
-        public void AddObject(IGameObject obj) {
+        public void AddObject(IGameObject obj)
+        {
             obj.AssignContext(this);
 
             LogInfoMessage($"Init Object {obj.Name}");
@@ -122,7 +133,8 @@ namespace Aximo.Render
                 LightObjects.Add(lightObj);
         }
 
-        public void RemoveObject(IGameObject obj) {
+        public void RemoveObject(IGameObject obj)
+        {
             AllObjects.Remove(obj);
 
             if (obj is IShadowObject shadowObj)
@@ -138,17 +150,20 @@ namespace Aximo.Render
                 LightObjects.Remove(lightObj);
         }
 
-        private void EmmitLogMessage(DebugType type, DebugSeverity severity, string message) {
+        private void EmmitLogMessage(DebugType type, DebugSeverity severity, string message)
+        {
             var handle = GCHandle.Alloc(message, GCHandleType.Pinned);
             GL.DebugMessageInsert(DebugSourceExternal.DebugSourceApplication, type, 0, severity, message.Length, message);
             handle.Free();
         }
 
-        public void LogInfoMessage(string message) {
+        public void LogInfoMessage(string message)
+        {
             EmmitLogMessage(DebugType.DebugTypeError, DebugSeverity.DebugSeverityNotification, message);
         }
 
-        public void OnScreenResize() {
+        public void OnScreenResize()
+        {
             GL.Viewport(0, 0, ScreenSize.X, ScreenSize.Y);
 
             // GL.Scissor(0, 0, ScreenSize.X, ScreenSize.Y);

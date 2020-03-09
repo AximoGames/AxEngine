@@ -1,5 +1,5 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
-// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,8 @@ namespace Aximo.Render
         private PixelFormat Format;
         private PixelType Type;
 
-        public Texture(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels) {
+        public Texture(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        {
             Width = width;
             Height = height;
             Target = target;
@@ -39,25 +40,29 @@ namespace Aximo.Render
             AllocData();
         }
 
-        private void AllocData() {
+        private void AllocData()
+        {
             Bind();
             GL.TexImage2D(Target, Level, InternalFormat, Width, Height, Border, Format, Type, IntPtr.Zero);
         }
 
-        private Texture(int handle, TextureTarget target, int width, int height) {
+        private Texture(int handle, TextureTarget target, int width, int height)
+        {
             Handle = handle;
             Target = target;
             Width = width;
             Height = height;
         }
 
-        public void Resize(int width, int height) {
+        public void Resize(int width, int height)
+        {
             Width = width;
             Height = height;
             AllocData();
         }
 
-        public static Texture CreateCubeShadowMap(PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels) {
+        public static Texture CreateCubeShadowMap(PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        {
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMap, width, height);
@@ -70,7 +75,8 @@ namespace Aximo.Render
             return txt;
         }
 
-        public static Texture CreateArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels) {
+        public static Texture CreateArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        {
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.Texture2DArray, width, height);
@@ -82,7 +88,8 @@ namespace Aximo.Render
             return txt;
         }
 
-        public static Texture CreateCubeArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels) {
+        public static Texture CreateCubeArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        {
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMapArray, width, height);
@@ -94,7 +101,8 @@ namespace Aximo.Render
             return txt;
         }
 
-        public static Texture LoadCubeMap(string path) {
+        public static Texture LoadCubeMap(string path)
+        {
             //var faces = new string[] { "right", "left", "back", "front", "top", "bottom" };
             //var faces = new string[] { "left", "right", "top", "top", "top", "top" };
             //var faces = new string[] { "top", "top", "top", "top", "left", "top" };
@@ -118,7 +126,8 @@ namespace Aximo.Render
             txt.Bind();
             txt.ObjectLabel = Path.GetFileName(path);
 
-            for (var i = 0; i < images.Count; i++) {
+            for (var i = 0; i < images.Count; i++)
+            {
                 var data = images[i].LockBits(
                     new Rectangle(0, 0, images[i].Width, images[i].Height),
                     ImageLockMode.ReadOnly,
@@ -142,7 +151,8 @@ namespace Aximo.Render
 
         public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Texture;
 
-        public Bitmap GetTexture() {
+        public Bitmap GetTexture()
+        {
             Bitmap bitmap = new Bitmap(Width, Height);
             var bits = bitmap.LockBits(new Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             //BindToRead(ReadBufferMode.ColorAttachment0 + AttachmentIndex);
@@ -157,38 +167,45 @@ namespace Aximo.Render
             return bitmap;
         }
 
-        public Bitmap GetDepthTexture() {
+        public Bitmap GetDepthTexture()
+        {
             GL.BindTexture(Target, Handle);
             return DataHelper.GetDepthTexture(Width, Height, (ptr) => GL.GetTexImage(Target, 0, PixelFormat.DepthComponent, PixelType.Float, ptr));
         }
 
-        public void SetLinearFilter() {
+        public void SetLinearFilter()
+        {
             Bind();
             GL.TexParameter(Target, TextureParameterName.TextureMinFilter, (int)All.Linear);
             GL.TexParameter(Target, TextureParameterName.TextureMagFilter, (int)All.Linear);
         }
 
-        public void SetNearestFilter() {
+        public void SetNearestFilter()
+        {
             Bind();
             GL.TexParameter(Target, TextureParameterName.TextureMinFilter, (int)All.Nearest);
             GL.TexParameter(Target, TextureParameterName.TextureMagFilter, (int)All.Nearest);
         }
 
-        public void SetClampToBordreWrap() {
+        public void SetClampToBordreWrap()
+        {
             Bind();
             GL.TexParameter(Target, TextureParameterName.TextureWrapS, (int)All.ClampToBorder);
             GL.TexParameter(Target, TextureParameterName.TextureWrapT, (int)All.ClampToBorder);
         }
 
-        public void SetClampToEdgeWrap() {
+        public void SetClampToEdgeWrap()
+        {
             Bind();
             GL.TexParameter(Target, TextureParameterName.TextureWrapS, (int)All.ClampToEdge);
             GL.TexParameter(Target, TextureParameterName.TextureWrapT, (int)All.ClampToEdge);
             GL.TexParameter(Target, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
         }
 
-        public Texture(string path) {
-            using (var image = LoadBitmap(path)) {
+        public Texture(string path)
+        {
+            using (var image = LoadBitmap(path))
+            {
                 InitFromBitmap(image);
             }
             Console.WriteLine($"Loaded Texture #{Handle} {path}");
@@ -196,11 +213,13 @@ namespace Aximo.Render
         }
 
         // Create texture from path.
-        public Texture(Bitmap image) {
+        public Texture(Bitmap image)
+        {
             InitFromBitmap(image);
         }
 
-        public void SetData(Bitmap image) {
+        public void SetData(Bitmap image)
+        {
             // Load the image
             // First, we get our pixels from the bitmap we loaded.
             // Arguments:
@@ -246,7 +265,8 @@ namespace Aximo.Render
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
         }
 
-        private void InitFromBitmap(Bitmap image) {
+        private void InitFromBitmap(Bitmap image)
+        {
             Target = TextureTarget.Texture2D;
             // Generate handle
             Handle = GL.GenTexture();
@@ -272,7 +292,8 @@ namespace Aximo.Render
             SetData(image);
         }
 
-        private static Bitmap LoadBitmap(string path) {
+        private static Bitmap LoadBitmap(string path)
+        {
             var imagePath = DirectoryHelper.GetAssetsPath(path);
             Console.WriteLine(imagePath);
             if (path.EndsWith(".tga"))
@@ -285,7 +306,8 @@ namespace Aximo.Render
         // Multiple textures can be bound, if your shader needs more than just one.
         // If you want to do that, use GL.ActiveTexture to set which slot GL.BindTexture binds to.
         // The OpenGL standard requires that there be at least 16, but there can be more depending on your graphics card.
-        public void Bind(TextureUnit unit = TextureUnit.Texture0) {
+        public void Bind(TextureUnit unit = TextureUnit.Texture0)
+        {
             GL.ActiveTexture(unit);
             GL.BindTexture(Target, Handle);
         }

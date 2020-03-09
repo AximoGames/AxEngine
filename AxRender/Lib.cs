@@ -1,5 +1,5 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
-// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
 
@@ -29,23 +29,29 @@ namespace Aximo.Render
 
     internal static class IDataHelper
     {
-        public static T GetData<T>(Dictionary<string, object> data, string name, T defaultValue = default) {
+        public static T GetData<T>(Dictionary<string, object> data, string name, T defaultValue = default)
+        {
             if (data.TryGetValue(name, out object value))
                 return (T)value;
             return default;
         }
 
-        public static bool HasData(Dictionary<string, object> data, string name) {
+        public static bool HasData(Dictionary<string, object> data, string name)
+        {
             return data.ContainsKey(name);
         }
 
-        public static bool SetData<T>(Dictionary<string, object> data, string name, T value, T defaultValue = default) {
-            if (data.TryGetValue(name, out object currentValue)) {
-                if (object.Equals(value, defaultValue)) {
+        public static bool SetData<T>(Dictionary<string, object> data, string name, T value, T defaultValue = default)
+        {
+            if (data.TryGetValue(name, out object currentValue))
+            {
+                if (object.Equals(value, defaultValue))
+                {
                     data.Remove(name);
                     return true;
                 }
-                else {
+                else
+                {
                     if (object.Equals(currentValue, value))
                         return false;
 
@@ -53,7 +59,8 @@ namespace Aximo.Render
                     return true;
                 }
             }
-            else {
+            else
+            {
                 if (object.Equals(value, defaultValue))
                     return false;
 
