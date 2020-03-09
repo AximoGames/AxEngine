@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     internal static class DataHelper
     {

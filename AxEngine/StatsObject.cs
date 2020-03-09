@@ -1,10 +1,11 @@
-﻿using OpenTK;
+﻿using Aximo.Render;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace AxEngine
+namespace Aximo.Engine
 {
     public class StatsObject : ScreenTextureObject, IUpdateFrame
     {
@@ -12,21 +13,17 @@ namespace AxEngine
         private DateTime LastStatUpdate;
         private Font DefaultFont = new Font(FontFamily.GenericSansSerif, 15, GraphicsUnit.Point);
 
-        public StatsObject()
-        {
+        public StatsObject() {
         }
 
-        public override void Init()
-        {
+        public override void Init() {
             GfxTexture = new GraphicsTexture(100, 100);
             SourceTexture = GfxTexture.Texture;
             base.Init();
         }
 
-        public void OnUpdateFrame()
-        {
-            if ((DateTime.UtcNow - LastStatUpdate).TotalSeconds > 1)
-            {
+        public void OnUpdateFrame() {
+            if ((DateTime.UtcNow - LastStatUpdate).TotalSeconds > 1) {
                 LastStatUpdate = DateTime.UtcNow;
                 GfxTexture.Graphics.Clear(Color.Transparent);
                 var txt = "FPS: " + Math.Round(RenderApplication.Current.RenderFrequency).ToString();

@@ -1,7 +1,7 @@
 using System;
 using System.Media;
 
-namespace AxEngine
+namespace Aximo.Engine
 {
 
     public class AudioManager

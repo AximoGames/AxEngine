@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 //using System.Drawing.Imaging;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public class RenderBuffer : IObjectLabel
     {

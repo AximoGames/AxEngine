@@ -1,4 +1,4 @@
-namespace AxEngine
+namespace Aximo.Render
 {
     public class SphereObject : SimpleVertexObject
     {

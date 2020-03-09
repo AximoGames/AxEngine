@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Drawing;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public class TgaDecoder
     {

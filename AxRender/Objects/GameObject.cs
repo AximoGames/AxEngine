@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Collections.Generic;
 
-namespace AxEngine
+namespace Aximo.Render
 {
 
     public abstract class GameObject : IGameObject

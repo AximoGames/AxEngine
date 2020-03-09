@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 
-namespace AxEngine
+namespace Aximo.Engine
 {
 
     public class GameContext

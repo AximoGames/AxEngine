@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AxEngine
+namespace Aximo.Engine
 {
     public class CommandLineOptions
     {

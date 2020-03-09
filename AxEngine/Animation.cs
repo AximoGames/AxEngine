@@ -1,9 +1,10 @@
 using System;
 
-namespace AxEngine
+namespace Aximo.Engine
 {
 
     public delegate float AnimationFunc(float position);
+    public delegate void AnimationFinishedDelegate();
 
     public class Animation
     {
@@ -13,8 +14,7 @@ namespace AxEngine
 
         public event AnimationFinishedDelegate AnimationFinished;
 
-        public void Start()
-        {
+        public void Start() {
             if (this.Duration == TimeSpan.Zero)
                 return;
 
@@ -22,23 +22,19 @@ namespace AxEngine
             StartTime = DateTime.UtcNow;
         }
 
-        public void ProcessAnimation()
-        {
+        public void ProcessAnimation() {
             if (!Enabled)
                 return;
 
             var pos = Position;
-            if (pos >= 1.0)
-            {
+            if (pos >= 1.0) {
                 Enabled = false;
                 AnimationFinished?.Invoke();
             }
         }
 
-        public float Position
-        {
-            get
-            {
+        public float Position {
+            get {
                 if (!Enabled)
                     return 0;
                 if (this.Duration == TimeSpan.Zero)
@@ -50,10 +46,8 @@ namespace AxEngine
 
         public AnimationFunc AnimationFunc;
 
-        public float Value
-        {
-            get
-            {
+        public float Value {
+            get {
                 if (AnimationFunc == null)
                     return Position;
 
@@ -65,23 +59,19 @@ namespace AxEngine
 
     public static class AnimationFuncs
     {
-        public static AnimationFunc Linear()
-        {
+        public static AnimationFunc Linear() {
             return (p) => { return p; };
         }
 
-        public static AnimationFunc LinearReverse()
-        {
+        public static AnimationFunc LinearReverse() {
             return (p) => { return 1 - p; };
         }
 
-        public static AnimationFunc Linear(float scale)
-        {
+        public static AnimationFunc Linear(float scale) {
             return (p) => { return p * scale; };
         }
 
-        public static AnimationFunc LinearReverse(float scale)
-        {
+        public static AnimationFunc LinearReverse(float scale) {
             return (p) => { return scale - (p * scale); };
         }
     }

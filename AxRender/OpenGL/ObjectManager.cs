@@ -1,6 +1,6 @@
 using OpenTK.Graphics.OpenGL4;
 
-namespace AxEngine
+namespace Aximo.Render
 {
 
     public interface IObjectHandle

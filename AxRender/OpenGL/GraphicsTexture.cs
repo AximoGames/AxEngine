@@ -1,7 +1,7 @@
 using System.Drawing;
 using OpenTK;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public class GraphicsTexture
     {

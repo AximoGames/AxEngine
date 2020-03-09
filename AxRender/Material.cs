@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using OpenTK;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public enum MaterialColorBlendMode
     {

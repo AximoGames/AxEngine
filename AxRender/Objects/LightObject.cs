@@ -1,7 +1,7 @@
 ﻿using OpenTK;
 using System.Collections.Generic;
 
-namespace AxEngine
+namespace Aximo.Render
 {
 
     public class LightObject : GameObject, IRenderableObject, IPosition, ILightObject

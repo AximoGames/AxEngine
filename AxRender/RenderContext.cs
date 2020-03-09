@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     //public class MeshObject : GameObject, IMeshObject
     //{

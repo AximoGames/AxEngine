@@ -3,12 +3,12 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
-using AxEngine;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Aximo.Render;
 
-namespace AxEngine
+namespace Aximo.Engine
 {
 
     public class RenderApplication

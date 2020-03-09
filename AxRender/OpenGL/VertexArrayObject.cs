@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace AxEngine
+namespace Aximo.Render
 {
 
     public class VertexArrayObject
