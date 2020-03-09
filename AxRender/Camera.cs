@@ -108,9 +108,9 @@ namespace AxEngine
             CameraChangedInternal?.Invoke();
         }
 
-        internal event CameraChangedDelegate CameraChangedInternal;
+        public event CameraChangedDelegate CameraChangedInternal;
 
-        internal delegate void CameraChangedDelegate();
+        public delegate void CameraChangedDelegate();
 
         public Camera(Vector3 position) {
             Position = position;

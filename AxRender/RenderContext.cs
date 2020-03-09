@@ -28,6 +28,24 @@ namespace AxEngine
 
         public IRenderPipeline CurrentPipeline { get; internal set; }
 
+        public void InitRender() {
+            foreach (var pipeline in RenderPipelines) {
+                ObjectManager.PushDebugGroup("InitRender", pipeline);
+                CurrentPipeline = pipeline;
+                pipeline.InitRender(this, Camera);
+                ObjectManager.PopDebugGroup();
+            }
+        }
+
+        public void Render() {
+            foreach (var pipeline in RenderPipelines) {
+                ObjectManager.PushDebugGroup("Render", pipeline);
+                CurrentPipeline = pipeline;
+                pipeline.Render(this, Camera);
+                ObjectManager.PopDebugGroup();
+            }
+        }
+
         public Vector2i _ScreenSize;
         public Vector2i ScreenSize {
             get { return _ScreenSize; }
@@ -47,7 +65,7 @@ namespace AxEngine
             return (T)RenderPipelines.FirstOrDefault(p => p is T);
         }
 
-        public IRenderPipeline PrimaryRenderPipeline => RenderApplication.Current.PrimaryRenderPipeline;
+        public IRenderPipeline PrimaryRenderPipeline { get; set; }
 
         public static RenderContext Current { get; set; }
 
@@ -132,8 +150,6 @@ namespace AxEngine
         }
 
         public void OnScreenResize() {
-            //return;
-            ScreenSize = RenderApplication.Current.ScreenSize;
             GL.Viewport(0, 0, ScreenSize.X, ScreenSize.Y);
 
             // GL.Scissor(0, 0, ScreenSize.X, ScreenSize.Y);
@@ -146,6 +162,10 @@ namespace AxEngine
             foreach (var obj in AllObjects)
                 obj.OnScreenResize();
         }
+    }
+
+    public class SceneOptions
+    {
     }
 
 }

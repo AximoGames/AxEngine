@@ -30,8 +30,6 @@ namespace AxEngine
             _startup = startup;
         }
 
-        public virtual IRenderPipeline PrimaryRenderPipeline => ctx.GetPipeline<DeferredRenderPipeline>();
-
         private static void PrintExtensions() {
             int numExtensions;
             GL.GetInteger(GetPName.NumExtensions, out numExtensions);
@@ -112,6 +110,7 @@ namespace AxEngine
             ObjectManager.PushDebugGroup("Setup", "Pipelines");
             SetupPipelines();
             ObjectManager.PopDebugGroup();
+            ctx.PrimaryRenderPipeline = ctx.GetPipeline<DeferredRenderPipeline>();
 
             ctx.LightBinding = new BindingPoint();
             Console.WriteLine("LightBinding: " + ctx.LightBinding.Number);
@@ -226,19 +225,8 @@ namespace AxEngine
 
             //--
 
-            foreach (var pipeline in ctx.RenderPipelines) {
-                ObjectManager.PushDebugGroup("InitRender", pipeline);
-                ctx.CurrentPipeline = pipeline;
-                pipeline.InitRender(ctx, ctx.Camera);
-                ObjectManager.PopDebugGroup();
-            }
-
-            foreach (var pipeline in ctx.RenderPipelines) {
-                ObjectManager.PushDebugGroup("Render", pipeline);
-                ctx.CurrentPipeline = pipeline;
-                pipeline.Render(ctx, ctx.Camera);
-                ObjectManager.PopDebugGroup();
-            }
+            ctx.InitRender();
+            ctx.Render();
 
             //--
 
@@ -673,8 +661,5 @@ namespace AxEngine
         public WindowBorder WindowBorder { get; set; } = WindowBorder.Resizable;
     }
 
-    public class SceneOptions
-    {
-    }
 
 }
