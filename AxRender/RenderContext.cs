@@ -22,6 +22,8 @@ namespace AxEngine
     public class RenderContext
     {
 
+        public Matrix4 WorldPositionMatrix = Matrix4.Identity;
+
         public List<Animation> Animations = new List<Animation>();
 
         public List<IRenderPipeline> RenderPipelines = new List<IRenderPipeline>();

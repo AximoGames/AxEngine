@@ -602,8 +602,6 @@ namespace AxEngine
             }
         }
 
-        public Matrix4 WorldPositionMatrix = Matrix4.Identity;
-
         private Vector3 _CurrentMouseWorldPosition;
         public Vector3 CurrentMouseWorldPosition {
             get { return _CurrentMouseWorldPosition; }
@@ -631,7 +629,7 @@ namespace AxEngine
 
             var ray = Ray.FromPoints(pos1, pos2);
             if (plane.Raycast(ray, out float result))
-                return (new Vector4(ray.GetPoint(result), 1) * WorldPositionMatrix).Xyz;
+                return (new Vector4(ray.GetPoint(result), 1) * ctx.WorldPositionMatrix).Xyz;
 
             return null;
         }
