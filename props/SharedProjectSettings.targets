@@ -1,0 +1,41 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <!--<CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)codeanalysis\default.ruleset</CodeAnalysisRuleSet>-->
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeQuality.Analyzers">
+            <Version>2.9.8</Version>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.NetFramework.Analyzers">
+            <Version>2.9.8</Version>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="StyleCop.Analyzers">
+            <Version>1.1.118</Version>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
+            <Version>2.9.8</Version>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory)codeanalysis/stylecop.json" Link="stylecop.json" />
+    </ItemGroup>
+
+    <Target Name="DisableAnalyzers"
+        BeforeTargets="CoreCompile"
+        Condition="'$(UseRoslynAnalyzers)' == 'false' or '$(RunCodeAnalysis)' == 'false' or '$(RunCodeAnalysis)' == 'never'" >
+        <!--  Disable analyzers via an MSBuild property settable on the command line. -->
+        <ItemGroup>
+            <Analyzer Remove="@(Analyzer)" />
+        </ItemGroup>
+    </Target>
+
+</Project>
