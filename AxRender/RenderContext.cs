@@ -29,11 +29,9 @@ namespace AxEngine
         public IRenderPipeline CurrentPipeline { get; internal set; }
 
         public Vector2i _ScreenSize;
-        public Vector2i ScreenSize
-        {
+        public Vector2i ScreenSize {
             get { return _ScreenSize; }
-            set
-            {
+            set {
                 _ScreenSize = value;
                 ScreenAspectRatio = (float)value.X / (float)value.Y;
                 PixelToUVFactor = new Vector2(1.0f / _ScreenSize.X, 1.0f / _ScreenSize.Y);
@@ -45,8 +43,7 @@ namespace AxEngine
         public float ScreenAspectRatio { get; private set; }
 
         public T GetPipeline<T>()
-            where T : class, IRenderPipeline
-        {
+            where T : class, IRenderPipeline {
             return (T)RenderPipelines.FirstOrDefault(p => p is T);
         }
 
@@ -64,14 +61,12 @@ namespace AxEngine
         public List<IShadowObject> ShadowObjects = new List<IShadowObject>();
         public List<ILightObject> LightObjects = new List<ILightObject>();
 
-        public IGameObject GetObjectByName(string name)
-        {
+        public IGameObject GetObjectByName(string name) {
             // TODO: Hash
             return AllObjects.FirstOrDefault(o => o.Name == name);
         }
 
-        public T GetObjectByName<T>(string name)
-        {
+        public T GetObjectByName<T>(string name) {
             var obj = GetObjectByName(name);
             if (obj == null || !(obj is T))
                 return default;
@@ -79,18 +74,15 @@ namespace AxEngine
             return (T)obj;
         }
 
-        public void AddPipeline(IRenderPipeline pipeline)
-        {
+        public void AddPipeline(IRenderPipeline pipeline) {
             RenderPipelines.Add(pipeline);
         }
 
-        public void AddAnimation(Animation animation)
-        {
+        public void AddAnimation(Animation animation) {
             Animations.Add(animation);
         }
 
-        public void AddObject(IGameObject obj)
-        {
+        public void AddObject(IGameObject obj) {
             obj.AssignContext(this);
 
             LogInfoMessage($"Init Object {obj.Name}");
@@ -113,8 +105,7 @@ namespace AxEngine
                 LightObjects.Add(lightObj);
         }
 
-        public void RemoveObject(IGameObject obj)
-        {
+        public void RemoveObject(IGameObject obj) {
             AllObjects.Remove(obj);
 
             if (obj is IShadowObject shadowObj)
@@ -130,20 +121,17 @@ namespace AxEngine
                 LightObjects.Remove(lightObj);
         }
 
-        private void EmmitLogMessage(DebugType type, DebugSeverity severity, string message)
-        {
+        private void EmmitLogMessage(DebugType type, DebugSeverity severity, string message) {
             var handle = GCHandle.Alloc(message, GCHandleType.Pinned);
             GL.DebugMessageInsert(DebugSourceExternal.DebugSourceApplication, type, 0, severity, message.Length, message);
             handle.Free();
         }
 
-        public void LogInfoMessage(string message)
-        {
+        public void LogInfoMessage(string message) {
             EmmitLogMessage(DebugType.DebugTypeError, DebugSeverity.DebugSeverityNotification, message);
         }
 
-        public void OnScreenResize()
-        {
+        public void OnScreenResize() {
             //return;
             ScreenSize = RenderApplication.Current.ScreenSize;
             GL.Viewport(0, 0, ScreenSize.X, ScreenSize.Y);
