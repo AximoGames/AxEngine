@@ -6,7 +6,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading;
 
-namespace AxEngine
+namespace Aximo.Engine
 {
     internal class AudioTest
     {

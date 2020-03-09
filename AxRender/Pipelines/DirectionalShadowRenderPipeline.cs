@@ -1,7 +1,7 @@
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public class DirectionalShadowRenderPipeline : RenderPipeline
     {

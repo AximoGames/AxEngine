@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public abstract class BufferObject
     {

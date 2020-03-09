@@ -1,6 +1,6 @@
 using OpenTK.Graphics.OpenGL4;
 
-namespace AxEngine
+namespace Aximo.Render
 {
 
     public interface IObjectHandle
@@ -21,10 +21,8 @@ namespace AxEngine
     public static class ObjectManager
     {
 
-        private static int MaxLabelLength = -1;
 
-        public static void SetLabel(IObjectLabel obj)
-        {
+        public static void SetLabel(IObjectLabel obj) {
             // if (MaxLabelLength == -1)
             //     MaxLabelLength = GL.GetInteger((GetIndexedPName)(int)All.MaxLabelLength);
 
@@ -34,14 +32,12 @@ namespace AxEngine
             GL.ObjectLabel(obj.ObjectLabelIdentifier, obj.Handle, -1, name);
         }
 
-        public static void PushDebugGroup(string verb, string nome)
-        {
+        public static void PushDebugGroup(string verb, string nome) {
             var name = $"{verb} {nome}]";
             GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, -1, name.Length, name);
         }
 
-        public static void PushDebugGroup(string verb, IGameObject obj)
-        {
+        public static void PushDebugGroup(string verb, IGameObject obj) {
             var objName = obj.Name;
             if (string.IsNullOrEmpty(objName))
                 objName = obj.GetType().Name;
@@ -49,14 +45,12 @@ namespace AxEngine
             GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, obj.Id, name.Length, name);
         }
 
-        public static void PushDebugGroup(string verb, IRenderPipeline obj)
-        {
+        public static void PushDebugGroup(string verb, IRenderPipeline obj) {
             var name = $"{verb} RenderPipeline {obj.GetType().Name}]";
             GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, -1, name.Length, name);
         }
 
-        public static void PopDebugGroup()
-        {
+        public static void PopDebugGroup() {
             GL.PopDebugGroup();
         }
 

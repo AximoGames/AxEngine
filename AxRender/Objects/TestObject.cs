@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 
-namespace AxEngine
+namespace Aximo.Render
 {
 
     public class TestObject : SimpleVertexObject

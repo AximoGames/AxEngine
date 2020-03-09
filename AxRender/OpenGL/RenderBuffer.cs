@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 //using System.Drawing.Imaging;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public class RenderBuffer : IObjectLabel
     {
@@ -18,8 +18,7 @@ namespace AxEngine
 
         public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Renderbuffer;
 
-        public RenderBuffer(FrameBuffer fb, RenderbufferStorage renderbufferStorage, FramebufferAttachment framebufferAttachment)
-        {
+        public RenderBuffer(FrameBuffer fb, RenderbufferStorage renderbufferStorage, FramebufferAttachment framebufferAttachment) {
             Target = RenderbufferTarget.Renderbuffer;
             RenderBufferStorage = renderbufferStorage;
             FrameBufferAttachment = framebufferAttachment;
@@ -28,19 +27,17 @@ namespace AxEngine
 
             GL.GenRenderbuffers(1, out _Handle);
             Bind();
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, renderbufferStorage, fb.Width, fb.Height);
-            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, framebufferAttachment, RenderbufferTarget.Renderbuffer, _Handle);
+            GL.RenderbufferStorage(Target, renderbufferStorage, fb.Width, fb.Height);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, framebufferAttachment, Target, _Handle);
         }
 
-        public void Bind()
-        {
-            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _Handle);
+        public void Bind() {
+            GL.BindRenderbuffer(Target, _Handle);
         }
 
-        public void Resize(FrameBuffer fb)
-        {
+        public void Resize(FrameBuffer fb) {
             fb.Bind();
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderBufferStorage, fb.Width, fb.Height);
+            GL.RenderbufferStorage(Target, RenderBufferStorage, fb.Width, fb.Height);
         }
 
     }

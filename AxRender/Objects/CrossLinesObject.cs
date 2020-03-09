@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public class CrossLinesObject : GameObject, IRenderableObject
     {
@@ -17,8 +17,7 @@ namespace AxEngine
 
         private VertexArrayObject vao;
 
-        public override void Init()
-        {
+        public override void Init() {
             UsePipeline<ForwardRenderPipeline>();
 
             _Shader = new Shader("Shaders/lines.vert", "Shaders/lines.frag");
@@ -32,8 +31,7 @@ namespace AxEngine
             vao.SetData(_vertices);
         }
 
-        public void OnRender()
-        {
+        public void OnRender() {
             vao.Bind();
 
             _Shader.Bind();
@@ -50,8 +48,7 @@ namespace AxEngine
             //GL.Enable(EnableCap.DepthTest);
         }
 
-        public override void Free()
-        {
+        public override void Free() {
             vao.Free();
             _Shader.Free();
         }

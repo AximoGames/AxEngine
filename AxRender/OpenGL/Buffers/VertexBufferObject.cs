@@ -2,7 +2,7 @@ using OpenTK.Graphics.OpenGL4;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public class VertexBufferObject : BufferObject
     {

@@ -2,7 +2,7 @@
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 
-namespace AxEngine
+namespace Aximo.Render
 {
 
     // TODO: Use a Quad instead of a cube

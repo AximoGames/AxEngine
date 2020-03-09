@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using OpenTK;
 
-namespace AxEngine
+namespace Aximo.Render
 {
-    public delegate void AnimationFinishedDelegate();
 
     public enum CameraType
     {

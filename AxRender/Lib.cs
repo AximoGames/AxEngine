@@ -1,75 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 using OpenTK;
-using System.IO;
 
-namespace AxEngine
+namespace Aximo.Render
 {
-
-
-    public static class DirectoryHelper
-    {
-        private static string _AppRootDir;
-        public static string AppRootDir
-        {
-            get
-            {
-                if (_AppRootDir == null)
-                    _AppRootDir = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..")).FullName;
-                return _AppRootDir;
-            }
-        }
-
-        private static string _EngineRootDir;
-        public static string EngineRootDir
-        {
-            get
-            {
-                if (_EngineRootDir == null)
-                {
-                    var dirName = Path.GetFileName(AppRootDir);
-                    if (dirName == "AxEngine")
-                    {
-                        _EngineRootDir = AppRootDir;
-                    }
-                    else
-                    {
-                        _EngineRootDir = new DirectoryInfo(Path.Combine(AppRootDir, "..", "AxEngine")).FullName;
-                    }
-                }
-                return _EngineRootDir;
-            }
-        }
-
-        private static List<string> _SearchDirectories;
-        public static List<string> SearchDirectories
-        {
-            get
-            {
-                if (_SearchDirectories == null)
-                    _SearchDirectories = new List<string> { AppRootDir, EngineRootDir };
-                return _SearchDirectories;
-            }
-        }
-
-        public static string GetAssetsPath(string subPath)
-        {
-            foreach (var dir in SearchDirectories)
-            {
-                var path = Path.Combine(dir, "Assets", subPath);
-                if (File.Exists(path))
-                    return new FileInfo(path).FullName;
-                if (Directory.Exists(path))
-                    return new DirectoryInfo(path).FullName;
-            }
-            return "";
-        }
-
-    }
 
     public interface IGameObject : IData
     {
@@ -92,29 +29,23 @@ namespace AxEngine
 
     internal static class IDataHelper
     {
-        public static T GetData<T>(Dictionary<string, object> data, string name, T defaultValue = default)
-        {
+        public static T GetData<T>(Dictionary<string, object> data, string name, T defaultValue = default) {
             if (data.TryGetValue(name, out object value))
                 return (T)value;
             return default;
         }
 
-        public static bool HasData(Dictionary<string, object> data, string name)
-        {
+        public static bool HasData(Dictionary<string, object> data, string name) {
             return data.ContainsKey(name);
         }
 
-        public static bool SetData<T>(Dictionary<string, object> data, string name, T value, T defaultValue = default)
-        {
-            if (data.TryGetValue(name, out object currentValue))
-            {
-                if (object.Equals(value, defaultValue))
-                {
+        public static bool SetData<T>(Dictionary<string, object> data, string name, T value, T defaultValue = default) {
+            if (data.TryGetValue(name, out object currentValue)) {
+                if (object.Equals(value, defaultValue)) {
                     data.Remove(name);
                     return true;
                 }
-                else
-                {
+                else {
                     if (object.Equals(currentValue, value))
                         return false;
 
@@ -122,8 +53,7 @@ namespace AxEngine
                     return true;
                 }
             }
-            else
-            {
+            else {
                 if (object.Equals(value, defaultValue))
                     return false;
 

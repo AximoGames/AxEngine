@@ -3,14 +3,13 @@ using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 
-namespace AxEngine
+namespace Aximo.Render
 {
 
     public class CubeObject : SimpleVertexObject
     {
 
-        public override void Init()
-        {
+        public override void Init() {
             SetVertices(DataHelper.Cube);
 
             base.Init();

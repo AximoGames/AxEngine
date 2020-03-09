@@ -4,11 +4,10 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
-using AxEngine;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 using System.Collections.Generic;
 
-namespace AxEngine
+namespace Aximo.Render
 {
 
     public class Texture : IObjectLabel
@@ -22,8 +21,7 @@ namespace AxEngine
         private PixelFormat Format;
         private PixelType Type;
 
-        public Texture(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
-        {
+        public Texture(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels) {
             Width = width;
             Height = height;
             Target = target;
@@ -39,29 +37,25 @@ namespace AxEngine
             AllocData();
         }
 
-        private void AllocData()
-        {
+        private void AllocData() {
             Bind();
             GL.TexImage2D(Target, Level, InternalFormat, Width, Height, Border, Format, Type, IntPtr.Zero);
         }
 
-        private Texture(int handle, TextureTarget target, int width, int height)
-        {
+        private Texture(int handle, TextureTarget target, int width, int height) {
             Handle = handle;
             Target = target;
             Width = width;
             Height = height;
         }
 
-        public void Resize(int width, int height)
-        {
+        public void Resize(int width, int height) {
             Width = width;
             Height = height;
             AllocData();
         }
 
-        public static Texture CreateCubeShadowMap(PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
-        {
+        public static Texture CreateCubeShadowMap(PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels) {
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMap, width, height);
@@ -74,8 +68,7 @@ namespace AxEngine
             return txt;
         }
 
-        public static Texture CreateArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels)
-        {
+        public static Texture CreateArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels) {
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.Texture2DArray, width, height);
@@ -87,8 +80,7 @@ namespace AxEngine
             return txt;
         }
 
-        public static Texture CreateCubeArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels)
-        {
+        public static Texture CreateCubeArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels) {
             int handle;
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMapArray, width, height);
@@ -100,8 +92,7 @@ namespace AxEngine
             return txt;
         }
 
-        public static Texture LoadCubeMap(string path)
-        {
+        public static Texture LoadCubeMap(string path) {
             //var faces = new string[] { "right", "left", "back", "front", "top", "bottom" };
             //var faces = new string[] { "left", "right", "top", "top", "top", "top" };
             //var faces = new string[] { "top", "top", "top", "top", "left", "top" };
@@ -125,8 +116,7 @@ namespace AxEngine
             txt.Bind();
             txt.ObjectLabel = Path.GetFileName(path);
 
-            for (var i = 0; i < images.Count; i++)
-            {
+            for (var i = 0; i < images.Count; i++) {
                 var data = images[i].LockBits(
                     new Rectangle(0, 0, images[i].Width, images[i].Height),
                     ImageLockMode.ReadOnly,
@@ -150,8 +140,7 @@ namespace AxEngine
 
         public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Texture;
 
-        public Bitmap GetTexture()
-        {
+        public Bitmap GetTexture() {
             Bitmap bitmap = new Bitmap(Width, Height);
             var bits = bitmap.LockBits(new Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             //BindToRead(ReadBufferMode.ColorAttachment0 + AttachmentIndex);
@@ -166,45 +155,38 @@ namespace AxEngine
             return bitmap;
         }
 
-        public Bitmap GetDepthTexture()
-        {
+        public Bitmap GetDepthTexture() {
             GL.BindTexture(Target, Handle);
             return DataHelper.GetDepthTexture(Width, Height, (ptr) => GL.GetTexImage(Target, 0, PixelFormat.DepthComponent, PixelType.Float, ptr));
         }
 
-        public void SetLinearFilter()
-        {
+        public void SetLinearFilter() {
             Bind();
             GL.TexParameter(Target, TextureParameterName.TextureMinFilter, (int)All.Linear);
             GL.TexParameter(Target, TextureParameterName.TextureMagFilter, (int)All.Linear);
         }
 
-        public void SetNearestFilter()
-        {
+        public void SetNearestFilter() {
             Bind();
             GL.TexParameter(Target, TextureParameterName.TextureMinFilter, (int)All.Nearest);
             GL.TexParameter(Target, TextureParameterName.TextureMagFilter, (int)All.Nearest);
         }
 
-        public void SetClampToBordreWrap()
-        {
+        public void SetClampToBordreWrap() {
             Bind();
             GL.TexParameter(Target, TextureParameterName.TextureWrapS, (int)All.ClampToBorder);
             GL.TexParameter(Target, TextureParameterName.TextureWrapT, (int)All.ClampToBorder);
         }
 
-        public void SetClampToEdgeWrap()
-        {
+        public void SetClampToEdgeWrap() {
             Bind();
             GL.TexParameter(Target, TextureParameterName.TextureWrapS, (int)All.ClampToEdge);
             GL.TexParameter(Target, TextureParameterName.TextureWrapT, (int)All.ClampToEdge);
             GL.TexParameter(Target, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
         }
 
-        public Texture(string path)
-        {
-            using (var image = LoadBitmap(path))
-            {
+        public Texture(string path) {
+            using (var image = LoadBitmap(path)) {
                 InitFromBitmap(image);
             }
             Console.WriteLine($"Loaded Texture #{Handle} {path}");
@@ -212,13 +194,11 @@ namespace AxEngine
         }
 
         // Create texture from path.
-        public Texture(Bitmap image)
-        {
+        public Texture(Bitmap image) {
             InitFromBitmap(image);
         }
 
-        public void SetData(Bitmap image)
-        {
+        public void SetData(Bitmap image) {
             // Load the image
             // First, we get our pixels from the bitmap we loaded.
             // Arguments:
@@ -264,8 +244,7 @@ namespace AxEngine
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
         }
 
-        private void InitFromBitmap(Bitmap image)
-        {
+        private void InitFromBitmap(Bitmap image) {
             Target = TextureTarget.Texture2D;
             // Generate handle
             Handle = GL.GenTexture();
@@ -292,8 +271,7 @@ namespace AxEngine
             SetData(image);
         }
 
-        private static Bitmap LoadBitmap(string path)
-        {
+        private static Bitmap LoadBitmap(string path) {
             var imagePath = DirectoryHelper.GetAssetsPath(path);
             Console.WriteLine(imagePath);
             if (path.EndsWith(".tga"))
@@ -306,8 +284,7 @@ namespace AxEngine
         // Multiple textures can be bound, if your shader needs more than just one.
         // If you want to do that, use GL.ActiveTexture to set which slot GL.BindTexture binds to.
         // The OpenGL standard requires that there be at least 16, but there can be more depending on your graphics card.
-        public void Bind(TextureUnit unit = TextureUnit.Texture0)
-        {
+        public void Bind(TextureUnit unit = TextureUnit.Texture0) {
             GL.ActiveTexture(unit);
             GL.BindTexture(Target, Handle);
         }

@@ -4,7 +4,7 @@ using System.Threading;
 using OpenTK;
 using System.Runtime.InteropServices;
 
-namespace AxEngine
+namespace Aximo.Engine
 {
     class MainClass
     {

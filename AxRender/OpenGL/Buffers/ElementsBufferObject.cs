@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public class ElementsBufferObject : BufferObject
     {

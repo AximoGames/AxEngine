@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenTK;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct VertexDataPosNormalUV

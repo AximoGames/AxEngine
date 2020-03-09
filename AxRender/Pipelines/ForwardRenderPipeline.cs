@@ -1,7 +1,7 @@
 using System;
 using OpenTK.Graphics.OpenGL4;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public class ForwardRenderPipeline : RenderPipeline
     {

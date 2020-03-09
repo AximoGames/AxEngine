@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public class ScreenTextureObject : GameObject, IRenderTarget, IScaleRotate, IPosition
     {

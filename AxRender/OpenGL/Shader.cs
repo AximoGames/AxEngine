@@ -4,11 +4,10 @@ using System.Text;
 using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
-using AxEngine;
 using System.Text.RegularExpressions;
 using System.Linq;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     // A simple class meant to help create shaders.
     public class Shader : IObjectLabel
@@ -23,41 +22,35 @@ namespace AxEngine
 
         private List<ShaderCompilation> Compilations = new List<ShaderCompilation>();
 
-        public void SetDefine(string name)
-        {
+        public void SetDefine(string name) {
             SetDefine(name, null);
         }
 
-        public void SetDefine(string name, object value)
-        {
+        public void SetDefine(string name, object value) {
             foreach (var comp in Compilations)
                 comp.SetDefine(name, value);
         }
 
-        public void AddSource(string path, ShaderType type)
-        {
+        public void AddSource(string path, ShaderType type) {
             ShaderCompilation comp = Compilations.FirstOrDefault(c => c.Type == type);
             if (comp == null)
                 Compilations.Add(comp = new ShaderCompilation { Type = type });
 
-            comp.Sources.Add(new ShaderSource
-            {
+            comp.Sources.Add(new ShaderSource {
                 Path = path,
                 Compilation = comp,
             });
             comp.SetOrdinals();
         }
 
-        public Shader()
-        {
+        public Shader() {
         }
 
         // This is how you create a simple shader.
         // Shaders are written in GLSL, which is a language very similar to C in its semantics.
         // The GLSL source is compiled *at runtime*, so it can optimize itself for the graphics card it's currently being used on.
         // A commented example of GLSL can be found in shader.vert
-        public Shader(string vertPath, string fragPath, string geomPath = null, bool compile = true)
-        {
+        public Shader(string vertPath, string fragPath, string geomPath = null, bool compile = true) {
             AddSource(vertPath, ShaderType.VertexShader);
             AddSource(fragPath, ShaderType.FragmentShader);
             if (geomPath != null)
@@ -76,8 +69,7 @@ namespace AxEngine
                 Compile();
         }
 
-        public void Compile()
-        {
+        public void Compile() {
             // There are several different types of shaders, but the only two you need for basic rendering are the vertex and fragment shaders.
             // The vertex shader is responsible for moving around vertices, and uploading that data to the fragment shader.
             //   The vertex shader won't be too important here, but they'll be more important later.
@@ -85,8 +77,7 @@ namespace AxEngine
             //   The fragment shader is what we'll be using the most here.
 
             // GL.CreateShader will create an empty shader (obviously). The ShaderType enum denotes which type of shader will be created.
-            foreach (var comp in Compilations)
-            {
+            foreach (var comp in Compilations) {
                 comp.GenerateSource();
 
                 comp.Handle = GL.CreateShader(comp.Type);
@@ -121,8 +112,7 @@ namespace AxEngine
             // When the shader program is linked, it no longer needs the individual shaders attacked to it; the compiled code is copied into the shader program.
             // Detach them, and then delete them.
 
-            foreach (var comp in Compilations)
-            {
+            foreach (var comp in Compilations) {
                 GL.DetachShader(Handle, comp.Handle);
                 GL.DeleteShader(comp.Handle);
             }
@@ -134,8 +124,7 @@ namespace AxEngine
             GL.GetProgram(Handle, GetProgramParameterName.ActiveUniforms, out var numberOfUniforms);
 
             // Loop over all the uniforms,
-            for (var i = 0; i < numberOfUniforms; i++)
-            {
+            for (var i = 0; i < numberOfUniforms; i++) {
                 // get the name of this uniform,
                 int size;
                 ActiveUniformType type;
@@ -147,10 +136,8 @@ namespace AxEngine
                 // and then add it to the dictionary.
                 _uniformLocations.Add(key, location);
 
-                if (size > 1)
-                {
-                    for (int n = 1; n < size; n++)
-                    {
+                if (size > 1) {
+                    for (int n = 1; n < size; n++) {
                         var keyN = key.Replace("[0]", $"[{n}]");
                         _uniformLocations.Add(keyN, GL.GetUniformLocation(Handle, keyN));
                     }
@@ -161,8 +148,7 @@ namespace AxEngine
             // First, we have to get the number of active uniforms in the shader.
             GL.GetProgram(Handle, GetProgramParameterName.ActiveUniformBlocks, out var numberOfUniformBlocks);
             // Loop over all the uniforms,
-            for (var i = 0; i < numberOfUniformBlocks; i++)
-            {
+            for (var i = 0; i < numberOfUniformBlocks; i++) {
                 // get the name of this uniform,
                 GL.GetActiveUniformBlock(Handle, i, ActiveUniformBlockParameter.UniformBlockNameLength, out var blockNameLen);
                 GL.GetActiveUniformBlockName(Handle, i, blockNameLen, out var len, out var key);
@@ -176,10 +162,8 @@ namespace AxEngine
 
         }
 
-        public void Reload()
-        {
-            try
-            {
+        public void Reload() {
+            try {
                 var sh = new Shader();
                 foreach (var comp in Compilations)
                     foreach (var src in comp.Sources)
@@ -188,22 +172,19 @@ namespace AxEngine
                 sh.Compile();
                 SetFrom(sh);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Console.WriteLine(ex.ToString());
             }
 
         }
 
-        private void SetFrom(Shader source)
-        {
+        private void SetFrom(Shader source) {
             Handle = source.Handle;
             Compilations = source.Compilations;
             _uniformLocations = source._uniformLocations;
         }
 
-        private static void CompileShader(ShaderCompilation comp)
-        {
+        private static void CompileShader(ShaderCompilation comp) {
             var shader = comp.Handle;
 
             // Try to compile the shader
@@ -211,8 +192,7 @@ namespace AxEngine
 
             // Check for compilation errors
             GL.GetShader(shader, ShaderParameter.CompileStatus, out var code);
-            if (code != (int)All.True)
-            {
+            if (code != (int)All.True) {
                 // We can use `GL.GetShaderInfoLog(shader)` to get information about the error.
                 var msg = GL.GetShaderInfoLog(shader);
                 Console.WriteLine(msg);
@@ -224,15 +204,13 @@ namespace AxEngine
             ObjectManager.SetLabel(comp);
         }
 
-        private static void LinkProgram(int program)
-        {
+        private static void LinkProgram(int program) {
             // We link the program
             GL.LinkProgram(program);
 
             // Check for linking errors
             GL.GetProgram(program, GetProgramParameterName.LinkStatus, out var code);
-            if (code != (int)All.True)
-            {
+            if (code != (int)All.True) {
                 // We can use `GL.GetProgramInfoLog(program)` to get information about the error.
                 var msg = GL.GetProgramInfoLog(program);
                 Console.WriteLine(msg);
@@ -244,27 +222,23 @@ namespace AxEngine
         internal static int CurrentHandle { get; private set; }
 
         // A wrapper function that enables the shader program.
-        public void Bind()
-        {
+        public void Bind() {
             if (CurrentHandle == Handle)
                 return;
             CurrentHandle = Handle;
             GL.UseProgram(Handle);
         }
 
-        public void Free()
-        {
+        public void Free() {
             GL.DeleteProgram(Handle);
         }
 
         // The shader sources provided with this project use hardcoded layout(location)-s. If you want to do it dynamically,
         // you can omit the layout(location=X) lines in the vertex shader, and use this in VertexAttribPointer instead of the hardcoded values.
-        public int GetAttribLocation(string attribName)
-        {
+        public int GetAttribLocation(string attribName) {
             Bind();
             var attrHandle = GL.GetAttribLocation(Handle, attribName);
-            if (attrHandle < 0)
-            {
+            if (attrHandle < 0) {
                 Console.WriteLine($"GetAttribLocation({attribName}): attrib not found");
             }
             return attrHandle;
@@ -284,17 +258,14 @@ namespace AxEngine
         /// </summary>
         /// <param name="name">The name of the uniform</param>
         /// <param name="data">The data to set</param>
-        public void SetInt(string name, int data)
-        {
-            if (_uniformLocations.TryGetValue(name, out var location))
-            {
+        public void SetInt(string name, int data) {
+            if (_uniformLocations.TryGetValue(name, out var location)) {
                 Bind();
                 GL.Uniform1(location, data);
             }
         }
 
-        public void SetMaterial(string name, Material material)
-        {
+        public void SetMaterial(string name, Material material) {
             material.WriteToShader(name, this);
         }
 
@@ -303,10 +274,8 @@ namespace AxEngine
         /// </summary>
         /// <param name="name">The name of the uniform</param>
         /// <param name="data">The data to set</param>
-        public void SetFloat(string name, float data)
-        {
-            if (_uniformLocations.TryGetValue(name, out var location))
-            {
+        public void SetFloat(string name, float data) {
+            if (_uniformLocations.TryGetValue(name, out var location)) {
                 Bind();
                 GL.Uniform1(location, data);
             }
@@ -322,10 +291,8 @@ namespace AxEngine
         ///   The matrix is transposed before being sent to the shader.
         ///   </para>
         /// </remarks>
-        public void SetMatrix4(string name, Matrix4 data)
-        {
-            if (_uniformLocations.TryGetValue(name, out var location))
-            {
+        public void SetMatrix4(string name, Matrix4 data) {
+            if (_uniformLocations.TryGetValue(name, out var location)) {
                 Bind();
                 GL.UniformMatrix4(location, true, ref data);
             }
@@ -336,19 +303,15 @@ namespace AxEngine
         /// </summary>
         /// <param name="name">The name of the uniform</param>
         /// <param name="data">The data to set</param>
-        public void SetVector3(string name, Vector3 data)
-        {
-            if (_uniformLocations.TryGetValue(name, out var location))
-            {
+        public void SetVector3(string name, Vector3 data) {
+            if (_uniformLocations.TryGetValue(name, out var location)) {
                 Bind();
                 GL.Uniform3(location, data);
             }
         }
 
-        public void BindBlock(string blockName, BindingPoint bindingPoint)
-        {
-            if (_uniformBlockLocations.TryGetValue(blockName, out var location))
-            {
+        public void BindBlock(string blockName, BindingPoint bindingPoint) {
+            if (_uniformBlockLocations.TryGetValue(blockName, out var location)) {
                 GL.UniformBlockBinding(Handle, location, bindingPoint.Number);
             }
         }
@@ -366,15 +329,13 @@ namespace AxEngine
 
         public string AllSources() => string.Join("\n", Sources.Select(s => s.Source));
 
-        public void GenerateSource()
-        {
+        public void GenerateSource() {
             SetOrdinals();
             foreach (var source in Sources)
                 source.GenerateSource();
         }
 
-        public void SetOrdinals()
-        {
+        public void SetOrdinals() {
             int ordinal = 0;
             foreach (var source in Sources)
                 source.Ordinal = ordinal++;
@@ -382,13 +343,11 @@ namespace AxEngine
 
         public IDictionary<string, object> Defines { get; } = new Dictionary<string, object>();
 
-        public void SetDefine(string name)
-        {
+        public void SetDefine(string name) {
             SetDefine(name, null);
         }
 
-        public void SetDefine(string name, object value)
-        {
+        public void SetDefine(string name, object value) {
             if (Defines.ContainsKey(name))
                 Defines[name] = value;
             else
@@ -407,25 +366,20 @@ namespace AxEngine
         private static Regex FileFinder = new Regex(@"#include ""([\w\.\/-]+)""", RegexOptions.RightToLeft);
         private static Regex DefineFileFinder = new Regex(@"#include ([\w_]+)", RegexOptions.RightToLeft);
 
-        public void GenerateSource()
-        {
+        public void GenerateSource() {
             Source = LoadSource(Path, ref OriginalSource, this);
         }
 
         // Just loads the entire file into a string.
-        private static string LoadSource(string path, ref string content, ShaderSource sh, bool isIncludeFile = false)
-        {
+        private static string LoadSource(string path, ref string content, ShaderSource sh, bool isIncludeFile = false) {
             var loadedContent = LoadFile(path, content);
             content = loadedContent;
 
-            if (sh.Ordinal == 0)
-            {
+            if (sh.Ordinal == 0) {
                 var lines = loadedContent.Split(Environment.NewLine).ToList();
-                foreach (var entry in sh.Compilation.Defines)
-                {
+                foreach (var entry in sh.Compilation.Defines) {
                     var defineLine = "#define " + entry.Key;
-                    if (entry.Value != null)
-                    {
+                    if (entry.Value != null) {
                         defineLine += " " + GetDefineLiteral(entry.Value);
                     }
                     lines.Insert(1, defineLine);
@@ -436,16 +390,14 @@ namespace AxEngine
             var sb = new StringBuilder(loadedContent);
 
             // replaces #include DEFINED_MACRO
-            foreach (Match match in DefineFileFinder.Matches(sb.ToString()))
-            {
+            foreach (Match match in DefineFileFinder.Matches(sb.ToString())) {
                 var filePlaceholder = match.Groups[1].Value;
                 if (sh.Compilation.Defines.ContainsKey(filePlaceholder))
                     sb.Replace(match.Value, $"#include {GetDefineLiteral(sh.Compilation.Defines[filePlaceholder])}", match.Index, match.Length);
             }
 
             // replaces #include "Path to file"
-            foreach (Match match in FileFinder.Matches(sb.ToString()))
-            {
+            foreach (Match match in FileFinder.Matches(sb.ToString())) {
                 var includePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(path), match.Groups[1].Value);
                 var dummy = "";
                 sb.Replace(match.Value, LoadSource(includePath, ref dummy, sh, true), match.Index, match.Length);
@@ -453,24 +405,20 @@ namespace AxEngine
             return sb.ToString();
         }
 
-        private static string GetDefineLiteral(object value)
-        {
+        private static string GetDefineLiteral(object value) {
             if (value == null)
                 return "";
 
-            if (value is string)
-            {
+            if (value is string) {
                 return "\"" + value.ToString() + "\"";
             }
-            else
-            {
+            else {
                 return value.ToString();
             }
         }
 
         // Just loads the entire file into a string.
-        private static string LoadFile(string path = null, string content = null)
-        {
+        private static string LoadFile(string path = null, string content = null) {
             if (!string.IsNullOrEmpty(content))
                 return content;
 
@@ -478,8 +426,7 @@ namespace AxEngine
             if (string.IsNullOrEmpty(absPath))
                 throw new Exception("Could not load file: " + path);
 
-            using (var sr = new StreamReader(absPath, Encoding.UTF8))
-            {
+            using (var sr = new StreamReader(absPath, Encoding.UTF8)) {
                 return sr.ReadToEnd();
             }
         }

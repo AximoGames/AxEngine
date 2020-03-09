@@ -2,7 +2,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 
-namespace AxEngine
+namespace Aximo.Render
 {
     public class DeferredRenderPipeline : RenderPipeline
     {
