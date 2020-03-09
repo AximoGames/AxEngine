@@ -1,5 +1,6 @@
-using System;
-using System.Collections.Generic;
+// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
 using OpenTK;
 
 namespace Aximo.Render
@@ -23,10 +24,8 @@ namespace Aximo.Render
         public float SpecularStrength { get; set; }
         public MaterialColorBlendMode ColorBlendMode { get; set; }
 
-        public static Material GetDefault()
-        {
-            return new Material()
-            {
+        public static Material GetDefault() {
+            return new Material() {
                 DiffuseImagePath = "Textures/woodenbox.png",
                 SpecularImagePath = "Textures/woodenbox_specular.png",
                 Color = new Vector3(1.0f, 1.0f, 0.0f),
@@ -36,8 +35,7 @@ namespace Aximo.Render
             };
         }
 
-        public void WriteToShader(string name, Shader shader)
-        {
+        public void WriteToShader(string name, Shader shader) {
             var prefix = name += ".";
             shader.SetVector3(prefix + "color", Color);
             shader.SetInt(prefix + "diffuse", 0);

@@ -1,7 +1,8 @@
-﻿using OpenTK.Graphics.OpenGL4;
-using System;
-using System.Collections.Generic;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
 using System.Runtime.InteropServices;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
@@ -21,41 +22,35 @@ namespace Aximo.Render
         private ElementsBufferObject _ebo;
         public ElementsBufferObject Ebo => _ebo;
 
-        public void SetVbo(VertexBufferObject vbo)
-        {
+        public void SetVbo(VertexBufferObject vbo) {
             _vbo = vbo;
         }
 
-        public void SetEbo(ElementsBufferObject ebo)
-        {
+        public void SetEbo(ElementsBufferObject ebo) {
             _ebo = ebo;
         }
 
-        public VertexArrayObject(VertexLayout layout, VertexBufferObject vbo = null, ElementsBufferObject ebo = null)
-        {
+        public VertexArrayObject(VertexLayout layout, VertexBufferObject vbo = null, ElementsBufferObject ebo = null) {
             Layout = layout;
             _vbo = vbo;
             _ebo = ebo;
         }
 
-        public VertexBufferObject CreateVBO()
-        {
+        public VertexBufferObject CreateVBO() {
             _vbo = new VertexBufferObject();
             _vbo.Create();
             _vbo.Bind();
             return _vbo;
         }
 
-        public ElementsBufferObject CreateEBO()
-        {
+        public ElementsBufferObject CreateEBO() {
             _ebo = new ElementsBufferObject();
             _ebo.Create();
             _ebo.Bind();
             return _ebo;
         }
 
-        public void Create()
-        {
+        public void Create() {
             _Handle = GL.GenVertexArray();
             Bind();
             // if (Layout != null)
@@ -63,8 +58,7 @@ namespace Aximo.Render
         }
 
         public static int CurrentHandle;
-        public void Bind()
-        {
+        public void Bind() {
             if (CurrentHandle == _Handle)
                 return;
             CurrentHandle = _Handle;
@@ -72,16 +66,14 @@ namespace Aximo.Render
             GL.BindVertexArray(_Handle);
         }
 
-        public void BindDefault()
-        {
+        public void BindDefault() {
             CurrentHandle = 0;
             GL.BindVertexArray(0);
         }
 
         public PrimitiveType PrimitiveType = PrimitiveType.Triangles;
 
-        public void Draw()
-        {
+        public void Draw() {
             if (_ebo == null)
                 GL.DrawArrays(PrimitiveType, 0, VertexCount);
             else
@@ -89,8 +81,7 @@ namespace Aximo.Render
         }
 
         private bool Initialized;
-        private void EnsureInitialized()
-        {
+        private void EnsureInitialized() {
             if (Initialized)
                 return;
             if (_Handle == -1)
@@ -104,14 +95,12 @@ namespace Aximo.Render
             Initialized = true;
         }
 
-        internal void SetData(float[] vertices, ushort[] indicies = null)
-        {
+        internal void SetData(float[] vertices, ushort[] indicies = null) {
             EnsureInitialized();
             _vbo.SetData(vertices);
-            VertexCount = (vertices.Length * sizeof(float)) / Layout.Stride;
+            VertexCount = vertices.Length * sizeof(float) / Layout.Stride;
             //          UseDefault();
-            if (indicies != null)
-            {
+            if (indicies != null) {
                 if (_ebo == null)
                     _ebo = CreateEBO();
                 _ebo.SetData(indicies);
@@ -119,15 +108,13 @@ namespace Aximo.Render
         }
 
         internal void SetData<T>(T[] vertices, ushort[] indicies = null)
-        where T : struct
-        {
+        where T : struct {
             EnsureInitialized();
             _vbo.SetData<T>(vertices);
             var typeSize = Marshal.SizeOf(typeof(T));
-            VertexCount = (vertices.Length * typeSize) / Layout.Stride;
+            VertexCount = vertices.Length * typeSize / Layout.Stride;
             //            UseDefault();
-            if (indicies != null)
-            {
+            if (indicies != null) {
                 if (_ebo == null)
                     _ebo = CreateEBO();
                 _ebo.SetData(indicies);
@@ -138,8 +125,7 @@ namespace Aximo.Render
         //{
         //}
 
-        public void Free()
-        {
+        public void Free() {
             GL.DeleteVertexArray(_Handle);
         }
     }

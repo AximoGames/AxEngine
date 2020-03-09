@@ -1,5 +1,8 @@
-﻿using System.Threading;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Aximo.Render
 {
@@ -12,18 +15,15 @@ namespace Aximo.Render
 
         private Dictionary<string, object> Data = new Dictionary<string, object>();
 
-        public T GetData<T>(string name, T defaultValue = default)
-        {
+        public T GetData<T>(string name, T defaultValue = default) {
             return IDataHelper.GetData(Data, name, defaultValue);
         }
 
-        public bool HasData(string name)
-        {
+        public bool HasData(string name) {
             return IDataHelper.HasData(Data, name);
         }
 
-        public bool SetData<T>(string name, T value, T defaultValue = default)
-        {
+        public bool SetData<T>(string name, T value, T defaultValue = default) {
             return IDataHelper.SetData(Data, name, value, defaultValue);
         }
 
@@ -32,29 +32,24 @@ namespace Aximo.Render
         public virtual List<IRenderPipeline> RenderPipelines { get; set; } = new List<IRenderPipeline>();
 
         public void UsePipeline<T>()
-            where T : class, IRenderPipeline
-        {
+            where T : class, IRenderPipeline {
             UsePipeline(Context.GetPipeline<T>());
         }
 
-        public void UsePipeline(IRenderPipeline pipeline)
-        {
+        public void UsePipeline(IRenderPipeline pipeline) {
             RenderPipelines.Add(pipeline);
         }
 
-        public void AssignContext(RenderContext ctx)
-        {
+        public void AssignContext(RenderContext ctx) {
             Context = ctx;
         }
 
-        public GameObject()
-        {
+        public GameObject() {
             Id = GetNextGameObjectId();
         }
 
         private static int CurrentGameObjectId;
-        private static int GetNextGameObjectId()
-        {
+        private static int GetNextGameObjectId() {
             return Interlocked.Increment(ref CurrentGameObjectId);
         }
 
@@ -62,8 +57,7 @@ namespace Aximo.Render
 
         public abstract void Free();
 
-        public virtual void OnScreenResize()
-        {
+        public virtual void OnScreenResize() {
         }
     }
 

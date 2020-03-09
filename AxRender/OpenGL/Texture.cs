@@ -1,11 +1,13 @@
-﻿using System;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
-using System.Collections.Generic;
 
 namespace Aximo.Render
 {
@@ -261,7 +263,6 @@ namespace Aximo.Render
             // your image will fail to render at all (usually resulting in pure black instead).
             GL.TexParameter(Target, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(Target, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
 
             // Now, set the wrapping mode. S is for the X axis, and T is for the Y axis.
             // We set this to Repeat so that textures will repeat when wrapped. Not demonstrated here since the texture coordinates exactly match

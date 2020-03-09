@@ -1,3 +1,6 @@
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
 // Adapted from this excellent IcoSphere tutorial by Andreas Kahler
 // http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
 // Changes Copyright (C) 2014 by David Jeske, and donated to the public domain.
@@ -12,14 +15,14 @@ namespace Util.IcoSphere
 
     public struct TriangleIndices
     {
-        public int v1;
-        public int v2;
-        public int v3;
+        public int V1;
+        public int V2;
+        public int V3;
 
         public TriangleIndices(int v1, int v2, int v3) {
-            this.v1 = v1;
-            this.v2 = v2;
-            this.v3 = v3;
+            this.V1 = v1;
+            this.V2 = v2;
+            this.V3 = v3;
         }
     }
 
@@ -35,22 +38,22 @@ namespace Util.IcoSphere
     {
         private MeshGeometry3D geometry;
         private int index;
-        private Dictionary<Int64, int> middlePointIndexCache;
+        private Dictionary<long, int> middlePointIndexCache;
 
         // add vertex to mesh, fix position to be on unit sphere, return index
-        private int addVertex(Vector3 p) {
-            float length = (float)Math.Sqrt(p.X * p.X + p.Y * p.Y + p.Z * p.Z);
+        private int AddVertex(Vector3 p) {
+            float length = (float)Math.Sqrt((p.X * p.X) + (p.Y * p.Y) + (p.Z * p.Z));
             geometry.Positions.Add(new Vector3(p.X / length, p.Y / length, p.Z / length));
             return index++;
         }
 
         // return index of point in the middle of p1 and p2
-        private int getMiddlePoint(int p1, int p2) {
+        private int GetMiddlePoint(int p1, int p2) {
             // first check if we have it already
             bool firstIsSmaller = p1 < p2;
-            Int64 smallerIndex = firstIsSmaller ? p1 : p2;
-            Int64 greaterIndex = firstIsSmaller ? p2 : p1;
-            Int64 key = (smallerIndex << 32) + greaterIndex;
+            long smallerIndex = firstIsSmaller ? p1 : p2;
+            long greaterIndex = firstIsSmaller ? p2 : p1;
+            long key = (smallerIndex << 32) + greaterIndex;
 
             int ret;
             if (this.middlePointIndexCache.TryGetValue(key, out ret)) {
@@ -66,7 +69,7 @@ namespace Util.IcoSphere
                                  (point1.Z + point2.Z) / 2.0f);
 
             // add vertex makes sure point is on unit sphere
-            int i = addVertex(middle);
+            int i = AddVertex(middle);
 
             // store it, return index
             this.middlePointIndexCache.Add(key, i);
@@ -81,21 +84,20 @@ namespace Util.IcoSphere
             // create 12 vertices of a icosahedron
             float t = (float)((1.0f + Math.Sqrt(5.0)) / 2.0);
 
-            addVertex(new Vector3(-1, t, 0f));
-            addVertex(new Vector3(1, t, 0f));
-            addVertex(new Vector3(-1, -t, 0f));
-            addVertex(new Vector3(1, -t, 0f));
+            AddVertex(new Vector3(-1, t, 0f));
+            AddVertex(new Vector3(1, t, 0f));
+            AddVertex(new Vector3(-1, -t, 0f));
+            AddVertex(new Vector3(1, -t, 0f));
 
-            addVertex(new Vector3(0, -1, t));
-            addVertex(new Vector3(0, 1, t));
-            addVertex(new Vector3(0, -1, -t));
-            addVertex(new Vector3(0, 1, -t));
+            AddVertex(new Vector3(0, -1, t));
+            AddVertex(new Vector3(0, 1, t));
+            AddVertex(new Vector3(0, -1, -t));
+            AddVertex(new Vector3(0, 1, -t));
 
-            addVertex(new Vector3(t, 0, -1));
-            addVertex(new Vector3(t, 0, 1));
-            addVertex(new Vector3(-t, 0, -1));
-            addVertex(new Vector3(-t, 0, 1));
-
+            AddVertex(new Vector3(t, 0, -1));
+            AddVertex(new Vector3(t, 0, 1));
+            AddVertex(new Vector3(-t, 0, -1));
+            AddVertex(new Vector3(-t, 0, 1));
 
             // create 20 triangles of the icosahedron
             var faces = new List<TriangleIndices>();
@@ -107,7 +109,7 @@ namespace Util.IcoSphere
             faces.Add(new TriangleIndices(0, 7, 10));
             faces.Add(new TriangleIndices(0, 10, 11));
 
-            // 5 adjacent faces 
+            // 5 adjacent faces
             faces.Add(new TriangleIndices(1, 5, 9));
             faces.Add(new TriangleIndices(5, 11, 4));
             faces.Add(new TriangleIndices(11, 10, 2));
@@ -121,26 +123,25 @@ namespace Util.IcoSphere
             faces.Add(new TriangleIndices(3, 6, 8));
             faces.Add(new TriangleIndices(3, 8, 9));
 
-            // 5 adjacent faces 
+            // 5 adjacent faces
             faces.Add(new TriangleIndices(4, 9, 5));
             faces.Add(new TriangleIndices(2, 4, 11));
             faces.Add(new TriangleIndices(6, 2, 10));
             faces.Add(new TriangleIndices(8, 6, 7));
             faces.Add(new TriangleIndices(9, 8, 1));
 
-
             // refine triangles
             for (int i = 0; i < recursionLevel; i++) {
                 var faces2 = new List<TriangleIndices>();
                 foreach (var tri in faces) {
                     // replace triangle by 4 triangles
-                    int a = getMiddlePoint(tri.v1, tri.v2);
-                    int b = getMiddlePoint(tri.v2, tri.v3);
-                    int c = getMiddlePoint(tri.v3, tri.v1);
+                    int a = GetMiddlePoint(tri.V1, tri.V2);
+                    int b = GetMiddlePoint(tri.V2, tri.V3);
+                    int c = GetMiddlePoint(tri.V3, tri.V1);
 
-                    faces2.Add(new TriangleIndices(tri.v1, a, c));
-                    faces2.Add(new TriangleIndices(tri.v2, b, a));
-                    faces2.Add(new TriangleIndices(tri.v3, c, b));
+                    faces2.Add(new TriangleIndices(tri.V1, a, c));
+                    faces2.Add(new TriangleIndices(tri.V2, b, a));
+                    faces2.Add(new TriangleIndices(tri.V3, c, b));
                     faces2.Add(new TriangleIndices(a, b, c));
                 }
                 faces = faces2;
@@ -150,9 +151,9 @@ namespace Util.IcoSphere
 
             // done, now add triangles to mesh
             foreach (var tri in faces) {
-                this.geometry.MeshIndicies.Add(tri.v1);
-                this.geometry.MeshIndicies.Add(tri.v2);
-                this.geometry.MeshIndicies.Add(tri.v3);
+                this.geometry.MeshIndicies.Add(tri.V1);
+                this.geometry.MeshIndicies.Add(tri.V2);
+                this.geometry.MeshIndicies.Add(tri.V3);
             }
 
             return this.geometry;
@@ -167,10 +168,10 @@ namespace Util.IcoSphere
         private MeshGeometry3D geom;
 
         public Mesh_SphereICO(int divisions) {
-            this._Create(divisions);
+            this.Create(divisions);
         }
 
-        private void _computeEquirectangularUVForSpherePoint(Vector3 p, out float u, out float v) {
+        private void ComputeEquirectangularUVForSpherePoint(Vector3 p, out float u, out float v) {
             // http://paulbourke.net/geometry/transformationprojection/
 
             // this is the unit surface normal (and surface point)
@@ -180,7 +181,7 @@ namespace Util.IcoSphere
             // using Y-up coordinates
 
             // compute azimuth (x texture coord)
-            float longitude = (float)Math.Atan2(vpn.X, vpn.Z);       // azimuth [-PI  to PI]   			
+            float longitude = (float)Math.Atan2(vpn.X, vpn.Z);       // azimuth [-PI  to PI]
             u = (float)((longitude / (2.0 * Math.PI)) + 0.5);     // [0 to 1]
 
             // compute altitude (y texture coord)
@@ -190,7 +191,7 @@ namespace Util.IcoSphere
             // v = (float) ( Math.Log((1.0 + Math.Sin(latitude))/(1.0 - Math.Sin(latitude))) / (4.0 * Math.PI) );
         }
 
-        private void _Create(int divisions) {
+        private void Create(int divisions) {
             var icoSphereCreator = new IcoSphereCreator();
             geom = icoSphereCreator.Create(divisions);
             var positions = geom.Positions.ToArray();
@@ -201,9 +202,9 @@ namespace Util.IcoSphere
             // we have to process each face in the IcoSphere, so we can
             // properly "wrap" the texture-coordinates that fall across the left/right border
             foreach (TriangleIndices face in geom.Faces) {
-                var vp1 = positions[face.v1];
-                var vp2 = positions[face.v2];
-                var vp3 = positions[face.v3];
+                var vp1 = positions[face.V1];
+                var vp2 = positions[face.V2];
+                var vp3 = positions[face.V3];
 
                 var normal1 = vp1.Normalized();
                 var normal2 = vp2.Normalized();
@@ -211,9 +212,9 @@ namespace Util.IcoSphere
 
                 float s1, s2, s3, t1, t2, t3;
 
-                _computeEquirectangularUVForSpherePoint(normal1, out s1, out t1);
-                _computeEquirectangularUVForSpherePoint(normal2, out s2, out t2);
-                _computeEquirectangularUVForSpherePoint(normal3, out s3, out t3);
+                ComputeEquirectangularUVForSpherePoint(normal1, out s1, out t1);
+                ComputeEquirectangularUVForSpherePoint(normal2, out s2, out t2);
+                ComputeEquirectangularUVForSpherePoint(normal3, out s3, out t3);
 
                 // configure verticies
 
@@ -249,16 +250,16 @@ namespace Util.IcoSphere
 
                 // add configured verticies to mesh..
 
-                ushort idx1 = vertexSoup.digestVertex(ref v1);
-                ushort idx2 = vertexSoup.digestVertex(ref v2);
-                ushort idx3 = vertexSoup.digestVertex(ref v3);
+                ushort idx1 = vertexSoup.DigestVertex(ref v1);
+                ushort idx2 = vertexSoup.DigestVertex(ref v2);
+                ushort idx3 = vertexSoup.DigestVertex(ref v3);
 
                 indexList.Add(idx1);
                 indexList.Add(idx2);
                 indexList.Add(idx3);
             }
 
-            Vertices = vertexSoup.verticies.ToArray();
+            Vertices = vertexSoup.Verticies.ToArray();
             Indicies = indexList.ToArray();
 
             for (var i = 0; i < Vertices.Length; i++) {
@@ -269,33 +270,33 @@ namespace Util.IcoSphere
 
     }
 
-    public class VertexSoup<VERTEX_STRUCT>
+    public class VertexSoup<TVertexStruct>
     {
 
-        Dictionary<VERTEX_STRUCT, UInt16> vertexToIndexMap = new Dictionary<VERTEX_STRUCT, UInt16>();
-        public List<VERTEX_STRUCT> verticies = new List<VERTEX_STRUCT>();
+        Dictionary<TVertexStruct, ushort> vertexToIndexMap = new Dictionary<TVertexStruct, ushort>();
+        public List<TVertexStruct> Verticies = new List<TVertexStruct>();
         private readonly bool deDup;
 
-        public UInt16 digestVertex(ref VERTEX_STRUCT vertex) {
-            UInt16 retval;
+        public ushort DigestVertex(ref TVertexStruct vertex) {
+            ushort retval;
             if (deDup && vertexToIndexMap.ContainsKey(vertex)) {
                 retval = vertexToIndexMap[vertex];
             }
             else {
-                UInt16 nextIndex = (UInt16)verticies.Count;
+                ushort nextIndex = (ushort)Verticies.Count;
                 vertexToIndexMap[vertex] = nextIndex;
-                verticies.Add(vertex);
+                Verticies.Add(vertex);
                 retval = nextIndex;
             }
 
             return retval;
         }
 
-        public UInt16[] digestVerticies(VERTEX_STRUCT[] vertex_list) {
-            UInt16[] retval = new UInt16[vertex_list.Length];
+        public ushort[] DigestVerticies(TVertexStruct[] vertex_list) {
+            ushort[] retval = new ushort[vertex_list.Length];
 
             for (int x = 0; x < vertex_list.Length; x++) {
-                retval[x] = digestVertex(ref vertex_list[x]);
+                retval[x] = DigestVertex(ref vertex_list[x]);
             }
             return retval;
         }

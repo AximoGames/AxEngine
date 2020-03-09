@@ -1,16 +1,18 @@
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
 using System;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
     public class DeferredRenderPipeline : RenderPipeline
     {
 
-        public FrameBuffer gBuffer;
-        public Texture gPosition;
-        public Texture gNormal;
-        public Texture gAlbedoSpec;
+        public FrameBuffer GBuffer;
+        public Texture GPosition;
+        public Texture GNormal;
+        public Texture GAlbedoSpec;
 
         private Shader _DefLightShader;
         private float[] _vertices = DataHelper.Quad;
@@ -18,39 +20,39 @@ namespace Aximo.Render
         private VertexArrayObject vao;
         private VertexBufferObject vbo;
 
-        public override void Init()
-        {
+        public override void Init() {
             var width = RenderContext.Current.ScreenSize.X;
             var height = RenderContext.Current.ScreenSize.Y;
 
-            gBuffer = new FrameBuffer(width, height);
-            gBuffer.InitNormal();
+            GBuffer = new FrameBuffer(width, height);
+            GBuffer.InitNormal();
 
-            gBuffer.ObjectLabel = nameof(gBuffer);
+            GBuffer.ObjectLabel = nameof(GBuffer);
 
-            gPosition = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-            gPosition.ObjectLabel = nameof(gPosition);
-            gPosition.SetNearestFilter();
-            gBuffer.DestinationTextures.Add(gPosition);
-            gBuffer.BindTexture(gPosition, FramebufferAttachment.ColorAttachment0);
+            GPosition = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            GPosition.ObjectLabel = nameof(GPosition);
+            GPosition.SetNearestFilter();
+            GBuffer.DestinationTextures.Add(GPosition);
+            GBuffer.BindTexture(GPosition, FramebufferAttachment.ColorAttachment0);
 
-            gNormal = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-            gNormal.ObjectLabel = nameof(gNormal);
-            gNormal.SetNearestFilter();
-            gBuffer.DestinationTextures.Add(gNormal);
-            gBuffer.BindTexture(gNormal, FramebufferAttachment.ColorAttachment1);
+            GNormal = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            GNormal.ObjectLabel = nameof(GNormal);
+            GNormal.SetNearestFilter();
+            GBuffer.DestinationTextures.Add(GNormal);
+            GBuffer.BindTexture(GNormal, FramebufferAttachment.ColorAttachment1);
 
+            GAlbedoSpec = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            GAlbedoSpec.SetNearestFilter();
+            GAlbedoSpec.ObjectLabel = nameof(GAlbedoSpec);
+            GBuffer.DestinationTextures.Add(GAlbedoSpec);
+            GBuffer.BindTexture(GAlbedoSpec, FramebufferAttachment.ColorAttachment2);
 
-            gAlbedoSpec = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
-            gAlbedoSpec.SetNearestFilter();
-            gAlbedoSpec.ObjectLabel = nameof(gAlbedoSpec);
-            gBuffer.DestinationTextures.Add(gAlbedoSpec);
-            gBuffer.BindTexture(gAlbedoSpec, FramebufferAttachment.ColorAttachment2);
-
-            GL.DrawBuffers(3, new DrawBuffersEnum[] {
+            GL.DrawBuffers(3, new DrawBuffersEnum[]
+            {
                 DrawBuffersEnum.ColorAttachment0,
                 DrawBuffersEnum.ColorAttachment1,
-                DrawBuffersEnum.ColorAttachment2 });
+                DrawBuffersEnum.ColorAttachment2,
+            });
 
             // var rboDepth = new RenderBuffer(gBuffer, RenderbufferStorage.DepthComponent, FramebufferAttachment.DepthAttachment);
             // rboDepth.ObjectLabel = nameof(rboDepth);
@@ -59,7 +61,7 @@ namespace Aximo.Render
             var fwPipe = RenderContext.Current.GetPipeline<ForwardRenderPipeline>();
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, fwPipe.FrameBuffer.RenderBuffer.Handle);
 
-            gBuffer.Check();
+            GBuffer.Check();
 
             _DefLightShader = new Shader("Shaders/deferred-shading.vert", "Shaders/deferred-shading.frag");
             _DefLightShader.SetInt("gPosition", 0);
@@ -82,8 +84,7 @@ namespace Aximo.Render
 
         public DeferredPass Pass;
 
-        public override void Render(RenderContext context, Camera camera)
-        {
+        public override void Render(RenderContext context, Camera camera) {
             GL.Disable(EnableCap.Blend);
 
             ObjectManager.PushDebugGroup("OnRender Pass1", this);
@@ -97,10 +98,9 @@ namespace Aximo.Render
             GL.Enable(EnableCap.Blend);
         }
 
-        private void RenderPass1(RenderContext context, Camera camera)
-        {
+        private void RenderPass1(RenderContext context, Camera camera) {
             GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
-            gBuffer.Bind();
+            GBuffer.Bind();
             GL.Enable(EnableCap.DepthTest);
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -110,8 +110,7 @@ namespace Aximo.Render
                 Render(context, camera, obj);
         }
 
-        private void RenderPass2(RenderContext context, Camera camera)
-        {
+        private void RenderPass2(RenderContext context, Camera camera) {
             Pass = DeferredPass.Pass2;
             // GL.ClearColor(0.1f, 0.3f, 0.3f, 1.0f);
             // GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -125,9 +124,9 @@ namespace Aximo.Render
 
             _DefLightShader.Bind();
 
-            gPosition.Bind(TextureUnit.Texture0);
-            gNormal.Bind(TextureUnit.Texture1);
-            gAlbedoSpec.Bind(TextureUnit.Texture2);
+            GPosition.Bind(TextureUnit.Texture0);
+            GNormal.Bind(TextureUnit.Texture1);
+            GAlbedoSpec.Bind(TextureUnit.Texture2);
 
             context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
             context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture4);
@@ -151,9 +150,8 @@ namespace Aximo.Render
             ObjectManager.PopDebugGroup();
         }
 
-        public override void OnScreenResize()
-        {
-            gBuffer.Resize(RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
+        public override void OnScreenResize() {
+            GBuffer.Resize(RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
         }
     }
 

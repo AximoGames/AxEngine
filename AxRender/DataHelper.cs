@@ -1,8 +1,14 @@
-﻿using OpenTK;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
 using System;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using OpenTK;
+
+#pragma warning disable SA1003 // Symbols should be spaced correctly
+#pragma warning disable SA1137 // Elements should have the same indentation
 
 namespace Aximo.Render
 {
@@ -53,7 +59,7 @@ namespace Aximo.Render
              0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
             -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
              0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
         };
 
         private const float dX = -0.5f;
@@ -191,7 +197,7 @@ namespace Aximo.Render
              0.3f+eX,  0.1f+eY,  0.1f+eZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
             -0.3f+eX,  0.1f+eY,  0.1f+eZ,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
              0.3f+eX,  0.1f+eY,  0.1f+eZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.3f+eX,  0.1f+eY, -0.1f+eZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+            -0.3f+eX,  0.1f+eY, -0.1f+eZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
 
         };
 
@@ -207,7 +213,7 @@ namespace Aximo.Render
 
             -1.0f,  1.0f,  0.0f, 1.0f,
              1.0f, -1.0f,  1.0f, 0.0f,
-             1.0f,  1.0f,  1.0f, 1.0f
+             1.0f,  1.0f,  1.0f, 1.0f,
         };
 
         public static Bitmap GetDepthTexture(int width, int height, Action<IntPtr> getPixels) {
@@ -229,7 +235,7 @@ namespace Aximo.Render
 
             for (var y = 0; y < height; y++) {
                 for (var x = 0; x < width; x++) {
-                    var value = floats[y * height + x];
+                    var value = floats[(y * height) + x];
                     if (value != 1.0f) {
                         value -= min;
                         value *= factor;
@@ -265,25 +271,25 @@ namespace Aximo.Render
         {
              // Position          Color
              -1f, 0f, 0.0f,  0.5f, 0f, 0f,  1.0f, // Line X
-             1.0f,  0.0f, 0.0f,  1f, 0,0,  1.0f,
+             1.0f,  0.0f, 0.0f,  1f, 0, 0,  1.0f,
 
              0f, -1f, 0.0f,  0f, 0.5f, 0f,  1.0f, // Line Y
              0.0f,  1.0f, 0.0f,  0f, 1f, 0f,  1.0f,
 
              0f, 0f, -1.0f,  0f, 0f, 0.5f,  1.0f, // Line Z
-             0.0f,  0.0f, 1.0f,  0f, 0f, 1f,  1.0f
+             0.0f,  0.0f, 1.0f,  0f, 0f, 1f,  1.0f,
         };
 
         public static readonly float[] Line =
         {
              // Position          Color
              -1.0f,  0.0f, 0.0f,  0.6f, 0.05f, 0.6f, 1.0f, // X-Aligned line
-              1.0f,  0.0f, 0.0f,  1.0f, 0,0f, 1.0f, 1.0f
+              1.0f,  0.0f, 0.0f,  1.0f, 0, 0f, 1.0f, 1.0f,
         };
 
         public static readonly float[] SkyBox =
         {
-            // positions          
+            // positions
             -1.0f, -1.0f,  1.0f, // Left
             -1.0f, -1.0f, -1.0f,
             -1.0f,  1.0f, -1.0f,
@@ -324,7 +330,7 @@ namespace Aximo.Render
             1.0f, -1.0f, -1.0f,
             1.0f, -1.0f, -1.0f,
             -1.0f, -1.0f,  1.0f,
-            1.0f, -1.0f,  1.0f
+            1.0f, -1.0f,  1.0f,
         };
 
     }

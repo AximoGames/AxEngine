@@ -1,4 +1,7 @@
-﻿using System;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using OpenTK;
 
@@ -121,7 +124,7 @@ namespace Aximo.Render
             set { if (_Up == value) return; _Up = value; OnCameraChanged(); }
         }
 
-        public float _Facing = (float)Math.PI / 2 + 0.15f;
+        public float _Facing = ((float)Math.PI / 2) + 0.15f;
         public float Facing {
             get { return _Facing; }
             set { if (_Facing == value) return; _Facing = value; OnCameraChanged(); }

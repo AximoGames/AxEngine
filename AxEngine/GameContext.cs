@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK;
+﻿using System.Collections.Generic;
 
 namespace Aximo.Engine
 {
@@ -15,7 +10,8 @@ namespace Aximo.Engine
 
         public List<Animation> Animations = new List<Animation>();
 
-        public void AddAnimation(Animation animation) {
+        public void AddAnimation(Animation animation)
+        {
             Animations.Add(animation);
         }
 

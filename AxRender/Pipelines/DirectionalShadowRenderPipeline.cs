@@ -1,5 +1,8 @@
-using OpenTK.Graphics.OpenGL4;
+// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
 using System.Collections.Generic;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
@@ -8,14 +11,12 @@ namespace Aximo.Render
 
         public FrameBuffer FrameBuffer { get; private set; }
 
-        public override void Init()
-        {
+        public override void Init() {
             FrameBuffer = new FrameBuffer(1024, 1024);
             FrameBuffer.InitDepth();
         }
 
-        public override void Render(RenderContext context, Camera camera)
-        {
+        public override void Render(RenderContext context, Camera camera) {
             GL.Viewport(0, 0, FrameBuffer.Width, FrameBuffer.Height);
             FrameBuffer.Bind();
             GL.Clear(ClearBufferMask.DepthBufferBit);
@@ -24,8 +25,7 @@ namespace Aximo.Render
                 Render(context, camera, obj);
         }
 
-        public override IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
-        {
+        public override IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera) {
             foreach (var obj in base.GetRenderObjects(context, camera))
                 if (obj is IShadowObject m)
                     if (m.RenderShadow)

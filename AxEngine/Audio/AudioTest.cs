@@ -1,10 +1,9 @@
-using OpenTK;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Threading;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
-using System;
-using System.IO;
-using System.Diagnostics;
-using System.Threading;
 
 namespace Aximo.Engine
 {

@@ -1,7 +1,9 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL4;
-using System;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
 using System.Collections.Generic;
+using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
@@ -18,8 +20,7 @@ namespace Aximo.Render
 
         private VertexArrayObject vao;
 
-        public override void Init()
-        {
+        public override void Init() {
             UsePipeline<ForwardRenderPipeline>();
 
             _Shader = new Shader("Shaders/lines.vert", "Shaders/lines.frag");
@@ -40,23 +41,20 @@ namespace Aximo.Render
             int end;
             float startPos;
             float endPos;
-            if (Center)
-            {
+            if (Center) {
                 start = -size;
                 end = size;
                 startPos = -size;
                 endPos = size;
             }
-            else
-            {
+            else {
                 start = 0;
                 end = size;
                 startPos = 0f;
                 endPos = size;
             }
 
-            for (var i = start; i <= end; i++)
-            {
+            for (var i = start; i <= end; i++) {
                 _vertices.Add(new Vector3(startPos, i, 0), color);
                 _vertices.Add(new Vector3(endPos, i, 0), color);
 
@@ -67,8 +65,7 @@ namespace Aximo.Render
             vao.SetData(_vertices.ToArray());
         }
 
-        public void OnRender()
-        {
+        public void OnRender() {
             vao.Bind();
 
             _Shader.Bind();
@@ -85,8 +82,7 @@ namespace Aximo.Render
             //GL.Enable(EnableCap.DepthTest);
         }
 
-        public override void Free()
-        {
+        public override void Free() {
             vao.Free();
             _Shader.Free();
         }

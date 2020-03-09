@@ -1,6 +1,8 @@
-﻿using OpenTK;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
-using System.Collections.Generic;
 
 namespace Aximo.Render
 {
@@ -21,8 +23,7 @@ namespace Aximo.Render
 
         private float[] _vertices = DataHelper.SkyBox;
 
-        public override void Init()
-        {
+        public override void Init() {
             UsePipeline<ForwardRenderPipeline>();
 
             _shader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
@@ -36,8 +37,7 @@ namespace Aximo.Render
             vao.SetData(_vertices);
         }
 
-        public void OnRender()
-        {
+        public void OnRender() {
             //return;
 
             vao.Bind();
@@ -56,8 +56,7 @@ namespace Aximo.Render
             GL.DepthMask(true);
         }
 
-        public override void Free()
-        {
+        public override void Free() {
             vao.Free();
             _shader.Free();
         }

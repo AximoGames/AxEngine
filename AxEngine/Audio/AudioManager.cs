@@ -1,4 +1,3 @@
-using System;
 using System.Media;
 
 namespace Aximo.Engine

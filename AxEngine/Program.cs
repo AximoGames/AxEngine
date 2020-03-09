@@ -1,8 +1,6 @@
 ﻿using System;
-using OpenTK.Graphics.OpenGL4;
 using System.Threading;
 using OpenTK;
-using System.Runtime.InteropServices;
 
 namespace Aximo.Engine
 {

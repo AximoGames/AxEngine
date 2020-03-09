@@ -1,19 +1,17 @@
-using OpenTK;
+// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+
 using OpenTK.Graphics.OpenGL4;
-using System;
 
 namespace Aximo.Render
 {
     public class ScreenPipeline : RenderPipeline
     {
 
-
-        public override void Init()
-        {
+        public override void Init() {
         }
 
-        public override void Render(RenderContext context, Camera camera)
-        {
+        public override void Render(RenderContext context, Camera camera) {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             GL.Disable(EnableCap.DepthTest);
             GL.ClearColor(1.0f, 0.0f, 1.0f, 1.0f);
