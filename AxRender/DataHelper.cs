@@ -210,8 +210,7 @@ namespace Aximo.Render
              1.0f,  1.0f,  1.0f, 1.0f
         };
 
-        public static Bitmap GetDepthTexture(int width, int height, Action<IntPtr> getPixels)
-        {
+        public static Bitmap GetDepthTexture(int width, int height, Action<IntPtr> getPixels) {
             Bitmap bitmap = new Bitmap(width, height);
             var ptr = Marshal.AllocHGlobal(width * height * 4);
 
@@ -228,13 +227,10 @@ namespace Aximo.Render
 
             var factor = 1.0f / span;
 
-            for (var y = 0; y < height; y++)
-            {
-                for (var x = 0; x < width; x++)
-                {
+            for (var y = 0; y < height; y++) {
+                for (var x = 0; x < width; x++) {
                     var value = floats[y * height + x];
-                    if (value != 1.0f)
-                    {
+                    if (value != 1.0f) {
                         value -= min;
                         value *= factor;
                         //value = 1 - value;
