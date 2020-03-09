@@ -65,13 +65,17 @@ namespace AxEngine
         }
 
         public RenderContext ctx { get; private set; }
-        //public GameContext gameCtx { get; private set; }
+        public GameContext gameCtx { get; private set; }
 
         public virtual void Init() {
             ctx = new RenderContext() {
                 ScreenSize = _startup.WindowSize,
             };
             RenderContext.Current = ctx;
+
+            gameCtx = new GameContext {
+            };
+            GameContext.Current = gameCtx;
 
             window = new Window(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle);
             window.WindowBorder = _startup.WindowBorder;
@@ -332,7 +336,7 @@ namespace AxEngine
         public bool DefaultKeyBindings = true;
 
         private void OnUpdateFrameInternal(FrameEventArgs e) {
-            foreach (var anim in ctx.Animations)
+            foreach (var anim in gameCtx.Animations)
                 anim.ProcessAnimation();
 
             foreach (var obj in ctx.UpdateFrameObjects)

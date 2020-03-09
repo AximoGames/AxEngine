@@ -24,8 +24,6 @@ namespace AxEngine
 
         public Matrix4 WorldPositionMatrix = Matrix4.Identity;
 
-        public List<Animation> Animations = new List<Animation>();
-
         public List<IRenderPipeline> RenderPipelines = new List<IRenderPipeline>();
 
         public IRenderPipeline CurrentPipeline { get; internal set; }
@@ -96,10 +94,6 @@ namespace AxEngine
 
         public void AddPipeline(IRenderPipeline pipeline) {
             RenderPipelines.Add(pipeline);
-        }
-
-        public void AddAnimation(Animation animation) {
-            Animations.Add(animation);
         }
 
         public void AddObject(IGameObject obj) {
