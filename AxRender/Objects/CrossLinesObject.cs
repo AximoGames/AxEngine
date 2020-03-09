@@ -28,8 +28,10 @@ namespace Aximo.Render
             layout.AddAttribute<float>(_Shader.GetAttribLocation("aPos"), 3);
             layout.AddAttribute<float>(_Shader.GetAttribLocation("aColor"), 4);
 
-            vao = new VertexArrayObject(layout);
-            vao.PrimitiveType = PrimitiveType.Lines;
+            vao = new VertexArrayObject(layout)
+            {
+                PrimitiveType = PrimitiveType.Lines
+            };
             vao.SetData(_vertices);
         }
 

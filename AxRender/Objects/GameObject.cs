@@ -32,7 +32,7 @@ namespace Aximo.Render
 
         public RenderContext Context { get; private set; }
 
-        public virtual List<IRenderPipeline> RenderPipelines { get; set; } = new List<IRenderPipeline>();
+        public virtual List<IRenderPipeline> RenderPipelines { get; } = new List<IRenderPipeline>();
 
         public void UsePipeline<T>()
             where T : class, IRenderPipeline

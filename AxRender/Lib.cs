@@ -74,7 +74,7 @@ namespace Aximo.Render
     public interface IRenderableObject : IGameObject
     {
         void OnRender();
-        List<IRenderPipeline> RenderPipelines { get; set; }
+        List<IRenderPipeline> RenderPipelines { get; }
     }
 
     public interface IForwardRenderable : IRenderableObject

@@ -16,7 +16,7 @@
       "xmlHeader": false,
       "variables": {
         "licenseName": "MIT",
-        "licenseFile": "LICENSE.txt"
+        "licenseFile": "LICENSE"
       }
     }
   }

@@ -62,13 +62,13 @@ namespace Aximo.Render
             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
         };
 
-        private const float dX = -0.5f;
-        private const float dY = -0.5f;
-        private const float dZ = 0.7f;
+        private const float DX = -0.5f;
+        private const float DY = -0.5f;
+        private const float DZ = 0.7f;
 
-        private const float eX = 0.7f;
-        private const float eY = -0.5f;
-        private const float eZ = 0.5f;
+        private const float EX = 0.7f;
+        private const float EY = -0.5f;
+        private const float EZ = 0.5f;
         public static readonly float[] CubeDebug =
         {
              // Position          Normal
@@ -115,89 +115,89 @@ namespace Aximo.Render
             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
 
 //--
-            -0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f, // Bottom face
-             0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-             0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-            -0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-             0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-            -0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+            -0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f, // Bottom face
+             0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+             0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+            -0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+             0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+            -0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-            -0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, // Top face
-             0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-             0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-             0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-            -0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
-            -0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+            -0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, // Top face
+             0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+             0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+             0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+            -0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+            -0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
 
-            -0.1f+dX,  0.1f+dY,  0.3f+dZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f, // Left face
-            -0.1f+dX,  0.1f+dY, -0.3f+dZ, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-            -0.1f+dX, -0.1f+dY, -0.3f+dZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.1f+dX, -0.1f+dY, -0.3f+dZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.1f+dX, -0.1f+dY,  0.3f+dZ, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-            -0.1f+dX,  0.1f+dY,  0.3f+dZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+            -0.1f+DX,  0.1f+DY,  0.3f+DZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f, // Left face
+            -0.1f+DX,  0.1f+DY, -0.3f+DZ, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+            -0.1f+DX, -0.1f+DY, -0.3f+DZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            -0.1f+DX, -0.1f+DY, -0.3f+DZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            -0.1f+DX, -0.1f+DY,  0.3f+DZ, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+            -0.1f+DX,  0.1f+DY,  0.3f+DZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-             0.1f+dX, -0.1f+dY, -0.3f+dZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f, // Right face
-             0.1f+dX,  0.1f+dY, -0.3f+dZ,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-             0.1f+dX,  0.1f+dY,  0.3f+dZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-             0.1f+dX,  0.1f+dY,  0.3f+dZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-             0.1f+dX, -0.1f+dY,  0.3f+dZ,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-             0.1f+dX, -0.1f+dY, -0.3f+dZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+             0.1f+DX, -0.1f+DY, -0.3f+DZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f, // Right face
+             0.1f+DX,  0.1f+DY, -0.3f+DZ,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+             0.1f+DX,  0.1f+DY,  0.3f+DZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+             0.1f+DX,  0.1f+DY,  0.3f+DZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+             0.1f+DX, -0.1f+DY,  0.3f+DZ,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+             0.1f+DX, -0.1f+DY, -0.3f+DZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
 
-            -0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f, // Front face
-             0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-             0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-             0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-            -0.1f+dX, -0.1f+dY,  0.3f+dZ,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-            -0.1f+dX, -0.1f+dY, -0.3f+dZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+            -0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f, // Front face
+             0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+             0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+             0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+            -0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+            -0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
-             0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f, // Back face
-            -0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-             0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-             0.1f+dX,  0.1f+dY,  0.3f+dZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.1f+dX,  0.1f+dY, -0.3f+dZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+             0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f, // Back face
+            -0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+             0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+            -0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+             0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+            -0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
 //--
-            -0.3f+eX, -0.1f+eY, -0.1f+eZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f, // Bottom face
-             0.3f+eX,  0.1f+eY, -0.1f+eZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-             0.3f+eX, -0.1f+eY, -0.1f+eZ,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-            -0.3f+eX,  0.1f+eY, -0.1f+eZ,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-             0.3f+eX,  0.1f+eY, -0.1f+eZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-            -0.3f+eX, -0.1f+eY, -0.1f+eZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+            -0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f, // Bottom face
+             0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+             0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+            -0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+             0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+            -0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-            -0.3f+eX, -0.1f+eY,  0.1f+eZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, // Top face
-             0.3f+eX, -0.1f+eY,  0.1f+eZ,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-             0.3f+eX,  0.1f+eY,  0.1f+eZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-             0.3f+eX,  0.1f+eY,  0.1f+eZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-            -0.3f+eX,  0.1f+eY,  0.1f+eZ,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
-            -0.3f+eX, -0.1f+eY,  0.1f+eZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+            -0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, // Top face
+             0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+             0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+             0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+            -0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+            -0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
 
-            -0.3f+eX,  0.1f+eY,  0.1f+eZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f, // Left face
-            -0.3f+eX,  0.1f+eY, -0.1f+eZ, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-            -0.3f+eX, -0.1f+eY, -0.1f+eZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.3f+eX, -0.1f+eY, -0.1f+eZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.3f+eX, -0.1f+eY,  0.1f+eZ, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-            -0.3f+eX,  0.1f+eY,  0.1f+eZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+            -0.3f+EX,  0.1f+EY,  0.1f+EZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f, // Left face
+            -0.3f+EX,  0.1f+EY, -0.1f+EZ, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+            -0.3f+EX, -0.1f+EY, -0.1f+EZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            -0.3f+EX, -0.1f+EY, -0.1f+EZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            -0.3f+EX, -0.1f+EY,  0.1f+EZ, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+            -0.3f+EX,  0.1f+EY,  0.1f+EZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-             0.3f+eX, -0.1f+eY, -0.1f+eZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f, // Right face
-             0.3f+eX,  0.1f+eY, -0.1f+eZ,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-             0.3f+eX,  0.1f+eY,  0.1f+eZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-             0.3f+eX,  0.1f+eY,  0.1f+eZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-             0.3f+eX, -0.1f+eY,  0.1f+eZ,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-             0.3f+eX, -0.1f+eY, -0.1f+eZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+             0.3f+EX, -0.1f+EY, -0.1f+EZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f, // Right face
+             0.3f+EX,  0.1f+EY, -0.1f+EZ,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+             0.3f+EX,  0.1f+EY,  0.1f+EZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+             0.3f+EX,  0.1f+EY,  0.1f+EZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+             0.3f+EX, -0.1f+EY,  0.1f+EZ,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+             0.3f+EX, -0.1f+EY, -0.1f+EZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
 
-            -0.3f+eX, -0.1f+eY, -0.1f+eZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f, // Front face
-             0.3f+eX, -0.1f+eY, -0.1f+eZ,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-             0.3f+eX, -0.1f+eY,  0.1f+eZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-             0.3f+eX, -0.1f+eY,  0.1f+eZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-            -0.3f+eX, -0.1f+eY,  0.1f+eZ,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-            -0.3f+eX, -0.1f+eY, -0.1f+eZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+            -0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f, // Front face
+             0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+             0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+             0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+            -0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+            -0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
-             0.3f+eX,  0.1f+eY, -0.1f+eZ,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f, // Back face
-            -0.3f+eX,  0.1f+eY, -0.1f+eZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-             0.3f+eX,  0.1f+eY,  0.1f+eZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.3f+eX,  0.1f+eY,  0.1f+eZ,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-             0.3f+eX,  0.1f+eY,  0.1f+eZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.3f+eX,  0.1f+eY, -0.1f+eZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+             0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f, // Back face
+            -0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+             0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+            -0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+             0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+            -0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
 
         };
 

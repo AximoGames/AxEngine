@@ -1,12 +1,13 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Drawing;
 using OpenTK;
 
 namespace Aximo.Render
 {
-    public class GraphicsTexture
+    public class GraphicsTexture : IDisposable
     {
         public GraphicsTexture(Vector2i size) : this(size.X, size.Y)
         {
@@ -35,5 +36,12 @@ namespace Aximo.Render
             Texture.SetData(Image);
         }
 
+        public void Dispose()
+        {
+            Graphics?.Dispose();
+            Image?.Dispose();
+        }
+
     }
+
 }

@@ -245,7 +245,8 @@ namespace Aximo.Render
             //   The format of the pixels, explained above. Since we loaded the pixels as ARGB earlier, we need to use BGRA.
             //   Data type of the pixels.
             //   And finally, the actual pixels.
-            GL.TexImage2D(Target,
+            GL.TexImage2D(
+                Target,
                 0,
                 PixelInternalFormat.Rgba,
                 image.Width,

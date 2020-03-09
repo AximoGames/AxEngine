@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Aximo.Render
 {
-    public class TgaDecoder
+    public static class TgaDecoder
     {
         protected class TgaData
         {
@@ -172,7 +172,7 @@ namespace Aximo.Render
             return Decode(image);
         }
 
-        protected static Bitmap Decode(byte[] image)
+        private static Bitmap Decode(byte[] image)
         {
             TgaData tga = new TgaData(image);
 

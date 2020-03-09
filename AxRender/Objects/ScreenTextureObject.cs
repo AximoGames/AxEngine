@@ -57,7 +57,8 @@ namespace Aximo.Render
             {
                 var pos = new Vector3(
                     ((value.X + (value.Width / 2f)) * 2) - 1.0f,
-                    ((1 - (value.Y + (value.Height / 2f))) * 2) - 1.0f, 0);
+                    ((1 - (value.Y + (value.Height / 2f))) * 2) - 1.0f,
+                    0);
 
                 var scale = new Vector3(value.Width, -value.Height, 1.0f);
                 Position = pos;

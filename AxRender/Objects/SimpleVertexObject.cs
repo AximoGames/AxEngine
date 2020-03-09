@@ -9,52 +9,6 @@ using OpenTK.Graphics.OpenGL4;
 namespace Aximo.Render
 {
 
-    public abstract class RenderableObject : GameObject, IRenderableObject
-    {
-        public void OnRender()
-        {
-            if (Context.CurrentPipeline is ForwardRenderPipeline && this is IForwardRenderable m1)
-                m1.OnForwardRender();
-            else if (Context.CurrentPipeline is DeferredRenderPipeline && this is IDeferredRenderable m2)
-                m2.OnDeferredRender();
-            else if (Context.CurrentPipeline is DirectionalShadowRenderPipeline && this is IShadowObject m3)
-                m3.OnRenderShadow();
-            else if (Context.CurrentPipeline is PointShadowRenderPipeline && this is IShadowObject m4)
-                m4.OnRenderCubeShadow();
-        }
-
-        protected Dictionary<string, object> ShaderParams = new Dictionary<string, object>();
-
-        public void AddShaderParam<T>(string name, T value)
-            where T : struct
-        {
-            if (ShaderParams.ContainsKey(name))
-                ShaderParams[name] = value;
-            else
-                ShaderParams.Add(name, value);
-        }
-
-        protected void ApplyShaderParams(Shader shader)
-        {
-            foreach (var entry in ShaderParams)
-            {
-                var name = entry.Key;
-                var value = entry.Value;
-                if (value == null)
-                    continue;
-
-                var type = value.GetType();
-                if (type == typeof(int))
-                    shader.SetInt(name, (int)value);
-                else if (type == typeof(Vector3))
-                    shader.SetVector3(name, (Vector3)value);
-                else
-                    throw new NotSupportedException(type.Name);
-            }
-        }
-
-    }
-
     public class SimpleVertexObject : RenderableObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
         IForwardRenderable, IDeferredRenderable
     {

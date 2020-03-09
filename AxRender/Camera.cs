@@ -14,52 +14,6 @@ namespace Aximo.Render
         Orthographic,
     }
 
-    public class PerspectiveFieldOfViewCamera : Camera
-    {
-        public override CameraType Type => CameraType.PerspectiveFieldOfView;
-
-        public PerspectiveFieldOfViewCamera(Vector3 position, float aspectRatio) : base(position)
-        {
-            AspectRatio = aspectRatio;
-        }
-
-        public PerspectiveFieldOfViewCamera(Vector3 position) : base(position)
-        {
-        }
-
-        protected override Matrix4 GetProjectionMatrix()
-        {
-            return Matrix4.CreatePerspectiveFieldOfView(FovInternal, AspectRatio, NearPlane, FarPlane);
-        }
-
-    }
-
-    public class OrthographicCamera : Camera
-    {
-        public override CameraType Type => CameraType.Orthographic;
-
-        private Vector2 _Size = new Vector2(20, 20);
-        public Vector2 Size
-        {
-            get { return _Size; }
-            set { if (_Size == value) return; _Size = value; OnCameraChanged(); }
-        }
-
-        public OrthographicCamera(Vector3 position) : base(position)
-        {
-        }
-
-        protected override Matrix4 GetProjectionMatrix()
-        {
-            // float near_plane = 0.01f;
-            // float far_plane = 7.5f;
-
-            //return Matrix4.CreateOrthographicOffCenter(-Size.X / 2, Size.X / 2, -Size.Y / 2, Size.Y / 2, NearPlane, FarPlane);
-            return Matrix4.CreateOrthographic(Size.X, Size.Y, NearPlane, FarPlane);
-        }
-
-    }
-
     public abstract class Camera : IPosition, IData
     {
         private Dictionary<string, object> Data = new Dictionary<string, object>();
@@ -134,28 +88,28 @@ namespace Aximo.Render
             Position = position;
         }
 
-        public Vector3 _Up = Vector3.UnitZ;
+        private Vector3 _Up = Vector3.UnitZ;
         public Vector3 Up
         {
             get { return _Up; }
             set { if (_Up == value) return; _Up = value; OnCameraChanged(); }
         }
 
-        public float _Facing = ((float)Math.PI / 2) + 0.15f;
+        private float _Facing = ((float)Math.PI / 2) + 0.15f;
         public float Facing
         {
             get { return _Facing; }
             set { if (_Facing == value) return; _Facing = value; OnCameraChanged(); }
         }
 
-        public float _AspectRatio = 1.0f;
+        private float _AspectRatio = 1.0f;
         public float AspectRatio
         {
             get { return _AspectRatio; }
             set { if (_AspectRatio == value) return; _AspectRatio = value; OnCameraChanged(); }
         }
 
-        public Vector3? _LookAt;
+        private Vector3? _LookAt;
         public Vector3? LookAt
         {
             get { return _LookAt; }
@@ -201,6 +155,52 @@ namespace Aximo.Render
         {
             AspectRatio = width / height;
         }
+    }
+
+    public class PerspectiveFieldOfViewCamera : Camera
+    {
+        public override CameraType Type => CameraType.PerspectiveFieldOfView;
+
+        public PerspectiveFieldOfViewCamera(Vector3 position, float aspectRatio) : base(position)
+        {
+            AspectRatio = aspectRatio;
+        }
+
+        public PerspectiveFieldOfViewCamera(Vector3 position) : base(position)
+        {
+        }
+
+        protected override Matrix4 GetProjectionMatrix()
+        {
+            return Matrix4.CreatePerspectiveFieldOfView(FovInternal, AspectRatio, NearPlane, FarPlane);
+        }
+
+    }
+
+    public class OrthographicCamera : Camera
+    {
+        public override CameraType Type => CameraType.Orthographic;
+
+        private Vector2 _Size = new Vector2(20, 20);
+        public Vector2 Size
+        {
+            get { return _Size; }
+            set { if (_Size == value) return; _Size = value; OnCameraChanged(); }
+        }
+
+        public OrthographicCamera(Vector3 position) : base(position)
+        {
+        }
+
+        protected override Matrix4 GetProjectionMatrix()
+        {
+            // float near_plane = 0.01f;
+            // float far_plane = 7.5f;
+
+            //return Matrix4.CreateOrthographicOffCenter(-Size.X / 2, Size.X / 2, -Size.Y / 2, Size.Y / 2, NearPlane, FarPlane);
+            return Matrix4.CreateOrthographic(Size.X, Size.Y, NearPlane, FarPlane);
+        }
+
     }
 
 }

@@ -30,10 +30,12 @@ namespace Aximo.Render
             layout.AddAttribute<float>(_Shader.GetAttribLocation("aPos"), 3);
             layout.AddAttribute<float>(_Shader.GetAttribLocation("aColor"), 4);
 
-            vao = new VertexArrayObject(layout);
-            vao.PrimitiveType = PrimitiveType.Lines;
+            vao = new VertexArrayObject(layout)
+            {
+                PrimitiveType = PrimitiveType.Lines
+            };
 
-            var _vertices = new List<VertexDataPosColor>();
+            var vertices = new List<VertexDataPosColor>();
 
             var size = Size;
             var color = new Vector4(0.45f, 0.45f, 0.0f, 1.0f);
@@ -59,14 +61,14 @@ namespace Aximo.Render
 
             for (var i = start; i <= end; i++)
             {
-                _vertices.Add(new Vector3(startPos, i, 0), color);
-                _vertices.Add(new Vector3(endPos, i, 0), color);
+                vertices.Add(new Vector3(startPos, i, 0), color);
+                vertices.Add(new Vector3(endPos, i, 0), color);
 
-                _vertices.Add(new Vector3(i, startPos, 0), color);
-                _vertices.Add(new Vector3(i, endPos, 0), color);
+                vertices.Add(new Vector3(i, startPos, 0), color);
+                vertices.Add(new Vector3(i, endPos, 0), color);
             }
 
-            vao.SetData(_vertices.ToArray());
+            vao.SetData(vertices.ToArray());
         }
 
         public void OnRender()

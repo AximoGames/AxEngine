@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -86,9 +86,11 @@ namespace Aximo.Engine
             };
             GameContext.Current = gameCtx;
 
-            window = new Window(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle);
-            window.WindowBorder = _startup.WindowBorder;
-            window.Location = new System.Drawing.Point(1920 / 2 + 10, 10);
+            window = new Window(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle)
+            {
+                WindowBorder = _startup.WindowBorder,
+                Location = new System.Drawing.Point(1920 / 2 + 10, 10)
+            };
             window.RenderFrame += (s, e) => OnRenderFrameInternal(e);
             window.UpdateFrame += (s, e) => OnUpdateFrameInternal(e);
             window.MouseMove += (s, e) => OnMouseMoveInternal(e);
