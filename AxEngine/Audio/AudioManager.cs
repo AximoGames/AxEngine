@@ -7,6 +7,8 @@ namespace AxEngine
     public class AudioManager
     {
 
+        public bool Mute => CommandLineOptions.Current.Mute;
+
         public static AudioManager Default { get; private set; }
 
         private SoundPlayer Player;
@@ -28,6 +30,8 @@ namespace AxEngine
 
         public void PlayAsync(string path)
         {
+            if (Mute) return;
+
             Player.Stop();
             Player.SoundLocation = GetPath(path);
             Player.Play();
@@ -35,6 +39,8 @@ namespace AxEngine
 
         public void PlaySync(string path)
         {
+            if (Mute) return;
+
             Player.Stop();
             Player.SoundLocation = GetPath(path);
             Player.PlaySync();

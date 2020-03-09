@@ -6,7 +6,7 @@ namespace AxEngine
     public static class MathF
     {
 
-        public static float PI = (float)Math.PI;
+        public const float PI = (float)Math.PI;
 
         public static float Round(float d)
         {
