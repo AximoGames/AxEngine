@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using Aximo.Render;
 using OpenTK;
 
-namespace Aximo.AxRender.Objects.Util.IcoSphere
+namespace Aximo.Render.Objects.Util.IcoSphere
 {
 
     public class IcoSphereMesh

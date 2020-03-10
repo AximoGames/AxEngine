@@ -3,12 +3,13 @@
 
 using System;
 using System.Drawing;
+using Aximo.Engine;
 using Aximo.Render;
 using OpenTK;
 
-namespace Aximo.Engine
+namespace Aximo.RenderDemo
 {
-    public class RenderApplicationDemo : RenderApplication
+    internal class RenderApplicationDemo : RenderApplication
     {
         public RenderApplicationDemo(RenderApplicationStartup startup) : base(startup)
         {

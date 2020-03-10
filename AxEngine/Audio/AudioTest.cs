@@ -12,7 +12,7 @@ namespace Aximo.Engine
 {
     internal class AudioTest
     {
-        public static readonly string Filename = "/home/sebastian/Downloads/the_ring_that_fell.wav";
+        public const string Filename = "/home/sebastian/Downloads/the_ring_that_fell.wav";
 
         // Loads a wave/riff audio file.
         public static byte[] LoadWave(Stream stream, out int channels, out int bits, out int rate)

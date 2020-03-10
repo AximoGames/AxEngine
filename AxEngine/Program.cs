@@ -3,6 +3,7 @@
 
 using System;
 using System.Threading;
+using Aximo.RenderDemo;
 using OpenTK;
 
 namespace Aximo.Engine
