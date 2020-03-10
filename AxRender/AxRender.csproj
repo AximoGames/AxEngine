@@ -13,5 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\AxCommon\AxCommon.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Experiment\" />
+  </ItemGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
 </Project>

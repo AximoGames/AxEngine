@@ -7,10 +7,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 
-#pragma warning disable SA1649 // File name should match first type name
-#pragma warning disable CA1050 // Declare types in namespaces
-
 namespace Aximo.Engine
 {
+
+    public class DirectionalLightComponent : LightComponent
+    {
+
+    }
 
 }
