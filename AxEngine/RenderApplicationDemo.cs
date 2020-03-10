@@ -1,3 +1,6 @@
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Drawing;
 using Aximo.Render;
@@ -5,9 +8,9 @@ using OpenTK;
 
 namespace Aximo.Engine
 {
-    public class RenderDemo : RenderApplication
+    public class RenderApplicationDemo : RenderApplication
     {
-        public RenderDemo(RenderApplicationStartup startup) : base(startup)
+        public RenderApplicationDemo(RenderApplicationStartup startup) : base(startup)
         {
         }
 
@@ -15,7 +18,7 @@ namespace Aximo.Engine
 
         protected override void SetupScene()
         {
-            ctx.AddObject(new TestObject()
+            RenderContext.AddObject(new TestObject()
             {
                 Name = "Ground",
                 Scale = new Vector3(50, 50, 1),
@@ -23,50 +26,50 @@ namespace Aximo.Engine
                 // RenderShadow = false,
                 //PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
             });
-            ctx.AddObject(new GridObject()
+            RenderContext.AddObject(new GridObject()
             {
                 Name = "Grid",
                 ModelMatrix = Matrix4.CreateTranslation(0f, 0f, 0.01f),
                 //Debug = true,
             });
-            ctx.AddObject(new GridObject()
+            RenderContext.AddObject(new GridObject()
             {
                 Name = "Grid",
                 ModelMatrix = Matrix4.CreateRotationY((float)Math.PI / 2) * Matrix4.CreateTranslation(-10f, 0f, 0.01f),
                 //Debug = true,
             });
-            ctx.AddObject(new GridObject()
+            RenderContext.AddObject(new GridObject()
             {
                 Name = "Grid",
                 ModelMatrix = Matrix4.CreateRotationX((float)Math.PI / 2) * Matrix4.CreateTranslation(0f, 10f, 0.01f),
                 //Debug = true,
             });
-            ctx.AddObject(new CrossLinesObject()
+            RenderContext.AddObject(new CrossLinesObject()
             {
                 Name = "CenterCross",
                 ModelMatrix = Matrix4.CreateScale(2.0f) * Matrix4.CreateTranslation(0f, 0f, 0.02f),
                 //Debug = true,
             });
-            ctx.AddObject(new ScreenTextureObject()
+            RenderContext.AddObject(new ScreenTextureObject()
             {
                 Name = "ScreenTexture1",
                 TexturePath = "Textures/woodenbox.png",
                 RectanglePixels = new RectangleF(000, 0, 30f, 30f),
             });
 
-            ctx.AddObject(new StatsObject()
+            RenderContext.AddObject(new StatsObject()
             {
                 Name = "Stats",
                 RectanglePixels = new RectangleF(40, 40, 100f, 100f),
             });
 
-            ctx.AddObject(new LineObject()
+            RenderContext.AddObject(new LineObject()
             {
                 Name = "DebugLine",
                 //Enabled = false,
             });
 
-            ctx.AddObject(new LightObject()
+            RenderContext.AddObject(new LightObject()
             {
                 Position = new Vector3(0, 2, 2.5f),
                 Name = "MovingLight",
@@ -75,7 +78,7 @@ namespace Aximo.Engine
                 //Enabled = false,
             });
 
-            ctx.AddObject(new LightObject()
+            RenderContext.AddObject(new LightObject()
             {
                 Position = new Vector3(2f, 0.5f, 3.25f),
                 Name = "StaticLight",
@@ -83,7 +86,7 @@ namespace Aximo.Engine
                 ShadowTextureIndex = 1,
             });
 
-            ctx.AddObject(new TestObject()
+            RenderContext.AddObject(new TestObject()
             {
                 Name = "GroundCursor",
                 Position = new Vector3(0, 1, 0.05f),
@@ -91,7 +94,7 @@ namespace Aximo.Engine
                 // Enabled = false,
             });
 
-            ctx.AddObject(new TestObject()
+            RenderContext.AddObject(new TestObject()
             {
                 Name = "Box1",
                 Rotate = new Vector3(0, 0, 0.5f),
@@ -101,7 +104,7 @@ namespace Aximo.Engine
                 // Enabled = false,
             });
 
-            ctx.AddObject(new TestObject()
+            RenderContext.AddObject(new TestObject()
             {
                 Name = "Box2",
                 Scale = new Vector3(1),
@@ -110,16 +113,16 @@ namespace Aximo.Engine
                 //Enabled = false,
             });
 
-            ctx.AddObject(new SphereObject()
+            RenderContext.AddObject(new SphereObject()
             {
                 Name = "Sphere1",
                 Scale = new Vector3(1),
                 Position = new Vector3(3f, 3f, 0.5f),
                 //Debug = true,
                 //Enabled = false,
-                PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
+                PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>(),
             });
-            ctx.AddObject(new TestObject()
+            RenderContext.AddObject(new TestObject()
             {
                 Name = "Box4",
                 Scale = new Vector3(1),
@@ -129,7 +132,7 @@ namespace Aximo.Engine
                 //PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
             });
 
-            ctx.AddObject(new TestObject()
+            RenderContext.AddObject(new TestObject()
             {
                 Name = "BoxFar1",
                 Scale = new Vector3(1),
@@ -137,7 +140,7 @@ namespace Aximo.Engine
                 Debug = true,
                 // Enabled = false,
             });
-            ctx.AddObject(new TestObject()
+            RenderContext.AddObject(new TestObject()
             {
                 Name = "BoxFar2",
                 Scale = new Vector3(1),
@@ -145,7 +148,7 @@ namespace Aximo.Engine
                 Debug = true,
                 // Enabled = false,
             });
-            ctx.AddObject(new TestObject()
+            RenderContext.AddObject(new TestObject()
             {
                 Name = "BoxFar3",
                 Scale = new Vector3(1),
@@ -153,7 +156,7 @@ namespace Aximo.Engine
                 Debug = true,
                 // Enabled = false,
             });
-            ctx.AddObject(new TestObject()
+            RenderContext.AddObject(new TestObject()
             {
                 Name = "BoxFar4",
                 Scale = new Vector3(1),
@@ -163,7 +166,7 @@ namespace Aximo.Engine
             });
 
             // For performance reasons, skybox should rendered as last
-            ctx.AddObject(new SkyboxObject()
+            RenderContext.AddObject(new SkyboxObject()
             {
                 Name = "Sky",
                 // RenderShadow = false,
@@ -178,18 +181,18 @@ namespace Aximo.Engine
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            if (ctx.LightObjects.Count > 0)
+            if (RenderContext.LightObjects.Count > 0)
             {
                 LightAngle -= 0.01;
                 var pos = new Vector3((float)(Math.Cos(LightAngle) * 2f), (float)(Math.Sin(LightAngle) * 2f), 1.5f);
-                ILightObject light = ctx.LightObjects[0];
+                ILightObject light = RenderContext.LightObjects[0];
 
                 light.Position = pos;
             }
 
             if (CurrentMouseWorldPositionIsValid)
             {
-                var cursor = ctx.GetObjectByName<IPosition>("GroundCursor");
+                var cursor = RenderContext.GetObjectByName<IPosition>("GroundCursor");
                 if (cursor != null)
                     cursor.Position = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.Position.Z);
             }

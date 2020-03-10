@@ -1,3 +1,6 @@
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -9,13 +12,13 @@ namespace Aximo.Engine
 {
     internal class AudioTest
     {
-        public static readonly string filename = "/home/sebastian/Downloads/the_ring_that_fell.wav";
+        public static readonly string Filename = "/home/sebastian/Downloads/the_ring_that_fell.wav";
 
         // Loads a wave/riff audio file.
         public static byte[] LoadWave(Stream stream, out int channels, out int bits, out int rate)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
 
             using (BinaryReader reader = new BinaryReader(stream))
             {
@@ -76,7 +79,7 @@ namespace Aximo.Engine
                 int state;
 
                 int channels, bits_per_sample, sample_rate;
-                byte[] sound_data = LoadWave(File.Open(filename, FileMode.Open), out channels, out bits_per_sample, out sample_rate);
+                byte[] sound_data = LoadWave(File.Open(Filename, FileMode.Open), out channels, out bits_per_sample, out sample_rate);
                 AL.BufferData(buffer, GetSoundFormat(channels, bits_per_sample), sound_data, sound_data.Length, sample_rate);
 
                 AL.Source(source, ALSourcei.Buffer, buffer);

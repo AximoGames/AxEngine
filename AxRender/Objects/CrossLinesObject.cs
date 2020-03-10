@@ -30,7 +30,7 @@ namespace Aximo.Render
 
             vao = new VertexArrayObject(layout)
             {
-                PrimitiveType = PrimitiveType.Lines
+                PrimitiveType = PrimitiveType.Lines,
             };
             vao.SetData(_vertices);
         }

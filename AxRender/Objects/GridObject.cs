@@ -32,7 +32,7 @@ namespace Aximo.Render
 
             vao = new VertexArrayObject(layout)
             {
-                PrimitiveType = PrimitiveType.Lines
+                PrimitiveType = PrimitiveType.Lines,
             };
 
             var vertices = new List<VertexDataPosColor>();

@@ -1,11 +1,14 @@
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using OpenTK;
 
 namespace Aximo
 {
     public struct Plane
     {
-        Vector3 _Normal;
-        float _Distance;
+        private Vector3 _Normal;
+        private float _Distance;
 
         /// <summary>
         /// Normal vector of the plane.

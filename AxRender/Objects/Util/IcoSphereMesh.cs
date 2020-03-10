@@ -78,7 +78,7 @@ namespace Aximo.AxRender.Objects.Util.IcoSphere
                 var v1 = new VertexDataPosNormalUV
                 {
                     Position = vp1,
-                    Normal = normal1
+                    Normal = normal1,
                 };
                 v1.UV.X = s1;
                 v1.UV.Y = t1;
@@ -86,7 +86,7 @@ namespace Aximo.AxRender.Objects.Util.IcoSphere
                 var v2 = new VertexDataPosNormalUV
                 {
                     Position = vp2,
-                    Normal = normal2
+                    Normal = normal2,
                 };
                 v2.UV.X = s2;
                 v2.UV.Y = t2;
@@ -94,7 +94,7 @@ namespace Aximo.AxRender.Objects.Util.IcoSphere
                 var v3 = new VertexDataPosNormalUV
                 {
                     Position = vp3,
-                    Normal = normal3
+                    Normal = normal3,
                 };
                 v3.UV.X = s3;
                 v3.UV.Y = t3;

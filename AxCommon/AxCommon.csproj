@@ -4,9 +4,11 @@
     <AssemblyName>AxCommon</AssemblyName>
     <TargetFramework>net472</TargetFramework>
     <NoWarn>CS0162</NoWarn>
+	<CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="3.1.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
+  <Import Project="..\props\SharedProjectSettings.props" />
 </Project>

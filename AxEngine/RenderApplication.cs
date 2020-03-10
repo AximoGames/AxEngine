@@ -1,4 +1,7 @@
-﻿using System;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -23,7 +26,7 @@ namespace Aximo.Engine
         private Vector2 MouseDelta;
         private float UpDownDelta;
 
-        public Camera Camera => ctx.Camera;
+        public Camera Camera => RenderContext.Camera;
 
         public RenderApplication(RenderApplicationStartup startup)
         {
@@ -70,26 +73,26 @@ namespace Aximo.Engine
             window.Run(60.0);
         }
 
-        public RenderContext ctx { get; private set; }
-        public GameContext gameCtx { get; private set; }
+        public RenderContext RenderContext { get; private set; }
+        public GameContext GameContext { get; private set; }
 
         public virtual void Init()
         {
-            ctx = new RenderContext()
+            RenderContext = new RenderContext()
             {
                 ScreenSize = _startup.WindowSize,
             };
-            RenderContext.Current = ctx;
+            RenderContext.Current = RenderContext;
 
-            gameCtx = new GameContext
+            GameContext = new GameContext
             {
             };
-            GameContext.Current = gameCtx;
+            GameContext.Current = GameContext;
 
             window = new Window(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle)
             {
                 WindowBorder = _startup.WindowBorder,
-                Location = new System.Drawing.Point(1920 / 2 + 10, 10)
+                Location = new System.Drawing.Point((1920 / 2) + 10, 10),
             };
             window.RenderFrame += (s, e) => OnRenderFrameInternal(e);
             window.UpdateFrame += (s, e) => OnUpdateFrameInternal(e);
@@ -117,21 +120,21 @@ namespace Aximo.Engine
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-            ctx.SceneOpitons = new SceneOptions
+            RenderContext.SceneOpitons = new SceneOptions
             {
             };
 
-            ctx.LogInfoMessage("Window.OnLoad");
+            RenderContext.LogInfoMessage("Window.OnLoad");
 
             ObjectManager.PushDebugGroup("Setup", "Pipelines");
             SetupPipelines();
             ObjectManager.PopDebugGroup();
-            ctx.PrimaryRenderPipeline = ctx.GetPipeline<DeferredRenderPipeline>();
+            RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<DeferredRenderPipeline>();
 
-            ctx.LightBinding = new BindingPoint();
-            Console.WriteLine("LightBinding: " + ctx.LightBinding.Number);
+            RenderContext.LightBinding = new BindingPoint();
+            Console.WriteLine("LightBinding: " + RenderContext.LightBinding.Number);
 
-            ctx.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), ctx.ScreenSize.X / (float)ctx.ScreenSize.Y)
+            RenderContext.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), RenderContext.ScreenSize.X / (float)RenderContext.ScreenSize.Y)
             {
                 NearPlane = 0.1f,
                 FarPlane = 100.0f,
@@ -142,7 +145,7 @@ namespace Aximo.Engine
             //     FarPlane = 100.0f,
             // };
 
-            ctx.AddObject(new ScreenSceneObject()
+            RenderContext.AddObject(new ScreenSceneObject()
             {
             });
 
@@ -155,7 +158,7 @@ namespace Aximo.Engine
             StartFileListener();
 
             MovingObject = Camera;
-            ctx.Camera.CameraChangedInternal += () =>
+            RenderContext.Camera.CameraChangedInternal += () =>
             {
                 UpdateMouseWorldPosition();
             };
@@ -165,14 +168,14 @@ namespace Aximo.Engine
 
         public void SetupPipelines()
         {
-            ctx.AddPipeline(new DirectionalShadowRenderPipeline());
-            ctx.AddPipeline(new PointShadowRenderPipeline());
-            ctx.AddPipeline(new DeferredRenderPipeline());
-            ctx.AddPipeline(new ForwardRenderPipeline());
-            ctx.AddPipeline(new ScreenPipeline());
+            RenderContext.AddPipeline(new DirectionalShadowRenderPipeline());
+            RenderContext.AddPipeline(new PointShadowRenderPipeline());
+            RenderContext.AddPipeline(new DeferredRenderPipeline());
+            RenderContext.AddPipeline(new ForwardRenderPipeline());
+            RenderContext.AddPipeline(new ScreenPipeline());
 
             ObjectManager.PushDebugGroup("BeforeInit", "Pipelines");
-            foreach (var pipe in ctx.RenderPipelines)
+            foreach (var pipe in RenderContext.RenderPipelines)
             {
                 ObjectManager.PushDebugGroup("BeforeInit", pipe);
                 pipe.BeforeInit();
@@ -181,7 +184,7 @@ namespace Aximo.Engine
             ObjectManager.PopDebugGroup();
 
             ObjectManager.PushDebugGroup("Init", "Pipelines");
-            foreach (var pipe in ctx.RenderPipelines)
+            foreach (var pipe in RenderContext.RenderPipelines)
             {
                 ObjectManager.PushDebugGroup("Init", pipe);
                 pipe.Init();
@@ -190,7 +193,7 @@ namespace Aximo.Engine
             ObjectManager.PopDebugGroup();
 
             ObjectManager.PushDebugGroup("AfterInit", "Pipelines");
-            foreach (var pipe in ctx.RenderPipelines)
+            foreach (var pipe in RenderContext.RenderPipelines)
             {
                 ObjectManager.PushDebugGroup("AfterInit", pipe);
                 pipe.AfterInit();
@@ -225,27 +228,27 @@ namespace Aximo.Engine
             //--
             var ubo = new UniformBufferObject();
             ubo.Create();
-            if (ctx.LightObjects.Count >= 2)
+            if (RenderContext.LightObjects.Count >= 2)
             {
                 var lightsData = new GlslLight[2];
-                lightsData[0].Position = ctx.LightObjects[0].Position;
+                lightsData[0].Position = RenderContext.LightObjects[0].Position;
                 lightsData[0].Color = new Vector3(0.5f, 0.5f, 0.5f);
-                lightsData[0].ShadowLayer = ctx.LightObjects[0].ShadowTextureIndex;
-                lightsData[0].DirectionalLight = ctx.LightObjects[0].LightType == LightType.Directional ? 1 : 0;
-                lightsData[0].LightSpaceMatrix = Matrix4.Transpose(ctx.LightObjects[0].LightCamera.ViewMatrix * ctx.LightObjects[0].LightCamera.ProjectionMatrix);
+                lightsData[0].ShadowLayer = RenderContext.LightObjects[0].ShadowTextureIndex;
+                lightsData[0].DirectionalLight = RenderContext.LightObjects[0].LightType == LightType.Directional ? 1 : 0;
+                lightsData[0].LightSpaceMatrix = Matrix4.Transpose(RenderContext.LightObjects[0].LightCamera.ViewMatrix * RenderContext.LightObjects[0].LightCamera.ProjectionMatrix);
                 lightsData[0].Linear = 0.1f;
                 lightsData[0].Quadric = 0f;
 
-                lightsData[1].Position = ctx.LightObjects[1].Position;
+                lightsData[1].Position = RenderContext.LightObjects[1].Position;
                 lightsData[1].Color = new Vector3(0.5f, 0.5f, 0.5f);
-                lightsData[1].ShadowLayer = ctx.LightObjects[1].ShadowTextureIndex;
-                lightsData[1].DirectionalLight = ctx.LightObjects[1].LightType == LightType.Directional ? 1 : 0;
-                lightsData[1].LightSpaceMatrix = Matrix4.Transpose(ctx.LightObjects[1].LightCamera.ViewMatrix * ctx.LightObjects[1].LightCamera.ProjectionMatrix);
+                lightsData[1].ShadowLayer = RenderContext.LightObjects[1].ShadowTextureIndex;
+                lightsData[1].DirectionalLight = RenderContext.LightObjects[1].LightType == LightType.Directional ? 1 : 0;
+                lightsData[1].LightSpaceMatrix = Matrix4.Transpose(RenderContext.LightObjects[1].LightCamera.ViewMatrix * RenderContext.LightObjects[1].LightCamera.ProjectionMatrix);
                 lightsData[1].Linear = 0.1f;
                 lightsData[1].Quadric = 0f;
                 ubo.SetData(lightsData);
 
-                ubo.SetBindingPoint(ctx.LightBinding);
+                ubo.SetBindingPoint(RenderContext.LightBinding);
             }
 
             //--
@@ -253,8 +256,8 @@ namespace Aximo.Engine
 
             //--
 
-            ctx.InitRender();
-            ctx.Render();
+            RenderContext.InitRender();
+            RenderContext.Render();
 
             //--
 
@@ -326,7 +329,7 @@ namespace Aximo.Engine
                     if (e.Shift)
                     {
                         DebugCamera = !DebugCamera;
-                        var debugLine = ctx.GetObjectByName("DebugLine") as LineObject;
+                        var debugLine = RenderContext.GetObjectByName("DebugLine") as LineObject;
                         debugLine.Enabled = DebugCamera;
                         Console.WriteLine($"DebugCamera: {DebugCamera}");
                     }
@@ -337,11 +340,11 @@ namespace Aximo.Engine
                 }
                 if (kbState[Key.B])
                 {
-                    MovingObject = ctx.GetObjectByName("Box1") as IPosition;
+                    MovingObject = RenderContext.GetObjectByName("Box1") as IPosition;
                 }
                 if (kbState[Key.L])
                 {
-                    MovingObject = ctx.GetObjectByName("StaticLight") as IPosition;
+                    MovingObject = RenderContext.GetObjectByName("StaticLight") as IPosition;
                 }
                 if (kbState[Key.J])
                 {
@@ -363,7 +366,7 @@ namespace Aximo.Engine
                 return;
 
             Console.WriteLine("OnScreenResize: " + window.Width + "x" + window.Height);
-            ctx.OnScreenResize();
+            RenderContext.OnScreenResize();
         }
 
         protected virtual void OnUpdateFrame(FrameEventArgs e) { }
@@ -372,10 +375,10 @@ namespace Aximo.Engine
 
         private void OnUpdateFrameInternal(FrameEventArgs e)
         {
-            foreach (var anim in gameCtx.Animations)
+            foreach (var anim in GameContext.Animations)
                 anim.ProcessAnimation();
 
-            foreach (var obj in ctx.UpdateFrameObjects)
+            foreach (var obj in RenderContext.UpdateFrameObjects)
                 obj.OnUpdateFrame();
 
             OnUpdateFrame(e);
@@ -416,14 +419,12 @@ namespace Aximo.Engine
                         pos.Position = new Vector3(
                             pos.Position.X,
                             pos.Position.Y + stepSize,
-                            pos.Position.Z
-                        );
+                            pos.Position.Z);
                     else
                         pos.Position = new Vector3(
-                            pos.Position.X + (float)Math.Cos(cam.Facing) * stepSize,
-                            pos.Position.Y + (float)Math.Sin(cam.Facing) * stepSize,
-                            pos.Position.Z
-                        );
+                            pos.Position.X + ((float)Math.Cos(cam.Facing) * stepSize),
+                            pos.Position.Y + ((float)Math.Sin(cam.Facing) * stepSize),
+                            pos.Position.Z);
                 }
 
                 if (kbState[Key.S])
@@ -432,14 +433,12 @@ namespace Aximo.Engine
                         pos.Position = new Vector3(
                             pos.Position.X,
                             pos.Position.Y - stepSize,
-                            pos.Position.Z
-                        );
+                            pos.Position.Z);
                     else
                         pos.Position = new Vector3(
-                            pos.Position.X - (float)Math.Cos(cam.Facing) * stepSize,
-                            pos.Position.Y - (float)Math.Sin(cam.Facing) * stepSize,
-                            pos.Position.Z
-                        );
+                            pos.Position.X - ((float)Math.Cos(cam.Facing) * stepSize),
+                            pos.Position.Y - ((float)Math.Sin(cam.Facing) * stepSize),
+                            pos.Position.Z);
                 }
 
                 if (kbState[Key.A])
@@ -448,14 +447,12 @@ namespace Aximo.Engine
                         pos.Position = new Vector3(
                             pos.Position.X - stepSize,
                             pos.Position.Y,
-                            pos.Position.Z
-                        );
+                            pos.Position.Z);
                     else
                         pos.Position = new Vector3(
-                            pos.Position.X + (float)Math.Cos(cam.Facing + Math.PI / 2) * stepSize,
-                            pos.Position.Y + (float)Math.Sin(cam.Facing + Math.PI / 2) * stepSize,
-                            pos.Position.Z
-                        );
+                            pos.Position.X + ((float)Math.Cos(cam.Facing + (Math.PI / 2)) * stepSize),
+                            pos.Position.Y + ((float)Math.Sin(cam.Facing + (Math.PI / 2)) * stepSize),
+                            pos.Position.Z);
                 }
 
                 if (kbState[Key.D])
@@ -464,14 +461,12 @@ namespace Aximo.Engine
                         pos.Position = new Vector3(
                             pos.Position.X + stepSize,
                             pos.Position.Y,
-                            pos.Position.Z
-                        );
+                            pos.Position.Z);
                     else
                         pos.Position = new Vector3(
-                            pos.Position.X - (float)Math.Cos(cam.Facing + Math.PI / 2) * stepSize,
-                            pos.Position.Y - (float)Math.Sin(cam.Facing + Math.PI / 2) * stepSize,
-                            pos.Position.Z
-                        );
+                            pos.Position.X - ((float)Math.Cos(cam.Facing + (Math.PI / 2)) * stepSize),
+                            pos.Position.Y - ((float)Math.Sin(cam.Facing + (Math.PI / 2)) * stepSize),
+                            pos.Position.Z);
                 }
 
                 if (kbState[Key.Left])
@@ -509,24 +504,21 @@ namespace Aximo.Engine
                 else if (rot != null)
                 {
                     rot.Rotate = new Vector3(
-                        rot.Rotate.X + MouseSpeed[1] * 2,
+                        rot.Rotate.X + (MouseSpeed[1] * 2),
                         rot.Rotate.Y,
-                        rot.Rotate.Z + MouseSpeed[0] * 2
-                    );
+                        rot.Rotate.Z + (MouseSpeed[0] * 2));
                 }
                 //Console.WriteLine(Camera.Pitch + " : " + Math.Round(MouseSpeed[1], 3));
                 if (simpleMove)
                     pos.Position = new Vector3(
                         pos.Position.X,
                         pos.Position.Y,
-                        pos.Position.Z + MouseSpeed[2] * 2
-                    );
+                        pos.Position.Z + (MouseSpeed[2] * 2));
                 else
                     pos.Position = new Vector3(
                         pos.Position.X,
                         pos.Position.Y,
-                        pos.Position.Z + MouseSpeed[2] * 2
-                    );
+                        pos.Position.Z + (MouseSpeed[2] * 2));
 
                 if (kbState[Key.F11])
                 {
@@ -562,7 +554,7 @@ namespace Aximo.Engine
 
         private void Reload()
         {
-            foreach (var obj in ctx.AllObjects)
+            foreach (var obj in RenderContext.AllObjects)
                 if (obj is IReloadable reloadable)
                     reloadable.OnReload();
         }
@@ -609,8 +601,8 @@ namespace Aximo.Engine
 
         protected void OnResize(EventArgs e)
         {
-            GL.Viewport(0, 0, ctx.ScreenSize.X, ctx.ScreenSize.Y);
-            Camera.AspectRatio = ctx.ScreenSize.X / (float)ctx.ScreenSize.Y;
+            GL.Viewport(0, 0, RenderContext.ScreenSize.X, RenderContext.ScreenSize.Y);
+            Camera.AspectRatio = RenderContext.ScreenSize.X / (float)RenderContext.ScreenSize.Y;
         }
 
         protected virtual void OnUnload(EventArgs e) { }
@@ -623,7 +615,7 @@ namespace Aximo.Engine
             GL.BindVertexArray(0);
             GL.UseProgram(0);
 
-            foreach (var obj in ctx.AllObjects)
+            foreach (var obj in RenderContext.AllObjects)
                 obj.Free();
         }
 
@@ -699,7 +691,7 @@ namespace Aximo.Engine
 
             var ray = Ray.FromPoints(pos1, pos2);
             if (plane.Raycast(ray, out float result))
-                return (new Vector4(ray.GetPoint(result), 1) * ctx.WorldPositionMatrix).Xyz;
+                return (new Vector4(ray.GetPoint(result), 1) * RenderContext.WorldPositionMatrix).Xyz;
 
             return null;
         }
@@ -729,6 +721,5 @@ namespace Aximo.Engine
         public string WindowTitle { get; set; }
         public WindowBorder WindowBorder { get; set; } = WindowBorder.Resizable;
     }
-
 
 }

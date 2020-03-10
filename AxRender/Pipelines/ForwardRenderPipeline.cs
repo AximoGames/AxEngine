@@ -14,7 +14,7 @@ namespace Aximo.Render
         {
             FrameBuffer = new FrameBuffer(RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y)
             {
-                ObjectLabel = "Forward"
+                ObjectLabel = "Forward",
             };
             FrameBuffer.InitNormal();
             //FrameBuffer.CreateRenderBuffer(RenderbufferStorage.Depth24Stencil8, FramebufferAttachment.DepthStencilAttachment);

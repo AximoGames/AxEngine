@@ -1,4 +1,7 @@
-﻿using System;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Input;
@@ -43,7 +46,6 @@ namespace Aximo.Engine
         {
             base.OnRenderFrame(e);
         }
-
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {

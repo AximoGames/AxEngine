@@ -1,11 +1,12 @@
-//
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 //  Vector3i.cs
 //
 //  Copyright (C) OpenTK
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
-//
 
 using System;
 using System.Diagnostics.Contracts;

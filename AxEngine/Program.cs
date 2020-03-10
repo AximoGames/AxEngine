@@ -1,10 +1,13 @@
-﻿using System;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Threading;
 using OpenTK;
 
 namespace Aximo.Engine
 {
-    class MainClass
+    internal class MainClass
     {
 
         private static Thread th;
@@ -52,7 +55,7 @@ namespace Aximo.Engine
 
         private static void UIThreadMain()
         {
-            demo = new RenderDemo(new RenderApplicationStartup
+            demo = new RenderApplicationDemo(new RenderApplicationStartup
             {
                 WindowTitle = "AxEngineDemo",
                 WindowSize = new Vector2i(800, 600),
