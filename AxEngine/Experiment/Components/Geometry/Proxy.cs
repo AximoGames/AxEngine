@@ -6,49 +6,33 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using Aximo.Render;
 using OpenTK;
 
 namespace Aximo.Engine
 {
 
-    public enum GPrimitiveType
-    {
-        Triangles,
-        Lines,
-    }
-
-    public class MeshBatch
-    {
-        public bool CastShadowget { get; set; }
-        public GPrimitiveType Type { get; set; }
-
-        // Data
-    }
-
-    public struct BoxSphereBounds
-    {
-        public Vector3 BoxExtent;
-        public Vector3 Origin;
-        public float SphereRadius;
-    }
-
-    public class StaticPrimitiveDrawInterface
-    {
-        public void DrawMesh(MeshBatch mesh)
-        {
-        }
-    }
-
     // Always called from Render Thread
-    public class PrimitiveSceneProxy
+    public class PrimitiveSceneProxy : IPrimitiveSceneProxy
     {
         public BoxSphereBounds Bounds { get; private set; }
-        public void DrawStaticElements(StaticPrimitiveDrawInterface meshInterface) { }
+        public void DrawStaticElements(IStaticPrimitiveDrawInterface meshInterface) { }
+        public void GetDynamicMeshElements() { }
         public bool IsStatic { get; private set; }
+
+        protected PrimitiveComponent PrimitiveComponent;
+
+        public PrimitiveSceneProxy(PrimitiveComponent component)
+        {
+            PrimitiveComponent = component;
+        }
+
     }
 
     public class StaticMeshSceneProxy : PrimitiveSceneProxy
     {
+        protected StaticMeshComponent StaticMeshComponent => (StaticMeshComponent)PrimitiveComponent;
+        public StaticMeshSceneProxy(StaticMeshComponent component) : base(component) { }
 
         public bool CastShadow { get; private set; }
 

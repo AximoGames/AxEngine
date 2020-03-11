@@ -12,5 +12,22 @@ using System.Threading;
 
 namespace Aximo.Engine
 {
+    public class TestClass
+    {
+        public void Test()
+        {
+            ISceneInterface scene = null;
+            Actor actor = null;
+            var light = new PointLightComponent();
+            actor.AddComponent(light);
+            scene.AddLight(light);
 
+            var box = new StaticMeshComponent();
+            var mesh = new StaticMesh();
+            var model = new StaticMeshSourceModel();
+            mesh.SetSourceModel(model);
+            box.SetMesh(mesh);
+            scene.AddPrimitive(box);
+        }
+    }
 }
