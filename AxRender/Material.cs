@@ -1,6 +1,8 @@
 // This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using OpenTK;
 
 namespace Aximo.Render
@@ -16,13 +18,38 @@ namespace Aximo.Render
 
     public class Material
     {
+        public Material()
+        {
+            _Textures = new List<Texture>();
+            Textures = new ReadOnlyCollection<Texture>(_Textures);
+        }
+
         public string DiffuseImagePath { get; set; }
         public string SpecularImagePath { get; set; }
+
+        public Vector3 BaseColor { get; set; }
+        public bool DisableDepthTest { get; set; }
+
         public Vector3 Color { get; set; }
         public float Ambient { get; set; }
         public float Shininess { get; set; }
         public float SpecularStrength { get; set; }
         public MaterialColorBlendMode ColorBlendMode { get; set; }
+
+        public Vector3 WorldPositionOffset { get; set; }
+
+        private List<Texture> _Textures;
+        public ICollection<Texture> Textures { get; private set; }
+
+        public void AddTexture(Texture texture)
+        {
+            _Textures.Add(texture);
+        }
+
+        public void RemoveTexture(Texture texture)
+        {
+            _Textures.Remove(texture);
+        }
 
         public static Material GetDefault()
         {

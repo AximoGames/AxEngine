@@ -59,7 +59,7 @@ namespace Aximo.Render
             UsePipeline<DirectionalShadowRenderPipeline>();
 
             if (PrimaryRenderPipeline == null)
-                PrimaryRenderPipeline = Context.PrimaryRenderPipeline;
+                PrimaryRenderPipeline = Renderer.PrimaryRenderPipeline;
 
             UsePipeline(PrimaryRenderPipeline);
 
@@ -111,7 +111,7 @@ namespace Aximo.Render
                 txt0.Bind(TextureUnit.Texture0);
             if (txt1 != null)
                 txt1.Bind(TextureUnit.Texture1);
-            Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
+            Renderer.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
 
             _Shader.Bind();
 
@@ -133,7 +133,7 @@ namespace Aximo.Render
 
             //var shadowCamera = GetShadowLight().LightCamera;
             _Shader.SetFloat("far_plane", 25f);
-            Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
+            Renderer.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
             _Shader.SetInt("depthMap", 3);
 
             _Shader.BindBlock("lightsArray", Context.LightBinding);
@@ -144,7 +144,7 @@ namespace Aximo.Render
 
         public void OnDeferredRender()
         {
-            var pipe = Context.GetPipeline<DeferredRenderPipeline>();
+            var pipe = Renderer.GetPipeline<DeferredRenderPipeline>();
             if (pipe.Pass == DeferredPass.Pass1)
             {
                 vao.Bind();

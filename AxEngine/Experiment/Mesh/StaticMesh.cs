@@ -18,23 +18,23 @@ namespace Aximo.Engine
 
         }
 
-        private List<IMaterialInterface> _Materials;
-        public ICollection<IMaterialInterface> Materials { get; private set; }
+        private List<Material> _Materials;
+        public ICollection<Material> Materials { get; private set; }
 
         public SceneComponent Parent { get; private set; }
 
         public StaticMesh()
         {
-            _Materials = new List<IMaterialInterface>();
-            Materials = new ReadOnlyCollection<IMaterialInterface>(_Materials);
+            _Materials = new List<Material>();
+            Materials = new ReadOnlyCollection<Material>(_Materials);
         }
 
-        public void AddMaterial(IMaterialInterface material)
+        public void AddMaterial(Material material)
         {
             _Materials.Add(material);
         }
 
-        public void RemoveMaterial(IMaterialInterface material)
+        public void RemoveMaterial(Material material)
         {
             _Materials.Remove(material);
         }

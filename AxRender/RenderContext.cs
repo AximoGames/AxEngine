@@ -27,32 +27,6 @@ namespace Aximo.Render
 
         public Matrix4 WorldPositionMatrix = Matrix4.Identity;
 
-        public List<IRenderPipeline> RenderPipelines = new List<IRenderPipeline>();
-
-        public IRenderPipeline CurrentPipeline { get; internal set; }
-
-        public void InitRender()
-        {
-            foreach (var pipeline in RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("InitRender", pipeline);
-                CurrentPipeline = pipeline;
-                pipeline.InitRender(this, Camera);
-                ObjectManager.PopDebugGroup();
-            }
-        }
-
-        public void Render()
-        {
-            foreach (var pipeline in RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("Render", pipeline);
-                CurrentPipeline = pipeline;
-                pipeline.Render(this, Camera);
-                ObjectManager.PopDebugGroup();
-            }
-        }
-
         public Vector2i _ScreenSize;
         public Vector2i ScreenSize
         {
@@ -68,14 +42,6 @@ namespace Aximo.Render
         public Vector2 PixelToUVFactor { get; private set; }
         public Vector2 PixelToNDCFactor { get; private set; }
         public float ScreenAspectRatio { get; private set; }
-
-        public T GetPipeline<T>()
-            where T : class, IRenderPipeline
-        {
-            return (T)RenderPipelines.FirstOrDefault(p => p is T);
-        }
-
-        public IRenderPipeline PrimaryRenderPipeline { get; set; }
 
         public static RenderContext Current { get; set; }
 
@@ -102,11 +68,6 @@ namespace Aximo.Render
                 return default;
 
             return (T)obj;
-        }
-
-        public void AddPipeline(IRenderPipeline pipeline)
-        {
-            RenderPipelines.Add(pipeline);
         }
 
         public void AddObject(IGameObject obj)
@@ -164,14 +125,9 @@ namespace Aximo.Render
 
         public void OnScreenResize()
         {
-            GL.Viewport(0, 0, ScreenSize.X, ScreenSize.Y);
-
             // GL.Scissor(0, 0, ScreenSize.X, ScreenSize.Y);
             // GL.Enable(EnableCap.ScissorTest);
             Camera.SetAspectRatio(ScreenSize.X, ScreenSize.Y);
-
-            foreach (var pipe in RenderPipelines)
-                pipe.OnScreenResize();
 
             foreach (var obj in AllObjects)
                 obj.OnScreenResize();

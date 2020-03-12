@@ -121,7 +121,7 @@ namespace Aximo.RenderDemo
                 Position = new Vector3(3f, 3f, 0.5f),
                 //Debug = true,
                 //Enabled = false,
-                PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>(),
+                PrimaryRenderPipeline = Renderer.GetPipeline<ForwardRenderPipeline>(),
             });
             RenderContext.AddObject(new TestObject()
             {

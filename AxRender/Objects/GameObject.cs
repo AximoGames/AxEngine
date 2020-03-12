@@ -31,13 +31,14 @@ namespace Aximo.Render
         }
 
         public RenderContext Context { get; private set; }
+        public Renderer Renderer => Renderer.Current;
 
         public virtual List<IRenderPipeline> RenderPipelines { get; } = new List<IRenderPipeline>();
 
         public void UsePipeline<T>()
             where T : class, IRenderPipeline
         {
-            UsePipeline(Context.GetPipeline<T>());
+            UsePipeline(Renderer.GetPipeline<T>());
         }
 
         public void UsePipeline(IRenderPipeline pipeline)

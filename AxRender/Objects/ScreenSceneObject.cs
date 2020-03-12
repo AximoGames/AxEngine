@@ -7,7 +7,7 @@ namespace Aximo.Render
     {
         public override void Init()
         {
-            SourceTexture = Context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.GetDestinationTexture();
+            SourceTexture = Renderer.GetPipeline<ForwardRenderPipeline>().FrameBuffer.GetDestinationTexture();
             base.Init();
         }
     }

@@ -6,11 +6,11 @@ using Aximo.Render;
 namespace Aximo.Engine
 {
 
-    public class StaticPrimitiveDrawInterface : IStaticPrimitiveDrawInterface
-    {
-        public void DrawMesh(MeshBatch mesh)
-        {
-        }
-    }
+    // public class StaticPrimitiveDrawInterface : IStaticPrimitiveDrawInterface
+    // {
+    //     public void DrawMesh(MeshBatch mesh)
+    //     {
+    //     }
+    // }
 
 }

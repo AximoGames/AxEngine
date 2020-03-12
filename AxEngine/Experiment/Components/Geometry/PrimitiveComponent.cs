@@ -16,26 +16,26 @@ namespace Aximo.Engine
 
         public bool CastShadow { get; set; }
 
-        public virtual PrimitiveSceneProxy CreateProxy()
-        {
-            return new PrimitiveSceneProxy(this);
-        }
+        // public virtual PrimitiveSceneProxy CreateProxy()
+        // {
+        //     return new PrimitiveSceneProxy(this);
+        // }
 
-        private List<IMaterialInterface> _Materials;
-        public ICollection<IMaterialInterface> Materials { get; private set; }
+        private List<Material> _Materials;
+        public ICollection<Material> Materials { get; private set; }
 
         public PrimitiveComponent()
         {
-            _Materials = new List<IMaterialInterface>();
-            Materials = new ReadOnlyCollection<IMaterialInterface>(_Materials);
+            _Materials = new List<Material>();
+            Materials = new ReadOnlyCollection<Material>(_Materials);
         }
 
-        public void AddMaterial(IMaterialInterface material)
+        public void AddMaterial(Material material)
         {
             _Materials.Add(material);
         }
 
-        public void RemoveMaterial(IMaterialInterface material)
+        public void RemoveMaterial(Material material)
         {
             _Materials.Remove(material);
         }

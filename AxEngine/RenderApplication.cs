@@ -7,7 +7,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Aximo.Render;
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 
 namespace Aximo.Engine
@@ -17,8 +16,6 @@ namespace Aximo.Engine
     {
 
         public static RenderApplication Current { get; private set; }
-
-        public Vector2i ScreenSize => new Vector2i(window.Width, window.Height);
 
         private RenderApplicationStartup _startup;
 
@@ -33,32 +30,7 @@ namespace Aximo.Engine
             _startup = startup;
         }
 
-        private static void PrintExtensions()
-        {
-            int numExtensions;
-            GL.GetInteger(GetPName.NumExtensions, out numExtensions);
-            for (var i = 0; i < numExtensions; i++)
-            {
-                var extName = GL.GetString(StringNameIndexed.Extensions, i);
-                Console.WriteLine(extName);
-            }
-        }
-
         private GameWindow window;
-
-        private DebugProc _debugProcCallback;
-        private GCHandle _debugProcCallbackHandle;
-        public static void DebugCallback(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
-        {
-            string messageString = Marshal.PtrToStringAnsi(message, length);
-
-            Console.WriteLine($"{severity} {type} | {messageString}");
-
-            if (type == DebugType.DebugTypeError)
-            {
-                throw new Exception(messageString);
-            }
-        }
 
         public void Run()
         {
@@ -75,6 +47,7 @@ namespace Aximo.Engine
 
         public RenderContext RenderContext { get; private set; }
         public GameContext GameContext { get; private set; }
+        public Renderer Renderer { get; private set; }
 
         public virtual void Init()
         {
@@ -93,6 +66,7 @@ namespace Aximo.Engine
             {
                 WindowBorder = _startup.WindowBorder,
                 Location = new System.Drawing.Point((1920 / 2) + 10, 10),
+
             };
             window.RenderFrame += (s, e) => OnRenderFrameInternal(e);
             window.UpdateFrame += (s, e) => OnUpdateFrameInternal(e);
@@ -104,21 +78,7 @@ namespace Aximo.Engine
             window.Unload += (s, e) => OnUnloadInternal(e);
             window.Resize += (s, e) => OnScreenResizeInternal();
 
-            var vendor = GL.GetString(StringName.Vendor);
-            var version = GL.GetString(StringName.Version);
-            var shadingLanguageVersion = GL.GetString(StringName.ShadingLanguageVersion);
-            var renderer = GL.GetString(StringName.Renderer);
-
-            Console.WriteLine($"Vendor: {vendor}, version: {version}, shadinglangVersion: {shadingLanguageVersion}, renderer: {renderer}");
-
             //PrintExtensions();
-
-            GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.CullFace);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             RenderContext.SceneOpitons = new SceneOptions
             {
@@ -126,10 +86,9 @@ namespace Aximo.Engine
 
             RenderContext.LogInfoMessage("Window.OnLoad");
 
-            ObjectManager.PushDebugGroup("Setup", "Pipelines");
-            SetupPipelines();
-            ObjectManager.PopDebugGroup();
-            RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<DeferredRenderPipeline>();
+            Renderer = new Renderer();
+            Renderer.Current = Renderer;
+            Renderer.Init();
 
             RenderContext.LightBinding = new BindingPoint();
             Console.WriteLine("LightBinding: " + RenderContext.LightBinding.Number);
@@ -164,42 +123,6 @@ namespace Aximo.Engine
             };
 
             Initialized = true;
-        }
-
-        public void SetupPipelines()
-        {
-            RenderContext.AddPipeline(new DirectionalShadowRenderPipeline());
-            RenderContext.AddPipeline(new PointShadowRenderPipeline());
-            RenderContext.AddPipeline(new DeferredRenderPipeline());
-            RenderContext.AddPipeline(new ForwardRenderPipeline());
-            RenderContext.AddPipeline(new ScreenPipeline());
-
-            ObjectManager.PushDebugGroup("BeforeInit", "Pipelines");
-            foreach (var pipe in RenderContext.RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("BeforeInit", pipe);
-                pipe.BeforeInit();
-                ObjectManager.PopDebugGroup();
-            }
-            ObjectManager.PopDebugGroup();
-
-            ObjectManager.PushDebugGroup("Init", "Pipelines");
-            foreach (var pipe in RenderContext.RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("Init", pipe);
-                pipe.Init();
-                ObjectManager.PopDebugGroup();
-            }
-            ObjectManager.PopDebugGroup();
-
-            ObjectManager.PushDebugGroup("AfterInit", "Pipelines");
-            foreach (var pipe in RenderContext.RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("AfterInit", pipe);
-                pipe.AfterInit();
-                ObjectManager.PopDebugGroup();
-            }
-            ObjectManager.PopDebugGroup();
         }
 
         protected virtual void SetupScene()
@@ -252,12 +175,11 @@ namespace Aximo.Engine
             }
 
             //--
-            GL.Enable(EnableCap.DepthTest);
 
             //--
 
-            RenderContext.InitRender();
-            RenderContext.Render();
+            Renderer.InitRender();
+            Renderer.Render();
 
             //--
 
@@ -300,17 +222,6 @@ namespace Aximo.Engine
             [FieldOffset(108)]
             public float Quadric;
         }
-
-        private void CheckForProgramError()
-        {
-            var err = LastErrorCode;
-            if (err != ErrorCode.NoError)
-            {
-                var s = "".ToString();
-            }
-        }
-
-        public static ErrorCode LastErrorCode => GL.GetError();
 
         private IPosition MovingObject;
 
@@ -366,7 +277,7 @@ namespace Aximo.Engine
                 return;
 
             Console.WriteLine("OnScreenResize: " + window.Width + "x" + window.Height);
-            RenderContext.OnScreenResize();
+            Renderer.OnScreenResize(ScreenSize);
         }
 
         protected virtual void OnUpdateFrame(FrameEventArgs e) { }
@@ -576,6 +487,8 @@ namespace Aximo.Engine
             // Console.WriteLine(CurrentMousePosition.ToString());
         }
 
+        public Vector2i ScreenSize => new Vector2i(window.Width, window.Height);
+
         protected virtual void OnMouseDown(MouseButtonEventArgs e) { }
 
         private void OnMouseDownInternal(MouseButtonEventArgs e)
@@ -598,25 +511,12 @@ namespace Aximo.Engine
             if (DefaultKeyBindings)
                 Camera.Fov -= e.DeltaPrecise;
         }
-
-        protected void OnResize(EventArgs e)
-        {
-            GL.Viewport(0, 0, RenderContext.ScreenSize.X, RenderContext.ScreenSize.Y);
-            Camera.AspectRatio = RenderContext.ScreenSize.X / (float)RenderContext.ScreenSize.Y;
-        }
-
+ 
         protected virtual void OnUnload(EventArgs e) { }
 
         private void OnUnloadInternal(EventArgs e)
         {
             OnUnload(e);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            GL.BindVertexArray(0);
-            GL.UseProgram(0);
-
-            foreach (var obj in RenderContext.AllObjects)
-                obj.Free();
         }
 
         public void Dispose()

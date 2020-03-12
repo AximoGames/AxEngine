@@ -59,7 +59,7 @@ namespace Aximo.Render
             // rboDepth.ObjectLabel = nameof(rboDepth);
 
             // Attach default Forward Depth Buffer to this Framebuffer, so both share the same depth informations.
-            var fwPipe = RenderContext.Current.GetPipeline<ForwardRenderPipeline>();
+            var fwPipe = Renderer.GetPipeline<ForwardRenderPipeline>();
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, fwPipe.FrameBuffer.RenderBuffer.Handle);
 
             GBuffer.Check();
@@ -132,8 +132,8 @@ namespace Aximo.Render
             GNormal.Bind(TextureUnit.Texture1);
             GAlbedoSpec.Bind(TextureUnit.Texture2);
 
-            context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
-            context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture4);
+            Renderer.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
+            Renderer.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture4);
 
             _DefLightShader.SetVector3("viewPos", camera.Position);
 
@@ -145,7 +145,7 @@ namespace Aximo.Render
             _DefLightShader.BindBlock("lightsArray", context.LightBinding);
             _DefLightShader.SetInt("lightCount", context.LightObjects.Count);
 
-            context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Bind();
+            Renderer.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Bind();
             vao.Bind();
             GL.Disable(EnableCap.DepthTest);
             vao.Draw();

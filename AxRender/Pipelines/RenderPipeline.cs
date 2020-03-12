@@ -16,6 +16,8 @@ namespace Aximo.Render
         {
         }
 
+        public Renderer Renderer => Renderer.Current;
+
         public abstract void Render(RenderContext context, Camera camera);
         protected virtual void Render(RenderContext context, Camera camera, IRenderableObject obj)
         {

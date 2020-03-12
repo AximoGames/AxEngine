@@ -79,7 +79,7 @@ namespace Aximo.Render
 
         public void OnRender()
         {
-            if (!(Context.CurrentPipeline is ScreenPipeline))
+            if (!(Renderer.CurrentPipeline is ScreenPipeline))
                 return;
 
             vao.Bind();

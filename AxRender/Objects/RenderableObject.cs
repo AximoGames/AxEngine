@@ -13,13 +13,13 @@ namespace Aximo.Render
     {
         public void OnRender()
         {
-            if (Context.CurrentPipeline is ForwardRenderPipeline && this is IForwardRenderable m1)
+            if (Renderer.CurrentPipeline is ForwardRenderPipeline && this is IForwardRenderable m1)
                 m1.OnForwardRender();
-            else if (Context.CurrentPipeline is DeferredRenderPipeline && this is IDeferredRenderable m2)
+            else if (Renderer.CurrentPipeline is DeferredRenderPipeline && this is IDeferredRenderable m2)
                 m2.OnDeferredRender();
-            else if (Context.CurrentPipeline is DirectionalShadowRenderPipeline && this is IShadowObject m3)
+            else if (Renderer.CurrentPipeline is DirectionalShadowRenderPipeline && this is IShadowObject m3)
                 m3.OnRenderShadow();
-            else if (Context.CurrentPipeline is PointShadowRenderPipeline && this is IShadowObject m4)
+            else if (Renderer.CurrentPipeline is PointShadowRenderPipeline && this is IShadowObject m4)
                 m4.OnRenderCubeShadow();
         }
 

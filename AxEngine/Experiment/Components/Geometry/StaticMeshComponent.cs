@@ -12,35 +12,6 @@ using OpenTK;
 namespace Aximo.Engine
 {
 
-    public class GMaterial : IMaterialInterface
-    {
-
-        public Vector3 BaseColor { get; set; }
-        public bool DisableDepthTest { get; set; }
-
-        public Vector3 WorldPositionOffset { get; set; }
-
-        private List<GTexture> _Textures;
-        public ICollection<GTexture> Textures { get; private set; }
-
-        public GMaterial()
-        {
-            _Textures = new List<GTexture>();
-            Textures = new ReadOnlyCollection<GTexture>(_Textures);
-        }
-
-        public void AddTexture(GTexture texture)
-        {
-            _Textures.Add(texture);
-        }
-
-        public void RemoveTexture(GTexture texture)
-        {
-            _Textures.Remove(texture);
-        }
-
-    }
-
     public class StreamableRenderAsset
     {
 
@@ -62,10 +33,10 @@ namespace Aximo.Engine
             Mesh = mesh;
         }
 
-        public override PrimitiveSceneProxy CreateProxy()
-        {
-            return new StaticMeshSceneProxy(this);
-        }
+        // public override PrimitiveSceneProxy CreateProxy()
+        // {
+        //     return new StaticMeshSceneProxy(this);
+        // }
 
     }
 
