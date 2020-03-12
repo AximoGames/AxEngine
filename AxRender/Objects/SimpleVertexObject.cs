@@ -10,7 +10,7 @@ namespace Aximo.Render
 {
 
     public class SimpleVertexObject : RenderableObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
-        IForwardRenderable, IDeferredRenderable
+        IForwardRenderable, IDeferredRenderable, IStaticMeshObject
     {
 
         public Camera Camera => Context.Camera;
@@ -31,6 +31,13 @@ namespace Aximo.Render
             * Matrix4.CreateRotationY(Rotate.Y * (MathF.PI * 2))
             * Matrix4.CreateRotationZ(Rotate.Z * (MathF.PI * 2))
             * Matrix4.CreateTranslation((new Vector4(Position, 1.0f) * PositionMatrix).Xyz);
+        }
+
+        private StaticMesh Mesh;
+
+        public StaticMesh GetMesh()
+        {
+            return Mesh;
         }
 
         public bool Debug;
