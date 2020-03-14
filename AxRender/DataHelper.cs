@@ -69,7 +69,7 @@ namespace Aximo.Render
         private const float EX = 0.7f;
         private const float EY = -0.5f;
         private const float EZ = 0.5f;
-        public static readonly float[] CubeDebug =
+        public static readonly float[] DebugCube =
         {
              // Position          Normal
             -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f, // Bottom face

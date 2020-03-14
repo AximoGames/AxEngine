@@ -9,7 +9,7 @@ namespace Aximo.Render
 
         public override void Init()
         {
-            SetVertices(DataHelper.Cube);
+            SetVertices(MeshDataBuilder.Cube());
 
             base.Init();
         }

@@ -151,6 +151,11 @@ namespace Aximo.Render
             }
         }
 
+        internal void SetData(MeshData data)
+        {
+            SetData(data.Data, data.Indicies);
+        }
+
         //public void AddPosition()
         //{
         //}

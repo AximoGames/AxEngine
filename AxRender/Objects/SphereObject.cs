@@ -8,9 +8,7 @@ namespace Aximo.Render
 
         public override void Init()
         {
-            var ico = new AxRender.Objects.Util.IcoSphere.IcoSphereMesh(2);
-            SetVertices(ico.Vertices);
-            SetIndicies(ico.Indicies);
+            SetVertices(MeshDataBuilder.Sphere(2));
 
             base.Init();
         }

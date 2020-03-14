@@ -6,14 +6,6 @@ using System;
 namespace Aximo.Render
 {
 
-    public static class MeshBuilder
-    {
-        public static MeshData Cube()
-        {
-            return new MeshData<float>(typeof(VertexDataPosNormalUV), DataHelper.Cube);
-        }
-    }
-
     public abstract class MeshData
     {
         public VertexLayoutDefinition Layout { get; protected set; }

@@ -42,9 +42,7 @@ namespace Aximo.Render
         private Shader _ShadowShader;
         private Shader _CubeShadowShader;
 
-        private float[] _vertices = DataHelper.Cube;
-        private VertexDataPosNormalUV[] _vertices2;
-        private ushort[] _indicies = null;
+        private MeshData MeshData;
 
         private VertexArrayObject vao;
 
@@ -82,29 +80,15 @@ namespace Aximo.Render
 
             // vao = new VertexArrayObject(layout);
 
-            var meshData = MeshBuilder.Cube();
-            vao = new VertexArrayObject(meshData.BindLayoutToShader(Shader));
+            vao = new VertexArrayObject(MeshData.BindLayoutToShader(Shader));
 
             //vao.SetData(_vertices, new ushort[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
-            if (_vertices2 == null)
-                vao.SetData(meshData.Data);
-            else
-                vao.SetData(_vertices2, _indicies);
+            vao.SetData(MeshData);
         }
 
-        public void SetVertices(float[] vertices)
+        public void SetVertices(MeshData data)
         {
-            _vertices = vertices;
-        }
-
-        public void SetVertices(VertexDataPosNormalUV[] vertices)
-        {
-            _vertices2 = vertices;
-        }
-
-        public void SetIndicies(ushort[] indicies)
-        {
-            _indicies = indicies;
+            MeshData = data;
         }
 
         public void OnForwardRender()
