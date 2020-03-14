@@ -82,12 +82,12 @@ namespace Aximo.Render
 
             // vao = new VertexArrayObject(layout);
 
-            var layout = VertexLayoutDefinition.CreateDefinitionFromVertexStruct<VertexDataPosNormalUV>();
-            vao = new VertexArrayObject(layout.BindToShader(Shader));
+            var meshData = MeshBuilder.Cube();
+            vao = new VertexArrayObject(meshData.BindLayoutToShader(Shader));
 
             //vao.SetData(_vertices, new ushort[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
             if (_vertices2 == null)
-                vao.SetData(_vertices, _indicies);
+                vao.SetData(meshData.Data);
             else
                 vao.SetData(_vertices2, _indicies);
         }

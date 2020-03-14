@@ -1,6 +1,7 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
@@ -32,12 +33,6 @@ namespace Aximo.Render
             Bind();
             Size = data.Length;
             GL.BufferData(Target, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
-
-            // if (currentBuffer == null)
-            //     UseDefault();
-            // else
-            //     currentBuffer.Use();
-            //UseDefault();
         }
 
         public void SetData<T>(T[] data)
@@ -48,12 +43,24 @@ namespace Aximo.Render
             Size = data.Length;
             var structSize = Marshal.SizeOf(typeof(T));
             GL.BufferData(Target, data.Length * structSize, data, BufferUsageHint.StaticDraw);
+        }
 
-            // if (currentBuffer == null)
-            //     UseDefault();
-            // else
-            //     currentBuffer.Use();
-            //UseDefault();
+        public unsafe void SetData(Array data)
+        {
+            var currentBuffer = CurrentBuffer;
+            Bind();
+            Size = data.Length;
+            var structSize = Marshal.SizeOf(data.GetType().GetElementType());
+
+            GCHandle h = GCHandle.Alloc(data, GCHandleType.Pinned);
+            try
+            {
+                GL.BufferData(Target, data.Length * structSize, h.AddrOfPinnedObject(), BufferUsageHint.StaticDraw);
+            }
+            finally
+            {
+                h.Free();
+            }
         }
 
         private static int CurrentHandle;

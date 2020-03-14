@@ -1,6 +1,7 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
 
@@ -125,6 +126,21 @@ namespace Aximo.Render
             EnsureInitialized();
             _vbo.SetData<T>(vertices);
             var typeSize = Marshal.SizeOf(typeof(T));
+            VertexCount = vertices.Length * typeSize / Layout.Stride;
+            //            UseDefault();
+            if (indicies != null)
+            {
+                if (_ebo == null)
+                    _ebo = CreateEBO();
+                _ebo.SetData(indicies);
+            }
+        }
+
+        internal void SetData(Array vertices, ushort[] indicies = null)
+        {
+            EnsureInitialized();
+            _vbo.SetData(vertices);
+            var typeSize = Marshal.SizeOf(vertices.GetType().GetElementType());
             VertexCount = vertices.Length * typeSize / Layout.Stride;
             //            UseDefault();
             if (indicies != null)

@@ -38,8 +38,13 @@ namespace Aximo.Render
 
         public static VertexLayoutDefinition CreateDefinitionFromVertexStruct<T>()
         {
+            return CreateDefinitionFromVertexStruct(typeof(T));
+        }
+
+        public static VertexLayoutDefinition CreateDefinitionFromVertexStruct(Type type)
+        {
             var layout = new VertexLayoutDefinition();
-            foreach (var field in typeof(T).GetFields())
+            foreach (var field in type.GetFields())
             {
                 layout.AddAttribute(field.FieldType, field.Name);
             }

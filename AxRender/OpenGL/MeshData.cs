@@ -5,6 +5,15 @@ using System;
 
 namespace Aximo.Render
 {
+
+    public static class MeshBuilder
+    {
+        public static MeshData Cube()
+        {
+            return new MeshData<float>(typeof(VertexDataPosNormalUV), DataHelper.Cube);
+        }
+    }
+
     public abstract class MeshData
     {
         public VertexLayoutDefinition Layout { get; protected set; }
@@ -12,11 +21,13 @@ namespace Aximo.Render
         public virtual int VertexCount { get; protected set; }
         public ushort[] Indicies { get; protected set; }
         public virtual int IndiciesCount { get; protected set; }
+
+        public VertexLayoutBinded BindLayoutToShader(Shader shader) => Layout.BindToShader(shader);
     }
 
     public class MeshData<T> : MeshData
     {
-        internal T[] _Data;
+        protected T[] _Data;
 
         public override Array Data => _Data;
 
@@ -33,6 +44,12 @@ namespace Aximo.Render
         public MeshData(VertexLayoutDefinition layoutDefinition, T[] data, ushort[] indicies = null)
         {
             Layout = layoutDefinition;
+            SetData(data, indicies);
+        }
+
+        public MeshData(Type layoutDefinitionType, T[] data, ushort[] indicies = null)
+        {
+            Layout = VertexLayoutDefinition.CreateDefinitionFromVertexStruct(layoutDefinitionType);
             SetData(data, indicies);
         }
 
