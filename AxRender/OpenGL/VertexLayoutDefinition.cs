@@ -36,6 +36,16 @@ namespace Aximo.Render
             Attributes = new ReadOnlyCollection<VertexLayoutDefinitionAttribute>(_Attributes);
         }
 
+        public static VertexLayoutDefinition CreateDefinitionFromVertexStruct<T>()
+        {
+            var layout = new VertexLayoutDefinition();
+            foreach (var field in typeof(T).GetFields())
+            {
+                layout.AddAttribute(field.GetType(), field.Name);
+            }
+            return layout;
+        }
+
         protected virtual void AddAttribute(VertexLayoutDefinitionAttribute attr)
         {
             _Attributes.Add(attr);
@@ -51,18 +61,28 @@ namespace Aximo.Render
 
         public virtual VertexLayoutDefinitionAttribute AddAttribute<T>(string name, bool normalized = false)
         {
-            return AddAttribute<T>(name, StructHelper.GetFieldsOf<T>(), normalized);
+            return AddAttribute(typeof(T), name, normalized);
+        }
+
+        public virtual VertexLayoutDefinitionAttribute AddAttribute(Type type, string name, bool normalized = false)
+        {
+            return AddAttribute(type, name, StructHelper.GetFieldsOf(type), normalized);
         }
 
         public virtual VertexLayoutDefinitionAttribute AddAttribute<T>(string name, int size, bool normalized = false)
         {
+            return AddAttribute(typeof(T), name, size, normalized);
+        }
+
+        public virtual VertexLayoutDefinitionAttribute AddAttribute(Type type, string name, int size, bool normalized = false)
+        {
             var offset = _Stride;
-            _Stride += size * StructHelper.GetFieldSizeOf<T>();
+            _Stride += size * StructHelper.GetFieldSizeOf(type);
 
             var attr = CreateAttributeInstance();
             attr.Name = name;
             attr.Size = size;
-            attr.Type = StructHelper.GetVertexAttribPointerType<T>();
+            attr.Type = StructHelper.GetVertexAttribPointerType(type);
             attr.Normalized = normalized;
             attr.Stride = 0; // will be set in UpdateStride()
             attr.Offset = offset;

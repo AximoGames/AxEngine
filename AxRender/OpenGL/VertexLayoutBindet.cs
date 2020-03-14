@@ -17,11 +17,6 @@ namespace Aximo.Render
             return new VertexLayoutBindedAttribute();
         }
 
-        public virtual VertexLayoutBindedAttribute AddAttribute<T>(int index, bool normalized = false)
-        {
-            return AddAttribute<T>(index, StructHelper.GetFieldsOf<T>(), normalized);
-        }
-
         protected override void AddAttribute(VertexLayoutDefinitionAttribute attr)
         {
             if (!(attr is VertexLayoutBindedAttribute))
@@ -29,9 +24,23 @@ namespace Aximo.Render
             base.AddAttribute(attr);
         }
 
+        public virtual VertexLayoutBindedAttribute AddAttribute<T>(int index, bool normalized = false)
+        {
+            return AddAttribute(typeof(T), index, normalized);
+        }
+        public virtual VertexLayoutBindedAttribute AddAttribute(Type type, int index, bool normalized = false)
+        {
+            return AddAttribute(type, index, StructHelper.GetFieldsOf(type), normalized);
+        }
+
         public virtual VertexLayoutBindedAttribute AddAttribute<T>(int index, int size, bool normalized = false)
         {
-            var attr = base.AddAttribute<T>("", size, normalized) as VertexLayoutBindedAttribute;
+            return AddAttribute(typeof(T), index, size, normalized);
+        }
+
+        public virtual VertexLayoutBindedAttribute AddAttribute(Type type, int index, int size, bool normalized = false)
+        {
+            var attr = base.AddAttribute(type, "", size, normalized) as VertexLayoutBindedAttribute;
             attr.Index = index;
             return attr;
         }

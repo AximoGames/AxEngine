@@ -10,26 +10,23 @@ namespace Aximo.Render
     public static class StructHelper
     {
 
-        public static VertexAttribPointerType GetVertexAttribPointerType<T>()
+        public static VertexAttribPointerType GetVertexAttribPointerType(Type type)
         {
-            var type = typeof(T);
             if (type == typeof(float))
                 return VertexAttribPointerType.Float;
             return VertexAttribPointerType.Float;
         }
 
-        public static int GetFieldSizeOf<T>()
+        public static int GetFieldSizeOf(Type type)
         {
-            var type = typeof(T);
             if (type == typeof(float))
                 return 4;
 
             return 4;
         }
 
-        public static int GetFieldsOf<T>()
+        public static int GetFieldsOf(Type type)
         {
-            var type = typeof(T);
             if (type == typeof(float))
                 return 1;
             if (type == typeof(Vector4))
@@ -38,7 +35,8 @@ namespace Aximo.Render
                 return 3;
             if (type == typeof(Vector2))
                 return 2;
-            throw new NotImplementedException();
+
+            return type.GetFields().Length;
         }
 
     }
