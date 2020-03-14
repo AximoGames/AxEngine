@@ -8,6 +8,12 @@ namespace Aximo.Render
     public class VertexLayoutAttribute : VertexLayoutDefinitionAttribute
     {
         public int Index;
+
+        internal override string GetDumpString()
+        {
+            return $"{base.GetDumpString()}, Index: {Index}";
+        }
+
     }
 
 }

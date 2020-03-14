@@ -22,9 +22,16 @@ namespace Aximo.Render
             return AddAttribute<T>(index, StructHelper.GetFieldsOf<T>(), normalized);
         }
 
+        protected override void AddAttribute(VertexLayoutDefinitionAttribute attr)
+        {
+            if (!(attr is VertexLayoutAttribute))
+                throw new InvalidOperationException();
+            base.AddAttribute(attr);
+        }
+
         public virtual VertexLayoutAttribute AddAttribute<T>(int index, int size, bool normalized = false)
         {
-            var attr = base.AddAttribute<T>(size, normalized) as VertexLayoutAttribute;
+            var attr = base.AddAttribute<T>("", size, normalized) as VertexLayoutAttribute;
             attr.Index = index;
             return attr;
         }

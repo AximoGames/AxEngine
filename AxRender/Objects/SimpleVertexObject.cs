@@ -75,12 +75,20 @@ namespace Aximo.Render
             _ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
             _CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
 
-            var layout = new VertexLayout();
-            layout.AddAttribute<Vector3>(_Shader.GetAttribLocation("aPos"));
-            layout.AddAttribute<Vector3>(_Shader.GetAttribLocation("aNormal"));
-            layout.AddAttribute<Vector2>(_Shader.GetAttribLocation("aTexCoords"));
+            // var layout = new VertexLayout();
+            // layout.AddAttribute<Vector3>(_Shader.GetAttribLocation("aPos"));
+            // layout.AddAttribute<Vector3>(_Shader.GetAttribLocation("aNormal"));
+            // layout.AddAttribute<Vector2>(_Shader.GetAttribLocation("aTexCoords"));
 
-            vao = new VertexArrayObject(layout);
+            // vao = new VertexArrayObject(layout);
+
+            var layout = new VertexLayoutDefinition();
+            layout.AddAttribute<Vector3>("aPos");
+            layout.AddAttribute<Vector3>("aNormal");
+            layout.AddAttribute<Vector2>("aTexCoords");
+
+            vao = new VertexArrayObject(layout.BindToShader(Shader));
+
             //vao.SetData(_vertices, new ushort[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
             if (_vertices2 == null)
                 vao.SetData(_vertices, _indicies);
