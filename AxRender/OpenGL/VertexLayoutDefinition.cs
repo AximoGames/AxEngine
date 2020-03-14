@@ -21,7 +21,7 @@ namespace Aximo.Render
             {
                 var attr = layout.CreateAttributeInstance() as VertexLayoutBindedAttribute;
                 srcAttr.CopyTo(attr);
-                attr.Index = shader.GetAttribLocation(attr.Name);
+                attr.Index = shader.GetAttribLocation(shader.AttributeNameForField(attr.Name));
                 layout.AddAttribute(attr);
             }
             return layout;
@@ -41,7 +41,7 @@ namespace Aximo.Render
             var layout = new VertexLayoutDefinition();
             foreach (var field in typeof(T).GetFields())
             {
-                layout.AddAttribute(field.GetType(), field.Name);
+                layout.AddAttribute(field.FieldType, field.Name);
             }
             return layout;
         }

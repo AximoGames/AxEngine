@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using OpenTK;
@@ -24,6 +25,21 @@ namespace Aximo.Render
         private Dictionary<string, int> _uniformBlockLocations = new Dictionary<string, int>();
 
         private List<ShaderCompilation> Compilations = new List<ShaderCompilation>();
+
+        public string AttributeNameForField(string structFieldName)
+        {
+            switch (structFieldName)
+            {
+                case "Position":
+                    return "aPos";
+                case "Normal":
+                    return "aNormal";
+                case "UV":
+                    return "aTexCoords";
+                default:
+                    return structFieldName;
+            }
+        }
 
         public void SetDefine(string name)
         {
