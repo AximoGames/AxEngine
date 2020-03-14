@@ -1,0 +1,46 @@
+// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
+using OpenTK;
+using OpenTK.Graphics.OpenGL4;
+
+namespace Aximo.Render
+{
+    public static class StructHelper
+    {
+
+        public static VertexAttribPointerType GetVertexAttribPointerType<T>()
+        {
+            var type = typeof(T);
+            if (type == typeof(float))
+                return VertexAttribPointerType.Float;
+            return VertexAttribPointerType.Float;
+        }
+
+        public static int GetFieldSizeOf<T>()
+        {
+            var type = typeof(T);
+            if (type == typeof(float))
+                return 4;
+
+            return 4;
+        }
+
+        public static int GetFieldsOf<T>()
+        {
+            var type = typeof(T);
+            if (type == typeof(float))
+                return 1;
+            if (type == typeof(Vector4))
+                return 4;
+            if (type == typeof(Vector3))
+                return 3;
+            if (type == typeof(Vector2))
+                return 2;
+            throw new NotImplementedException();
+        }
+
+    }
+
+}

@@ -9,83 +9,39 @@ using OpenTK.Graphics.OpenGL4;
 namespace Aximo.Render
 {
 
-    public class VertexLayout
+    public class VertexLayout : VertexLayoutDefinition
     {
 
-        private int _Stride;
-        public int Stride => _Stride;
-        public void AddAttribute<T>(int index, bool normalized = false)
+        protected override VertexLayoutDefinitionAttribute CreateAttributeInstance()
         {
-            AddAttribute<T>(index, GetElementsOf<T>(), normalized);
+            return new VertexLayoutAttribute();
         }
 
-        public void AddAttribute<T>(int index, int size, bool normalized = false)
+        public virtual VertexLayoutAttribute AddAttribute<T>(int index, bool normalized = false)
         {
-            var offset = _Stride;
-            _Stride += size * GetSizeOf<T>();
-            var attr = new VertexLayoutAttribute
-            {
-                Index = index,
-                Size = size,
-                Type = GetVertexAttribPointerType<T>(),
-                Normalized = normalized,
-                Stride = 0, // will be set in UpdateStride()
-                Offset = offset,
-            };
-            Attributes.Add(attr);
-            UpdateStride();
+            return AddAttribute<T>(index, StructHelper.GetFieldsOf<T>(), normalized);
         }
 
-        private void UpdateStride()
+        public virtual VertexLayoutAttribute AddAttribute<T>(int index, int size, bool normalized = false)
         {
-            foreach (var attr in Attributes)
-                attr.Stride = _Stride;
+            var attr = base.AddAttribute<T>(size, normalized) as VertexLayoutAttribute;
+            attr.Index = index;
+            return attr;
         }
 
         internal void InitAttributes()
         {
             ObjectManager.PushDebugGroup("Init", "VertexLayout");
-            foreach (var attr in Attributes)
+            foreach (VertexLayoutAttribute attr in Attributes)
             {
                 if (attr.Index < 0)
                     continue;
+
                 GL.EnableVertexAttribArray(attr.Index);
                 GL.VertexAttribPointer(attr.Index, attr.Size, attr.Type, attr.Normalized, attr.Stride, attr.Offset);
             }
             ObjectManager.PopDebugGroup();
         }
-
-        private static VertexAttribPointerType GetVertexAttribPointerType<T>()
-        {
-            var type = typeof(T);
-            if (type == typeof(float))
-                return VertexAttribPointerType.Float;
-            throw new NotImplementedException();
-        }
-
-        private static int GetSizeOf<T>()
-        {
-            var type = typeof(T);
-            if (type == typeof(float))
-                return 4;
-            throw new NotImplementedException();
-        }
-
-        private static int GetElementsOf<T>()
-        {
-            var type = typeof(T);
-            if (type == typeof(float))
-                return 1;
-            if (type == typeof(Vector4))
-                return 4;
-            if (type == typeof(Vector3))
-                return 3;
-            if (type == typeof(Vector2))
-                return 1;
-            throw new NotImplementedException();
-        }
-
-        private List<VertexLayoutAttribute> Attributes = new List<VertexLayoutAttribute>();
 
     }
 

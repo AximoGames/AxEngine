@@ -5,9 +5,13 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
-    public class VertexLayoutAttribute : VertexLayoutDefinitionAttribute
+    public class VertexLayoutDefinitionAttribute
     {
-        public int Index;
+        public int Size;
+        public VertexAttribPointerType Type;
+        public bool Normalized;
+        public int Stride;
+        public int Offset;
     }
 
 }
