@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Aximo.Render
@@ -13,17 +14,20 @@ namespace Aximo.Render
 
         private int _Stride;
         public int Stride => _Stride;
+        public void AddAttribute<T>(int index, bool normalized = false)
+        {
+            AddAttribute<T>(index, GetElementsOf<T>(), normalized);
+        }
 
         public void AddAttribute<T>(int index, int size, bool normalized = false)
         {
-            var type = typeof(T);
             var offset = _Stride;
-            _Stride += size * GetSizeOf(type);
+            _Stride += size * GetSizeOf<T>();
             var attr = new VertexLayoutAttribute
             {
                 Index = index,
                 Size = size,
-                Type = GetVertexAttribPointerType(type),
+                Type = GetVertexAttribPointerType<T>(),
                 Normalized = normalized,
                 Stride = 0, // will be set in UpdateStride()
                 Offset = offset,
@@ -51,17 +55,33 @@ namespace Aximo.Render
             ObjectManager.PopDebugGroup();
         }
 
-        private static VertexAttribPointerType GetVertexAttribPointerType(Type type)
+        private static VertexAttribPointerType GetVertexAttribPointerType<T>()
         {
+            var type = typeof(T);
             if (type == typeof(float))
                 return VertexAttribPointerType.Float;
             throw new NotImplementedException();
         }
 
-        private static int GetSizeOf(Type type)
+        private static int GetSizeOf<T>()
         {
+            var type = typeof(T);
             if (type == typeof(float))
                 return 4;
+            throw new NotImplementedException();
+        }
+
+        private static int GetElementsOf<T>()
+        {
+            var type = typeof(T);
+            if (type == typeof(float))
+                return 1;
+            if (type == typeof(Vector4))
+                return 4;
+            if (type == typeof(Vector3))
+                return 3;
+            if (type == typeof(Vector2))
+                return 1;
             throw new NotImplementedException();
         }
 
