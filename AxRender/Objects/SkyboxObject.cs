@@ -31,7 +31,7 @@ namespace Aximo.Render
             //txt = Texture.LoadCubeMap("Textures/desert-skybox/#.tga");
             txt = Texture.LoadCubeMap("Textures/water-skybox/#.jpg");
 
-            var layout = new VertexLayout();
+            var layout = new VertexLayoutBinded();
             layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 3);
 
             vao = new VertexArrayObject(layout);

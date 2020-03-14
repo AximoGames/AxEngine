@@ -34,7 +34,7 @@ namespace Aximo.Render
                 SourceTexture = new Texture(TexturePath);
             }
 
-            var layout = new VertexLayout();
+            var layout = new VertexLayoutBinded();
             layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 2);
             layout.AddAttribute<float>(_shader.GetAttribLocation("aTexCoords"), 2);
 

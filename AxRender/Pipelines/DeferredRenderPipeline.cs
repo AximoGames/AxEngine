@@ -73,7 +73,7 @@ namespace Aximo.Render
             vbo.Create();
             vbo.Bind();
 
-            var layout = new VertexLayout();
+            var layout = new VertexLayoutBinded();
             layout.AddAttribute<float>(_DefLightShader.GetAttribLocation("aPos"), 2);
             layout.AddAttribute<float>(_DefLightShader.GetAttribLocation("aTexCoords"), 2);
 

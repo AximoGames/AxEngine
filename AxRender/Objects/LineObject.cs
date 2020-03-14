@@ -41,7 +41,7 @@ namespace Aximo.Render
 
             _Shader = new Shader("Shaders/lines.vert", "Shaders/lines.frag");
 
-            var layout = new VertexLayout();
+            var layout = new VertexLayoutBinded();
             layout.AddAttribute<float>(_Shader.GetAttribLocation("aPos"), 3);
             layout.AddAttribute<float>(_Shader.GetAttribLocation("aColor"), 4);
 

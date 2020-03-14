@@ -63,7 +63,7 @@ namespace Aximo.Render
 
             _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
 
-            var layout = new VertexLayout();
+            var layout = new VertexLayoutBinded();
             layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 3);
             layout.AddAttribute<float>(_shader.GetAttribLocation("aNormal"), 3);
             layout.AddAttribute<float>(_shader.GetAttribLocation("aTexCoords"), 2);

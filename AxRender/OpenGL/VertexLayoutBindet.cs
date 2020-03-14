@@ -9,29 +9,29 @@ using OpenTK.Graphics.OpenGL4;
 namespace Aximo.Render
 {
 
-    public class VertexLayout : VertexLayoutDefinition
+    public class VertexLayoutBinded : VertexLayoutDefinition
     {
 
         protected override VertexLayoutDefinitionAttribute CreateAttributeInstance()
         {
-            return new VertexLayoutAttribute();
+            return new VertexLayoutBindedAttribute();
         }
 
-        public virtual VertexLayoutAttribute AddAttribute<T>(int index, bool normalized = false)
+        public virtual VertexLayoutBindedAttribute AddAttribute<T>(int index, bool normalized = false)
         {
             return AddAttribute<T>(index, StructHelper.GetFieldsOf<T>(), normalized);
         }
 
         protected override void AddAttribute(VertexLayoutDefinitionAttribute attr)
         {
-            if (!(attr is VertexLayoutAttribute))
+            if (!(attr is VertexLayoutBindedAttribute))
                 throw new InvalidOperationException();
             base.AddAttribute(attr);
         }
 
-        public virtual VertexLayoutAttribute AddAttribute<T>(int index, int size, bool normalized = false)
+        public virtual VertexLayoutBindedAttribute AddAttribute<T>(int index, int size, bool normalized = false)
         {
-            var attr = base.AddAttribute<T>("", size, normalized) as VertexLayoutAttribute;
+            var attr = base.AddAttribute<T>("", size, normalized) as VertexLayoutBindedAttribute;
             attr.Index = index;
             return attr;
         }
@@ -39,7 +39,7 @@ namespace Aximo.Render
         internal void InitAttributes()
         {
             ObjectManager.PushDebugGroup("Init", "VertexLayout");
-            foreach (VertexLayoutAttribute attr in Attributes)
+            foreach (VertexLayoutBindedAttribute attr in Attributes)
             {
                 if (attr.Index < 0)
                     continue;

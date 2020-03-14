@@ -14,7 +14,7 @@ namespace Aximo.Render
 
         public int VertexCount { get; private set; }
 
-        public VertexLayout Layout { get; set; }
+        public VertexLayoutBinded Layout { get; set; }
 
         private VertexBufferObject _vbo;
         public VertexBufferObject Vbo => _vbo;
@@ -32,7 +32,7 @@ namespace Aximo.Render
             _ebo = ebo;
         }
 
-        public VertexArrayObject(VertexLayout layout, VertexBufferObject vbo = null, ElementsBufferObject ebo = null)
+        public VertexArrayObject(VertexLayoutBinded layout, VertexBufferObject vbo = null, ElementsBufferObject ebo = null)
         {
             Layout = layout;
             _vbo = vbo;

@@ -13,13 +13,13 @@ namespace Aximo.Render
     public class VertexLayoutDefinition
     {
 
-        public VertexLayout BindToShader(Shader shader)
+        public VertexLayoutBinded BindToShader(Shader shader)
         {
-            var layout = new VertexLayout();
+            var layout = new VertexLayoutBinded();
             layout._Stride = _Stride;
             foreach (var srcAttr in Attributes)
             {
-                var attr = layout.CreateAttributeInstance() as VertexLayoutAttribute;
+                var attr = layout.CreateAttributeInstance() as VertexLayoutBindedAttribute;
                 srcAttr.CopyTo(attr);
                 attr.Index = shader.GetAttribLocation(attr.Name);
                 layout.AddAttribute(attr);
