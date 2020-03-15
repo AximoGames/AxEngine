@@ -7,12 +7,25 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 
+using Aximo.Render;
+
 namespace Aximo.Engine
 {
 
     public abstract class LightComponent : ActorComponent
     {
+        internal ILightObject LightObject;
 
+        internal override void ApplyChanges()
+        {
+            if (!HasChanges)
+                return;
+
+            if (LightObject == null)
+                LightObject = new LightObject();
+
+            base.ApplyChanges();
+        }
     }
 
 }

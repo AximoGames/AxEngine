@@ -385,7 +385,7 @@ namespace Aximo.Engine
                 }
                 else if (rot != null)
                 {
-                    rot.Rotate = new Vector3(
+                    rot.Rotate = new Quaternion(
                         rot.Rotate.X + (MouseSpeed[1] * 2),
                         rot.Rotate.Y,
                         rot.Rotate.Z + (MouseSpeed[0] * 2));

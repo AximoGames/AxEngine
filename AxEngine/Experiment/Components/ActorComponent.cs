@@ -14,6 +14,8 @@ namespace Aximo.Engine
     {
         public int ComponentId { get; private set; }
 
+        public bool HasChanges { get; internal set; } = true;
+
         private static int LastComponentId;
 
         private static int GetNewComponentId()
@@ -45,6 +47,11 @@ namespace Aximo.Engine
                 throw new InvalidOperationException("Actor not attached");
 
             Actor = null;
+        }
+
+        internal virtual void ApplyChanges()
+        {
+            HasChanges = false;
         }
 
     }

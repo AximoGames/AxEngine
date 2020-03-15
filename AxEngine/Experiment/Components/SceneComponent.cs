@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using OpenTK;
 
 namespace Aximo.Engine
 {
@@ -67,6 +68,12 @@ namespace Aximo.Engine
         public IReadOnlyList<SceneComponent> ParentComponents { get; private set; }
 
         public SceneComponent RootComponent => ParentComponents.FirstOrDefault();
+
+        public Quaternion RelativeRotation { get; set; }
+        public Vector3 RelativeScale { get; set; } = Vector3.One;
+        public Vector3 RelativeLocation { get; set; }
+
+        public Transform Transform => new Transform(RelativeRotation, RelativeScale, RelativeLocation);
 
     }
 

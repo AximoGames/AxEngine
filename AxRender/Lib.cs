@@ -127,7 +127,7 @@ namespace Aximo.Render
     public interface IScaleRotate : IPosition
     {
         Vector3 Scale { get; set; }
-        Vector3 Rotate { get; set; }
+        Quaternion Rotate { get; set; }
     }
 
     public interface ILightObject : IPosition, IGameObject

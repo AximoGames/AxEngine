@@ -38,6 +38,25 @@ namespace Aximo.Engine
             return new StaticMeshSceneProxy(this);
         }
 
+        internal override void ApplyChanges()
+        {
+            if (!HasChanges)
+                return;
+
+            if (RenderableObject == null)
+                RenderableObject = new SimpleVertexObject();
+
+            var obj = (SimpleVertexObject)RenderableObject;
+            obj.Scale = new Vector3(2.0f);
+            obj.SetVertices(Mesh);
+            obj.Position = RelativeLocation;
+            obj.Scale = RelativeScale;
+            obj.Rotate = RelativeRotation;
+            RenderContext.Current.AddObject(obj);
+
+            base.ApplyChanges();
+        }
+
     }
 
     public class PrimitiveSceneProxy

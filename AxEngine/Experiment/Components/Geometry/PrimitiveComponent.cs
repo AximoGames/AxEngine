@@ -14,6 +14,8 @@ namespace Aximo.Engine
     public class PrimitiveComponent : SceneComponent
     {
 
+        internal IRenderableObject RenderableObject;
+
         public bool CastShadow { get; set; }
 
         public virtual PrimitiveSceneProxy CreateProxy()
@@ -39,6 +41,7 @@ namespace Aximo.Engine
         {
             _Materials.Remove(material);
         }
+
 
     }
 

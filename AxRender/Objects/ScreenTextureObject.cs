@@ -12,7 +12,7 @@ namespace Aximo.Render
         private Shader _shader;
 
         public Vector3 Scale { get; set; } = Vector3.One;
-        public Vector3 Rotate { get; set; }
+        public Quaternion Rotate { get; set; }
         public Vector3 Position { get; set; }
 
         private float[] _vertices = DataHelper.Quad;

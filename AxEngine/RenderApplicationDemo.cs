@@ -8,6 +8,7 @@ using OpenTK;
 
 namespace Aximo.Engine
 {
+
     public class RenderApplicationDemo : RenderApplication
     {
         public RenderApplicationDemo(RenderApplicationStartup startup) : base(startup)
@@ -17,6 +18,16 @@ namespace Aximo.Engine
         protected override void SetupScene()
         {
             //RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>();
+
+            var act = new Actor();
+            var comp = new StaticMeshComponent();
+            comp.SetMesh(MeshBuilder.Sphere(2));
+            comp.RelativeLocation = new Vector3(-1, 0, 0);
+            comp.RelativeScale = new Vector3(1.5f);
+            act.AddComponent(comp);
+            GameContext.AddActor(act);
+
+            GameContext.Sync();
 
             RenderContext.AddObject(new TestObject()
             {
@@ -97,7 +108,7 @@ namespace Aximo.Engine
             RenderContext.AddObject(new TestObject()
             {
                 Name = "Box1",
-                Rotate = new Vector3(0, 0, 0.5f),
+                Rotate = new Quaternion(0, 0, 0.5f),
                 Scale = new Vector3(1),
                 Position = new Vector3(0, 0, 0.5f),
                 Debug = true,
