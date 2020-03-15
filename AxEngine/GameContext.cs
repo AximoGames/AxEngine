@@ -1,6 +1,8 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Aximo.Render;
 using OpenTK;
@@ -21,40 +23,76 @@ namespace Aximo.Engine
         }
 
         public List<Actor> Actors = new List<Actor>();
+        private ConcurrentDictionary<string, List<Actor>> ActorNamehash = new ConcurrentDictionary<string, List<Actor>>();
+
+        public Actor GetActor(string name)
+        {
+            List<Actor> actors;
+            if (!ActorNamehash.TryGetValue(name, out actors))
+                return null;
+            if (actors.Count == 0)
+                return null;
+            return actors[0];
+        }
+
+        public Actor[] GetActors(string name)
+        {
+            List<Actor> actors;
+            if (!ActorNamehash.TryGetValue(name, out actors))
+                return Array.Empty<Actor>();
+            return actors.ToArray();
+        }
 
         public void AddActor(Actor actor)
         {
             Actors.Add(actor);
-
-            foreach (var comp in actor.Components)
-            {
-                if (comp is PrimitiveComponent)
-                    AddPrimitive((PrimitiveComponent)comp);
-                if (comp is LightComponent)
-                    AddLight((LightComponent)comp);
-            }
+            RegisterActorName(actor);
         }
 
-        private void AddLight(LightComponent comp)
+        internal void RegisterActorName(Actor actor)
         {
-            LightComponents.Add(comp);
+            if (string.IsNullOrEmpty(actor.Name))
+                return;
+
+            List<Actor> array;
+            if (!ActorNamehash.TryGetValue(actor.Name, out array))
+                ActorNamehash.TryAdd(actor.Name, array = new List<Actor>());
+            array.Add(actor);
         }
 
-        private void AddPrimitive(PrimitiveComponent comp)
+        internal void UnregisterActorName(Actor actor)
         {
-            PrimitiveComponents.Add(comp);
+            if (string.IsNullOrEmpty(actor.Name))
+                return;
+
+            List<Actor> array;
+            if (!ActorNamehash.TryGetValue(actor.Name, out array))
+                return;
+            array.Remove(actor);
         }
 
-        private List<LightComponent> LightComponents = new List<LightComponent>();
-        private List<PrimitiveComponent> PrimitiveComponents = new List<PrimitiveComponent>();
+        // private void AddLight(LightComponent comp)
+        // {
+        //     LightComponents.Add(comp);
+        // }
+
+        // private void AddPrimitive(PrimitiveComponent comp)
+        // {
+        //     PrimitiveComponents.Add(comp);
+        // }
+
+        // private List<LightComponent> LightComponents = new List<LightComponent>();
+        // private List<PrimitiveComponent> PrimitiveComponents = new List<PrimitiveComponent>();
+
+
 
         public void Sync()
         {
-            foreach (var light in LightComponents)
-                light.ApplyChanges();
-
-            foreach (var prim in PrimitiveComponents)
-                prim.ApplyChanges();
+            foreach (var act in Actors)
+            {
+                act.PropagateChanges();
+                act.SyncChanges();
+            }
         }
 
     }

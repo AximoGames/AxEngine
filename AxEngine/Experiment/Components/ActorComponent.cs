@@ -14,6 +14,8 @@ namespace Aximo.Engine
     {
         public int ComponentId { get; private set; }
 
+        public string Name { get; set; }
+
         public bool HasChanges { get; internal set; } = true;
 
         private static int LastComponentId;
@@ -28,7 +30,7 @@ namespace Aximo.Engine
             ComponentId = GetNewComponentId();
         }
 
-        public Actor Actor { get; private set; }
+        public virtual Actor Actor { get; private set; }
 
         internal void SetActor(Actor actor)
         {
@@ -49,9 +51,18 @@ namespace Aximo.Engine
             Actor = null;
         }
 
-        internal virtual void ApplyChanges()
+        internal virtual void PropagateChanges()
+        {
+        }
+
+        internal virtual void SyncChanges()
         {
             HasChanges = false;
+        }
+
+        protected internal void Update()
+        {
+            HasChanges = true;
         }
 
     }

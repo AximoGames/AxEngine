@@ -7,16 +7,24 @@ namespace Aximo
 {
     public struct Transform
     {
-        public Quaternion Rotation;
         public Vector3 Scale;
+        public Quaternion Rotation;
         public Vector3 Translation;
 
-        public Transform(Quaternion rotation, Vector3 scale, Vector3 translation)
+        public static readonly Transform Identity = new Transform(Vector3.One, Quaternion.Identity, Vector3.Zero);
+
+        public Transform(Vector3 scale, Quaternion rotation, Vector3 translation)
         {
-            Rotation = rotation;
             Scale = scale;
+            Rotation = rotation;
             Translation = translation;
         }
+
+        public Matrix4 GetMatrix()
+        {
+            return Matrix4.CreateScale(Scale) * Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateTranslation(Translation);
+        }
+
     }
 
 }

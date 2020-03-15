@@ -16,7 +16,7 @@ namespace Aximo.Engine
     {
         internal ILightObject LightObject;
 
-        internal override void ApplyChanges()
+        internal override void SyncChanges()
         {
             if (!HasChanges)
                 return;
@@ -24,7 +24,7 @@ namespace Aximo.Engine
             if (LightObject == null)
                 LightObject = new LightObject();
 
-            base.ApplyChanges();
+            base.SyncChanges();
         }
     }
 

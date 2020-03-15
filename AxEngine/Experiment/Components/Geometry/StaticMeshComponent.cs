@@ -23,14 +23,46 @@ namespace Aximo.Engine
     {
     }
 
+    public class CubeComponent : StaticMeshComponent
+    {
+        public CubeComponent() : base(MeshBuilder.Cube())
+        {
+        }
+    }
+
+    public class SphereComponent : StaticMeshComponent
+    {
+        public SphereComponent(int divisions = 2) : base(MeshBuilder.Sphere(2))
+        {
+        }
+    }
+
     public class StaticMeshComponent : MeshComponent
     {
+
+        public StaticMeshComponent()
+        {
+
+        }
+
+        public StaticMeshComponent(StaticMesh mesh)
+        {
+            SetMesh(mesh);
+        }
 
         public StaticMesh Mesh { get; private set; }
 
         public void SetMesh(StaticMesh mesh)
         {
             Mesh = mesh;
+            UpdateMesh();
+        }
+
+        protected internal bool MeshChanged;
+        protected internal void UpdateMesh()
+        {
+            MeshChanged = true;
+            Update();
         }
 
         public override PrimitiveSceneProxy CreateProxy()
@@ -38,23 +70,36 @@ namespace Aximo.Engine
             return new StaticMeshSceneProxy(this);
         }
 
-        internal override void ApplyChanges()
+        internal override void SyncChanges()
         {
             if (!HasChanges)
                 return;
 
+            bool created = false;
             if (RenderableObject == null)
+            {
+                created = true;
                 RenderableObject = new SimpleVertexObject();
+            }
 
             var obj = (SimpleVertexObject)RenderableObject;
-            obj.Scale = new Vector3(2.0f);
-            obj.SetVertices(Mesh);
-            obj.Position = RelativeLocation;
-            obj.Scale = RelativeScale;
-            obj.Rotate = RelativeRotation;
-            RenderContext.Current.AddObject(obj);
+            if (MeshChanged)
+            {
+                obj.SetVertices(Mesh);
+                MeshChanged = false;
+            }
 
-            base.ApplyChanges();
+            if (TransformChanged)
+            {
+                var trans = LocalToWorld();
+                obj.PositionMatrix = trans;
+                TransformChanged = false;
+            }
+
+            if (created)
+                RenderContext.Current.AddObject(RenderableObject);
+
+            base.SyncChanges();
         }
 
     }

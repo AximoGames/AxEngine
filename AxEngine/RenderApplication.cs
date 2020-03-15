@@ -190,6 +190,7 @@ namespace Aximo.Engine
         {
             OnRenderFrame(e);
 
+            GameContext.Sync();
             Renderer.Render();
             window.SwapBuffers();
         }

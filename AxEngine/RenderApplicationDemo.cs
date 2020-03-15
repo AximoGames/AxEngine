@@ -19,15 +19,11 @@ namespace Aximo.Engine
         {
             //RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>();
 
-            var act = new Actor();
-            var comp = new StaticMeshComponent();
-            comp.SetMesh(MeshBuilder.Sphere(2));
-            comp.RelativeLocation = new Vector3(-1, 0, 0);
-            comp.RelativeScale = new Vector3(1.5f);
-            act.AddComponent(comp);
-            GameContext.AddActor(act);
-
-            GameContext.Sync();
+            GameContext.AddActor(new Actor(new SphereComponent()
+            {
+                RelativeTranslation = new Vector3(-1, 0, 0),
+                RelativeScale = new Vector3(1.5f),
+            }));
 
             RenderContext.AddObject(new TestObject()
             {
@@ -143,6 +139,26 @@ namespace Aximo.Engine
                 //PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
             });
 
+            GameContext.AddActor(new Actor(
+                new SceneComponent(
+                    new CubeComponent
+                    {
+                        RelativeTranslation = new Vector3(-1, 0, 0),
+                    },
+                    new SphereComponent
+                    {
+                        RelativeTranslation = new Vector3(1f, 0, 0),
+                    })
+                {
+                    Name = "CompGroup1",
+                    RelativeTranslation = new Vector3(0, 18, 1f),
+                    RelativeRotation = new Quaternion(0, 0, MathF.PI / 4),
+                    RelativeScale = new Vector3(2f),
+                })
+            {
+                Name = "GroupActor1",
+            });
+
             RenderContext.AddObject(new TestObject()
             {
                 Name = "BoxFar1",
@@ -159,22 +175,22 @@ namespace Aximo.Engine
                 Debug = true,
                 // Enabled = false,
             });
-            RenderContext.AddObject(new TestObject()
-            {
-                Name = "BoxFar3",
-                Scale = new Vector3(1),
-                Position = new Vector3(0, 18, 0.5f),
-                Debug = true,
-                // Enabled = false,
-            });
-            RenderContext.AddObject(new TestObject()
-            {
-                Name = "BoxFar4",
-                Scale = new Vector3(1),
-                Position = new Vector3(-1, 16, 0.5f),
-                Debug = true,
-                // Enabled = false,
-            });
+            // RenderContext.AddObject(new TestObject()
+            // {
+            //     Name = "BoxFar3",
+            //     Scale = new Vector3(1),
+            //     Position = new Vector3(0, 18, 0.5f),
+            //     Debug = true,
+            //     // Enabled = false,
+            // });
+            // RenderContext.AddObject(new TestObject()
+            // {
+            //     Name = "BoxFar4",
+            //     Scale = new Vector3(1),
+            //     Position = new Vector3(-1, 16, 0.5f),
+            //     Debug = true,
+            //     // Enabled = false,
+            // });
 
             // For performance reasons, skybox should rendered as last
             RenderContext.AddObject(new SkyboxObject()
@@ -184,7 +200,7 @@ namespace Aximo.Engine
             });
         }
 
-        private double LightAngle = 0;
+        private float LightAngle = 0;
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
@@ -194,12 +210,16 @@ namespace Aximo.Engine
         {
             if (RenderContext.LightObjects.Count > 0)
             {
-                LightAngle -= 0.01;
+                LightAngle -= 0.01f;
                 var pos = new Vector3((float)(Math.Cos(LightAngle) * 2f), (float)(Math.Sin(LightAngle) * 2f), 1.5f);
                 ILightObject light = RenderContext.LightObjects[0];
 
                 light.Position = pos;
             }
+
+            var actt = GameContext.GetActor("GroupActor1");
+            var compp = actt.GetComponent<SceneComponent>("CompGroup1");
+            compp.RelativeRotation = new Quaternion(0, 0, LightAngle * 2);
 
             if (CurrentMouseWorldPositionIsValid)
             {

@@ -24,11 +24,16 @@ namespace Aximo.Render
 
         public Matrix4 GetModelMatrix()
         {
+            if (PositionMatrix != Matrix4.Identity)
+            {
+                return PositionMatrix;
+            }
+
             return Matrix4.CreateScale(Scale)
-            * Matrix4.CreateRotationX(Rotate.X * (MathF.PI * 2))
-            * Matrix4.CreateRotationY(Rotate.Y * (MathF.PI * 2))
-            * Matrix4.CreateRotationZ(Rotate.Z * (MathF.PI * 2))
-            * Matrix4.CreateTranslation((new Vector4(Position, 1.0f) * PositionMatrix).Xyz);
+                * Matrix4.CreateRotationX(Rotate.X * (MathF.PI * 2))
+                * Matrix4.CreateRotationY(Rotate.Y * (MathF.PI * 2))
+                * Matrix4.CreateRotationZ(Rotate.Z * (MathF.PI * 2))
+                * Matrix4.CreateTranslation((new Vector4(Position, 1.0f) * PositionMatrix).Xyz);
         }
 
         private Material _MaterialTmp;

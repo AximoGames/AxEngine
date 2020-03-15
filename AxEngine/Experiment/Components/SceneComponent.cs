@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -26,6 +27,11 @@ namespace Aximo.Engine
             _ParentComponents = new List<SceneComponent>();
             ParentComponents = new ReadOnlyCollection<SceneComponent>(_ParentComponents);
         }
+        public SceneComponent(params SceneComponent[] childs) : this()
+        {
+            foreach (var child in childs)
+                AddComponent(child);
+        }
 
         public bool CanAttach(SceneComponent child)
         {
@@ -34,13 +40,15 @@ namespace Aximo.Engine
 
         public void AddComponent(SceneComponent child)
         {
-            if (CanAttach(child))
+            if (!CanAttach(child))
                 throw new InvalidOperationException("Can't attach this child");
 
             _Components.Add(child);
             child.Parent = this;
 
             child.SetParents();
+
+            Actor?.RegisterComponentName(child);
         }
 
         private void SetParents()
@@ -62,6 +70,8 @@ namespace Aximo.Engine
                 return;
 
             child.Parent = null;
+
+            Actor?.RegisterComponentName(child);
         }
 
         private List<SceneComponent> _ParentComponents;
@@ -69,11 +79,85 @@ namespace Aximo.Engine
 
         public SceneComponent RootComponent => ParentComponents.FirstOrDefault();
 
-        public Quaternion RelativeRotation { get; set; }
-        public Vector3 RelativeScale { get; set; } = Vector3.One;
-        public Vector3 RelativeLocation { get; set; }
+        public override Actor Actor => RootComponent?.Actor;
 
-        public Transform Transform => new Transform(RelativeRotation, RelativeScale, RelativeLocation);
+        public Vector3 RelativeScale { get; set; } = Vector3.One;
+
+        private Quaternion _RelativeRotation = Quaternion.Identity;
+        public Quaternion RelativeRotation
+        {
+            get
+            {
+                return _RelativeRotation;
+            }
+            set
+            {
+                if (_RelativeRotation == value)
+                    return;
+                _RelativeRotation = value;
+                UpdateTransform();
+            }
+        }
+
+        private Vector3 _RelativeTranslation;
+        public Vector3 RelativeTranslation
+        {
+            get => _RelativeTranslation;
+            set
+            {
+                if (_RelativeTranslation == value)
+                    return;
+                _RelativeTranslation = value;
+                UpdateTransform();
+            }
+        }
+
+        public Transform Transform => new Transform(RelativeScale, RelativeRotation, RelativeTranslation);
+
+        public Matrix4 LocalToWorld()
+        {
+            //var trans = Matrix4.Identity;
+            var trans = Transform.GetMatrix();
+
+            var parent = Parent;
+            while (parent != null)
+            {
+                trans *= parent.Transform.GetMatrix();
+                parent = parent.Parent;
+            }
+            //trans *= Transform.GetMatrix();
+            //return Transform.GetMatrix();
+            //return Matrix4.CreateScale(2);
+            return trans;
+        }
+
+        protected internal bool TransformChanged;
+        protected internal void UpdateTransform()
+        {
+            Update();
+            TransformChanged = true;
+        }
+
+        internal override void PropagateChanges()
+        {
+            if (TransformChanged)
+                foreach (var child in Components)
+                    child.UpdateTransform();
+
+            foreach (var child in Components)
+                child.PropagateChanges();
+        }
+
+        internal override void SyncChanges()
+        {
+            if (!HasChanges)
+                return;
+
+            foreach (var comp in Components)
+                comp.SyncChanges();
+
+            base.SyncChanges();
+        }
 
     }
 
