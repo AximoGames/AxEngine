@@ -16,8 +16,6 @@ in vec3 FragPos;
 in vec3 Normal;
 
 uniform Material material;
-uniform sampler2D texture_diffuse1;
-uniform sampler2D texture_specular1;
 
 void main()
 {    

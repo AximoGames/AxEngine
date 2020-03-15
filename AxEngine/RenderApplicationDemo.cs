@@ -16,7 +16,7 @@ namespace Aximo.Engine
 
         protected override void SetupScene()
         {
-            RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>();
+            //RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>();
 
             RenderContext.AddObject(new TestObject()
             {
