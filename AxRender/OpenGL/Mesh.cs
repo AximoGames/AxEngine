@@ -14,6 +14,29 @@ namespace Aximo.Render
             MeshData = meshData;
         }
 
+        public Mesh(MeshData meshData, Material material)
+        {
+            MeshData = meshData;
+            Materials.Add(material);
+        }
+
+        public Material Material
+        {
+            get
+            {
+                if (Materials.Count == 0)
+                    return null;
+                return Materials[0];
+            }
+            set
+            {
+                if (Materials.Count == 0)
+                    Materials.Add(value);
+                else
+                    Materials[0] = value;
+            }
+        }
+
         public List<Material> Materials = new List<Material>();
         public MeshData MeshData { get; set; }
 

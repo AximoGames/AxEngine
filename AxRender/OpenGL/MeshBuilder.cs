@@ -4,6 +4,24 @@
 namespace Aximo.Render
 {
 
+    public static class MeshBuilder
+    {
+        public static Mesh Cube()
+        {
+            return new Mesh(MeshDataBuilder.Cube(), Material.GetDefault());
+        }
+
+        public static Mesh DebugCube()
+        {
+            return new Mesh(MeshDataBuilder.DebugCube(), Material.GetDefault());
+        }
+
+        public static Mesh Sphere(int divisions)
+        {
+            return new Mesh(MeshDataBuilder.Sphere(divisions), Material.GetDefault());
+        }
+    }
+
     public static class MeshDataBuilder
     {
         public static MeshData Cube()

@@ -8,7 +8,7 @@ namespace Aximo.Render
 
         public override void Init()
         {
-            SetVertices(MeshDataBuilder.Sphere(2));
+            SetVertices(MeshBuilder.Sphere(2));
 
             base.Init();
         }

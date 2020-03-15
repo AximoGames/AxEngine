@@ -20,8 +20,6 @@ namespace Aximo.Render
 
         public bool RenderShadow { get; set; } = true;
 
-        public Material Material { get; set; } = Material.GetDefault();
-
         public Matrix4 PositionMatrix = RenderContext.Current.WorldPositionMatrix;
 
         public Matrix4 GetModelMatrix()
@@ -33,9 +31,27 @@ namespace Aximo.Render
             * Matrix4.CreateTranslation((new Vector4(Position, 1.0f) * PositionMatrix).Xyz);
         }
 
+        private Material _MaterialTmp;
+        public Material Material
+        {
+            get
+            {
+                return Mesh?.Material;
+            }
+            set
+            {
+                if (Mesh == null)
+                {
+                    _MaterialTmp = value;
+                    return;
+                }
+                Mesh.Material = value;
+            }
+        }
+
         public bool Debug;
 
-        private MeshData MeshData;
+        private Mesh Mesh;
 
         private List<VertexArrayObjectMaterial> vaoList = new List<VertexArrayObjectMaterial>();
 
@@ -60,11 +76,13 @@ namespace Aximo.Render
 
             UsePipeline(PrimaryRenderPipeline);
 
-            var mesh = new Mesh(MeshData);
-            var mat = Material ?? Material.GetDefault();
-            mesh.Materials.Add(mat);
+            if (_MaterialTmp != null)
+            {
+                Mesh.Material = _MaterialTmp;
+                _MaterialTmp = null;
+            }
 
-            foreach (var m in mesh.Materials)
+            foreach (var m in Mesh.Materials)
             {
                 m.CreateShaders();
                 if (!string.IsNullOrEmpty(m.DiffuseImagePath))
@@ -72,8 +90,8 @@ namespace Aximo.Render
                 if (!string.IsNullOrEmpty(m.SpecularImagePath))
                     txt1 = new Texture(m.SpecularImagePath);
 
-                var vao = new VertexArrayObject(MeshData.BindLayoutToShader(mat.Shader));
-                vao.SetData(MeshData);
+                var vao = new VertexArrayObject(Mesh.MeshData.BindLayoutToShader(m.Shader));
+                vao.SetData(Mesh.MeshData);
                 vaoList.Add(new VertexArrayObjectMaterial
                 {
                     vao = vao,
@@ -82,9 +100,9 @@ namespace Aximo.Render
             }
         }
 
-        public void SetVertices(MeshData data)
+        public void SetVertices(Mesh mesh)
         {
-            MeshData = data;
+            Mesh = mesh;
         }
 
         public void OnForwardRender()
@@ -110,7 +128,7 @@ namespace Aximo.Render
 
                 shader.SetInt("shadowMap", 2);
 
-                shader.SetMaterial("material", Material);
+                shader.SetMaterial("material", mat.material);
 
                 ApplyShaderParams(shader);
 
