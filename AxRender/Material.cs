@@ -39,6 +39,9 @@ namespace Aximo.Render
         public Shader ShadowShader { get; set; }
         public Shader CubeShadowShader { get; set; }
 
+        public Texture txt0;
+        public Texture txt1;
+
         public static Material GetDefault()
         {
             var mat = new Material()
@@ -56,6 +59,11 @@ namespace Aximo.Render
 
         public void CreateShaders()
         {
+            if (!string.IsNullOrEmpty(DiffuseImagePath))
+                txt0 = new Texture(DiffuseImagePath);
+            if (!string.IsNullOrEmpty(SpecularImagePath))
+                txt1 = new Texture(SpecularImagePath);
+
             if (Shader == null)
                 Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
             if (DefGeometryShader == null)

@@ -51,15 +51,15 @@ void main()
         Light light = lights[i];
 
         // diffuse
-        vec3 lightDir = normalize(lights[i].position - FragPos);
-        vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * lights[i].color;
+        vec3 lightDir = normalize(light.position - FragPos);
+        vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * light.color;
         // specular
         vec3 halfwayDir = normalize(lightDir + viewDir);  
         float spec = pow(max(dot(Normal, halfwayDir), 0.0), material.shininess);
-        vec3 specular = lights[i].color * spec * Specular;
+        vec3 specular = light.color * spec * Specular;
         // attenuation
-        float distance = length(lights[i].position - FragPos);
-        float attenuation = 1.0 / (1.0 + lights[i].linear * distance + lights[i].quadratic * distance * distance);
+        float distance = length(light.position - FragPos);
+        float attenuation = 1.0 / (1.0 + light.linear * distance + light.quadratic * distance * distance);
 
         attenuation = 1.0; // debug
 

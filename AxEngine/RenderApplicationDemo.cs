@@ -14,10 +14,10 @@ namespace Aximo.Engine
         {
         }
 
-        //public override IRenderPipeline PrimaryRenderPipeline => ctx.GetPipeline<ForwardRenderPipeline>();
-
         protected override void SetupScene()
         {
+            RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>();
+
             RenderContext.AddObject(new TestObject()
             {
                 Name = "Ground",

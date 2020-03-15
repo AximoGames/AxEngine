@@ -61,9 +61,6 @@ namespace Aximo.Render
             public Material material;
         }
 
-        private Texture txt0;
-        private Texture txt1;
-
         public IRenderPipeline PrimaryRenderPipeline;
 
         public override void Init()
@@ -85,10 +82,6 @@ namespace Aximo.Render
             foreach (var m in Mesh.Materials)
             {
                 m.CreateShaders();
-                if (!string.IsNullOrEmpty(m.DiffuseImagePath))
-                    txt0 = new Texture(m.DiffuseImagePath);
-                if (!string.IsNullOrEmpty(m.SpecularImagePath))
-                    txt1 = new Texture(m.SpecularImagePath);
 
                 var vao = new VertexArrayObject(Mesh.MeshData.BindLayoutToShader(m.Shader));
                 vao.SetData(Mesh.MeshData);
@@ -112,10 +105,10 @@ namespace Aximo.Render
                 var shader = mat.material.Shader;
                 mat.vao.Bind();
 
-                if (txt0 != null)
-                    txt0.Bind(TextureUnit.Texture0);
-                if (txt1 != null)
-                    txt1.Bind(TextureUnit.Texture1);
+                if (mat.material.txt0 != null)
+                    mat.material.txt0.Bind(TextureUnit.Texture0);
+                if (mat.material.txt1 != null)
+                    mat.material.txt1.Bind(TextureUnit.Texture1);
                 Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
 
                 shader.Bind();
@@ -159,10 +152,14 @@ namespace Aximo.Render
                     var defGeometryShader = mat.material.DefGeometryShader;
                     mat.vao.Bind();
 
-                    txt0.Bind(TextureUnit.Texture0);
-                    txt1.Bind(TextureUnit.Texture1);
+                    if (mat.material.txt0 != null)
+                        mat.material.txt0.Bind(TextureUnit.Texture0);
+                    if (mat.material.txt1 != null)
+                        mat.material.txt1.Bind(TextureUnit.Texture1);
 
                     defGeometryShader.Bind();
+
+                    defGeometryShader.SetMaterial("material", mat.material);
 
                     defGeometryShader.SetMatrix4("model", GetModelMatrix());
                     defGeometryShader.SetMatrix4("view", Camera.ViewMatrix);

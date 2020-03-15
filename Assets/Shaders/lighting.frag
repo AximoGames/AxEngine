@@ -46,12 +46,15 @@ void main()
 {
 	vec3 viewDir = normalize(viewPos - FragPos);
     vec3 color;
+    float txtSpec;
 
 #ifndef OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
     color = BlendColor(texture(material.diffuse, TexCoords).rgb, material.color, material.colorBlendMode);
 #else
 #include OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
 #endif
+
+    txtSpec = texture(material.specular, TexCoords).r;
 
     //vec3 color = material.color; // solid color for debugging
     vec3 normal = normalize(Normal);
@@ -73,7 +76,10 @@ void main()
         float spec = 0.0;
         vec3 halfwayDir = normalize(lightDir + viewDir);
         spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
-        vec3 specular = light.color * spec * material.specularStrength;
+        // float specularStrength;
+        // //specularStrength = material.specularStrength;
+        // specularStrength = ;
+        vec3 specular = light.color * spec * txtSpec;
 
         // calculate shadow
    
