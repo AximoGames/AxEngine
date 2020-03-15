@@ -53,107 +53,110 @@ namespace Aximo.Render
 
             Console.WriteLine($"Vendor: {vendor}, version: {version}, shadinglangVersion: {shadingLanguageVersion}, renderer: {renderer}");
 
+            //PrintExtensions();
+
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-
-            ObjectManager.PushDebugGroup("Setup", "Pipelines");
-            SetupPipelines();
-            ObjectManager.PopDebugGroup();
-
-            PrimaryRenderPipeline = GetPipeline<DeferredRenderPipeline>();
         }
-
-        public void AddPipeline(IRenderPipeline pipeline)
-        {
-            RenderPipelines.Add(pipeline);
-        }
-
-        public List<IRenderPipeline> RenderPipelines = new List<IRenderPipeline>();
-
-        public IRenderPipeline CurrentPipeline { get; internal set; }
 
         public void SetupPipelines()
         {
-            AddPipeline(new DirectionalShadowRenderPipeline());
-            AddPipeline(new PointShadowRenderPipeline());
-            AddPipeline(new DeferredRenderPipeline());
-            AddPipeline(new ForwardRenderPipeline());
-            AddPipeline(new ScreenPipeline());
-
-            ObjectManager.PushDebugGroup("BeforeInit", "Pipelines");
-            foreach (var pipe in RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("BeforeInit", pipe);
-                pipe.BeforeInit();
-                ObjectManager.PopDebugGroup();
-            }
-            ObjectManager.PopDebugGroup();
-
-            ObjectManager.PushDebugGroup("Init", "Pipelines");
-            foreach (var pipe in RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("Init", pipe);
-                pipe.Init();
-                ObjectManager.PopDebugGroup();
-            }
-            ObjectManager.PopDebugGroup();
-
-            ObjectManager.PushDebugGroup("AfterInit", "Pipelines");
-            foreach (var pipe in RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("AfterInit", pipe);
-                pipe.AfterInit();
-                ObjectManager.PopDebugGroup();
-            }
-            ObjectManager.PopDebugGroup();
         }
-
-        public T GetPipeline<T>()
-            where T : class, IRenderPipeline
-        {
-            return (T)RenderPipelines.FirstOrDefault(p => p is T);
-        }
-
-        public IRenderPipeline PrimaryRenderPipeline { get; set; }
 
         public void OnScreenResize(Vector2i size)
         {
-            ScreenSize = size;
-            GL.Viewport(0, 0, ScreenSize.X, ScreenSize.Y);
-
-            // GL.Scissor(0, 0, ScreenSize.X, ScreenSize.Y);
-            // GL.Enable(EnableCap.ScissorTest);
-
-            foreach (var pipe in Renderer.Current.RenderPipelines)
-                pipe.OnScreenResize();
-
-            Context.OnScreenResize();
         }
 
-        public void InitRender()
-        {
-            foreach (var pipeline in RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("InitRender", pipeline);
-                CurrentPipeline = pipeline;
-                pipeline.InitRender(Context, Context.Camera);
-                ObjectManager.PopDebugGroup();
-            }
-        }
+        public RenderContext RenderContext => RenderContext.Current;
 
         public void Render()
         {
-            foreach (var pipeline in RenderPipelines)
+            //--
+            var ubo = new UniformBufferObject();
+            ubo.Create();
+            if (RenderContext.LightObjects.Count >= 2)
             {
-                ObjectManager.PushDebugGroup("Render", pipeline);
-                CurrentPipeline = pipeline;
-                pipeline.Render(Context, Context.Camera);
-                ObjectManager.PopDebugGroup();
+                var lightsData = new GlslLight[2];
+                lightsData[0].Position = RenderContext.LightObjects[0].Position;
+                lightsData[0].Color = new Vector3(0.5f, 0.5f, 0.5f);
+                lightsData[0].ShadowLayer = RenderContext.LightObjects[0].ShadowTextureIndex;
+                lightsData[0].DirectionalLight = RenderContext.LightObjects[0].LightType == LightType.Directional ? 1 : 0;
+                lightsData[0].LightSpaceMatrix = Matrix4.Transpose(RenderContext.LightObjects[0].LightCamera.ViewMatrix * RenderContext.LightObjects[0].LightCamera.ProjectionMatrix);
+                lightsData[0].Linear = 0.1f;
+                lightsData[0].Quadric = 0f;
+
+                lightsData[1].Position = RenderContext.LightObjects[1].Position;
+                lightsData[1].Color = new Vector3(0.5f, 0.5f, 0.5f);
+                lightsData[1].ShadowLayer = RenderContext.LightObjects[1].ShadowTextureIndex;
+                lightsData[1].DirectionalLight = RenderContext.LightObjects[1].LightType == LightType.Directional ? 1 : 0;
+                lightsData[1].LightSpaceMatrix = Matrix4.Transpose(RenderContext.LightObjects[1].LightCamera.ViewMatrix * RenderContext.LightObjects[1].LightCamera.ProjectionMatrix);
+                lightsData[1].Linear = 0.1f;
+                lightsData[1].Quadric = 0f;
+                ubo.SetData(lightsData);
+
+                ubo.SetBindingPoint(RenderContext.LightBinding);
             }
+
+            //--
+            GL.Enable(EnableCap.DepthTest);
+
+            //--
+
+            RenderContext.InitRender();
+            RenderContext.Render();
+
+            //--
+
+            // Configure
+
+            // Render objects
+
+            // Render Screen Surface
+
+            //CheckForProgramError();
+
+            ubo.Free();
+        }
+
+        private void CheckForProgramError()
+        {
+            var err = LastErrorCode;
+            if (err != ErrorCode.NoError)
+            {
+                var s = "".ToString();
+            }
+        }
+
+        public static ErrorCode LastErrorCode => GL.GetError();
+
+        [Serializable]
+        [StructLayout(LayoutKind.Explicit, Size = 112)]
+        private struct GlslLight
+        {
+            [FieldOffset(0)]
+            public Vector3 Position;
+
+            [FieldOffset(16)]
+            public Vector3 Color;
+
+            [FieldOffset(32)]
+            public Matrix4 LightSpaceMatrix;
+
+            [FieldOffset(96)]
+            public int ShadowLayer;
+
+            [FieldOffset(100)]
+            public int DirectionalLight; // Bool
+
+            [FieldOffset(104)]
+            public float Linear;
+
+            [FieldOffset(108)]
+            public float Quadric;
         }
 
     }
