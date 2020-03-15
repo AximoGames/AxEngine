@@ -6,19 +6,19 @@ namespace Aximo.Render
 
     public static class MeshBuilder
     {
-        public static Mesh Cube()
+        public static StaticMesh Cube()
         {
-            return new Mesh(MeshDataBuilder.Cube(), Material.GetDefault());
+            return new StaticMesh(MeshDataBuilder.Cube(), Material.GetDefault());
         }
 
-        public static Mesh DebugCube()
+        public static StaticMesh DebugCube()
         {
-            return new Mesh(MeshDataBuilder.DebugCube(), Material.GetDefault());
+            return new StaticMesh(MeshDataBuilder.DebugCube(), Material.GetDefault());
         }
 
-        public static Mesh Sphere(int divisions)
+        public static StaticMesh Sphere(int divisions)
         {
-            return new Mesh(MeshDataBuilder.Sphere(divisions), Material.GetDefault());
+            return new StaticMesh(MeshDataBuilder.Sphere(divisions), Material.GetDefault());
         }
     }
 

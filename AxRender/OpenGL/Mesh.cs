@@ -5,7 +5,22 @@ using System.Collections.Generic;
 
 namespace Aximo.Render
 {
-    public class Mesh
+
+    public class StaticMesh : Mesh
+    {
+        public StaticMesh() : base() { }
+        public StaticMesh(MeshData meshData) : base(meshData) { }
+        public StaticMesh(MeshData meshData, Material material) : base(meshData, material) { }
+    }
+
+    public class DynamicMesh : Mesh
+    {
+        public DynamicMesh() : base() { }
+        public DynamicMesh(MeshData meshData) : base(meshData) { }
+        public DynamicMesh(MeshData meshData, Material material) : base(meshData, material) { }
+    }
+
+    public abstract class Mesh
     {
 
         public Mesh() { }
@@ -38,7 +53,7 @@ namespace Aximo.Render
         }
 
         public List<Material> Materials = new List<Material>();
-        public MeshData MeshData { get; set; }
+        public MeshData MeshData { get; private set; }
 
         public int VertexCount => MeshData?.VertexCount ?? 0;
     }
