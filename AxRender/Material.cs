@@ -1,6 +1,7 @@
 // This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Threading;
 using OpenTK;
 
 namespace Aximo.Render
@@ -16,6 +17,15 @@ namespace Aximo.Render
 
     public class Material
     {
+        private static int LastMaterialId = 0;
+        public int MaterialId { get; private set; }
+
+        public Material()
+        {
+
+            MaterialId = Interlocked.Increment(ref LastMaterialId);
+        }
+
         public string DiffuseImagePath { get; set; }
         public string SpecularImagePath { get; set; }
         public Vector3 Color { get; set; }
@@ -24,9 +34,14 @@ namespace Aximo.Render
         public float SpecularStrength { get; set; }
         public MaterialColorBlendMode ColorBlendMode { get; set; }
 
+        public Shader Shader { get; set; }
+        public Shader DefGeometryShader { get; set; }
+        public Shader ShadowShader { get; set; }
+        public Shader CubeShadowShader { get; set; }
+
         public static Material GetDefault()
         {
-            return new Material()
+            var mat = new Material()
             {
                 DiffuseImagePath = "Textures/woodenbox.png",
                 SpecularImagePath = "Textures/woodenbox_specular.png",
@@ -35,7 +50,23 @@ namespace Aximo.Render
                 Shininess = 32.0f,
                 SpecularStrength = 0.5f,
             };
+            mat.CreateShaders();
+            return mat;
         }
+
+        public void CreateShaders()
+        {
+            if (Shader == null)
+                Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
+            if (DefGeometryShader == null)
+                DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
+            if (ShadowShader == null)
+                ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
+            if (CubeShadowShader == null)
+                CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
+        }
+
+        public static Material Default { get; } = GetDefault();
 
         public void WriteToShader(string name, Shader shader)
         {

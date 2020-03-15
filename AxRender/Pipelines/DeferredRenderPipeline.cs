@@ -138,7 +138,7 @@ namespace Aximo.Render
             _DefLightShader.SetVector3("viewPos", camera.Position);
 
             // TODO: Move to Pass1
-            _DefLightShader.SetMaterial("material", Material.GetDefault());
+            _DefLightShader.SetMaterial("material", Material.Default);
 
             _DefLightShader.SetInt("shadowMap", 3);
             _DefLightShader.SetInt("depthMap", 4);

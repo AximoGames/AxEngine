@@ -35,16 +35,15 @@ namespace Aximo.Render
 
         public bool Debug;
 
-        private Shader _Shader;
-        public Shader Shader { get => _Shader; set => _Shader = value; }
-
-        private Shader _DefGeometryShader;
-        private Shader _ShadowShader;
-        private Shader _CubeShadowShader;
-
         private MeshData MeshData;
 
-        private VertexArrayObject vao;
+        private List<VertexArrayObjectMaterial> vaoList = new List<VertexArrayObjectMaterial>();
+
+        class VertexArrayObjectMaterial
+        {
+            public VertexArrayObject vao;
+            public Material material;
+        }
 
         private Texture txt0;
         private Texture txt1;
@@ -61,29 +60,26 @@ namespace Aximo.Render
 
             UsePipeline(PrimaryRenderPipeline);
 
-            if (_Shader == null)
-                _Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
-            _DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
+            var mesh = new Mesh(MeshData);
+            var mat = Material ?? Material.GetDefault();
+            mesh.Materials.Add(mat);
 
-            if (!string.IsNullOrEmpty(Material.DiffuseImagePath))
-                txt0 = new Texture(Material.DiffuseImagePath);
-            if (!string.IsNullOrEmpty(Material.SpecularImagePath))
-                txt1 = new Texture(Material.SpecularImagePath);
+            foreach (var m in mesh.Materials)
+            {
+                m.CreateShaders();
+                if (!string.IsNullOrEmpty(m.DiffuseImagePath))
+                    txt0 = new Texture(m.DiffuseImagePath);
+                if (!string.IsNullOrEmpty(m.SpecularImagePath))
+                    txt1 = new Texture(m.SpecularImagePath);
 
-            _ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
-            _CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
-
-            // var layout = new VertexLayout();
-            // layout.AddAttribute<Vector3>(_Shader.GetAttribLocation("aPos"));
-            // layout.AddAttribute<Vector3>(_Shader.GetAttribLocation("aNormal"));
-            // layout.AddAttribute<Vector2>(_Shader.GetAttribLocation("aTexCoords"));
-
-            // vao = new VertexArrayObject(layout);
-
-            vao = new VertexArrayObject(MeshData.BindLayoutToShader(Shader));
-
-            //vao.SetData(_vertices, new ushort[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
-            vao.SetData(MeshData);
+                var vao = new VertexArrayObject(MeshData.BindLayoutToShader(mat.Shader));
+                vao.SetData(MeshData);
+                vaoList.Add(new VertexArrayObjectMaterial
+                {
+                    vao = vao,
+                    material = m,
+                });
+            }
         }
 
         public void SetVertices(MeshData data)
@@ -93,41 +89,45 @@ namespace Aximo.Render
 
         public void OnForwardRender()
         {
-            vao.Bind();
+            foreach (var mat in vaoList)
+            {
+                var shader = mat.material.Shader;
+                mat.vao.Bind();
 
-            if (txt0 != null)
-                txt0.Bind(TextureUnit.Texture0);
-            if (txt1 != null)
-                txt1.Bind(TextureUnit.Texture1);
-            Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
+                if (txt0 != null)
+                    txt0.Bind(TextureUnit.Texture0);
+                if (txt1 != null)
+                    txt1.Bind(TextureUnit.Texture1);
+                Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
 
-            _Shader.Bind();
+                shader.Bind();
 
-            _Shader.SetMatrix4("model", GetModelMatrix());
-            _Shader.SetMatrix4("view", Camera.ViewMatrix);
-            _Shader.SetMatrix4("projection", Camera.ProjectionMatrix);
+                shader.SetMatrix4("model", GetModelMatrix());
+                shader.SetMatrix4("view", Camera.ViewMatrix);
+                shader.SetMatrix4("projection", Camera.ProjectionMatrix);
 
-            _Shader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+                shader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
-            _Shader.SetInt("shadowMap", 2);
+                shader.SetInt("shadowMap", 2);
 
-            _Shader.SetMaterial("material", Material);
+                shader.SetMaterial("material", Material);
 
-            ApplyShaderParams(_Shader);
+                ApplyShaderParams(shader);
 
-            //_Shader.SetVector3("light.position", GetShadowLight().Position);
-            //_Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));
-            _Shader.SetVector3("viewPos", Camera.Position);
+                //_Shader.SetVector3("light.position", GetShadowLight().Position);
+                //_Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));
+                shader.SetVector3("viewPos", Camera.Position);
 
-            //var shadowCamera = GetShadowLight().LightCamera;
-            _Shader.SetFloat("far_plane", 25f);
-            Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
-            _Shader.SetInt("depthMap", 3);
+                //var shadowCamera = GetShadowLight().LightCamera;
+                shader.SetFloat("far_plane", 25f);
+                Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
+                shader.SetInt("depthMap", 3);
 
-            _Shader.BindBlock("lightsArray", Context.LightBinding);
-            _Shader.SetInt("lightCount", Lights.Count);
+                shader.BindBlock("lightsArray", Context.LightBinding);
+                shader.SetInt("lightCount", Lights.Count);
 
-            vao.Draw();
+                mat.vao.Draw();
+            }
         }
 
         public void OnDeferredRender()
@@ -135,18 +135,23 @@ namespace Aximo.Render
             var pipe = Context.GetPipeline<DeferredRenderPipeline>();
             if (pipe.Pass == DeferredPass.Pass1)
             {
-                vao.Bind();
 
-                txt0.Bind(TextureUnit.Texture0);
-                txt1.Bind(TextureUnit.Texture1);
+                foreach (var mat in vaoList)
+                {
+                    var defGeometryShader = mat.material.DefGeometryShader;
+                    mat.vao.Bind();
 
-                _DefGeometryShader.Bind();
+                    txt0.Bind(TextureUnit.Texture0);
+                    txt1.Bind(TextureUnit.Texture1);
 
-                _DefGeometryShader.SetMatrix4("model", GetModelMatrix());
-                _DefGeometryShader.SetMatrix4("view", Camera.ViewMatrix);
-                _DefGeometryShader.SetMatrix4("projection", Camera.ProjectionMatrix);
+                    defGeometryShader.Bind();
 
-                vao.Draw();
+                    defGeometryShader.SetMatrix4("model", GetModelMatrix());
+                    defGeometryShader.SetMatrix4("view", Camera.ViewMatrix);
+                    defGeometryShader.SetMatrix4("projection", Camera.ProjectionMatrix);
+
+                    mat.vao.Draw();
+                }
             }
 
             if (pipe.Pass == DeferredPass.Pass2)
@@ -171,25 +176,29 @@ namespace Aximo.Render
 
         public void OnRenderShadow()
         {
-            vao.Bind();
-
-            _ShadowShader.Bind();
-
-            foreach (var light in Lights)
+            foreach (var mat in vaoList)
             {
-                var shadowCamera = light.LightCamera;
+                mat.vao.Bind();
+                var shadowShader = mat.material.ShadowShader;
 
-                var lightProjection = shadowCamera.ProjectionMatrix;
-                var lightView = shadowCamera.ViewMatrix;
-                lightSpaceMatrix = lightView * lightProjection;
+                shadowShader.Bind();
 
-                _ShadowShader.SetMatrix4("model", GetModelMatrix());
-                _ShadowShader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
-                _ShadowShader.SetInt("shadowLayer", light.ShadowTextureIndex);
+                foreach (var light in Lights)
+                {
+                    var shadowCamera = light.LightCamera;
 
-                //GL.CullFace(CullFaceMode.Front);
-                vao.Draw();
-                //GL.CullFace(CullFaceMode.Back);}
+                    var lightProjection = shadowCamera.ProjectionMatrix;
+                    var lightView = shadowCamera.ViewMatrix;
+                    lightSpaceMatrix = lightView * lightProjection;
+
+                    shadowShader.SetMatrix4("model", GetModelMatrix());
+                    shadowShader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+                    shadowShader.SetInt("shadowLayer", light.ShadowTextureIndex);
+
+                    //GL.CullFace(CullFaceMode.Front);
+                    mat.vao.Draw();
+                    //GL.CullFace(CullFaceMode.Back);}
+                }
             }
         }
 
@@ -197,43 +206,46 @@ namespace Aximo.Render
 
         public void OnRenderCubeShadow()
         {
-            vao.Bind();
-
-            _CubeShadowShader.Bind();
-
-            foreach (var light in Lights)
+            foreach (var mat in vaoList)
             {
-                var shadowCamera = light.LightCamera;
+                mat.vao.Bind();
+                var cubeShadowShader = mat.material.CubeShadowShader;
+                cubeShadowShader.Bind();
 
-                CubeShadowsMatrices.Clear();
-
-                if (CUBE_MAP_SHADOW_ROTATED)
+                foreach (var light in Lights)
                 {
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f));
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f));
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 0.0f, -1.0f));
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f));
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f));
-                }
-                else
-                {
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f));
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, 1.0f, 0.0f));
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
-                    AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
-                }
+                    var shadowCamera = light.LightCamera;
 
-                _CubeShadowShader.SetMatrix4("model", GetModelMatrix());
-                for (var i = 0; i < CubeShadowsMatrices.Count; i++)
-                    _CubeShadowShader.SetMatrix4($"shadowMatrices[{i}]", CubeShadowsMatrices[i]);
-                _CubeShadowShader.SetVector3("light.position", light.Position);
-                _CubeShadowShader.SetFloat("far_plane", shadowCamera.FarPlane);
-                _CubeShadowShader.SetInt("shadowLayer", light.ShadowTextureIndex);
+                    CubeShadowsMatrices.Clear();
 
-                vao.Draw();
+                    if (CUBE_MAP_SHADOW_ROTATED)
+                    {
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f));
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f));
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 0.0f, -1.0f));
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f));
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f));
+                    }
+                    else
+                    {
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f));
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, 1.0f, 0.0f));
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, 1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
+                        AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
+                    }
+
+                    cubeShadowShader.SetMatrix4("model", GetModelMatrix());
+                    for (var i = 0; i < CubeShadowsMatrices.Count; i++)
+                        cubeShadowShader.SetMatrix4($"shadowMatrices[{i}]", CubeShadowsMatrices[i]);
+                    cubeShadowShader.SetVector3("light.position", light.Position);
+                    cubeShadowShader.SetFloat("far_plane", shadowCamera.FarPlane);
+                    cubeShadowShader.SetInt("shadowLayer", light.ShadowTextureIndex);
+
+                    mat.vao.Draw();
+                }
             }
         }
 
@@ -251,15 +263,10 @@ namespace Aximo.Render
 
         public override void Free()
         {
-            vao.Free();
-            //_Shader.Free(); // TODO
-            _ShadowShader.Free();
         }
 
         public void OnReload()
         {
-            _Shader.Reload();
-            _ShadowShader.Reload();
         }
 
         public List<ILightObject> Lights => Context.LightObjects;
