@@ -23,38 +23,63 @@ namespace Aximo.Engine
             return new PrimitiveSceneProxy(this);
         }
 
-        private List<Material> _Materials;
-        public ICollection<Material> Materials { get; private set; }
+        private List<GameMaterial> _Materials;
+        public ICollection<GameMaterial> Materials { get; private set; }
 
         public PrimitiveComponent()
         {
-            _Materials = new List<Material>();
-            Materials = new ReadOnlyCollection<Material>(_Materials);
+            _Materials = new List<GameMaterial>();
+            Materials = new ReadOnlyCollection<GameMaterial>(_Materials);
         }
 
-        public void AddMaterial(Material material)
+        public void AddMaterial(GameMaterial material)
         {
             _Materials.Add(material);
         }
 
-        public void RemoveMaterial(Material material)
+        public void AddMaterial(GameMaterial material, int index)
+        {
+            _Materials.Insert(index, material);
+        }
+
+        public void RemoveMaterial(GameMaterial material)
         {
             _Materials.Remove(material);
         }
 
-        // internal override void PropagateChanges()
-        // {
-        //     foreach (var mat in _Materials)
-        //         mat.pr();
-        // }
+        public GameMaterial Material
+        {
+            get
+            {
+                return _Materials.FirstOrDefault();
+            }
+            set
+            {
+                if (value == null)
+                    throw new InvalidOperationException();
 
-        // internal override void SyncChanges()
-        // {
-        //     foreach (var mat in _Materials)
-        //         mat.SyncChanges();
+                if (_Materials.Count == 0)
+                    _Materials.Add(value);
+                else
+                    _Materials[0] = value;
+            }
+        }
 
-        //     base.SyncChanges();
-        // }
+        internal override void PropagateChanges()
+        {
+            foreach (var mat in _Materials)
+                mat.PropagateChanges();
+
+            base.PropagateChanges();
+        }
+
+        internal override void SyncChanges()
+        {
+            foreach (var mat in _Materials)
+                mat.SyncChanges();
+
+            base.SyncChanges();
+        }
 
     }
 

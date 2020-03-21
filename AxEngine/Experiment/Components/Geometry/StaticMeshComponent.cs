@@ -25,14 +25,14 @@ namespace Aximo.Engine
 
     public class CubeComponent : StaticMeshComponent
     {
-        public CubeComponent() : base(MeshBuilder.Cube())
+        public CubeComponent() : base(MeshDataBuilder.Cube(), GameMaterial.Default)
         {
         }
     }
 
     public class SphereComponent : StaticMeshComponent
     {
-        public SphereComponent(int divisions = 2) : base(MeshBuilder.Sphere(2))
+        public SphereComponent(int divisions = 2) : base(MeshDataBuilder.Sphere(2), GameMaterial.Default)
         {
         }
     }
@@ -45,14 +45,21 @@ namespace Aximo.Engine
 
         }
 
-        public StaticMeshComponent(StaticMesh mesh)
+        public StaticMeshComponent(MeshData mesh)
         {
             SetMesh(mesh);
         }
 
-        public StaticMesh Mesh { get; private set; }
+        public StaticMeshComponent(MeshData mesh, GameMaterial material)
+        {
+            SetMesh(mesh);
+            Material = material;
+        }
 
-        public void SetMesh(StaticMesh mesh)
+        public MeshData Mesh { get; private set; }
+        private StaticMesh InternalMesh;
+
+        public void SetMesh(MeshData mesh)
         {
             Mesh = mesh;
             UpdateMesh();
@@ -75,6 +82,8 @@ namespace Aximo.Engine
             if (!HasChanges)
                 return;
 
+            base.SyncChanges();
+
             bool created = false;
             if (RenderableObject == null)
             {
@@ -85,7 +94,18 @@ namespace Aximo.Engine
             var obj = (SimpleVertexObject)RenderableObject;
             if (MeshChanged)
             {
-                obj.SetVertices(Mesh);
+                if (InternalMesh == null)
+                {
+                    InternalMesh = new StaticMesh(Mesh);
+                    obj.Name = Name;
+                }
+                InternalMesh.Materials.Clear();
+                foreach (var gameMat in Materials)
+                {
+                    InternalMesh.Materials.Add(gameMat.InternalMaterial);
+                }
+
+                obj.SetVertices(InternalMesh);
                 MeshChanged = false;
             }
 
@@ -98,8 +118,6 @@ namespace Aximo.Engine
 
             if (created)
                 RenderContext.Current.AddObject(RenderableObject);
-
-            base.SyncChanges();
         }
 
     }

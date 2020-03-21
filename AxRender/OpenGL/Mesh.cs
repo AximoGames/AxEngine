@@ -1,6 +1,7 @@
 // This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 
 namespace Aximo.Render
@@ -32,6 +33,9 @@ namespace Aximo.Render
         public Mesh(MeshData meshData, Material material)
         {
             MeshData = meshData;
+            if (material == null)
+                throw new InvalidOperationException();
+
             Materials.Add(material);
         }
 
@@ -45,6 +49,9 @@ namespace Aximo.Render
             }
             set
             {
+                if (value == null)
+                    throw new InvalidOperationException();
+
                 if (Materials.Count == 0)
                     Materials.Add(value);
                 else

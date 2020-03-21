@@ -21,8 +21,14 @@ namespace Aximo.Engine
 
             GameContext.AddActor(new Actor(new SphereComponent()
             {
+                Name = "CompSphere",
                 RelativeTranslation = new Vector3(-1, 0, 0),
                 RelativeScale = new Vector3(1.5f),
+                Material = new GameMaterial()
+                {
+                    DiffuseTexture = GameTexture.GetFromFile("Textures/wood.png"),
+                    SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                },
             }));
 
             RenderContext.AddObject(new TestObject()

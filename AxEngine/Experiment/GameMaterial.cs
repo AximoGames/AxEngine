@@ -30,6 +30,7 @@ namespace Aximo.Engine
 
         public static GameTexture GetFromFile(string sourcePath)
         {
+            Console.WriteLine($"Loading: {sourcePath}");
             var imagePath = DirectoryHelper.GetAssetsPath(sourcePath);
             Bitmap bitmap;
 
@@ -72,7 +73,7 @@ namespace Aximo.Engine
             HasChanges = true;
         }
 
-        private Texture InternalTexture;
+        internal Texture InternalTexture;
 
         public void Sync()
         {
@@ -83,6 +84,7 @@ namespace Aximo.Engine
             if (InternalTexture == null)
             {
                 InternalTexture = new Texture(Bitmap);
+                InternalTexture.ObjectLabel = Label;
             }
             else
             {
@@ -92,7 +94,6 @@ namespace Aximo.Engine
                     InternalTexture.SetData(Bitmap);
                 }
             }
-            //InternalTexture.ObjectLabel = Label;
         }
 
     }
@@ -109,7 +110,8 @@ namespace Aximo.Engine
                 {
                     _DefaultMaterial = new GameMaterial
                     {
-
+                        DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
+                        SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
                     };
                 }
                 return _DefaultMaterial;
@@ -125,17 +127,20 @@ namespace Aximo.Engine
 
     public class GameMaterial
     {
+
+        public static GameMaterial Default => MaterialManager.DefaultMaterial;
+
         private static int LastMaterialId = 0;
         public int MaterialId { get; private set; }
-        private Material Material;
+        internal Material InternalMaterial;
 
         public GameTexture DiffuseTexture;
         public GameTexture SpecularTexture;
 
-        private Shader Shader;
-        private Shader DefGeometryShader;
-        private Shader ShadowShader;
-        private Shader CubeShadowShader;
+        // private Shader Shader;
+        // private Shader DefGeometryShader;
+        // private Shader ShadowShader;
+        // private Shader CubeShadowShader;
 
         public GameMaterial()
         {
@@ -147,60 +152,6 @@ namespace Aximo.Engine
         public float Shininess { get; set; }
         public float SpecularStrength { get; set; }
         public MaterialColorBlendMode ColorBlendMode { get; set; }
-
-        public void Sync()
-        {
-            if (Shader == null)
-                Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
-            if (DefGeometryShader == null)
-                DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
-            if (ShadowShader == null)
-                ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
-            if (CubeShadowShader == null)
-                CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
-
-            DiffuseTexture.Sync();
-            SpecularTexture.Sync();
-
-            foreach (var param in Parameters.Values)
-            {
-                if (param.HasChanges)
-                {
-                    param.HasChanges = false;
-                    switch (param.Type)
-                    {
-                        case ParamterType.Bool:
-                            Shader.SetBool(param.Name, (bool)param.Value);
-                            DefGeometryShader.SetBool(param.Name, (bool)param.Value);
-                            break;
-                        case ParamterType.Int:
-                            Shader.SetInt(param.Name, (int)param.Value);
-                            DefGeometryShader.SetInt(param.Name, (int)param.Value);
-                            break;
-                        case ParamterType.Float:
-                            Shader.SetFloat(param.Name, (float)param.Value);
-                            DefGeometryShader.SetFloat(param.Name, (float)param.Value);
-                            break;
-                        case ParamterType.Vector2:
-                            Shader.SetVector2(param.Name, (Vector2)param.Value);
-                            DefGeometryShader.SetVector2(param.Name, (Vector2)param.Value);
-                            break;
-                        case ParamterType.Vector3:
-                            Shader.SetVector3(param.Name, (Vector3)param.Value);
-                            DefGeometryShader.SetVector3(param.Name, (Vector3)param.Value);
-                            break;
-                        case ParamterType.Vector4:
-                            Shader.SetVector4(param.Name, (Vector4)param.Value);
-                            DefGeometryShader.SetVector4(param.Name, (Vector4)param.Value);
-                            break;
-                        case ParamterType.Matrix4:
-                            Shader.SetMatrix4(param.Name, (Matrix4)param.Value);
-                            DefGeometryShader.SetMatrix4(param.Name, (Matrix4)param.Value);
-                            break;
-                    }
-                }
-            }
-        }
 
         private Dictionary<string, Parameter> Parameters = new Dictionary<string, Parameter>();
 
@@ -227,6 +178,74 @@ namespace Aximo.Engine
             {
                 parameter.HasChanges = true;
                 Parameters.Add(parameter.Name, parameter);
+            }
+        }
+
+        internal virtual void PropagateChanges()
+        {
+        }
+
+        internal virtual void SyncChanges()
+        {
+            // if (Shader == null)
+            //     Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
+            // if (DefGeometryShader == null)
+            //     DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
+            // if (ShadowShader == null)
+            //     ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
+            // if (CubeShadowShader == null)
+            //     CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
+
+            DiffuseTexture.Sync();
+            SpecularTexture.Sync();
+
+            if (InternalMaterial == null)
+            {
+                InternalMaterial = new Material();
+                InternalMaterial.CreateShaders();
+            }
+
+            var mat = InternalMaterial;
+            mat.txt0 = DiffuseTexture.InternalTexture;
+            mat.txt1 = SpecularTexture.InternalTexture;
+
+            foreach (var param in Parameters.Values)
+            {
+                if (param.HasChanges)
+                {
+                    param.HasChanges = false;
+                    switch (param.Type)
+                    {
+                        case ParamterType.Bool:
+                            mat.Shader.SetBool(param.Name, (bool)param.Value);
+                            mat.DefGeometryShader.SetBool(param.Name, (bool)param.Value);
+                            break;
+                        case ParamterType.Int:
+                            mat.Shader.SetInt(param.Name, (int)param.Value);
+                            mat.DefGeometryShader.SetInt(param.Name, (int)param.Value);
+                            break;
+                        case ParamterType.Float:
+                            mat.Shader.SetFloat(param.Name, (float)param.Value);
+                            mat.DefGeometryShader.SetFloat(param.Name, (float)param.Value);
+                            break;
+                        case ParamterType.Vector2:
+                            mat.Shader.SetVector2(param.Name, (Vector2)param.Value);
+                            mat.DefGeometryShader.SetVector2(param.Name, (Vector2)param.Value);
+                            break;
+                        case ParamterType.Vector3:
+                            mat.Shader.SetVector3(param.Name, (Vector3)param.Value);
+                            mat.DefGeometryShader.SetVector3(param.Name, (Vector3)param.Value);
+                            break;
+                        case ParamterType.Vector4:
+                            mat.Shader.SetVector4(param.Name, (Vector4)param.Value);
+                            mat.DefGeometryShader.SetVector4(param.Name, (Vector4)param.Value);
+                            break;
+                        case ParamterType.Matrix4:
+                            mat.Shader.SetMatrix4(param.Name, (Matrix4)param.Value);
+                            mat.DefGeometryShader.SetMatrix4(param.Name, (Matrix4)param.Value);
+                            break;
+                    }
+                }
             }
         }
 

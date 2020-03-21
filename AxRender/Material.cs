@@ -51,9 +51,9 @@ namespace Aximo.Render
 
         public void CreateShaders()
         {
-            if (!string.IsNullOrEmpty(DiffuseImagePath))
+            if (txt0 == null && !string.IsNullOrEmpty(DiffuseImagePath))
                 txt0 = new Texture(DiffuseImagePath);
-            if (!string.IsNullOrEmpty(SpecularImagePath))
+            if (txt1 == null && !string.IsNullOrEmpty(SpecularImagePath))
                 txt1 = new Texture(SpecularImagePath);
 
             if (Shader == null)
