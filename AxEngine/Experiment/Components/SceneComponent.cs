@@ -142,6 +142,13 @@ namespace Aximo.Engine
             return trans;
         }
 
+        internal override void UpdateFrameInternal()
+        {
+            base.UpdateFrameInternal();
+            foreach (var child in Components)
+                child.UpdateFrameInternal();
+        }
+
         protected internal bool TransformChanged;
         protected internal void UpdateTransform()
         {

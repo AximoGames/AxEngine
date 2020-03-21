@@ -28,6 +28,7 @@ namespace Aximo.Engine
                 {
                     DiffuseTexture = GameTexture.GetFromFile("Textures/wood.png"),
                     SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                    CastShadow = true,
                 },
             }));
 
@@ -73,11 +74,11 @@ namespace Aximo.Engine
             //     RectanglePixels = new RectangleF(000, 0, 30f, 30f),
             // });
 
-            RenderContext.AddObject(new StatsObject()
+            GameContext.AddActor(new Actor(new StatsComponent()
             {
                 Name = "Stats",
                 RectanglePixels = new RectangleF(40, 40, 100f, 100f),
-            });
+            }));
 
             RenderContext.AddObject(new LineObject()
             {

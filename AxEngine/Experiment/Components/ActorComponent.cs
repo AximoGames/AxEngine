@@ -51,6 +51,15 @@ namespace Aximo.Engine
             Actor = null;
         }
 
+        internal virtual void UpdateFrameInternal()
+        {
+            UpdateFrame();
+        }
+
+        public virtual void UpdateFrame()
+        {
+        }
+
         internal virtual void PropagateChanges()
         {
         }

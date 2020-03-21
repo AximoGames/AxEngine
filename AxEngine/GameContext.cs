@@ -87,6 +87,12 @@ namespace Aximo.Engine
         // private List<LightComponent> LightComponents = new List<LightComponent>();
         // private List<PrimitiveComponent> PrimitiveComponents = new List<PrimitiveComponent>();
 
+        public void OnUpdateFrame()
+        {
+            foreach (var act in Actors)
+                act.UpdateFrameInternal();
+        }
+
         public void Sync()
         {
             foreach (var act in Actors)

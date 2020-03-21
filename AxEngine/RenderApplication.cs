@@ -262,6 +262,8 @@ namespace Aximo.Engine
             foreach (var anim in GameContext.Animations)
                 anim.ProcessAnimation();
 
+            GameContext.OnUpdateFrame();
+
             foreach (var obj in RenderContext.UpdateFrameObjects)
                 obj.OnUpdateFrame();
 

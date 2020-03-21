@@ -96,6 +96,17 @@ namespace Aximo.Engine
                     UnregisterComponentName(child);
         }
 
+        internal virtual void UpdateFrameInternal()
+        {
+            foreach (var comp in Components)
+                comp.UpdateFrameInternal();
+            UpdateFrame();
+        }
+
+        public virtual void UpdateFrame()
+        {
+        }
+
         internal virtual void PropagateChanges()
         {
             foreach (var comp in Components)
