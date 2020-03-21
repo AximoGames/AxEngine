@@ -147,7 +147,7 @@ namespace Aximo.Render
         public int Height { get; private set; }
 
         private string _ObjectLabel;
-        public string ObjectLabel { get => _ObjectLabel; set { _ObjectLabel = value; ObjectManager.SetLabel(this); } }
+        public string ObjectLabel { get => _ObjectLabel; set { if (_ObjectLabel == value) return; _ObjectLabel = value; ObjectManager.SetLabel(this); } }
 
         public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Texture;
 

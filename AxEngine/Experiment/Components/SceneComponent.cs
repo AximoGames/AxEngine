@@ -81,7 +81,18 @@ namespace Aximo.Engine
 
         public override Actor Actor => RootComponent?.Actor;
 
-        public Vector3 RelativeScale { get; set; } = Vector3.One;
+        private Vector3 _RelativeScale = Vector3.One;
+        public Vector3 RelativeScale
+        {
+            get => _RelativeScale;
+            set
+            {
+                if (_RelativeScale == value)
+                    return;
+                _RelativeScale = value;
+                UpdateTransform();
+            }
+        }
 
         private Quaternion _RelativeRotation = Quaternion.Identity;
         public Quaternion RelativeRotation
@@ -146,6 +157,8 @@ namespace Aximo.Engine
 
             foreach (var child in Components)
                 child.PropagateChanges();
+
+            base.PropagateChanges();
         }
 
         internal override void SyncChanges()

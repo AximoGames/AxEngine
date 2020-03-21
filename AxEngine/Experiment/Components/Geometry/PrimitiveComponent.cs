@@ -42,6 +42,19 @@ namespace Aximo.Engine
             _Materials.Remove(material);
         }
 
+        // internal override void PropagateChanges()
+        // {
+        //     foreach (var mat in _Materials)
+        //         mat.pr();
+        // }
+
+        // internal override void SyncChanges()
+        // {
+        //     foreach (var mat in _Materials)
+        //         mat.SyncChanges();
+
+        //     base.SyncChanges();
+        // }
 
     }
 

@@ -302,6 +302,20 @@ namespace Aximo.Render
         /// </summary>
         /// <param name="name">The name of the uniform</param>
         /// <param name="data">The data to set</param>
+        public void SetBool(string name, bool data)
+        {
+            if (_uniformLocations.TryGetValue(name, out var location))
+            {
+                Bind();
+                GL.Uniform1(location, data ? 1 : 0);
+            }
+        }
+
+        /// <summary>
+        /// Set a uniform int on this shader.
+        /// </summary>
+        /// <param name="name">The name of the uniform</param>
+        /// <param name="data">The data to set</param>
         public void SetInt(string name, int data)
         {
             if (_uniformLocations.TryGetValue(name, out var location))
@@ -350,6 +364,20 @@ namespace Aximo.Render
         }
 
         /// <summary>
+        /// Set a uniform Vector2 on this shader.
+        /// </summary>
+        /// <param name="name">The name of the uniform</param>
+        /// <param name="data">The data to set</param>
+        public void SetVector2(string name, Vector2 data)
+        {
+            if (_uniformLocations.TryGetValue(name, out var location))
+            {
+                Bind();
+                GL.Uniform2(location, data);
+            }
+        }
+
+        /// <summary>
         /// Set a uniform Vector3 on this shader.
         /// </summary>
         /// <param name="name">The name of the uniform</param>
@@ -360,6 +388,20 @@ namespace Aximo.Render
             {
                 Bind();
                 GL.Uniform3(location, data);
+            }
+        }
+
+        /// <summary>
+        /// Set a uniform Vector4 on this shader.
+        /// </summary>
+        /// <param name="name">The name of the uniform</param>
+        /// <param name="data">The data to set</param>
+        public void SetVector4(string name, Vector4 data)
+        {
+            if (_uniformLocations.TryGetValue(name, out var location))
+            {
+                Bind();
+                GL.Uniform4(location, data);
             }
         }
 

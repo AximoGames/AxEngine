@@ -17,14 +17,6 @@ namespace Aximo.Render
 
     public class Material
     {
-        private static int LastMaterialId = 0;
-        public int MaterialId { get; private set; }
-
-        public Material()
-        {
-
-            MaterialId = Interlocked.Increment(ref LastMaterialId);
-        }
 
         public string DiffuseImagePath { get; set; }
         public string SpecularImagePath { get; set; }
