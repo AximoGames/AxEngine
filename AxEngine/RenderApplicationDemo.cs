@@ -191,9 +191,9 @@ namespace Aximo.Engine
 
             if (CurrentMouseWorldPositionIsValid)
             {
-                var cursor = RenderContext.GetObjectByName<IPosition>("GroundCursor");
+                var cursor = GameContext.GetActor("GroundCursor")?.RootComponent;
                 if (cursor != null)
-                    cursor.Position = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.Position.Z);
+                    cursor.RelativeTranslation = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.RelativeTranslation.Z);
             }
 
         }

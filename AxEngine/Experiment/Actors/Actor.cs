@@ -18,7 +18,9 @@ namespace Aximo.Engine
         public string Name { get; set; }
 
         private List<ActorComponent> _Components;
-        public ICollection<ActorComponent> Components { get; private set; }
+        public IList<ActorComponent> Components { get; private set; }
+
+        public SceneComponent RootComponent { get; private set; }
 
         private static int LastGameObjectId;
 
@@ -110,6 +112,10 @@ namespace Aximo.Engine
         {
             component.SetActor(this);
             _Components.Add(component);
+
+            if (component is SceneComponent)
+                RootComponent = (SceneComponent)component;
+
             RegisterComponentName(component);
         }
 
@@ -117,6 +123,10 @@ namespace Aximo.Engine
         {
             component.Detach();
             _Components.Remove(component);
+
+            if (RootComponent == component)
+                RootComponent = null;
+
             UnregisterComponentName(component);
         }
 

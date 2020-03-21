@@ -51,6 +51,9 @@ namespace Aximo.Engine
 
         internal void RegisterActorName(Actor actor)
         {
+            if (string.IsNullOrEmpty(actor.Name) && actor.Components.Count > 0)
+                actor.Name = actor.Components[0].Name;
+
             if (string.IsNullOrEmpty(actor.Name))
                 return;
 
