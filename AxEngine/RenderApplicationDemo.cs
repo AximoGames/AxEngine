@@ -37,26 +37,30 @@ namespace Aximo.Engine
                 RelativeScale = new Vector3(50, 50, 1),
                 RelativeTranslation = new Vector3(0f, 0f, -0.5f),
             }));
-            RenderContext.AddObject(new GridObject()
+
+            GameContext.AddActor(new Actor(new GridPlaneComponent(10, true)
             {
-                Name = "Grid",
-                ModelMatrix = Matrix4.CreateTranslation(0f, 0f, 0.01f),
-            });
-            RenderContext.AddObject(new GridObject()
+                Name = "GridZ",
+                RelativeTranslation = new Vector3(0f, 0f, 0.01f),
+            }));
+            GameContext.AddActor(new Actor(new GridPlaneComponent(10, true)
             {
-                Name = "Grid",
-                ModelMatrix = Matrix4.CreateRotationY((float)Math.PI / 2) * Matrix4.CreateTranslation(-10f, 0f, 0.01f),
-            });
-            RenderContext.AddObject(new GridObject()
+                Name = "GridX",
+                RelativeTranslation = new Vector3(-10f, 0f, 0.01f),
+                RelativeRotation = new Vector3(0, 0.25f, 0).ToQuaternion(),
+            }));
+            GameContext.AddActor(new Actor(new GridPlaneComponent(10, true)
             {
-                Name = "Grid",
-                ModelMatrix = Matrix4.CreateRotationX((float)Math.PI / 2) * Matrix4.CreateTranslation(0f, 10f, 0.01f),
-            });
-            RenderContext.AddObject(new CrossLinesObject()
+                Name = "GridY",
+                RelativeTranslation = new Vector3(0f, 10f, 0.01f),
+                RelativeRotation = new Vector3(0.25f, 0, 0).ToQuaternion(),
+            }));
+            GameContext.AddActor(new Actor(new CrossLineComponent(10, true)
             {
                 Name = "CenterCross",
-                ModelMatrix = Matrix4.CreateScale(2.0f) * Matrix4.CreateTranslation(0f, 0f, 0.02f),
-            });
+                RelativeTranslation = new Vector3(0f, 0f, 0.02f),
+                RelativeScale = new Vector3(2.0f),
+            }));
             RenderContext.AddObject(new ScreenTextureObject()
             {
                 Name = "ScreenTexture1",

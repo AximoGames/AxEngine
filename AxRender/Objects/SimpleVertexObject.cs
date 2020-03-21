@@ -71,6 +71,9 @@ namespace Aximo.Render
 
         public override void Init()
         {
+            if (Mesh == null)
+                return;
+
             UsePipeline<PointShadowRenderPipeline>();
             UsePipeline<DirectionalShadowRenderPipeline>();
 

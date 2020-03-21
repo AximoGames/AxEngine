@@ -30,6 +30,20 @@ namespace Aximo.Engine
         }
     }
 
+    public class GridPlaneComponent : StaticMeshComponent
+    {
+        public GridPlaneComponent(int size, bool center) : base(MeshDataBuilder.Grid(size, center), MaterialManager.DefaultLineMaterial)
+        {
+        }
+    }
+
+    public class CrossLineComponent : StaticMeshComponent
+    {
+        public CrossLineComponent(int size, bool center) : base(MeshDataBuilder.CrossLine(), MaterialManager.DefaultLineMaterial)
+        {
+        }
+    }
+
     public class DebugCubeComponent : StaticMeshComponent
     {
         public DebugCubeComponent() : base(MeshDataBuilder.DebugCube(), GameMaterial.Default)

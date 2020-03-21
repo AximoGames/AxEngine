@@ -36,6 +36,8 @@ namespace Aximo.Render
                     return "aNormal";
                 case "UV":
                     return "aTexCoords";
+                case "Color":
+                    return "aColor";
                 default:
                     return structFieldName;
             }

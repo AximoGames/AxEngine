@@ -154,6 +154,20 @@ namespace Aximo.Render
         internal void SetData(MeshData data)
         {
             SetData(data.Data, data.Indicies);
+            PrimitiveType = GetPrimitiveType(data.PrimitiveType);
+        }
+
+        private PrimitiveType GetPrimitiveType(AxPrimitiveType primitiveType)
+        {
+            switch (primitiveType)
+            {
+                case AxPrimitiveType.Triangles:
+                    return PrimitiveType.Triangles;
+                case AxPrimitiveType.Lines:
+                    return PrimitiveType.Lines;
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         //public void AddPosition()

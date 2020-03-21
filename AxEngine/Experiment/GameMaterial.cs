@@ -10,6 +10,20 @@ using System.Collections.Concurrent;
 namespace Aximo.Engine
 {
 
+    public class GameShader
+    {
+        public string VertexShaderPath;
+        public string FragmentShaderPath;
+        public string GeometryShaderPath;
+
+        public GameShader(string vertexShaderPath, string fragmentShaderPath, string geometryShaderPath = null)
+        {
+            VertexShaderPath = vertexShaderPath;
+            FragmentShaderPath = fragmentShaderPath;
+            GeometryShaderPath = geometryShaderPath;
+        }
+    }
+
     public class GameTexture
     {
         private Texture Texture;
@@ -118,6 +132,12 @@ namespace Aximo.Engine
             }
         }
 
+        public static GameMaterial DefaultLineMaterial { get; } = new GameMaterial
+        {
+            Shader = new GameShader("Shaders/lines.vert", "Shaders/lines.frag"),
+            PipelineType = PipelineType.Forward,
+        };
+
         public static GameMaterial CreateNewMaterial()
         {
             return new GameMaterial();
@@ -141,6 +161,11 @@ namespace Aximo.Engine
         // private Shader DefGeometryShader;
         // private Shader ShadowShader;
         // private Shader CubeShadowShader;
+
+        public GameShader Shader { get; set; }
+        public GameShader DefGeometryShader { get; set; }
+        public GameShader ShadowShader { get; set; }
+        public GameShader CubeShadowShader { get; set; }
 
         public GameMaterial()
         {
@@ -198,18 +223,22 @@ namespace Aximo.Engine
             // if (CubeShadowShader == null)
             //     CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
 
-            DiffuseTexture.Sync();
-            SpecularTexture.Sync();
+            DiffuseTexture?.Sync();
+            SpecularTexture?.Sync();
 
             if (InternalMaterial == null)
             {
                 InternalMaterial = new Material();
+                if (Shader != null)
+                    InternalMaterial.Shader = new Shader(Shader.VertexShaderPath, Shader.FragmentShaderPath, Shader.GeometryShaderPath);
+                if (DefGeometryShader != null)
+                    InternalMaterial.DefGeometryShader = new Shader(DefGeometryShader.VertexShaderPath, DefGeometryShader.FragmentShaderPath, DefGeometryShader.GeometryShaderPath);
                 InternalMaterial.CreateShaders();
             }
 
             var mat = InternalMaterial;
-            mat.txt0 = DiffuseTexture.InternalTexture;
-            mat.txt1 = SpecularTexture.InternalTexture;
+            mat.txt0 = DiffuseTexture?.InternalTexture;
+            mat.txt1 = SpecularTexture?.InternalTexture;
 
             switch (PipelineType)
             {

@@ -7,6 +7,12 @@ using System.Collections.Generic;
 namespace Aximo.Render
 {
 
+    public enum AxPrimitiveType
+    {
+        Triangles,
+        Lines,
+    }
+
     public abstract class MeshData
     {
         public VertexLayoutDefinition Layout { get; protected set; }
@@ -16,6 +22,7 @@ namespace Aximo.Render
         public virtual int IndiciesCount { get; protected set; }
 
         public VertexLayoutBinded BindLayoutToShader(Shader shader) => Layout.BindToShader(shader);
+        public AxPrimitiveType PrimitiveType { get; protected set; }
     }
 
     public class MeshData<T> : MeshData
@@ -34,21 +41,24 @@ namespace Aximo.Render
             Layout = layoutDefinition;
         }
 
-        public MeshData(VertexLayoutDefinition layoutDefinition, T[] data, ushort[] indicies = null)
+        public MeshData(VertexLayoutDefinition layoutDefinition, T[] data, ushort[] indicies = null, AxPrimitiveType primitiveType = AxPrimitiveType.Triangles)
         {
             Layout = layoutDefinition;
             SetData(data, indicies);
+            PrimitiveType = primitiveType;
         }
 
-        public MeshData(Type layoutDefinitionType, T[] data, ushort[] indicies = null)
+        public MeshData(Type layoutDefinitionType, T[] data, ushort[] indicies = null, AxPrimitiveType primitiveType = AxPrimitiveType.Triangles)
         {
             Layout = VertexLayoutDefinition.CreateDefinitionFromVertexStruct(layoutDefinitionType);
             SetData(data, indicies);
+            PrimitiveType = primitiveType;
         }
 
-        public MeshData(T[] data, ushort[] indicies = null) : this()
+        public MeshData(T[] data, ushort[] indicies = null, AxPrimitiveType primitiveType = AxPrimitiveType.Triangles) : this()
         {
             SetData(data, indicies);
+            PrimitiveType = primitiveType;
         }
 
         public void SetData(T[] data, ushort[] indicies = null)
