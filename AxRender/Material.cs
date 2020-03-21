@@ -26,6 +26,8 @@ namespace Aximo.Render
         public float SpecularStrength { get; set; }
         public MaterialColorBlendMode ColorBlendMode { get; set; }
 
+        public bool CastShadow;
+
         public Shader Shader { get; set; }
         public Shader DefGeometryShader { get; set; }
         public Shader ShadowShader { get; set; }

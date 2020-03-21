@@ -82,6 +82,11 @@ namespace Aximo.Render
         void OnForwardRender();
     }
 
+    public interface IScreenRenderable : IRenderableObject
+    {
+        void OnScreenRender();
+    }
+
     public interface IDeferredRenderable : IRenderableObject
     {
         void OnDeferredRender();

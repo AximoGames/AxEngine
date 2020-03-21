@@ -74,8 +74,11 @@ namespace Aximo.Render
             if (Mesh == null)
                 return;
 
-            UsePipeline<PointShadowRenderPipeline>();
-            UsePipeline<DirectionalShadowRenderPipeline>();
+            if (Mesh.Materials.Any(m => m.CastShadow))
+            {
+                UsePipeline<PointShadowRenderPipeline>();
+                UsePipeline<DirectionalShadowRenderPipeline>();
+            }
 
             if (PrimaryRenderPipeline == null)
                 PrimaryRenderPipeline = Context.PrimaryRenderPipeline;
@@ -204,6 +207,9 @@ namespace Aximo.Render
         {
             foreach (var mat in vaoList)
             {
+                if (!mat.material.CastShadow)
+                    continue;
+
                 mat.vao.Bind();
                 var shadowShader = mat.material.ShadowShader;
 
@@ -234,6 +240,9 @@ namespace Aximo.Render
         {
             foreach (var mat in vaoList)
             {
+                if (!mat.material.CastShadow)
+                    continue;
+
                 mat.vao.Bind();
                 var cubeShadowShader = mat.material.CubeShadowShader;
                 cubeShadowShader.Bind();

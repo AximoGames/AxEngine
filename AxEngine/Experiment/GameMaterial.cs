@@ -126,6 +126,7 @@ namespace Aximo.Engine
                     {
                         DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
                         SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                        CastShadow = true,
                     };
                 }
                 return _DefaultMaterial;
@@ -137,6 +138,22 @@ namespace Aximo.Engine
             Shader = new GameShader("Shaders/lines.vert", "Shaders/lines.frag"),
             PipelineType = PipelineType.Forward,
         };
+
+        public static GameMaterial DefaultScreenMaterial { get; } = new GameMaterial
+        {
+            Shader = new GameShader("Shaders/screen.vert", "Shaders/screen.frag"),
+            PipelineType = PipelineType.Forward,
+        };
+
+        public static GameMaterial CreateScreenMaterial(string texturePath)
+        {
+            return new GameMaterial
+            {
+                Shader = new GameShader("Shaders/screen.vert", "Shaders/screen.frag"),
+                DiffuseTexture = GameTexture.GetFromFile(texturePath),
+                PipelineType = PipelineType.Screen,
+            };
+        }
 
         public static GameMaterial CreateNewMaterial()
         {
@@ -177,6 +194,7 @@ namespace Aximo.Engine
         public float Shininess { get; set; }
         public float SpecularStrength { get; set; }
         public MaterialColorBlendMode ColorBlendMode { get; set; }
+        public bool CastShadow { get; set; }
 
         private Dictionary<string, Parameter> Parameters = new Dictionary<string, Parameter>();
 
@@ -239,6 +257,7 @@ namespace Aximo.Engine
             var mat = InternalMaterial;
             mat.txt0 = DiffuseTexture?.InternalTexture;
             mat.txt1 = SpecularTexture?.InternalTexture;
+            mat.CastShadow = CastShadow;
 
             switch (PipelineType)
             {
@@ -250,6 +269,9 @@ namespace Aximo.Engine
                     break;
                 case PipelineType.Deferred:
                     mat.RenderPipeline = RenderContext.Current.GetPipeline<DeferredRenderPipeline>();
+                    break;
+                case PipelineType.Screen:
+                    mat.RenderPipeline = RenderContext.Current.GetPipeline<ScreenPipeline>();
                     break;
             }
 
@@ -327,6 +349,7 @@ namespace Aximo.Engine
         Default,
         Forward,
         Deferred,
+        Screen,
     }
 
 }

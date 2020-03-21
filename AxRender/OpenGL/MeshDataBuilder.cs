@@ -18,6 +18,11 @@ namespace Aximo.Render
             return new MeshData<float>(typeof(VertexDataPosNormalUV), DataHelper.DebugCube);
         }
 
+        public static MeshData Quad()
+        {
+            return new MeshData<float>(typeof(VertexDataPos2UV), DataHelper.Quad);
+        }
+
         public static MeshData Sphere(int divisions)
         {
             var ico = new AxRender.Objects.Util.IcoSphere.IcoSphereMesh(2);
