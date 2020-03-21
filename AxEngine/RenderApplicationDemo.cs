@@ -113,13 +113,11 @@ namespace Aximo.Engine
                 RelativeTranslation = new Vector3(1.5f, 1.5f, 0.5f),
             }));
 
-            RenderContext.AddObject(new SphereObject()
+            GameContext.AddActor(new Actor(new SphereComponent()
             {
                 Name = "Sphere1",
-                Scale = new Vector3(1),
-                Position = new Vector3(3f, 3f, 0.5f),
-                PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>(),
-            });
+                RelativeTranslation = new Vector3(3f, 3f, 0.5f),
+            }));
             GameContext.AddActor(new Actor(new CubeComponent()
             {
                 Name = "Box4",
