@@ -31,37 +31,31 @@ namespace Aximo.Engine
                 },
             }));
 
-            RenderContext.AddObject(new TestObject()
+            GameContext.AddActor(new Actor(new CubeComponent()
             {
                 Name = "Ground",
-                Scale = new Vector3(50, 50, 1),
-                Position = new Vector3(0f, 0f, -0.5f),
-                // RenderShadow = false,
-                //PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
-            });
+                RelativeScale = new Vector3(50, 50, 1),
+                RelativeTranslation = new Vector3(0f, 0f, -0.5f),
+            }));
             RenderContext.AddObject(new GridObject()
             {
                 Name = "Grid",
                 ModelMatrix = Matrix4.CreateTranslation(0f, 0f, 0.01f),
-                //Debug = true,
             });
             RenderContext.AddObject(new GridObject()
             {
                 Name = "Grid",
                 ModelMatrix = Matrix4.CreateRotationY((float)Math.PI / 2) * Matrix4.CreateTranslation(-10f, 0f, 0.01f),
-                //Debug = true,
             });
             RenderContext.AddObject(new GridObject()
             {
                 Name = "Grid",
                 ModelMatrix = Matrix4.CreateRotationX((float)Math.PI / 2) * Matrix4.CreateTranslation(0f, 10f, 0.01f),
-                //Debug = true,
             });
             RenderContext.AddObject(new CrossLinesObject()
             {
                 Name = "CenterCross",
                 ModelMatrix = Matrix4.CreateScale(2.0f) * Matrix4.CreateTranslation(0f, 0f, 0.02f),
-                //Debug = true,
             });
             RenderContext.AddObject(new ScreenTextureObject()
             {
@@ -79,7 +73,6 @@ namespace Aximo.Engine
             RenderContext.AddObject(new LineObject()
             {
                 Name = "DebugLine",
-                //Enabled = false,
             });
 
             RenderContext.AddObject(new LightObject()
@@ -88,7 +81,6 @@ namespace Aximo.Engine
                 Name = "MovingLight",
                 LightType = LightType.Directional,
                 ShadowTextureIndex = 0,
-                //Enabled = false,
             });
 
             RenderContext.AddObject(new LightObject()
@@ -99,51 +91,41 @@ namespace Aximo.Engine
                 ShadowTextureIndex = 1,
             });
 
-            RenderContext.AddObject(new TestObject()
+            GameContext.AddActor(new Actor(new CubeComponent()
             {
                 Name = "GroundCursor",
-                Position = new Vector3(0, 1, 0.05f),
-                Scale = new Vector3(1.0f, 1.0f, 0.1f),
-                // Enabled = false,
-            });
+                RelativeTranslation = new Vector3(0, 1, 0.05f),
+                RelativeScale = new Vector3(1.0f, 1.0f, 0.1f),
+            }));
 
-            RenderContext.AddObject(new TestObject()
+            GameContext.AddActor(new Actor(new DebugCubeComponent()
             {
                 Name = "Box1",
-                Rotate = new Quaternion(0, 0, 0.5f),
-                Scale = new Vector3(1),
-                Position = new Vector3(0, 0, 0.5f),
-                Debug = true,
-                // Enabled = false,
-            });
+                RelativeRotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
+                RelativeScale = new Vector3(1),
+                RelativeTranslation = new Vector3(0, 0, 0.5f),
+            }));
 
-            RenderContext.AddObject(new TestObject()
+            GameContext.AddActor(new Actor(new CubeComponent()
             {
                 Name = "Box2",
-                Scale = new Vector3(1),
-                Position = new Vector3(1.5f, 1.5f, 0.5f),
-                //Debug = true,
-                //Enabled = false,
-            });
+                RelativeScale = new Vector3(1),
+                RelativeTranslation = new Vector3(1.5f, 1.5f, 0.5f),
+            }));
 
             RenderContext.AddObject(new SphereObject()
             {
                 Name = "Sphere1",
                 Scale = new Vector3(1),
                 Position = new Vector3(3f, 3f, 0.5f),
-                //Debug = true,
-                //Enabled = false,
                 PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>(),
             });
-            RenderContext.AddObject(new TestObject()
+            GameContext.AddActor(new Actor(new CubeComponent()
             {
                 Name = "Box4",
-                Scale = new Vector3(1),
-                Position = new Vector3(4f, 3f, 0.5f),
-                //Debug = true,
-                //Enabled = false,
-                //PrimaryRenderPipeline = ctx.GetPipeline<ForwardRenderPipeline>(),
-            });
+                RelativeScale = new Vector3(1),
+                RelativeTranslation = new Vector3(4f, 3f, 0.5f),
+            }));
 
             GameContext.AddActor(new Actor(
                 new SceneComponent(
@@ -165,44 +147,24 @@ namespace Aximo.Engine
                 Name = "GroupActor1",
             });
 
-            RenderContext.AddObject(new TestObject()
+            GameContext.AddActor(new Actor(new DebugCubeComponent()
             {
                 Name = "BoxFar1",
-                Scale = new Vector3(1),
-                Position = new Vector3(18, 0, 0.5f),
-                Debug = true,
-                // Enabled = false,
-            });
-            RenderContext.AddObject(new TestObject()
+                RelativeScale = new Vector3(1),
+                RelativeTranslation = new Vector3(18, 0, 0.5f),
+            }));
+            GameContext.AddActor(new Actor(new DebugCubeComponent()
             {
                 Name = "BoxFar2",
-                Scale = new Vector3(1),
-                Position = new Vector3(16, 1, 0.5f),
-                Debug = true,
+                RelativeScale = new Vector3(1),
+                RelativeTranslation = new Vector3(16, 1, 0.5f),
                 // Enabled = false,
-            });
-            // RenderContext.AddObject(new TestObject()
-            // {
-            //     Name = "BoxFar3",
-            //     Scale = new Vector3(1),
-            //     Position = new Vector3(0, 18, 0.5f),
-            //     Debug = true,
-            //     // Enabled = false,
-            // });
-            // RenderContext.AddObject(new TestObject()
-            // {
-            //     Name = "BoxFar4",
-            //     Scale = new Vector3(1),
-            //     Position = new Vector3(-1, 16, 0.5f),
-            //     Debug = true,
-            //     // Enabled = false,
-            // });
+            }));
 
             // For performance reasons, skybox should rendered as last
             RenderContext.AddObject(new SkyboxObject()
             {
                 Name = "Sky",
-                // RenderShadow = false,
             });
         }
 

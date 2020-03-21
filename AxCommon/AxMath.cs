@@ -32,5 +32,25 @@ namespace Aximo
             return new Vector2i((int)vec.X, (int)vec.Y);
         }
 
+        public static float NormalizedToRadians(float normalizedAngle)
+        {
+            return normalizedAngle * MathF.PI * 2;
+        }
+
+        public static Quaternion QuaternionFromNormalizedAngles(float rotationX, float rotationY, float rotationZ)
+        {
+            return new Quaternion(NormalizedToRadians(rotationX), NormalizedToRadians(rotationY), NormalizedToRadians(rotationZ));
+        }
+
+        public static Quaternion QuaternionFromNormalizedAngles(Vector3 normalizedAngle)
+        {
+            return QuaternionFromNormalizedAngles(normalizedAngle.X, normalizedAngle.Y, normalizedAngle.Z);
+        }
+
+        public static Quaternion ToQuaternion(this Vector3 normalizedAngle)
+        {
+            return QuaternionFromNormalizedAngles(normalizedAngle);
+        }
+
     }
 }
