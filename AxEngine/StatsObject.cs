@@ -20,7 +20,9 @@ namespace Aximo.Engine
         public override void Init()
         {
             GfxTexture = new GraphicsTexture(100, 100);
+            GfxTexture.Graphics.Clear(Color.Green);
             SourceTexture = GfxTexture.Texture;
+            GfxTexture.UpdateTexture();
             base.Init();
         }
 

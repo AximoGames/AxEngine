@@ -18,7 +18,6 @@ namespace Aximo.Render
             Image = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             Graphics = Graphics.FromImage(Image);
             Texture = new Texture(Image);
-            Graphics.Clear(Color.Transparent);
             UpdateTexture();
         }
 

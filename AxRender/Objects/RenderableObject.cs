@@ -21,6 +21,8 @@ namespace Aximo.Render
                 m3.OnRenderShadow();
             else if (Context.CurrentPipeline is PointShadowRenderPipeline && this is IShadowObject m4)
                 m4.OnRenderCubeShadow();
+            else if (Context.CurrentPipeline is ScreenPipeline && this is IScreenRenderable m5)
+                m5.OnScreenRender();
         }
 
         protected Dictionary<string, object> ShaderParams = new Dictionary<string, object>();

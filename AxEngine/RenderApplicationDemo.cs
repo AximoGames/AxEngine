@@ -61,17 +61,17 @@ namespace Aximo.Engine
                 RelativeTranslation = new Vector3(0f, 0f, 0.02f),
                 RelativeScale = new Vector3(2.0f),
             }));
-            GameContext.AddActor(new Actor(new ScreenTextureComponent("Textures/woodenbox.png")
+            GameContext.AddActor(new Actor(new ScreenTextureComponent("Textures/wood.png")
             {
                 Name = "ScreenTexture1.1",
-                RectanglePixels = new RectangleF(000, 0, 30f, 30f),
+                RectanglePixels = new RectangleF(0, 0, 30f, 30f),
             }));
-            RenderContext.AddObject(new ScreenTextureObject()
-            {
-                Name = "ScreenTexture1",
-                TexturePath = "Textures/woodenbox.png",
-                RectanglePixels = new RectangleF(000, 0, 30f, 30f),
-            });
+            // RenderContext.AddObject(new ScreenTextureObject()
+            // {
+            //     Name = "ScreenTexture1",
+            //     TexturePath = "Textures/woodenbox.png",
+            //     RectanglePixels = new RectangleF(000, 0, 30f, 30f),
+            // });
 
             RenderContext.AddObject(new StatsObject()
             {

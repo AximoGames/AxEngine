@@ -220,6 +220,7 @@ namespace Aximo.Render
 
         public void SetData(Bitmap image)
         {
+            Bind();
             // Load the image
             // First, we get our pixels from the bitmap we loaded.
             // Arguments:

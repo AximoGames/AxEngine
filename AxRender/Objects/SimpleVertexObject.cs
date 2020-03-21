@@ -11,7 +11,7 @@ namespace Aximo.Render
 {
 
     public class SimpleVertexObject : RenderableObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
-        IForwardRenderable, IDeferredRenderable
+        IForwardRenderable, IDeferredRenderable, IScreenRenderable
     {
 
         public Camera Camera => Context.Camera;
@@ -117,6 +117,7 @@ namespace Aximo.Render
             foreach (var mat in vaoList)
             {
                 var shader = mat.material.Shader;
+                shader.Bind();
                 mat.vao.Bind();
 
                 if (mat.material.txt0 != null)
@@ -124,8 +125,6 @@ namespace Aximo.Render
                 if (mat.material.txt1 != null)
                     mat.material.txt1.Bind(TextureUnit.Texture1);
                 Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
-
-                shader.Bind();
 
                 shader.SetMatrix4("model", GetModelMatrix());
                 shader.SetMatrix4("view", Camera.ViewMatrix);
@@ -155,6 +154,26 @@ namespace Aximo.Render
             }
         }
 
+        public void OnScreenRender()
+        {
+            foreach (var mat in vaoList)
+            {
+                var shader = mat.material.Shader;
+                shader.Bind();
+
+                mat.vao.Bind();
+
+                if (mat.material.txt0 != null)
+                    mat.material.txt0.Bind(TextureUnit.Texture0);
+
+                shader.SetMatrix4("model", GetModelMatrix());
+
+                GL.Disable(EnableCap.CullFace);
+                mat.vao.Draw();
+                GL.Enable(EnableCap.CullFace);
+            }
+        }
+
         public void OnDeferredRender()
         {
             var pipe = Context.GetPipeline<DeferredRenderPipeline>();
@@ -164,14 +183,14 @@ namespace Aximo.Render
                 foreach (var mat in vaoList)
                 {
                     var defGeometryShader = mat.material.DefGeometryShader;
+                    defGeometryShader.Bind();
+
                     mat.vao.Bind();
 
                     if (mat.material.txt0 != null)
                         mat.material.txt0.Bind(TextureUnit.Texture0);
                     if (mat.material.txt1 != null)
                         mat.material.txt1.Bind(TextureUnit.Texture1);
-
-                    defGeometryShader.Bind();
 
                     defGeometryShader.SetMaterial("material", mat.material);
 
