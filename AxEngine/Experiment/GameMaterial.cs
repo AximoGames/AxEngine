@@ -63,7 +63,7 @@ namespace Aximo.Engine
 
         private bool AutoDisposeBitmap = false;
 
-        public static GameTexture GetFromBitmap(Bitmap bitmap, string name, bool autoDisposeBitmap = false)
+        public static GameTexture GetFromBitmap(Bitmap bitmap, string name = null, bool autoDisposeBitmap = false)
         {
             var txt = new GameTexture(bitmap.Width, bitmap.Height);
             txt.Label = name;
@@ -147,10 +147,16 @@ namespace Aximo.Engine
 
         public static GameMaterial CreateScreenMaterial(string texturePath)
         {
+            var mat = CreateScreenMaterial();
+            mat.DiffuseTexture = GameTexture.GetFromFile(texturePath);
+            return mat;
+        }
+
+        public static GameMaterial CreateScreenMaterial()
+        {
             return new GameMaterial
             {
                 Shader = new GameShader("Shaders/screen.vert", "Shaders/screen.frag"),
-                DiffuseTexture = GameTexture.GetFromFile(texturePath),
                 PipelineType = PipelineType.Screen,
             };
         }

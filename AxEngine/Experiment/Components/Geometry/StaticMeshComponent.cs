@@ -52,8 +52,39 @@ namespace Aximo.Engine
         }
     }
 
+    public class GraphicsScreenTextureComponent : ScreenTextureComponent
+    {
+        public GraphicsScreenTextureComponent(int width, int height)
+        {
+            Image = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            Graphics = Graphics.FromImage(Image);
+            Texture = GameTexture.GetFromBitmap(Image, null);
+            Material.DiffuseTexture = Texture;
+            UpdateTexture();
+        }
+
+        private Bitmap Image;
+
+        public Graphics Graphics { get; private set; }
+
+        public GameTexture Texture { get; private set; }
+
+        public void UpdateTexture()
+        {
+            // Graphics.Save();
+            Graphics.Flush();
+            // Graphics.Dispose();
+            Texture.SetData(Image);
+        }
+
+    }
+
     public class ScreenTextureComponent : StaticMeshComponent
     {
+        public ScreenTextureComponent() : base(MeshDataBuilder.Quad(), MaterialManager.CreateScreenMaterial())
+        {
+        }
+
         public ScreenTextureComponent(string texturePath) : base(MeshDataBuilder.Quad(), MaterialManager.CreateScreenMaterial(texturePath))
         {
         }

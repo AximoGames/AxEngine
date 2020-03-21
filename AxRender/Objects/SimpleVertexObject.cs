@@ -168,9 +168,11 @@ namespace Aximo.Render
 
                 shader.SetMatrix4("model", GetModelMatrix());
 
-                GL.Disable(EnableCap.CullFace);
+                //GL.Disable(EnableCap.CullFace);
+                GL.CullFace(CullFaceMode.Front);
                 mat.vao.Draw();
-                GL.Enable(EnableCap.CullFace);
+                //GL.Enable(EnableCap.CullFace);
+                GL.CullFace(CullFaceMode.Back);
             }
         }
 
