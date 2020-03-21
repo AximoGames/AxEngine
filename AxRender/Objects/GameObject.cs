@@ -42,7 +42,11 @@ namespace Aximo.Render
 
         public void UsePipeline(IRenderPipeline pipeline)
         {
-            RenderPipelines.Add(pipeline);
+            if (pipeline == null)
+                return;
+
+            if (!RenderPipelines.Contains(pipeline))
+                RenderPipelines.Add(pipeline);
         }
 
         public void AssignContext(RenderContext ctx)

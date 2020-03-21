@@ -34,6 +34,8 @@ namespace Aximo.Render
         public Texture txt0;
         public Texture txt1;
 
+        public IRenderPipeline RenderPipeline;
+
         public static Material GetDefault()
         {
             var mat = new Material()

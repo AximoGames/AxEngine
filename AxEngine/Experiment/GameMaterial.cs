@@ -155,6 +155,8 @@ namespace Aximo.Engine
 
         private Dictionary<string, Parameter> Parameters = new Dictionary<string, Parameter>();
 
+        public PipelineType PipelineType { get; set; }
+
         public void AddParameter(string name, Vector3 value)
         {
             AddParameter(new Parameter(name, value, ParamterType.Vector3));
@@ -208,6 +210,19 @@ namespace Aximo.Engine
             var mat = InternalMaterial;
             mat.txt0 = DiffuseTexture.InternalTexture;
             mat.txt1 = SpecularTexture.InternalTexture;
+
+            switch (PipelineType)
+            {
+                case PipelineType.Default:
+                    mat.RenderPipeline = RenderContext.Current.PrimaryRenderPipeline;
+                    break;
+                case PipelineType.Forward:
+                    mat.RenderPipeline = RenderContext.Current.GetPipeline<ForwardRenderPipeline>();
+                    break;
+                case PipelineType.Deferred:
+                    mat.RenderPipeline = RenderContext.Current.GetPipeline<DeferredRenderPipeline>();
+                    break;
+            }
 
             foreach (var param in Parameters.Values)
             {
@@ -276,6 +291,13 @@ namespace Aximo.Engine
             Texture,
         }
 
+    }
+
+    public enum PipelineType
+    {
+        Default,
+        Forward,
+        Deferred,
     }
 
 }

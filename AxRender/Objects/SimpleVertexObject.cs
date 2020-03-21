@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -76,16 +77,18 @@ namespace Aximo.Render
             if (PrimaryRenderPipeline == null)
                 PrimaryRenderPipeline = Context.PrimaryRenderPipeline;
 
-            UsePipeline(PrimaryRenderPipeline);
-
             if (_MaterialTmp != null)
             {
                 Mesh.Material = _MaterialTmp;
                 _MaterialTmp = null;
             }
 
+            if (Mesh.Materials.All(m => m.RenderPipeline == null))
+                UsePipeline(PrimaryRenderPipeline);
+
             foreach (var m in Mesh.Materials)
             {
+                UsePipeline(m.RenderPipeline);
                 m.CreateShaders();
 
                 var vao = new VertexArrayObject(Mesh.MeshData.BindLayoutToShader(m.Shader));
