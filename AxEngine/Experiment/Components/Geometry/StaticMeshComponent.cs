@@ -273,6 +273,8 @@ namespace Aximo.Engine
                 TransformChanged = false;
             }
 
+            obj.Enabled = Visible;
+
             if (created)
                 RenderContext.Current.AddObject(RenderableObject);
         }

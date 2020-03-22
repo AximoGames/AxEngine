@@ -19,7 +19,21 @@ namespace Aximo.Engine
 
         public SceneComponent Parent { get; private set; }
 
-        public bool Visible { get; set; }
+        private bool _Visible = true;
+        public bool Visible
+        {
+            get
+            {
+                return _Visible;
+            }
+            set
+            {
+                if (_Visible == value)
+                    return;
+                Update();
+                _Visible = value;
+            }
+        }
 
         public SceneComponent()
         {
