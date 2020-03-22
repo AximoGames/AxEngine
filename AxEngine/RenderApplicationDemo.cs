@@ -41,18 +41,18 @@ namespace Aximo.Engine
 
             GameContext.AddActor(new Actor(new GridPlaneComponent(10, true)
             {
-                Name = "GridZ",
+                Name = "GridPlaneXY",
                 RelativeTranslation = new Vector3(0f, 0f, 0.01f),
             }));
             GameContext.AddActor(new Actor(new GridPlaneComponent(10, true)
             {
-                Name = "GridX",
+                Name = "GridPlaneYZ",
                 RelativeTranslation = new Vector3(-10f, 0f, 0.01f),
                 RelativeRotation = new Vector3(0, 0.25f, 0).ToQuaternion(),
             }));
             GameContext.AddActor(new Actor(new GridPlaneComponent(10, true)
             {
-                Name = "GridY",
+                Name = "GridPlaneXZ",
                 RelativeTranslation = new Vector3(0f, 10f, 0.01f),
                 RelativeRotation = new Vector3(0.25f, 0, 0).ToQuaternion(),
             }));
