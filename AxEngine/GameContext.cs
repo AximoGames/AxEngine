@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Aximo.Render;
 using OpenTK;
 
@@ -99,8 +100,16 @@ namespace Aximo.Engine
                 act.PropagateChangesDown();
         }
 
+        internal IList<ActorComponent> ComponentsForDeallocation = new SynchronizedCollection<ActorComponent>();
+
         public void Sync()
         {
+            foreach (var comp in ComponentsForDeallocation.ToArray())
+            {
+                comp.DoDeallocation();
+                ComponentsForDeallocation.Remove(comp);
+            }
+
             foreach (var act in Actors)
                 act.SyncChanges();
         }

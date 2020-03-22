@@ -10,7 +10,7 @@ using System.Threading;
 namespace Aximo.Engine
 {
 
-    public class ActorComponent
+    public class ActorComponent : IDisposable
     {
         public int ComponentId { get; private set; }
 
@@ -34,7 +34,7 @@ namespace Aximo.Engine
 
         internal void SetActor(Actor actor)
         {
-            if (Actor == Actor)
+            if (Actor == actor)
                 return;
 
             if (Actor != null)
@@ -43,12 +43,12 @@ namespace Aximo.Engine
             Actor = actor;
         }
 
-        public void Detach()
+        public virtual void Detach()
         {
-            if (Actor == null)
-                throw new InvalidOperationException("Actor not attached");
-
+            Actor?.RemoveComponent(this);
             Actor = null;
+
+            Deallocate();
         }
 
         internal virtual void UpdateFrameInternal()
@@ -78,5 +78,26 @@ namespace Aximo.Engine
             HasChanges = true;
         }
 
+        internal virtual void Deallocate()
+        {
+            if (HasDeallocation)
+                return;
+
+            HasDeallocation = true;
+            GameContext.Current.ComponentsForDeallocation.Add(this);
+        }
+
+        protected bool HasDeallocation;
+
+        // Only this object, no childs
+        internal virtual void DoDeallocation()
+        {
+            HasDeallocation = false;
+        }
+
+        public virtual void Dispose()
+        {
+            Detach();
+        }
     }
 }

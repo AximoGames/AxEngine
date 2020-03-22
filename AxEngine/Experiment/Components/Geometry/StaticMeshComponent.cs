@@ -219,6 +219,21 @@ namespace Aximo.Engine
             return new StaticMeshSceneProxy(this);
         }
 
+        internal override void DoDeallocation()
+        {
+            if (!HasDeallocation)
+                return;
+
+            if (RenderableObject == null)
+                return;
+
+            RenderContext.Current.RemoveObject(RenderableObject);
+            RenderableObject.Free();
+            RenderableObject = null;
+
+            base.DoDeallocation();
+        }
+
         internal override void SyncChanges()
         {
             if (!HasChanges)

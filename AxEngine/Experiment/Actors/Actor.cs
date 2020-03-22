@@ -156,8 +156,8 @@ namespace Aximo.Engine
 
         public void RemoveComponent(ActorComponent component)
         {
-            component.Detach();
-            _Components.Remove(component);
+            if (!_Components.Remove(component))
+                return;
 
             if (RootComponent == component)
                 RootComponent = null;

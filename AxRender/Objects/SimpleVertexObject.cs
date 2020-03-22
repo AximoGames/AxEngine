@@ -321,6 +321,11 @@ namespace Aximo.Render
 
         public override void Free()
         {
+            foreach (var itm in vaoList)
+            {
+                itm.vao.Free();
+            }
+            vaoList.Clear();
         }
 
         public void OnReload()

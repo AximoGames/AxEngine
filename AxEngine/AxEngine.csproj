@@ -10,6 +10,11 @@
 	<CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.ServiceModel">
+      <Name>System.ServiceModel</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="OpenTK" Version="3.1.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>

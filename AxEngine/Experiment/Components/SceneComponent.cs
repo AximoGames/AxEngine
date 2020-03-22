@@ -100,6 +100,25 @@ namespace Aximo.Engine
 
         public override Actor Actor => RootComponent?.Actor;
 
+        internal override void Deallocate()
+        {
+            foreach (var child in Components)
+                child.Deallocate();
+
+            base.Deallocate();
+        }
+
+        public override void Detach()
+        {
+            if (Parent != null)
+                Parent.RemoveComponent(this);
+
+            foreach (var child in Components)
+                child.Deallocate();
+
+            base.Detach();
+        }
+
         private Vector3 _RelativeScale = Vector3.One;
         public Vector3 RelativeScale
         {
