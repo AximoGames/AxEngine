@@ -112,7 +112,7 @@ namespace Aximo.Engine
 
         public SceneComponent RootComponent => ParentComponents.FirstOrDefault();
 
-        public override Actor Actor => RootComponent?.Actor;
+        public override Actor Actor => RootComponent?.Actor ?? base.Actor;
 
         internal override void Deallocate()
         {
