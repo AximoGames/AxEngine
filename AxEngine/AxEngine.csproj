@@ -7,7 +7,7 @@
     <OutputType>Exe</OutputType>
     <StartupObject />
     <NoWarn>CS0162</NoWarn>
-	<CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ServiceModel">
@@ -21,6 +21,9 @@
   <ItemGroup>
     <ProjectReference Include="..\AxRender\AxRender.csproj" />
     <ProjectReference Include="..\AxCommon\AxCommon.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Experiment\" />
   </ItemGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
 </Project>

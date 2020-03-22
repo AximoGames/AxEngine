@@ -13,7 +13,7 @@ using OpenTK.Input;
 namespace Aximo.Engine
 {
 
-    public class RenderApplication
+    public class RenderApplication : IDisposable
     {
 
         public static RenderApplication Current { get; private set; }
@@ -68,7 +68,7 @@ namespace Aximo.Engine
             };
             GameContext.Current = GameContext;
 
-            window = new Window(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle)
+            window = new RenderWindow(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle)
             {
                 WindowBorder = _startup.WindowBorder,
                 Location = new System.Drawing.Point((1920 / 2) + 10, 10),
@@ -501,6 +501,9 @@ namespace Aximo.Engine
         public void Dispose()
         {
             window.Dispose();
+            window = null;
+            ShaderWatcher.Dispose();
+            ShaderWatcher = null;
         }
 
         public void Close()

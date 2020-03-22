@@ -110,7 +110,7 @@ namespace Aximo.Engine
         private List<SceneComponent> _ParentComponents;
         public IReadOnlyList<SceneComponent> ParentComponents { get; private set; }
 
-        public SceneComponent RootComponent => ParentComponents.FirstOrDefault();
+        public SceneComponent RootComponent => ParentComponents.Count == 0 ? null : ParentComponents[0];
 
         public override Actor Actor => RootComponent?.Actor ?? base.Actor;
 

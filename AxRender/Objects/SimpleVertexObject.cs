@@ -61,10 +61,10 @@ namespace Aximo.Render
 
         private List<VertexArrayObjectMaterial> vaoList = new List<VertexArrayObjectMaterial>();
 
-        class VertexArrayObjectMaterial
+        private class VertexArrayObjectMaterial
         {
-            public VertexArrayObject vao;
-            public Material material;
+            public VertexArrayObject Vao;
+            public Material Material;
         }
 
         public IRenderPipeline PrimaryRenderPipeline;
@@ -101,8 +101,8 @@ namespace Aximo.Render
                 vao.SetData(Mesh.MeshData);
                 vaoList.Add(new VertexArrayObjectMaterial
                 {
-                    vao = vao,
-                    material = m,
+                    Vao = vao,
+                    Material = m,
                 });
             }
         }
@@ -116,14 +116,14 @@ namespace Aximo.Render
         {
             foreach (var mat in vaoList)
             {
-                var shader = mat.material.Shader;
+                var shader = mat.Material.Shader;
                 shader.Bind();
-                mat.vao.Bind();
+                mat.Vao.Bind();
 
-                if (mat.material.txt0 != null)
-                    mat.material.txt0.Bind(TextureUnit.Texture0);
-                if (mat.material.txt1 != null)
-                    mat.material.txt1.Bind(TextureUnit.Texture1);
+                if (mat.Material.txt0 != null)
+                    mat.Material.txt0.Bind(TextureUnit.Texture0);
+                if (mat.Material.txt1 != null)
+                    mat.Material.txt1.Bind(TextureUnit.Texture1);
                 Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
 
                 var model = GetModelMatrix();
@@ -136,7 +136,7 @@ namespace Aximo.Render
 
                 shader.SetInt("shadowMap", 2);
 
-                shader.SetMaterial("material", mat.material);
+                shader.SetMaterial("material", mat.Material);
 
                 ApplyShaderParams(shader);
 
@@ -152,7 +152,7 @@ namespace Aximo.Render
                 shader.BindBlock("lightsArray", Context.LightBinding);
                 shader.SetInt("lightCount", Lights.Count);
 
-                mat.vao.Draw();
+                mat.Vao.Draw();
             }
         }
 
@@ -160,19 +160,19 @@ namespace Aximo.Render
         {
             foreach (var mat in vaoList)
             {
-                var shader = mat.material.Shader;
+                var shader = mat.Material.Shader;
                 shader.Bind();
 
-                mat.vao.Bind();
+                mat.Vao.Bind();
 
-                if (mat.material.txt0 != null)
-                    mat.material.txt0.Bind(TextureUnit.Texture0);
+                if (mat.Material.txt0 != null)
+                    mat.Material.txt0.Bind(TextureUnit.Texture0);
 
                 shader.SetMatrix4("model", GetModelMatrix());
 
                 //GL.Disable(EnableCap.CullFace);
                 GL.CullFace(CullFaceMode.Front);
-                mat.vao.Draw();
+                mat.Vao.Draw();
                 //GL.Enable(EnableCap.CullFace);
                 GL.CullFace(CullFaceMode.Back);
             }
@@ -186,23 +186,23 @@ namespace Aximo.Render
 
                 foreach (var mat in vaoList)
                 {
-                    var defGeometryShader = mat.material.DefGeometryShader;
+                    var defGeometryShader = mat.Material.DefGeometryShader;
                     defGeometryShader.Bind();
 
-                    mat.vao.Bind();
+                    mat.Vao.Bind();
 
-                    if (mat.material.txt0 != null)
-                        mat.material.txt0.Bind(TextureUnit.Texture0);
-                    if (mat.material.txt1 != null)
-                        mat.material.txt1.Bind(TextureUnit.Texture1);
+                    if (mat.Material.txt0 != null)
+                        mat.Material.txt0.Bind(TextureUnit.Texture0);
+                    if (mat.Material.txt1 != null)
+                        mat.Material.txt1.Bind(TextureUnit.Texture1);
 
-                    defGeometryShader.SetMaterial("material", mat.material);
+                    defGeometryShader.SetMaterial("material", mat.Material);
 
                     defGeometryShader.SetMatrix4("model", GetModelMatrix());
                     defGeometryShader.SetMatrix4("view", Camera.ViewMatrix);
                     defGeometryShader.SetMatrix4("projection", Camera.ProjectionMatrix);
 
-                    mat.vao.Draw();
+                    mat.Vao.Draw();
                 }
             }
 
@@ -230,11 +230,11 @@ namespace Aximo.Render
         {
             foreach (var mat in vaoList)
             {
-                if (!mat.material.CastShadow)
+                if (!mat.Material.CastShadow)
                     continue;
 
-                mat.vao.Bind();
-                var shadowShader = mat.material.ShadowShader;
+                mat.Vao.Bind();
+                var shadowShader = mat.Material.ShadowShader;
 
                 shadowShader.Bind();
 
@@ -251,7 +251,7 @@ namespace Aximo.Render
                     shadowShader.SetInt("shadowLayer", light.ShadowTextureIndex);
 
                     //GL.CullFace(CullFaceMode.Front);
-                    mat.vao.Draw();
+                    mat.Vao.Draw();
                     //GL.CullFace(CullFaceMode.Back);}
                 }
             }
@@ -263,11 +263,11 @@ namespace Aximo.Render
         {
             foreach (var mat in vaoList)
             {
-                if (!mat.material.CastShadow)
+                if (!mat.Material.CastShadow)
                     continue;
 
-                mat.vao.Bind();
-                var cubeShadowShader = mat.material.CubeShadowShader;
+                mat.Vao.Bind();
+                var cubeShadowShader = mat.Material.CubeShadowShader;
                 cubeShadowShader.Bind();
 
                 foreach (var light in Lights)
@@ -302,7 +302,7 @@ namespace Aximo.Render
                     cubeShadowShader.SetFloat("far_plane", shadowCamera.FarPlane);
                     cubeShadowShader.SetInt("shadowLayer", light.ShadowTextureIndex);
 
-                    mat.vao.Draw();
+                    mat.Vao.Draw();
                 }
             }
         }
@@ -323,7 +323,7 @@ namespace Aximo.Render
         {
             foreach (var itm in vaoList)
             {
-                itm.vao.Free();
+                itm.Vao.Free();
             }
             vaoList.Clear();
         }

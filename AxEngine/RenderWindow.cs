@@ -9,7 +9,7 @@ using OpenTK.Input;
 namespace Aximo.Engine
 {
 
-    public class Window : GameWindow
+    public class RenderWindow : GameWindow
     {
 
         //public static Matrix4 CameraMatrix;
@@ -21,7 +21,7 @@ namespace Aximo.Engine
         //private float Pitch = -0.3f;
         //private float Facing = (float)Math.PI / 2 + 0.15f;
 
-        public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 3, GraphicsContextFlags.Default) { }
+        public RenderWindow(int width, int height, string title) : base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 3, GraphicsContextFlags.Default) { }
 
         protected override void OnLoad(EventArgs e)
         {
