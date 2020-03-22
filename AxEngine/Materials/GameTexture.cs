@@ -57,7 +57,7 @@ namespace Aximo.Engine
         {
             var txt = new GameTexture(bitmap.Width, bitmap.Height);
             txt.Label = name;
-            txt.AutoDisposeBitmap = true;
+            txt.AutoDisposeBitmap = autoDisposeBitmap;
             txt.SetData(bitmap);
             return txt;
         }
