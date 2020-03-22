@@ -3,11 +3,12 @@
 
 using System;
 using System.Threading;
+using Aximo.Engine;
 using OpenTK;
 
-namespace Aximo.Engine
+namespace Aximo.AxDemo
 {
-    internal class MainClass
+    internal class Program
     {
 
         private static Thread th;

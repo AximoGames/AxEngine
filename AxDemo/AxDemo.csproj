@@ -1,14 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <RootNamespace>AxEngine</RootNamespace>
-    <AssemblyName>AxEngine</AssemblyName>
+    <RootNamespace>AxDemo</RootNamespace>
+    <AssemblyName>AxDemo</AssemblyName>
     <TargetFramework>net472</TargetFramework>
     <ApplicationIcon />
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <StartupObject />
     <NoWarn>CS0162</NoWarn>
     <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Experiment\**" />
+    <EmbeddedResource Remove="Experiment\**" />
+    <None Remove="Experiment\**" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ServiceModel">
       <Name>System.ServiceModel</Name>
@@ -19,11 +24,9 @@
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AxEngine\AxEngine.csproj" />
     <ProjectReference Include="..\AxRender\AxRender.csproj" />
     <ProjectReference Include="..\AxCommon\AxCommon.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Experiment\" />
   </ItemGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
 </Project>

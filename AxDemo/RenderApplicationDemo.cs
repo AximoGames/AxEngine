@@ -3,10 +3,10 @@
 
 using System;
 using System.Drawing;
-//using Aximo.Render;
+using Aximo.Engine;
 using OpenTK;
 
-namespace Aximo.Engine
+namespace Aximo.AxDemo
 {
 
     public class RenderApplicationDemo : RenderApplication
