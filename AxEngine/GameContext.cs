@@ -91,15 +91,18 @@ namespace Aximo.Engine
         {
             foreach (var act in Actors)
                 act.UpdateFrameInternal();
+
+            foreach (var act in Actors)
+                act.PropagateChangesUp();
+
+            foreach (var act in Actors)
+                act.PropagateChangesDown();
         }
 
         public void Sync()
         {
             foreach (var act in Actors)
-            {
-                act.PropagateChanges();
                 act.SyncChanges();
-            }
         }
 
     }

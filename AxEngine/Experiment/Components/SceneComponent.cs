@@ -19,6 +19,8 @@ namespace Aximo.Engine
 
         public SceneComponent Parent { get; private set; }
 
+        public bool Visible { get; set; }
+
         public SceneComponent()
         {
             _Components = new List<SceneComponent>();
@@ -64,6 +66,8 @@ namespace Aximo.Engine
             child.SetParents();
 
             Actor?.RegisterComponentName(child);
+
+            child.UpdateParent();
         }
 
         private void SetParents()
@@ -140,20 +144,50 @@ namespace Aximo.Engine
 
         public Transform Transform => new Transform(RelativeScale, RelativeRotation, RelativeTranslation);
 
+        //public Transform TranslationTransform { get; set; } = Transform.Identity;
+
+        protected virtual Transform CalculateTransform()
+        {
+            var trans = Transform;
+            //trans.Translation.Y = -trans.Translation.Y;
+            //trans.Translation *= LocalTransform.Translation;
+
+            //TransformMatrix = Matrix4.CreateScale(1, -1, 1);
+
+            //trans.Translation *= MultiplyTransform.Translation;
+
+            // var t = TransformMatrix.Inverted();
+
+            // var a = t.ExtractTranslation();
+            // var b = t.ExtractScale();
+
+            // trans.Translation += TranslationTransform.Translation;
+            // trans.Translation *= TranslationTransform.Scale;
+
+            trans.Translation = (TranslationMatrix * new Vector4(trans.Translation, 1.0f)).Xyz;
+
+            return trans;
+        }
+
+        public Matrix4 TranslationMatrix = Matrix4.Identity;
+
         public Matrix4 LocalToWorld()
         {
             //var trans = Matrix4.Identity;
-            var trans = Transform.GetMatrix();
+            var trans = CalculateTransform().GetMatrix();
+
+            //trans *= TransformMatrix.Inverted();
 
             var parent = Parent;
             while (parent != null)
             {
-                trans *= parent.Transform.GetMatrix();
+                trans *= parent.CalculateTransform().GetMatrix();
                 parent = parent.Parent;
             }
             //trans *= Transform.GetMatrix();
             //return Transform.GetMatrix();
             //return Matrix4.CreateScale(2);
+
             return trans;
         }
 
@@ -171,22 +205,42 @@ namespace Aximo.Engine
             TransformChanged = true;
         }
 
-        internal override void PropagateChanges()
+        protected internal bool ParentChanged;
+        protected internal void UpdateParent()
+        {
+            Update();
+            ParentChanged = true;
+        }
+
+        internal override void PropagateChangesUp()
         {
             if (TransformChanged)
                 foreach (var child in Components)
                     child.UpdateTransform();
 
             foreach (var child in Components)
-                child.PropagateChanges();
+                child.PropagateChangesUp();
 
-            base.PropagateChanges();
+            base.PropagateChangesUp();
+        }
+
+        internal override void PropagateChangesDown()
+        {
+            foreach (var child in Components)
+                child.PropagateChangesDown();
+
+            if (HasChanges && Parent != null)
+                Parent.HasChanges = true;
+
+            base.PropagateChangesDown();
         }
 
         internal override void SyncChanges()
         {
             if (!HasChanges)
                 return;
+
+            ParentChanged = false;
 
             foreach (var comp in Components)
                 comp.SyncChanges();

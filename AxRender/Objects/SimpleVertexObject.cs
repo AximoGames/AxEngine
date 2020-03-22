@@ -126,7 +126,9 @@ namespace Aximo.Render
                     mat.material.txt1.Bind(TextureUnit.Texture1);
                 Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
 
-                shader.SetMatrix4("model", GetModelMatrix());
+                var model = GetModelMatrix();
+
+                shader.SetMatrix4("model", model);
                 shader.SetMatrix4("view", Camera.ViewMatrix);
                 shader.SetMatrix4("projection", Camera.ProjectionMatrix);
 

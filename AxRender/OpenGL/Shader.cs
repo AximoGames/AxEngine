@@ -76,7 +76,7 @@ namespace Aximo.Render
         // Shaders are written in GLSL, which is a language very similar to C in its semantics.
         // The GLSL source is compiled *at runtime*, so it can optimize itself for the graphics card it's currently being used on.
         // A commented example of GLSL can be found in shader.vert
-        public Shader(string vertPath, string fragPath, string geomPath = null, bool compile = true)
+        public Shader(string vertPath, string fragPath, string geomPath = null, bool compile = true, IDictionary<string, object> defines = null)
         {
             AddSource(vertPath, ShaderType.VertexShader);
             AddSource(fragPath, ShaderType.FragmentShader);
@@ -91,6 +91,10 @@ namespace Aximo.Render
             //         Source = LoadSource("Shaders/lib.frag"),
             //     });
             // }
+
+            if (defines != null)
+                foreach (var entry in defines)
+                    SetDefine(entry.Key, entry.Value);
 
             if (compile)
                 Compile();

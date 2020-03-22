@@ -65,12 +65,12 @@ namespace Aximo.Engine
             }
         }
 
-        internal override void PropagateChanges()
+        internal override void PropagateChangesUp()
         {
             foreach (var mat in _Materials)
                 mat.PropagateChanges();
 
-            base.PropagateChanges();
+            base.PropagateChangesUp();
         }
 
         internal override void SyncChanges()

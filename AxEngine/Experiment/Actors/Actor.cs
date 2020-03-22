@@ -125,10 +125,16 @@ namespace Aximo.Engine
         {
         }
 
-        internal virtual void PropagateChanges()
+        internal virtual void PropagateChangesUp()
         {
             foreach (var comp in Components)
-                comp.PropagateChanges();
+                comp.PropagateChangesUp();
+        }
+
+        internal virtual void PropagateChangesDown()
+        {
+            foreach (var comp in Components)
+                comp.PropagateChangesDown();
         }
 
         internal void SyncChanges()

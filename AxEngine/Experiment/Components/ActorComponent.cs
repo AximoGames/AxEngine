@@ -43,7 +43,7 @@ namespace Aximo.Engine
             Actor = actor;
         }
 
-        internal void Detach()
+        public void Detach()
         {
             if (Actor == null)
                 throw new InvalidOperationException("Actor not attached");
@@ -60,7 +60,11 @@ namespace Aximo.Engine
         {
         }
 
-        internal virtual void PropagateChanges()
+        internal virtual void PropagateChangesUp()
+        {
+        }
+
+        internal virtual void PropagateChangesDown()
         {
         }
 

@@ -126,6 +126,10 @@ namespace Aximo.Engine
                     {
                         DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
                         SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                        Color = new Vector3(1.0f, 1.0f, 0.0f),
+                        Ambient = 0.3f,
+                        Shininess = 32.0f,
+                        SpecularStrength = 0.5f,
                         CastShadow = true,
                     };
                 }
@@ -203,12 +207,58 @@ namespace Aximo.Engine
         public bool CastShadow { get; set; }
 
         private Dictionary<string, Parameter> Parameters = new Dictionary<string, Parameter>();
+        private Dictionary<string, object> Defines = new Dictionary<string, object>();
 
         public PipelineType PipelineType { get; set; }
+
+        public void SetDefine(string name, string value)
+        {
+            Defines.Add(name, value);
+        }
+
+        public void AddParameter(string name, Matrix3 value)
+        {
+            AddParameter(new Parameter(name, value, ParamterType.Matrix3));
+        }
+
+        public void AddParameter(string name, Matrix4 value)
+        {
+            AddParameter(new Parameter(name, value, ParamterType.Matrix4));
+        }
+
+        public void AddParameter(string name, GameTexture value)
+        {
+            AddParameter(new Parameter(name, value, ParamterType.Texture));
+        }
+
+        public void AddParameter(string name, float value)
+        {
+            AddParameter(new Parameter(name, value, ParamterType.Float));
+        }
+
+        public void AddParameter(string name, bool value)
+        {
+            AddParameter(new Parameter(name, value, ParamterType.Bool));
+        }
+
+        public void AddParameter(string name, int value)
+        {
+            AddParameter(new Parameter(name, value, ParamterType.Int));
+        }
+
+        public void AddParameter(string name, Vector2 value)
+        {
+            AddParameter(new Parameter(name, value, ParamterType.Vector2));
+        }
 
         public void AddParameter(string name, Vector3 value)
         {
             AddParameter(new Parameter(name, value, ParamterType.Vector3));
+        }
+
+        public void AddParameter(string name, Vector4 value)
+        {
+            AddParameter(new Parameter(name, value, ParamterType.Vector4));
         }
 
         public void AddParameter(Parameter parameter)
@@ -253,10 +303,15 @@ namespace Aximo.Engine
             if (InternalMaterial == null)
             {
                 InternalMaterial = new Material();
-                if (Shader != null)
-                    InternalMaterial.Shader = new Shader(Shader.VertexShaderPath, Shader.FragmentShaderPath, Shader.GeometryShaderPath);
-                if (DefGeometryShader != null)
-                    InternalMaterial.DefGeometryShader = new Shader(DefGeometryShader.VertexShaderPath, DefGeometryShader.FragmentShaderPath, DefGeometryShader.GeometryShaderPath);
+
+                if (Shader == null)
+                    Shader = new GameShader("Shaders/shader.vert", "Shaders/lighting.frag");
+                if (DefGeometryShader == null)
+                    DefGeometryShader = new GameShader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
+
+                InternalMaterial.Shader = new Shader(Shader.VertexShaderPath, Shader.FragmentShaderPath, Shader.GeometryShaderPath, true, Defines);
+                InternalMaterial.DefGeometryShader = new Shader(DefGeometryShader.VertexShaderPath, DefGeometryShader.FragmentShaderPath, DefGeometryShader.GeometryShaderPath, true, Defines);
+
                 InternalMaterial.CreateShaders();
             }
 
@@ -264,6 +319,12 @@ namespace Aximo.Engine
             mat.txt0 = DiffuseTexture?.InternalTexture;
             mat.txt1 = SpecularTexture?.InternalTexture;
             mat.CastShadow = CastShadow;
+
+            mat.Ambient = Ambient;
+            mat.Color = Color;
+            mat.Shininess = Shininess;
+            mat.SpecularStrength = SpecularStrength;
+            mat.ColorBlendMode = ColorBlendMode;
 
             switch (PipelineType)
             {
@@ -341,6 +402,7 @@ namespace Aximo.Engine
             Vector2,
             Vector3,
             Vector4,
+            Matrix3,
             Matrix4,
             Float,
             Int,
