@@ -6,12 +6,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using Aximo.Render;
 
 namespace Aximo.Engine
 {
 
     public class PointLightComponent : LightComponent
     {
+        protected override LightType LightType => LightType.Point;
 
     }
 

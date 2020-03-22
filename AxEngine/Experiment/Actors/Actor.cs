@@ -58,6 +58,24 @@ namespace Aximo.Engine
             return null;
         }
 
+        public T GetComponent<T>()
+            where T : ActorComponent
+        {
+
+            foreach (var comp in Components)
+            {
+                if (comp is T)
+                    return (T)comp;
+            }
+
+            if (RootComponent != null)
+            {
+                return (T)RootComponent.GetComponent<T>();
+            }
+
+            return null;
+        }
+
         public T[] GetComponents<T>(string name)
         {
             List<ActorComponent> components;

@@ -33,6 +33,21 @@ namespace Aximo.Engine
                 AddComponent(child);
         }
 
+        public T GetComponent<T>()
+            where T : ActorComponent
+        {
+            foreach (var comp in Components)
+            {
+                if (comp is T)
+                    return (T)(ActorComponent)comp;
+
+                var result = comp.GetComponent<T>();
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
         public bool CanAttach(SceneComponent child)
         {
             return true;

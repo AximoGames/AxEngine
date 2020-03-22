@@ -246,6 +246,40 @@ namespace Aximo.Engine
 
     }
 
+    public class SkyBoxComponent : MeshComponent
+    {
+
+        public SkyBoxComponent()
+        {
+
+        }
+
+        public SkyBoxComponent(string skyBoxPath)
+        {
+        }
+
+        internal override void SyncChanges()
+        {
+            if (!HasChanges)
+                return;
+
+            base.SyncChanges();
+
+            bool created = false;
+            if (RenderableObject == null)
+            {
+                created = true;
+                RenderableObject = new SkyboxObject();
+            }
+
+            var obj = (SkyboxObject)RenderableObject;
+
+            if (created)
+                RenderContext.Current.AddObject(RenderableObject);
+        }
+
+    }
+
     public class PrimitiveSceneProxy
     {
 

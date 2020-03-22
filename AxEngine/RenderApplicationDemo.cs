@@ -85,21 +85,16 @@ namespace Aximo.Engine
                 Name = "DebugLine",
             });
 
-            RenderContext.AddObject(new LightObject()
+            GameContext.AddActor(new Actor(new DirectionalLightComponent()
             {
-                Position = new Vector3(0, 2, 2.5f),
+                RelativeTranslation = new Vector3(0, 2, 2.5f),
                 Name = "MovingLight",
-                LightType = LightType.Directional,
-                ShadowTextureIndex = 0,
-            });
-
-            RenderContext.AddObject(new LightObject()
+            }));
+            GameContext.AddActor(new Actor(new DirectionalLightComponent()
             {
-                Position = new Vector3(2f, 0.5f, 3.25f),
+                RelativeTranslation = new Vector3(2f, 0.5f, 3.25f),
                 Name = "StaticLight",
-                LightType = LightType.Directional,
-                ShadowTextureIndex = 1,
-            });
+            }));
 
             GameContext.AddActor(new Actor(new CubeComponent()
             {
@@ -170,10 +165,10 @@ namespace Aximo.Engine
             }));
 
             // For performance reasons, skybox should rendered as last
-            RenderContext.AddObject(new SkyboxObject()
+            GameContext.AddActor(new Actor(new SkyBoxComponent()
             {
                 Name = "Sky",
-            });
+            }));
         }
 
         private float LightAngle = 0;
@@ -184,13 +179,13 @@ namespace Aximo.Engine
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            if (RenderContext.LightObjects.Count > 0)
+            var movingLight = GameContext.GetActor("MovingLight")?.GetComponent<LightComponent>();
+            if (movingLight != null)
             {
                 LightAngle -= 0.01f;
                 var pos = new Vector3((float)(Math.Cos(LightAngle) * 2f), (float)(Math.Sin(LightAngle) * 2f), 1.5f);
-                ILightObject light = RenderContext.LightObjects[0];
 
-                light.Position = pos;
+                movingLight.RelativeTranslation = pos;
             }
 
             var actt = GameContext.GetActor("GroupActor1");

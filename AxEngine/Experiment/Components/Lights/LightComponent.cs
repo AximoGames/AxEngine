@@ -12,9 +12,13 @@ using Aximo.Render;
 namespace Aximo.Engine
 {
 
-    public abstract class LightComponent : ActorComponent
+    public abstract class LightComponent : SceneComponent
     {
         internal ILightObject LightObject;
+
+        protected abstract LightType LightType { get; }
+
+        private static int ShadowIdx;
 
         internal override void SyncChanges()
         {
@@ -22,7 +26,18 @@ namespace Aximo.Engine
                 return;
 
             if (LightObject == null)
+            {
                 LightObject = new LightObject();
+                LightObject.LightType = LightType;
+                LightObject.ShadowTextureIndex = ShadowIdx++;
+                RenderContext.Current.AddObject(LightObject);
+            }
+
+            if (TransformChanged)
+            {
+                LightObject.Position = LocalToWorld().ExtractTranslation();
+                TransformChanged = false;
+            }
 
             base.SyncChanges();
         }
