@@ -3,7 +3,7 @@
 
 using System;
 using System.Drawing;
-using Aximo.Render;
+//using Aximo.Render;
 using OpenTK;
 
 namespace Aximo.Engine
@@ -67,12 +67,6 @@ namespace Aximo.Engine
                 Name = "ScreenTexture1.1",
                 RectanglePixels = new RectangleF(0, 0, 30f, 30f),
             }));
-            // RenderContext.AddObject(new ScreenTextureObject()
-            // {
-            //     Name = "ScreenTexture1",
-            //     TexturePath = "Textures/woodenbox.png",
-            //     RectanglePixels = new RectangleF(000, 0, 30f, 30f),
-            // });
 
             GameContext.AddActor(new Actor(new StatsComponent()
             {
@@ -80,10 +74,10 @@ namespace Aximo.Engine
                 RectanglePixels = new RectangleF(40, 40, 100f, 100f),
             }));
 
-            RenderContext.AddObject(new LineObject()
+            GameContext.AddActor(new Actor(new LineComponent(new Vector3(0, 0, 0), new Vector3(2, 2, 2))
             {
                 Name = "DebugLine",
-            });
+            }));
 
             GameContext.AddActor(new Actor(new DirectionalLightComponent()
             {

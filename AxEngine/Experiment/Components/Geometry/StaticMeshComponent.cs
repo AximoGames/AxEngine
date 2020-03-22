@@ -39,6 +39,24 @@ namespace Aximo.Engine
         }
     }
 
+    public class LineComponent : StaticMeshComponent
+    {
+        public LineComponent(Vector3 start, Vector3 end)
+            : this(start, end, new Vector4(0, 1, 0, 1))
+        {
+        }
+
+        public LineComponent(Vector3 start, Vector3 end, Vector4 color)
+            : this(start, end, color, color)
+        {
+        }
+
+        public LineComponent(Vector3 start, Vector3 end, Vector4 colorStart, Vector4 colorEnd)
+            : base(MeshDataBuilder.Line(start, end, colorStart, colorEnd), MaterialManager.DefaultLineMaterial)
+        {
+        }
+    }
+
     public class CrossLineComponent : StaticMeshComponent
     {
         public CrossLineComponent(int size, bool center) : base(MeshDataBuilder.CrossLine(), MaterialManager.DefaultLineMaterial)

@@ -71,6 +71,16 @@ namespace Aximo.Render
             return new MeshData<VertexDataPosColor>(vertices.ToArray(), null, AxPrimitiveType.Lines);
         }
 
+        public static MeshData Line(Vector3 start, Vector3 end, Vector4 colorStart, Vector4 colorEnd)
+        {
+            var vertices = new List<VertexDataPosColor>();
+
+            vertices.Add(start, colorStart);
+            vertices.Add(end, colorEnd);
+
+            return new MeshData<VertexDataPosColor>(vertices.ToArray(), null, AxPrimitiveType.Lines);
+        }
+
     }
 
 }
