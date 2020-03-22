@@ -17,7 +17,7 @@ namespace Aximo.Engine
 
         public string Name { get; set; }
 
-        private List<ActorComponent> _Components;
+        private IList<ActorComponent> _Components;
         public IList<ActorComponent> Components { get; private set; }
 
         public SceneComponent RootComponent { get; private set; }
@@ -32,7 +32,7 @@ namespace Aximo.Engine
         public Actor()
         {
             ActorId = GetNewGameObjectId();
-            _Components = new List<ActorComponent>();
+            _Components = new SynchronizedCollection<ActorComponent>();
             Components = new ReadOnlyCollection<ActorComponent>(_Components);
         }
 
@@ -139,7 +139,7 @@ namespace Aximo.Engine
 
         internal void SyncChanges()
         {
-            foreach (var comp in Components)
+            foreach (var comp in Components.ToArray())
                 comp.SyncChanges();
         }
 

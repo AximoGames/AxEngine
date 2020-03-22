@@ -23,7 +23,7 @@ namespace Aximo.Engine
             Animations.Add(animation);
         }
 
-        public List<Actor> Actors = new List<Actor>();
+        public IList<Actor> Actors = new SynchronizedCollection<Actor>();
         private ConcurrentDictionary<string, List<Actor>> ActorNamehash = new ConcurrentDictionary<string, List<Actor>>();
 
         public Actor GetActor(string name)
@@ -110,7 +110,7 @@ namespace Aximo.Engine
                 ComponentsForDeallocation.Remove(comp);
             }
 
-            foreach (var act in Actors)
+            foreach (var act in Actors.ToArray())
                 act.SyncChanges();
         }
 

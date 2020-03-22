@@ -14,7 +14,7 @@ namespace Aximo.Engine
     public class SceneComponent : ActorComponent
     {
 
-        private List<SceneComponent> _Components;
+        private IList<SceneComponent> _Components;
         public ICollection<SceneComponent> Components { get; private set; }
 
         public SceneComponent Parent { get; private set; }
@@ -37,7 +37,7 @@ namespace Aximo.Engine
 
         public SceneComponent()
         {
-            _Components = new List<SceneComponent>();
+            _Components = new SynchronizedCollection<SceneComponent>();
             Components = new ReadOnlyCollection<SceneComponent>(_Components);
 
             _ParentComponents = new List<SceneComponent>();
@@ -275,7 +275,7 @@ namespace Aximo.Engine
 
             ParentChanged = false;
 
-            foreach (var comp in Components)
+            foreach (var comp in Components.ToArray())
                 comp.SyncChanges();
 
             base.SyncChanges();

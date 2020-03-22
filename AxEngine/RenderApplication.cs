@@ -68,7 +68,7 @@ namespace Aximo.Engine
             };
             GameContext.Current = GameContext;
 
-            window = new RenderWindow(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle)
+            window = new RenderWindow(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle, false)
             {
                 WindowBorder = _startup.WindowBorder,
                 Location = new System.Drawing.Point((1920 / 2) + 10, 10),
