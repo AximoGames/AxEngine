@@ -24,7 +24,7 @@
             // Use the standard MS compiler pattern to detect errors, warnings and infos
             "problemMatcher": "$msCompile",
             "options": {
-                "cwd": "${workspaceRoot}/AxEngine",
+                "cwd": "${workspaceRoot}/AxDemo",
                 "env": {
                     "FrameworkPathOverride": "/usr/lib/mono/4.5"
                 }
