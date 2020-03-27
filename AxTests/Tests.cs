@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Xunit;
 
 namespace test
@@ -8,7 +8,10 @@ namespace test
     {
 
         [Fact]
-        public void test() { }
+        public void test()
+        {
+            Assert.Null(null);
+        }
     }
 
 }
