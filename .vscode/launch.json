@@ -12,6 +12,13 @@
             "cwd": "${workspaceRoot}"
         },
         {
+            "name": "Launch Tests",
+            "type": "mono",
+            "request": "launch",
+            "program": "${workspaceRoot}/AxTests/bin/Debug/net472/AxTests.exe",
+            "cwd": "${workspaceRoot}"
+        },
+        {
             "name": "Attach",
             "type": "mono",
             "request": "attach",

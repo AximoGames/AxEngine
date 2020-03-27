@@ -76,5 +76,11 @@ namespace Aximo.Engine
         {
             base.OnUnload(e);
         }
+
+        // public void Quit()
+        // {
+        //     base.Exit();
+        // }
+
     }
 }

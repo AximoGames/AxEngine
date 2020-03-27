@@ -3,6 +3,7 @@
 
 using System;
 using System.Drawing;
+using System.Threading;
 using Aximo.Engine;
 using Aximo.Render;
 using OpenTK;
@@ -27,7 +28,6 @@ namespace Aximo.AxDemo
         [Fact]
         public void test()
         {
-
             var mat = new GameMaterial()
             {
                 DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
@@ -46,7 +46,8 @@ namespace Aximo.AxDemo
                 RelativeTranslation = new Vector3(0, 0, 0.5f),
                 Material = mat,
             }));
-            while (true) { }
+            RenderSingleFrameSync();
+            Thread.Sleep(4000);
         }
 
     }

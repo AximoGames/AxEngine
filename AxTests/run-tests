@@ -1,4 +1,4 @@
 #!/bin/bash
 
 dotnet msbuild /p:Configuration=Debug /property:GenerateFullPaths=true
-mono ~/.nuget/packages/xunit.runner.console/2.4.1/tools/net472/xunit.console.exe bin/Debug/net472/AxTests.exe -parallel none -noshadow
+mono --debug ~/.nuget/packages/xunit.runner.console/2.4.1/tools/net472/xunit.console.exe bin/Debug/net472/AxTests.exe -parallel none -noshadow

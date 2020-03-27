@@ -12,15 +12,27 @@ namespace Aximo.AxDemo
 
     public class RenderApplicationTests : RenderApplication
     {
-        private Thread thread;
-        private AutoResetEvent waiter;
+        protected Thread UpdaterThread;
+        private AutoResetEvent SetupWaiter;
         public RenderApplicationTests(RenderApplicationStartup startup) : base(startup)
         {
-            waiter = new AutoResetEvent(false);
-            AfterApplicationInitialized += () => waiter.Set();
-            thread = new Thread(() => Run());
-            thread.Start();
-            waiter.WaitOne(10000);
+            DebugHelper.LogThreadInfo("UnitTestThread");
+            SetupWaiter = new AutoResetEvent(false);
+            AfterApplicationInitialized += () => SetupWaiter.Set();
+            UpdaterThread = new Thread(() =>
+            {
+                try
+                {
+                    Run();
+                }
+                catch (Exception ex)
+                {
+                    if (!Exiting)
+                        throw;
+                }
+            });
+            UpdaterThread.Start();
+            SetupWaiter.WaitOne(4000);
             Console.WriteLine("Ready for tests");
         }
 
@@ -31,12 +43,47 @@ namespace Aximo.AxDemo
 
         private float LightAngle = 0;
 
-        protected override void OnRenderFrame(FrameEventArgs e)
+        protected override void BeforeUpdateFrame()
         {
+            if (Exiting)
+                return;
+
+            WaitHandle.SignalAndWait(RenderWaiter, UpdateWaiter);
         }
 
-        protected override void OnUpdateFrame(FrameEventArgs e)
+        protected override void BeforeRenderFrame()
         {
+            if (Exiting)
+                return;
+            WaitHandle.SignalAndWait(TestWaiter, RenderWaiter);
+        }
+
+        public bool RendererEnabled;
+        public AutoResetEvent UpdateWaiter = new AutoResetEvent(false);
+        public AutoResetEvent RenderWaiter = new AutoResetEvent(false);
+        public AutoResetEvent TestWaiter = new AutoResetEvent(true);
+
+        public void RenderSingleFrameSync()
+        {
+            WaitHandle.SignalAndWait(UpdateWaiter, TestWaiter);
+        }
+
+        public override void Dispose()
+        {
+            SignalShutdown();
+            Console.WriteLine("Shutting down Test");
+            TestWaiter.Set();
+            RenderWaiter.Set();
+            UpdateWaiter.Set();
+
+            base.Dispose();
+
+            UpdateWaiter.Dispose();
+            UpdateWaiter = null;
+            RenderWaiter.Dispose();
+            RenderWaiter = null;
+            TestWaiter.Dispose();
+            TestWaiter = null;
         }
 
     }

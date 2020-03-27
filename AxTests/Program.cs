@@ -15,8 +15,11 @@ namespace Aximo.AxDemo
 
         public static void Main(string[] args)
         {
-            new Tester().test();
-            Console.ReadLine();
+            var tester = new Tester();
+            tester.test();
+            tester.Dispose();
+            //Console.ReadLine();
+            Environment.Exit(0);
         }
 
     }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Aximo.Render;
 using OpenTK;
 //using OpenTK.Graphics.OpenGL4;
@@ -12,6 +13,18 @@ using OpenTK.Input;
 
 namespace Aximo.Engine
 {
+
+    public static class DebugHelper
+    {
+        public static void LogThreadInfo(string message)
+        {
+            LogThreadInfo(Thread.CurrentThread, message);
+        }
+        public static void LogThreadInfo(Thread th, string message)
+        {
+            Console.WriteLine($"#{th.ManagedThreadId} {th.Name} {message}");
+        }
+    }
 
     public delegate void AfterApplicationInitializedDelegate();
 
@@ -41,6 +54,8 @@ namespace Aximo.Engine
 
         public void Run()
         {
+            DebugHelper.LogThreadInfo("UI/Render Thread");
+            UIThread = Thread.CurrentThread;
             Current = this;
 
             Toolkit.Init(new ToolkitOptions
@@ -51,11 +66,18 @@ namespace Aximo.Engine
             Init();
             AfterApplicationInitialized?.Invoke();
             window.Run(60.0);
+            Console.WriteLine("Exited Run()");
+            WindowExited = true;
+            Environment.Exit(0);
         }
+        protected bool WindowExited;
 
         public RenderContext RenderContext { get; private set; }
         public GameContext GameContext { get; private set; }
         public Renderer Renderer { get; private set; }
+
+        private Thread UIThread;
+        private Thread UpdateThread;
 
         public virtual void Init()
         {
@@ -73,7 +95,7 @@ namespace Aximo.Engine
             };
             GameContext.Current = GameContext;
 
-            window = new RenderWindow(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle, false)
+            window = new RenderWindow(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle, _startup.IsSingleThread)
             {
                 WindowBorder = _startup.WindowBorder,
                 Location = new System.Drawing.Point((1920 / 2) + 10, 10),
@@ -192,13 +214,40 @@ namespace Aximo.Engine
 
         protected virtual void OnRenderFrame(FrameEventArgs e) { }
 
+        public int UpdateFrameNumber { get; private set; } = 0;
+        public int RenderFrameNumber { get; private set; } = 0;
+
+        private bool FirstRenderFrame = true;
+        private bool FirstUpdateFrame = true;
+
+        protected virtual void BeforeRenderFrame() { }
+        protected virtual void AfterRenderFrame() { }
+
         private void OnRenderFrameInternal(FrameEventArgs e)
         {
+            if (Exiting)
+                return;
+
+            BeforeRenderFrame();
+
+            if (Exiting)
+                return;
+
+            Console.WriteLine($"Render Frame #{RenderFrameNumber}");
+            if (FirstRenderFrame)
+                FirstRenderFrame = false;
+            else
+                RenderFrameNumber++;
+
             OnRenderFrame(e);
+
+            if (Exiting)
+                return;
 
             GameContext.Sync();
             Renderer.Render();
             window.SwapBuffers();
+            AfterRenderFrame();
         }
 
         private IPosition MovingObject;
@@ -262,17 +311,58 @@ namespace Aximo.Engine
 
         public bool DefaultKeyBindings = true;
 
+        private bool UpdateThreadChecked;
+
+        private void SetUpdateThread()
+        {
+            if (!UpdateThreadChecked)
+            {
+                UpdateThreadChecked = true;
+
+                var currentThread = Thread.CurrentThread;
+                if (!_startup.IsSingleThread && currentThread != UIThread)
+                {
+                    UpdateThread = currentThread;
+                    DebugHelper.LogThreadInfo("Update Thread");
+                }
+            }
+        }
+
+        protected virtual void BeforeUpdateFrame() { }
+        protected virtual void AfterUpdateFrame() { }
+
         private void OnUpdateFrameInternal(FrameEventArgs e)
         {
+            if (Exiting)
+                return;
+
+            SetUpdateThread();
+            BeforeUpdateFrame();
+
+            if (Exiting)
+
+                return;
+            if (FirstUpdateFrame)
+                FirstUpdateFrame = false;
+            else
+                UpdateFrameNumber++;
+
+            Console.WriteLine($"Update Frame #{UpdateFrameNumber}");
+
             foreach (var anim in GameContext.Animations)
                 anim.ProcessAnimation();
 
             GameContext.OnUpdateFrame();
+            if (Exiting)
+                return;
 
             foreach (var obj in RenderContext.UpdateFrameObjects)
                 obj.OnUpdateFrame();
 
             OnUpdateFrame(e);
+
+            if (Exiting)
+                return;
 
             ProcessTaskQueue();
 
@@ -289,7 +379,6 @@ namespace Aximo.Engine
                 if (input.IsKeyDown(Key.Escape))
                 {
                     window.Exit();
-                    Environment.Exit(0);
                     return;
                 }
 
@@ -421,6 +510,8 @@ namespace Aximo.Engine
             // {
             //     shadowFb.DestinationTexture.GetDepthTexture().Save("test.png");
             // }
+
+            AfterUpdateFrame();
         }
 
         private Queue<Action> TaskQueue = new Queue<Action>();
@@ -503,8 +594,13 @@ namespace Aximo.Engine
             OnUnload(e);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
+            SignalShutdown();
+            window.Exit();
+
+            Thread.Sleep(200);
+
             window.Dispose();
             window = null;
             ShaderWatcher.Dispose();
@@ -600,6 +696,14 @@ namespace Aximo.Engine
         public double RenderFrequency => window.RenderFrequency;
         public double UpdateFrequency => window.UpdateFrequency;
 
+        private bool _Exiting;
+        public bool Exiting => _Exiting || window == null || window.IsExiting;
+
+        protected void SignalShutdown()
+        {
+            _Exiting = true;
+        }
+
     }
 
     public class RenderApplicationStartup
@@ -607,6 +711,7 @@ namespace Aximo.Engine
         public Vector2i WindowSize { get; set; }
         public string WindowTitle { get; set; }
         public WindowBorder WindowBorder { get; set; } = WindowBorder.Resizable;
+        public bool IsSingleThread = false;
     }
 
 }
