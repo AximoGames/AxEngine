@@ -68,7 +68,6 @@ namespace Aximo.Engine
             window.Run(60.0);
             Console.WriteLine("Exited Run()");
             WindowExited = true;
-            //Environment.Exit(0);
         }
         protected bool WindowExited;
 
@@ -700,9 +699,17 @@ namespace Aximo.Engine
         private bool _Exiting;
         public bool Exiting => _Exiting || window == null || window.IsExiting;
 
+        // Foreign Thread
         protected void SignalShutdown()
         {
             _Exiting = true;
+        }
+
+        // UI Thread
+        public void Exit()
+        {
+            SignalShutdown();
+            window.Exit();
         }
 
     }

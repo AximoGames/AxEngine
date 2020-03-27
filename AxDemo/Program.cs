@@ -63,6 +63,7 @@ namespace Aximo.AxDemo
                 WindowBorder = WindowBorder.Fixed,
             });
             demo.Run();
+            Environment.Exit(0);
         }
 
     }
