@@ -48,23 +48,30 @@ namespace Aximo.AxDemo
             if (Exiting)
                 return;
 
-            WaitHandle.SignalAndWait(RenderWaiter, UpdateWaiter);
+            if (UpdateFrameNumber == 0)
+                UpdateWaiter.WaitOne();
+            else
+                WaitHandle.SignalAndWait(RenderWaiter, UpdateWaiter);
         }
 
         protected override void BeforeRenderFrame()
         {
             if (Exiting)
                 return;
-            WaitHandle.SignalAndWait(TestWaiter, RenderWaiter);
+            if (RenderFrameNumber == 0)
+                RenderWaiter.WaitOne();
+            else
+                WaitHandle.SignalAndWait(TestWaiter, RenderWaiter);
         }
 
         public bool RendererEnabled;
         public AutoResetEvent UpdateWaiter = new AutoResetEvent(false);
         public AutoResetEvent RenderWaiter = new AutoResetEvent(false);
-        public AutoResetEvent TestWaiter = new AutoResetEvent(true);
+        public AutoResetEvent TestWaiter = new AutoResetEvent(false);
 
         public void RenderSingleFrameSync()
         {
+            Console.WriteLine(" --- Render Single Frame ---");
             WaitHandle.SignalAndWait(UpdateWaiter, TestWaiter);
         }
 

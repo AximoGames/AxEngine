@@ -68,7 +68,7 @@ namespace Aximo.Engine
             window.Run(60.0);
             Console.WriteLine("Exited Run()");
             WindowExited = true;
-            Environment.Exit(0);
+            //Environment.Exit(0);
         }
         protected bool WindowExited;
 
@@ -228,16 +228,17 @@ namespace Aximo.Engine
             if (Exiting)
                 return;
 
+            if (FirstRenderFrame)
+                FirstRenderFrame = false;
+            else
+                RenderFrameNumber++;
+
             BeforeRenderFrame();
 
             if (Exiting)
                 return;
 
             Console.WriteLine($"Render Frame #{RenderFrameNumber}");
-            if (FirstRenderFrame)
-                FirstRenderFrame = false;
-            else
-                RenderFrameNumber++;
 
             OnRenderFrame(e);
 
@@ -336,16 +337,16 @@ namespace Aximo.Engine
             if (Exiting)
                 return;
 
-            SetUpdateThread();
-            BeforeUpdateFrame();
-
-            if (Exiting)
-
-                return;
             if (FirstUpdateFrame)
                 FirstUpdateFrame = false;
             else
                 UpdateFrameNumber++;
+
+            SetUpdateThread();
+            BeforeUpdateFrame();
+
+            if (Exiting)
+                return;
 
             Console.WriteLine($"Update Frame #{UpdateFrameNumber}");
 
