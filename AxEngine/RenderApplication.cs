@@ -13,8 +13,12 @@ using OpenTK.Input;
 namespace Aximo.Engine
 {
 
+    public delegate void AfterApplicationInitializedDelegate();
+
     public class RenderApplication : IDisposable
     {
+
+        public event AfterApplicationInitializedDelegate AfterApplicationInitialized;
 
         public static RenderApplication Current { get; private set; }
 
@@ -45,6 +49,7 @@ namespace Aximo.Engine
             });
 
             Init();
+            AfterApplicationInitialized?.Invoke();
             window.Run(60.0);
         }
 

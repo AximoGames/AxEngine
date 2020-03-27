@@ -114,6 +114,14 @@ namespace Aximo.Engine
                 act.SyncChanges();
         }
 
+        private RenderContext RenderContext => RenderContext.Current;
+
+        public Vector3 BackgroundColor
+        {
+            get => RenderContext.BackgroundColor;
+            set => RenderContext.BackgroundColor = value;
+        }
+
     }
 
 }

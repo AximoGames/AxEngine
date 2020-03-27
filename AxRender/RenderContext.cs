@@ -176,6 +176,9 @@ namespace Aximo.Render
             foreach (var obj in AllObjects)
                 obj.OnScreenResize();
         }
+
+        public Vector3 BackgroundColor { get; set; } = new Vector3(0.2f, 0.3f, 0.3f);
+
     }
 
     public class SceneOptions
