@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>AxTests</RootNamespace>
+    <AssemblyName>AxTests</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject />
+    <NoWarn>CS0162</NoWarn>
+    <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Experiment\**" />
+    <EmbeddedResource Remove="Experiment\**" />
+    <None Remove="Experiment\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.ServiceModel">
+      <Name>System.ServiceModel</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="OpenTK" Version="3.1.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.console" Version="2.4.1" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AxEngine\AxEngine.csproj" />
+    <ProjectReference Include="..\AxRender\AxRender.csproj" />
+    <ProjectReference Include="..\AxCommon\AxCommon.csproj" />
+  </ItemGroup>
+  <Import Project="..\props\SharedProjectSettings.props" />
+</Project>
