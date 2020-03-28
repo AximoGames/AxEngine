@@ -12,6 +12,18 @@ namespace Aximo.Render
 
     public class FrameBuffer : IObjectLabel
     {
+
+        private static FrameBuffer _Default;
+        public static FrameBuffer Default
+        {
+            get
+            {
+                if (_Default == null)
+                    _Default = FrameBuffer.CreateFromHandle(0, RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
+                return _Default;
+            }
+        }
+
         public List<Texture> DestinationTextures = new List<Texture>();
 
         public Texture GetDestinationTexture()
@@ -35,30 +47,29 @@ namespace Aximo.Render
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public Bitmap GetTexture()
+        public void GetData(BufferData2<int> target)
         {
-            Bitmap bitmap = new Bitmap(Width, Height);
-            var bits = bitmap.LockBits(new Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            //BindToRead(ReadBufferMode.ColorAttachment0 + AttachmentIndex);
-            GL.ReadPixels(0, 0, Width, Height, PixelFormat.Bgra, PixelType.UnsignedByte, bits.Scan0);
-            //GL.BindTexture(TextureTarget.Texture2D, texColorBuffer);
-            //GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Rgb, PixelType.UnsignedByte, bits.Scan0);
-            bitmap.UnlockBits(bits);
+            GL.ReadBuffer(ReadBufferMode.Back);
+            DataHelper.GetData(target, (ptr) => GL.ReadPixels(0, 0, Width, Height, PixelFormat.DepthComponent, PixelType.UnsignedByte, ptr));
+            GL.ReadBuffer(ReadBufferMode.None);
 
-            bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
-            //bitmap.Save("test.bmp");
+            // Bitmap bitmap = new Bitmap(Width, Height);
+            // var bits = bitmap.LockBits(new Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            // //BindToRead(ReadBufferMode.ColorAttachment0 + AttachmentIndex);
+            // GL.ReadPixels(0, 0, Width, Height, PixelFormat.Bgra, PixelType.UnsignedByte, bits.Scan0);
+            // //GL.BindTexture(TextureTarget.Texture2D, texColorBuffer);
+            // //GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Rgb, PixelType.UnsignedByte, bits.Scan0);
+            // bitmap.UnlockBits(bits);
 
-            return bitmap;
+            // //bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
+            // //bitmap.Save("test.bmp");
+
+            // return bitmap;
         }
 
-        public Bitmap GetDepthTexture()
+        public void GetDepthData(BufferData2<float> target)
         {
-            return DataHelper.GetDepthTexture(Width, Height, (ptr) => GL.ReadPixels(0, 0, Width, Height, PixelFormat.DepthComponent, PixelType.UnsignedByte, ptr));
-        }
-
-        public static Bitmap GetTexture(int handle, int width, int height)
-        {
-            return DataHelper.GetDepthTexture(width, height, (ptr) => GL.ReadPixels(0, 0, width, height, PixelFormat.Bgra, PixelType.UnsignedByte, ptr));
+            DataHelper.GetDepthData(target, (ptr) => GL.ReadPixels(0, 0, Width, Height, PixelFormat.DepthComponent, PixelType.UnsignedByte, ptr));
         }
 
         public FrameBuffer(int width, int height)
@@ -68,6 +79,18 @@ namespace Aximo.Render
 
             GL.GenFramebuffers(1, out _Handle);
             Bind();
+        }
+
+        private FrameBuffer(int handle, int width, int height)
+        {
+            _Handle = handle;
+            Width = width;
+            Height = height;
+        }
+
+        public static FrameBuffer CreateFromHandle(int handle, int width, int height)
+        {
+            return new FrameBuffer(handle, width, height);
         }
 
         public void InitNormal()

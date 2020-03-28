@@ -106,7 +106,7 @@ namespace Aximo.Render
             Initialized = true;
         }
 
-        internal void SetData(BufferData1D vertices, BufferData1D<ushort> indicies = null)
+        internal void SetData(BufferData1 vertices, BufferData1<ushort> indicies = null)
         {
             EnsureInitialized();
             _vbo.SetData(vertices);

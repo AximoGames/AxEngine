@@ -151,26 +151,44 @@ namespace Aximo.Render
 
         public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Texture;
 
-        public Bitmap GetTexture()
+        public void GetTexture(BufferData2<int> data)
         {
-            Bitmap bitmap = new Bitmap(Width, Height);
-            var bits = bitmap.LockBits(new Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            //BindToRead(ReadBufferMode.ColorAttachment0 + AttachmentIndex);
-            //GL.ReadPixels(0, 0, 800, 600, PixelFormat.Rgb, PixelType.Float, bits.Scan0);
             GL.BindTexture(Target, Handle);
-            GL.GetTexImage(Target, 0, PixelFormat.Bgra, PixelType.UnsignedByte, bits.Scan0);
-            bitmap.UnlockBits(bits);
 
-            bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
-            //bitmap.Save("test.bmp");
+            data.Resize(Width, Height);
 
-            return bitmap;
+            var handle = data.CreateHandle();
+            try
+            {
+                GL.GetTexImage(Target, 0, PixelFormat.Bgra, PixelType.UnsignedByte, handle.AddrOfPinnedObject());
+            }
+            finally
+            {
+                handle.Free();
+            }
         }
 
-        public Bitmap GetDepthTexture()
+        // public Bitmap GetTexture()
+        // {
+        //     Bitmap bitmap = new Bitmap(Width, Height);
+        //     var bits = bitmap.LockBits(new Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+        //     //BindToRead(ReadBufferMode.ColorAttachment0 + AttachmentIndex);
+        //     //GL.ReadPixels(0, 0, 800, 600, PixelFormat.Rgb, PixelType.Float, bits.Scan0);
+        //     GL.BindTexture(Target, Handle);
+        //     GL.GetTexImage(Target, 0, PixelFormat.Bgra, PixelType.UnsignedByte, bits.Scan0);
+        //     bitmap.UnlockBits(bits);
+
+        //     bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
+        //     bitmap.Save("/tmp/test.bmp");
+
+        //     return bitmap;
+        // }
+
+        public void GetDepthTexture(BufferData2<float> target, bool normalize = false)
         {
             GL.BindTexture(Target, Handle);
-            return DataHelper.GetDepthTexture(Width, Height, (ptr) => GL.GetTexImage(Target, 0, PixelFormat.DepthComponent, PixelType.Float, ptr));
+            DataHelper.GetDepthData(target, (ptr) => GL.GetTexImage(Target, 0, PixelFormat.DepthComponent, PixelType.Float, ptr));
+            //bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
         }
 
         public void SetLinearFilter()

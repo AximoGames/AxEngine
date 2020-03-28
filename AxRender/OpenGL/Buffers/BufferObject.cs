@@ -32,7 +32,7 @@ namespace Aximo.Render
             var currentBuffer = CurrentBuffer;
             Bind();
             Size = data.Length;
-            GCHandle h = data.Createhandle();
+            GCHandle h = data.CreateHandle();
             try
             {
                 GL.BufferData(Target, data.Length * data.ElementSize, h.AddrOfPinnedObject(), BufferUsageHint.StaticDraw);

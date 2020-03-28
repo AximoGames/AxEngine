@@ -110,7 +110,7 @@ namespace Aximo.Engine
             window.Resize += (s, e) => OnScreenResizeInternal();
 
             Renderer.Init();
-            window.SwapBuffers();
+            //window.SwapBuffers();
 
             RenderContext.SceneOpitons = new SceneOptions
             {

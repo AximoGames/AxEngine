@@ -216,60 +216,22 @@ namespace Aximo.Render
              1.0f,  1.0f,  1.0f, 1.0f,
         };
 
-        public static Bitmap GetTexture(int width, int height, Action<IntPtr> getPixels)
+        public static void GetData<T>(BufferData2<T> target, Action<IntPtr> getPixels)
         {
-            Bitmap bitmap = new Bitmap(width, height);
-            var ptr = Marshal.AllocHGlobal(width * height * 4);
-
-            getPixels(ptr);
-
-            var floats = new float[width * height];
-            Marshal.Copy(ptr, floats, 0, width * height);
-            Marshal.FreeHGlobal(ptr);
-
-            return bitmap;
-        }
-        public static Bitmap GetDepthTexture(int width, int height, Action<IntPtr> getPixels)
-        {
-            Bitmap bitmap = new Bitmap(width, height);
-            var ptr = Marshal.AllocHGlobal(width * height * 4);
-
-            getPixels(ptr);
-
-            var floats = new float[width * height];
-            Marshal.Copy(ptr, floats, 0, width * height);
-            Marshal.FreeHGlobal(ptr);
-
-            var collection = floats.Where(v => v != 1);
-            var min = collection.Min();
-            var max = collection.Max();
-            var span = max - min;
-
-            var factor = 1.0f / span;
-
-            for (var y = 0; y < height; y++)
+            var handle = target.CreateHandle();
+            try
             {
-                for (var x = 0; x < width; x++)
-                {
-                    var value = floats[(y * height) + x];
-                    if (value != 1.0f)
-                    {
-                        value -= min;
-                        value *= factor;
-                        //value = 1 - value;
-                        //value *= 300;
-                        //value = 1 - value;
-                        var component = (int)(value * 255f);
-                        component = Math.Max(0, Math.Min(component, 255));
-                        var color = Color.FromArgb(component, component, component);
-                        bitmap.SetPixel(x, y, color);
-                    }
-                }
+                getPixels(handle.AddrOfPinnedObject());
             }
+            finally
+            {
+                handle.Free();
+            }
+        }
 
-            bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
-
-            return bitmap;
+        public static void GetDepthData(BufferData2<float> target, Action<IntPtr> getPixels)
+        {
+            GetData(target, getPixels);
         }
 
         public static Matrix4 CoordinateSystemMatrix = new Matrix4(

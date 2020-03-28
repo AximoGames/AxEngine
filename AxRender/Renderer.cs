@@ -108,6 +108,7 @@ namespace Aximo.Render
 
             RenderContext.InitRender();
             RenderContext.Render();
+            RenderContext.OnWorldRendered();
 
             //--
 

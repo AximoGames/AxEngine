@@ -53,6 +53,12 @@ namespace Aximo.Render
             }
         }
 
+        public void OnWorldRendered()
+        {
+            foreach (var obj in AllObjects)
+                obj.OnWorldRendered();
+        }
+
         public Vector2i _ScreenSize;
         public Vector2i ScreenSize
         {
