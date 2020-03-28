@@ -3,6 +3,8 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Threading;
 using Aximo.Engine;
 using Aximo.Render;
@@ -12,13 +14,13 @@ using Xunit;
 namespace Aximo.AxDemo
 {
 
-    public class Tester : RenderApplicationTests
+    public class RenderTests : RenderApplicationTests
     {
 
-        public Tester() : base(new RenderApplicationStartup
+        public RenderTests() : base(new RenderApplicationStartup
         {
-            WindowTitle = "AxEngineDemo",
-            WindowSize = new Vector2i(800, 600),
+            WindowTitle = "AxTests",
+            WindowSize = new Vector2i(160, 120),
             WindowBorder = WindowBorder.Fixed,
         })
         {
@@ -26,18 +28,8 @@ namespace Aximo.AxDemo
         }
 
         [Fact]
-        public void test()
+        public void ForwardBox1()
         {
-            var mat = new GameMaterial()
-            {
-                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
-                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
-                Ambient = 1f,
-                ColorBlendMode = MaterialColorBlendMode.Set,
-                Color = new Vector3(0, 1, 0),
-                PipelineType = PipelineType.Deferred,
-            };
-
             var mat2 = new GameMaterial()
             {
                 DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
@@ -50,24 +42,10 @@ namespace Aximo.AxDemo
 
             GameContext.AddActor(new Actor(new DebugCubeComponent()
             {
-                Name = "Box1",
-                RelativeRotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
-                RelativeScale = new Vector3(1),
-                RelativeTranslation = new Vector3(0, 0, 0.5f),
-
-                // RelativeRotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
-                // RelativeScale = new Vector3(8, 1, 8),
-                // RelativeTranslation = new Vector3(0, 0, 0.5f),
-
-                Material = mat,
-            }));
-
-            GameContext.AddActor(new Actor(new DebugCubeComponent()
-            {
                 Name = "Box2",
                 RelativeRotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
                 RelativeScale = new Vector3(1),
-                RelativeTranslation = new Vector3(1.5f, 0, 0.5f),
+                RelativeTranslation = new Vector3(0f, 0, 0.5f),
 
                 // RelativeRotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
                 // RelativeScale = new Vector3(8, 1, 8),
@@ -76,8 +54,8 @@ namespace Aximo.AxDemo
                 Material = mat2,
             }));
 
-            GameContext.AddActor(new Actor(new BufferComponent()));
-            RenderSingleFrameSync();
+            RenderAndCompare(nameof(ForwardBox1));
+
             //RenderSingleFrameSync();
             Thread.Sleep(4000);
         }

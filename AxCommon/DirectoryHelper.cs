@@ -20,6 +20,19 @@ namespace Aximo
             }
         }
 
+        private static string _AppSourceDir;
+        public static string AppSourceDir
+        {
+            get
+            {
+                if (_AppSourceDir == null)
+                {
+                    _AppSourceDir = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..")).FullName;
+                }
+                return _AppSourceDir;
+            }
+        }
+
         private static string _EngineRootDir;
         public static string EngineRootDir
         {
@@ -47,7 +60,7 @@ namespace Aximo
             get
             {
                 if (_SearchDirectories == null)
-                    _SearchDirectories = new List<string> { AppRootDir, EngineRootDir };
+                    _SearchDirectories = new List<string> { AppSourceDir, AppRootDir, EngineRootDir };
                 return _SearchDirectories;
             }
         }

@@ -47,7 +47,7 @@ namespace Aximo.Render
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public void GetData(BufferData2<int> target)
+        public void GetData(BufferData2D<int> target)
         {
             GL.ReadBuffer(ReadBufferMode.Back);
             DataHelper.GetData(target, (ptr) => GL.ReadPixels(0, 0, Width, Height, PixelFormat.DepthComponent, PixelType.UnsignedByte, ptr));
@@ -67,7 +67,7 @@ namespace Aximo.Render
             // return bitmap;
         }
 
-        public void GetDepthData(BufferData2<float> target)
+        public void GetDepthData(BufferData2D<float> target)
         {
             DataHelper.GetDepthData(target, (ptr) => GL.ReadPixels(0, 0, Width, Height, PixelFormat.DepthComponent, PixelType.UnsignedByte, ptr));
         }

@@ -10,24 +10,30 @@ namespace Aximo.Render
 {
     public class ScreenshotObject : GameObjectBase
     {
+
+        public ScreenshotObject(BufferData2D<int> data)
+        {
+            Data = data;
+        }
+
         public override void Init()
         {
         }
 
-        private BufferData2<int> Data;
+        private BufferData2D<int> Data;
 
         public override void OnWorldRendered()
         {
             if (Data == null)
-                Data = new BufferData2<int>(Context.ScreenSize.X, Context.ScreenSize.Y);
+                Data = new BufferData2D<int>(Context.ScreenSize.X, Context.ScreenSize.Y);
             //FrameBuffer.Default.GetData(Data);
 
             var fb = Context.GetPipeline<ForwardRenderPipeline>().FrameBuffer;
             var txt = fb.DestinationTextures[0];
             txt.GetTexture(Data);
 
-            var bmpt = Data.CreateBitmap();
-            bmpt.Save("/tmp/blubb.png");
+            // var bmpt = Data.CreateBitmap();
+            // bmpt.Save("/tmp/blubb.png");
         }
 
         public override void Free()

@@ -183,7 +183,7 @@ namespace Aximo.Render
                 obj.OnScreenResize();
         }
 
-        public Vector3 BackgroundColor { get; set; } = new Vector3(0.2f, 0.3f, 0.3f);
+        public Vector4 BackgroundColor { get; set; } = new Vector4(0.2f, 0.3f, 0.3f, 1.0f);
 
     }
 

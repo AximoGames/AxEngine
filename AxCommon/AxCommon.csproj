@@ -4,6 +4,7 @@
     <AssemblyName>AxCommon</AssemblyName>
     <TargetFramework>net472</TargetFramework>
     <NoWarn>CS0162</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>

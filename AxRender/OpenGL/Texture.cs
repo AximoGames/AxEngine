@@ -151,7 +151,7 @@ namespace Aximo.Render
 
         public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Texture;
 
-        public void GetTexture(BufferData2<int> data)
+        public void GetTexture(BufferData2D<int> data)
         {
             GL.BindTexture(Target, Handle);
 
@@ -184,7 +184,7 @@ namespace Aximo.Render
         //     return bitmap;
         // }
 
-        public void GetDepthTexture(BufferData2<float> target, bool normalize = false)
+        public void GetDepthTexture(BufferData2D<float> target, bool normalize = false)
         {
             GL.BindTexture(Target, Handle);
             DataHelper.GetDepthData(target, (ptr) => GL.GetTexImage(Target, 0, PixelFormat.DepthComponent, PixelType.Float, ptr));

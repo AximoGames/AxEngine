@@ -216,7 +216,7 @@ namespace Aximo.Render
              1.0f,  1.0f,  1.0f, 1.0f,
         };
 
-        public static void GetData<T>(BufferData2<T> target, Action<IntPtr> getPixels)
+        public static void GetData<T>(BufferData2D<T> target, Action<IntPtr> getPixels)
         {
             var handle = target.CreateHandle();
             try
@@ -229,7 +229,7 @@ namespace Aximo.Render
             }
         }
 
-        public static void GetDepthData(BufferData2<float> target, Action<IntPtr> getPixels)
+        public static void GetDepthData(BufferData2D<float> target, Action<IntPtr> getPixels)
         {
             GetData(target, getPixels);
         }

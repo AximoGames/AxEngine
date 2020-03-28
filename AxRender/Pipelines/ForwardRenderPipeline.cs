@@ -34,7 +34,9 @@ namespace Aximo.Render
         {
             GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
             FrameBuffer.Bind();
-            GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+            var bgColor = context.BackgroundColor;
+            GL.ClearColor(context.BackgroundColor.X, bgColor.Y, bgColor.Z, bgColor.W);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         }
 

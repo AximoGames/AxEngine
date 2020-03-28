@@ -116,7 +116,7 @@ namespace Aximo.Engine
 
         private RenderContext RenderContext => RenderContext.Current;
 
-        public Vector3 BackgroundColor
+        public Vector4 BackgroundColor
         {
             get => RenderContext.BackgroundColor;
             set => RenderContext.BackgroundColor = value;

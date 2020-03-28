@@ -15,8 +15,8 @@ namespace Aximo.AxDemo
 
         public static void Main(string[] args)
         {
-            var tester = new Tester();
-            tester.test();
+            var tester = new RenderTests();
+            tester.ForwardBox1();
             tester.Dispose();
             //Console.ReadLine();
             Environment.Exit(0);

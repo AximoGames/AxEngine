@@ -16,19 +16,22 @@ namespace Aximo.Engine
     public class BufferComponent : ActorComponent
     {
 
-        // TODO: 2D-Array of Struct
-        public Bitmap Image { get; private set; }
-
-        public void SetSize(int width, int height)
+        public BufferComponent()
         {
-            Image?.Dispose();
-            Image = new Bitmap(width, height);
+            SetData(new BufferData2D<int>());
         }
 
-        public void SetImage(Bitmap image)
+        public BufferComponent(BufferData2D<int> bufferData)
         {
-            Image = image;
+            SetData(bufferData);
         }
+
+        public void SetData(BufferData2D<int> bufferData)
+        {
+            BufferData = bufferData;
+        }
+
+        public BufferData2D<int> BufferData;
 
         private ScreenshotObject RenderObject;
 
@@ -38,7 +41,7 @@ namespace Aximo.Engine
             if (RenderObject == null)
             {
                 created = true;
-                RenderObject = new ScreenshotObject();
+                RenderObject = new ScreenshotObject(BufferData);
             }
 
             if (created)
