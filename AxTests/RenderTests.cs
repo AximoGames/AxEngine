@@ -27,62 +27,51 @@ namespace Aximo.AxDemo
 
         }
 
+        private GameMaterial GetMaterial(PipelineType pipelineType, Vector3 color)
+        {
+            return new GameMaterial()
+            {
+                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
+                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                Ambient = 1f,
+                ColorBlendMode = MaterialColorBlendMode.Set,
+                Color = color,
+                PipelineType = pipelineType,
+            };
+        }
+
+        private Transform GetTransform()
+        {
+            return new Transform
+            {
+                Scale = new Vector3(1),
+                Rotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
+                Translation = new Vector3(0f, 0, 0.5f),
+            };
+        }
+
         [Fact]
         public void ForwardBox1()
         {
-            var mat2 = new GameMaterial()
-            {
-                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
-                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
-                Ambient = 1f,
-                ColorBlendMode = MaterialColorBlendMode.Set,
-                Color = new Vector3(0, 1, 0),
-                PipelineType = PipelineType.Forward,
-            };
-
             GameContext.AddActor(new Actor(new DebugCubeComponent()
             {
                 Name = "Box2",
-                RelativeRotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
-                RelativeScale = new Vector3(1),
-                RelativeTranslation = new Vector3(0f, 0, 0.5f),
-
-                // RelativeRotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
-                // RelativeScale = new Vector3(8, 1, 8),
-                // RelativeTranslation = new Vector3(0, 0, 0.5f),
-
-                Material = mat2,
+                Transform = GetTransform(),
+                Material = GetMaterial(PipelineType.Forward, new Vector3(0, 1, 0)),
             }));
-
             RenderAndCompare(nameof(ForwardBox1));
-
-            //RenderSingleFrameSync();
-            Thread.Sleep(4000);
         }
 
-        [Fact(Skip = "skip")]
-        public void test2()
+        [Fact]
+        public void DeferredBox1()
         {
-            var mat = new GameMaterial()
-            {
-                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
-                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
-                Ambient = 1f,
-                ColorBlendMode = MaterialColorBlendMode.Set,
-                Color = new Vector3(0, 1, 0),
-                PipelineType = PipelineType.Forward,
-            };
-
             GameContext.AddActor(new Actor(new DebugCubeComponent()
             {
-                Name = "Box1",
-                RelativeRotation = new Vector3(0, 0.25f, 0.5f).ToQuaternion(),
-                RelativeScale = new Vector3(1),
-                RelativeTranslation = new Vector3(1f, 0, 0.5f),
-                Material = mat,
+                Name = "Box2",
+                Transform = GetTransform(),
+                Material = GetMaterial(PipelineType.Deferred, new Vector3(0, 1, 0)),
             }));
-            RenderSingleFrameSync();
-            Thread.Sleep(4000);
+            RenderAndCompare(nameof(DeferredBox1));
         }
 
     }

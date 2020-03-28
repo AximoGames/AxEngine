@@ -175,7 +175,19 @@ namespace Aximo.Engine
             }
         }
 
-        public Transform Transform => new Transform(RelativeScale, RelativeRotation, RelativeTranslation);
+        public Transform Transform
+        {
+            get
+            {
+                return new Transform(RelativeScale, RelativeRotation, RelativeTranslation);
+            }
+            set
+            {
+                RelativeScale = value.Scale;
+                RelativeRotation = value.Rotation;
+                RelativeTranslation = value.Translation;
+            }
+        }
 
         //public Transform TranslationTransform { get; set; } = Transform.Identity;
 
