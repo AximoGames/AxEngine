@@ -17,13 +17,13 @@ namespace ImageHashing
         /// Bitcounts array used for BitCount method (used in Similarity comparisons).
         /// </summary>
         private static byte[] bitCounts = {
-            0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4,1,2,2,3,2,3,3,4,2,3,3,4,3,4,4,5,1,2,2,3,2,3,3,4,
-            2,3,3,4,3,4,4,5,2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,1,2,2,3,2,3,3,4,2,3,3,4,3,4,4,5,
-            2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,3,4,4,5,4,5,5,6,
-            4,5,5,6,5,6,6,7,1,2,2,3,2,3,3,4,2,3,3,4,3,4,4,5,2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,
-            2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,3,4,4,5,4,5,5,6,4,5,5,6,5,6,6,7,2,3,3,4,3,4,4,5,
-            3,4,4,5,4,5,5,6,3,4,4,5,4,5,5,6,4,5,5,6,5,6,6,7,3,4,4,5,4,5,5,6,4,5,5,6,5,6,6,7,
-            4,5,5,6,5,6,6,7,5,6,6,7,6,7,7,8
+            0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 1, 2, 2, 3, 2, 3, 3, 4,
+            2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+            2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6,
+            4, 5, 5, 6, 5, 6, 6, 7, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+            2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 2, 3, 3, 4, 3, 4, 4, 5,
+            3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+            4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
         };
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace ImageHashing
             averageValue /= 64;
 
             // Compute the hash: each bit is a pixel
-            // 1 = higher than average, 0 = lower than average
+            // 1 = higher than average,  0 = lower than average
             ulong hash = 0;
             for (int i = 0; i < 64; i++)
                 if (grayscale[i] >= averageValue)
@@ -97,7 +97,7 @@ namespace ImageHashing
 
         /// <summary>
         /// Returns a percentage-based similarity value between the two given hashes. The higher
-        /// the percentage, the closer the hashes are to being identical.
+        /// the percentage,  the closer the hashes are to being identical.
         /// </summary>
         /// <param name="hash1">The first hash.</param>
         /// <param name="hash2">The second hash.</param>
@@ -109,7 +109,7 @@ namespace ImageHashing
 
         /// <summary>
         /// Returns a percentage-based similarity value between the two given images. The higher
-        /// the percentage, the closer the images are to being identical.
+        /// the percentage,  the closer the images are to being identical.
         /// </summary>
         /// <param name="image1">The first image.</param>
         /// <param name="image2">The second image.</param>
@@ -123,7 +123,7 @@ namespace ImageHashing
 
         /// <summary>
         /// Returns a percentage-based similarity value between the image content of the two given
-        /// files. The higher the percentage, the closer the image contents are to being identical.
+        /// files. The higher the percentage,  the closer the image contents are to being identical.
         /// </summary>
         /// <param name="image1">The first image file.</param>
         /// <param name="image2">The second image file.</param>

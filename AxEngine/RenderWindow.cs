@@ -21,7 +21,7 @@ namespace Aximo.Engine
         //private float Pitch = -0.3f;
         //private float Facing = (float)Math.PI / 2 + 0.15f;
 
-        public RenderWindow(int width, int height, string title, bool isSingleThead = true) : base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 3, GraphicsContextFlags.Default, GraphicsContext.CurrentContext, isSingleThead) { }
+        public RenderWindow(int width, int height, string title, bool isSingleThead = true) : base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 1, 0, GraphicsContextFlags.Default, GraphicsContext.CurrentContext, isSingleThead) { }
 
         protected override void OnLoad(EventArgs e)
         {

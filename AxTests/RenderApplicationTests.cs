@@ -20,7 +20,7 @@ namespace Aximo.AxDemo
     {
         protected Thread UpdaterThread;
         private AutoResetEvent SetupWaiter;
-        public RenderApplicationTests(RenderApplicationStartup startup) : base(new RenderApplicationStartup
+        public RenderApplicationTests() : base(new RenderApplicationStartup
         {
             WindowTitle = "AxTests",
             WindowSize = new Vector2i(160, 120),

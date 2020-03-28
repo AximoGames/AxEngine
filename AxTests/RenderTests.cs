@@ -12,7 +12,7 @@ namespace Aximo.AxDemo
     public class RenderTests : RenderApplicationTests
     {
 
-        public RenderTests() : base()
+        public RenderTests()
         {
 
         }
