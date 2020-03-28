@@ -68,7 +68,7 @@ namespace Aximo.Render
                 vertices.Add(new Vector3(i, endPos, 0), color);
             }
 
-            vao.SetData(vertices.ToArray());
+            vao.SetData(BufferData.Create(vertices.ToArray()));
         }
 
         public void OnRender()

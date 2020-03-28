@@ -46,6 +46,7 @@ namespace Aximo.AxDemo
                 RelativeTranslation = new Vector3(0, 0, 0.5f),
                 Material = mat,
             }));
+            //GameContext.AddActor(new BufferActor());
             RenderSingleFrameSync();
             Thread.Sleep(4000);
         }

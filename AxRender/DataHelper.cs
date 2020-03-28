@@ -216,6 +216,19 @@ namespace Aximo.Render
              1.0f,  1.0f,  1.0f, 1.0f,
         };
 
+        public static Bitmap GetTexture(int width, int height, Action<IntPtr> getPixels)
+        {
+            Bitmap bitmap = new Bitmap(width, height);
+            var ptr = Marshal.AllocHGlobal(width * height * 4);
+
+            getPixels(ptr);
+
+            var floats = new float[width * height];
+            Marshal.Copy(ptr, floats, 0, width * height);
+            Marshal.FreeHGlobal(ptr);
+
+            return bitmap;
+        }
         public static Bitmap GetDepthTexture(int width, int height, Action<IntPtr> getPixels)
         {
             Bitmap bitmap = new Bitmap(width, height);

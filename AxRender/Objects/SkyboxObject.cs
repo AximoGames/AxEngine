@@ -35,7 +35,7 @@ namespace Aximo.Render
             layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 3);
 
             vao = new VertexArrayObject(layout);
-            vao.SetData(_vertices);
+            vao.SetData(BufferData.Create(_vertices));
         }
 
         public void OnRender()

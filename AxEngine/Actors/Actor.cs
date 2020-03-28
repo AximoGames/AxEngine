@@ -137,7 +137,7 @@ namespace Aximo.Engine
                 comp.PropagateChangesDown();
         }
 
-        internal void SyncChanges()
+        internal virtual void SyncChanges()
         {
             foreach (var comp in Components.ToArray())
                 comp.SyncChanges();

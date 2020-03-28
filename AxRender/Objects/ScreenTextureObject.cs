@@ -39,7 +39,7 @@ namespace Aximo.Render
             layout.AddAttribute<float>(_shader.GetAttribLocation("aTexCoords"), 2);
 
             vao = new VertexArrayObject(layout);
-            vao.SetData(_vertices);
+            vao.SetData(BufferData.Create(_vertices));
         }
 
         public Matrix4 GetModelMatrix()

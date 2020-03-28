@@ -56,6 +56,11 @@ namespace Aximo.Render
             return DataHelper.GetDepthTexture(Width, Height, (ptr) => GL.ReadPixels(0, 0, Width, Height, PixelFormat.DepthComponent, PixelType.UnsignedByte, ptr));
         }
 
+        public static Bitmap GetTexture(int handle, int width, int height)
+        {
+            return DataHelper.GetDepthTexture(width, height, (ptr) => GL.ReadPixels(0, 0, width, height, PixelFormat.Bgra, PixelType.UnsignedByte, ptr));
+        }
+
         public FrameBuffer(int width, int height)
         {
             Width = width;

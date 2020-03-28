@@ -106,43 +106,12 @@ namespace Aximo.Render
             Initialized = true;
         }
 
-        internal void SetData(float[] vertices, ushort[] indicies = null)
+        internal void SetData(BufferData1D vertices, BufferData1D<ushort> indicies = null)
         {
             EnsureInitialized();
             _vbo.SetData(vertices);
-            VertexCount = vertices.Length * sizeof(float) / Layout.Stride;
+            VertexCount = vertices.Length * vertices.ElementSize / Layout.Stride;
             //          UseDefault();
-            if (indicies != null)
-            {
-                if (_ebo == null)
-                    _ebo = CreateEBO();
-                _ebo.SetData(indicies);
-            }
-        }
-
-        internal void SetData<T>(T[] vertices, ushort[] indicies = null)
-        where T : struct
-        {
-            EnsureInitialized();
-            _vbo.SetData<T>(vertices);
-            var typeSize = Marshal.SizeOf(typeof(T));
-            VertexCount = vertices.Length * typeSize / Layout.Stride;
-            //            UseDefault();
-            if (indicies != null)
-            {
-                if (_ebo == null)
-                    _ebo = CreateEBO();
-                _ebo.SetData(indicies);
-            }
-        }
-
-        internal void SetData(Array vertices, ushort[] indicies = null)
-        {
-            EnsureInitialized();
-            _vbo.SetData(vertices);
-            var typeSize = Marshal.SizeOf(vertices.GetType().GetElementType());
-            VertexCount = vertices.Length * typeSize / Layout.Stride;
-            //            UseDefault();
             if (indicies != null)
             {
                 if (_ebo == null)

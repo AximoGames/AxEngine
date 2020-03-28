@@ -32,7 +32,7 @@ namespace Aximo.Render
             {
                 PrimitiveType = PrimitiveType.Lines,
             };
-            vao.SetData(_vertices);
+            vao.SetData(BufferData.Create(_vertices));
         }
 
         public void OnRender()

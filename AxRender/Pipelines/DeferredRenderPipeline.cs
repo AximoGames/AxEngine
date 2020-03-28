@@ -80,7 +80,7 @@ namespace Aximo.Render
             vao = new VertexArrayObject(layout, vbo);
             vao.Create();
 
-            vao.SetData(_vertices);
+            vao.SetData(BufferData.Create(_vertices));
         }
 
         public DeferredPass Pass;

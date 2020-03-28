@@ -10,28 +10,28 @@ namespace Aximo.Render
     {
         public static MeshData Cube()
         {
-            return new MeshData<float>(typeof(VertexDataPosNormalUV), DataHelper.Cube);
+            return new MeshData<float>(typeof(VertexDataPosNormalUV), BufferData.Create(DataHelper.Cube));
         }
 
         public static MeshData DebugCube()
         {
-            return new MeshData<float>(typeof(VertexDataPosNormalUV), DataHelper.DebugCube);
+            return new MeshData<float>(typeof(VertexDataPosNormalUV), BufferData.Create(DataHelper.DebugCube));
         }
 
         public static MeshData Quad()
         {
-            return new MeshData<float>(typeof(VertexDataPos2UV), DataHelper.Quad);
+            return new MeshData<float>(typeof(VertexDataPos2UV), BufferData.Create(DataHelper.Quad));
         }
 
         public static MeshData Sphere(int divisions)
         {
             var ico = new AxRender.Objects.Util.IcoSphere.IcoSphereMesh(2);
-            return new MeshData<VertexDataPosNormalUV>(ico.Vertices, ico.Indicies);
+            return new MeshData<VertexDataPosNormalUV>(BufferData.Create(ico.Vertices), BufferData.Create(ico.Indicies));
         }
 
         public static MeshData CrossLine()
         {
-            return new MeshData<float>(typeof(VertexDataPosColor), DataHelper.Cross, null, AxPrimitiveType.Lines);
+            return new MeshData<float>(typeof(VertexDataPosColor), BufferData.Create(DataHelper.Cross), null, AxPrimitiveType.Lines);
         }
 
         public static MeshData Grid(int size, bool center)
@@ -68,7 +68,7 @@ namespace Aximo.Render
                 vertices.Add(new Vector3(i, endPos, 0), color);
             }
 
-            return new MeshData<VertexDataPosColor>(vertices.ToArray(), null, AxPrimitiveType.Lines);
+            return new MeshData<VertexDataPosColor>(BufferData.Create(vertices.ToArray()), null, AxPrimitiveType.Lines);
         }
 
         public static MeshData Line(Vector3 start, Vector3 end, Vector4 colorStart, Vector4 colorEnd)
@@ -78,7 +78,7 @@ namespace Aximo.Render
             vertices.Add(start, colorStart);
             vertices.Add(end, colorEnd);
 
-            return new MeshData<VertexDataPosColor>(vertices.ToArray(), null, AxPrimitiveType.Lines);
+            return new MeshData<VertexDataPosColor>(BufferData.Create(vertices.ToArray()), null, AxPrimitiveType.Lines);
         }
 
     }

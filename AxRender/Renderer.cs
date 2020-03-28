@@ -96,7 +96,7 @@ namespace Aximo.Render
                 lightsData[1].LightSpaceMatrix = Matrix4.Transpose(RenderContext.LightObjects[1].LightCamera.ViewMatrix * RenderContext.LightObjects[1].LightCamera.ProjectionMatrix);
                 lightsData[1].Linear = 0.1f;
                 lightsData[1].Quadric = 0f;
-                ubo.SetData(lightsData);
+                ubo.SetData(BufferData.Create(lightsData));
 
                 ubo.SetBindingPoint(RenderContext.LightBinding);
             }

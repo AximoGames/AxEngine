@@ -18,6 +18,7 @@ namespace Aximo.Render
         void Free();
         void AssignContext(RenderContext ctx);
         void OnScreenResize();
+        void OnWorldRendered();
     }
 
     public interface IData

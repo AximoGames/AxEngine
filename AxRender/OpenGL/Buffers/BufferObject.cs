@@ -27,35 +27,15 @@ namespace Aximo.Render
 
         public int Size { get; private set; }
 
-        public void SetData(float[] data)
+        public unsafe void SetData(BufferData data)
         {
             var currentBuffer = CurrentBuffer;
             Bind();
             Size = data.Length;
-            GL.BufferData(Target, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
-        }
-
-        public void SetData<T>(T[] data)
-            where T : struct
-        {
-            var currentBuffer = CurrentBuffer;
-            Bind();
-            Size = data.Length;
-            var structSize = Marshal.SizeOf(typeof(T));
-            GL.BufferData(Target, data.Length * structSize, data, BufferUsageHint.StaticDraw);
-        }
-
-        public unsafe void SetData(Array data)
-        {
-            var currentBuffer = CurrentBuffer;
-            Bind();
-            Size = data.Length;
-            var structSize = Marshal.SizeOf(data.GetType().GetElementType());
-
-            GCHandle h = GCHandle.Alloc(data, GCHandleType.Pinned);
+            GCHandle h = data.Createhandle();
             try
             {
-                GL.BufferData(Target, data.Length * structSize, h.AddrOfPinnedObject(), BufferUsageHint.StaticDraw);
+                GL.BufferData(Target, data.Length * data.ElementSize, h.AddrOfPinnedObject(), BufferUsageHint.StaticDraw);
             }
             finally
             {
