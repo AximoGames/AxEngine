@@ -11,6 +11,7 @@ using Aximo.Engine;
 using OpenTK;
 using Xunit;
 using System.IO;
+using Aximo.Render;
 
 namespace Aximo.AxDemo
 {
@@ -19,7 +20,12 @@ namespace Aximo.AxDemo
     {
         protected Thread UpdaterThread;
         private AutoResetEvent SetupWaiter;
-        public RenderApplicationTests(RenderApplicationStartup startup) : base(startup)
+        public RenderApplicationTests(RenderApplicationStartup startup) : base(new RenderApplicationStartup
+        {
+            WindowTitle = "AxTests",
+            WindowSize = new Vector2i(160, 120),
+            WindowBorder = WindowBorder.Fixed,
+        })
         {
             DebugHelper.LogThreadInfo("UnitTestThread");
             SetupWaiter = new AutoResetEvent(false);
@@ -199,6 +205,29 @@ namespace Aximo.AxDemo
             canvas.Flush();
             canvas.Dispose();
             return squeezed;
+        }
+
+        protected GameMaterial GetTestMaterial(PipelineType pipelineType, Vector3 color)
+        {
+            return new GameMaterial()
+            {
+                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
+                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                Ambient = 1f,
+                ColorBlendMode = MaterialColorBlendMode.Set,
+                Color = color,
+                PipelineType = pipelineType,
+            };
+        }
+
+        protected Transform GetTestTransform()
+        {
+            return new Transform
+            {
+                Scale = new Vector3(1),
+                Rotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
+                Translation = new Vector3(0f, 0, 0.5f),
+            };
         }
 
     }

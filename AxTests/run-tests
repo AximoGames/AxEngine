@@ -1,4 +1,8 @@
 #!/bin/bash
 
+ORIGIN_DIR=$(pwd)
+THIS_DIR=$(dirname $0)
+
+cd $THIS_DIR
 dotnet msbuild /p:Configuration=Debug /property:GenerateFullPaths=true
 mono --debug ~/.nuget/packages/xunit.runner.console/2.4.1/tools/net472/xunit.console.exe bin/Debug/net472/AxTests.exe -parallel none -noshadow -verbose
