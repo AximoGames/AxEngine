@@ -45,8 +45,8 @@ void main()
     Normal = texture(gNormal, TexCoords).rgb;
     vec3 Diffuse = texture(gAlbedoSpec, TexCoords).rgb;
     float Specular = texture(gAlbedoSpec, TexCoords).a;
-    float ambient = texture(gMaterial, TexCoords).a;
-    float shininess = texture(gMaterial, TexCoords).b;
+    float ambient = texture(gMaterial, TexCoords).r;
+    float shininess = texture(gMaterial, TexCoords).g;
 
     // then calculate lighting as usual
     vec3 lighting  = Diffuse * ambient; // hard-coded ambient component

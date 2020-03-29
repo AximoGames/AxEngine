@@ -132,6 +132,8 @@ namespace Aximo.AxTests
 
                 if (File.Exists(currentFile))
                     File.Delete(currentFile);
+                if (File.Exists(originalCopyFile))
+                    File.Delete(originalCopyFile);
                 return;
             }
 

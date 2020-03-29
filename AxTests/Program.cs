@@ -20,7 +20,7 @@ namespace Aximo.AxTests
             {
                 Pipeline = PipelineType.Deferred,
                 DiffuseSource = "Texture",
-                Ambient = 1.0f,
+                Ambient = 0.5f,
             });
             tester.Dispose();
             //Console.ReadLine();
