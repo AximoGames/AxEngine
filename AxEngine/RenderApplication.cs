@@ -14,18 +14,6 @@ using OpenTK.Input;
 namespace Aximo.Engine
 {
 
-    public static class DebugHelper
-    {
-        public static void LogThreadInfo(string message)
-        {
-            LogThreadInfo(Thread.CurrentThread, message);
-        }
-        public static void LogThreadInfo(Thread th, string message)
-        {
-            Console.WriteLine($"#{th.ManagedThreadId} {th.Name} {message}");
-        }
-    }
-
     public delegate void AfterApplicationInitializedDelegate();
 
     public class RenderApplication : IDisposable
@@ -386,7 +374,7 @@ namespace Aximo.Engine
 
                 IPosition pos = MovingObject;
                 Camera cam = pos as Camera;
-                IScaleRotate rot = MovingObject as IScaleRotate;
+                var rot = MovingObject as IScaleRotate;
                 bool simpleMove = cam == null;
 
                 var stepSize = 0.1f;
@@ -529,8 +517,8 @@ namespace Aximo.Engine
                 Action act;
                 lock (TaskQueue)
                     act = TaskQueue.Dequeue();
-                if (act != null)
-                    act();
+
+                act?.Invoke();
             }
         }
 

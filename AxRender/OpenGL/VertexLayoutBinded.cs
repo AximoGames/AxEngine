@@ -40,7 +40,7 @@ namespace Aximo.Render
 
         public virtual VertexLayoutBindedAttribute AddAttribute(Type type, int index, int size, bool normalized = false)
         {
-            var attr = base.AddAttribute(type, "", size, normalized) as VertexLayoutBindedAttribute;
+            var attr = this.AddAttribute(type, "", size, normalized) as VertexLayoutBindedAttribute;
             attr.Index = index;
             return attr;
         }

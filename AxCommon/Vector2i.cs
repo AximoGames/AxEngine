@@ -14,6 +14,8 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 
+#pragma warning disable CA2225 // Operator overloads have named alternates
+
 namespace OpenTK
 {
     /// <summary>

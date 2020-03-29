@@ -1,29 +1,33 @@
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
-namespace ImageHashing
+namespace Aximo.AxTests
 {
     /// <summary>
     /// Contains a variety of methods useful in generating image hashes for image comparison
     /// and recognition.
-    /// 
+    ///
     /// Credit for the AverageHash implementation to David Oftedal of the University of Oslo.
     /// </summary>
-    public class ImageHashing
+    public static class ImageHashing
     {
         /// <summary>
         /// Bitcounts array used for BitCount method (used in Similarity comparisons).
         /// </summary>
-        private static byte[] bitCounts = {
+        private static byte[] bitCounts =
+        {
             0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 1, 2, 2, 3, 2, 3, 3, 4,
             2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
             2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6,
             4, 5, 5, 6, 5, 6, 6, 7, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
             2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 2, 3, 3, 4, 3, 4, 4, 5,
             3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-            4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
+            4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8,
         };
 
         /// <summary>
@@ -37,7 +41,7 @@ namespace ImageHashing
         {
             uint count = 0;
             for (; num > 0; num >>= 8)
-                count += bitCounts[(num & 0xff)];
+                count += bitCounts[num & 0xff];
             return count;
         }
 
@@ -66,7 +70,7 @@ namespace ImageHashing
                     uint pixel = (uint)squeezed.GetPixel(x, y).ToArgb();
                     uint gray = (pixel & 0x00ff0000) >> 16;
                     gray += (pixel & 0x0000ff00) >> 8;
-                    gray += (pixel & 0x000000ff);
+                    gray += pixel & 0x000000ff;
                     gray /= 12;
 
                     grayscale[x + (y * 8)] = (byte)gray;
@@ -79,7 +83,7 @@ namespace ImageHashing
             ulong hash = 0;
             for (int i = 0; i < 64; i++)
                 if (grayscale[i] >= averageValue)
-                    hash |= (1UL << (63 - i));
+                    hash |= 1UL << (63 - i);
 
             return hash;
         }
@@ -89,7 +93,7 @@ namespace ImageHashing
         /// </summary>
         /// <param name="path">Path to the input file.</param>
         /// <returns>The hash of the input file's image content.</returns>
-        public static ulong AverageHash(String path)
+        public static ulong AverageHash(string path)
         {
             Bitmap bmp = new Bitmap(path);
             return AverageHash(bmp);
@@ -104,7 +108,7 @@ namespace ImageHashing
         /// <returns>The similarity percentage.</returns>
         public static double Similarity(ulong hash1, ulong hash2)
         {
-            return ((64 - BitCount(hash1 ^ hash2)) * 100) / 64.0;
+            return (64 - BitCount(hash1 ^ hash2)) * 100 / 64.0;
         }
 
         /// <summary>
@@ -125,10 +129,7 @@ namespace ImageHashing
         /// Returns a percentage-based similarity value between the image content of the two given
         /// files. The higher the percentage,  the closer the image contents are to being identical.
         /// </summary>
-        /// <param name="image1">The first image file.</param>
-        /// <param name="image2">The second image file.</param>
-        /// <returns>The similarity percentage.</returns>
-        public static double Similarity(String path1, String path2)
+        public static double Similarity(string path1, string path2)
         {
             ulong hash1 = AverageHash(path1);
             ulong hash2 = AverageHash(path2);

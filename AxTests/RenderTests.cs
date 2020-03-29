@@ -6,7 +6,7 @@ using Aximo.Engine;
 using OpenTK;
 using Xunit;
 
-namespace Aximo.AxDemo
+namespace Aximo.AxTests
 {
 
     public class RenderTests : RenderApplicationTests

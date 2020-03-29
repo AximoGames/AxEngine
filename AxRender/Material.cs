@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Threading;
@@ -33,8 +33,8 @@ namespace Aximo.Render
         public Shader ShadowShader { get; set; }
         public Shader CubeShadowShader { get; set; }
 
-        public Texture txt0;
-        public Texture txt1;
+        public Texture Txt0;
+        public Texture Txt1;
 
         public IRenderPipeline RenderPipeline;
 
@@ -55,10 +55,10 @@ namespace Aximo.Render
 
         public void CreateShaders()
         {
-            if (txt0 == null && !string.IsNullOrEmpty(DiffuseImagePath))
-                txt0 = new Texture(DiffuseImagePath);
-            if (txt1 == null && !string.IsNullOrEmpty(SpecularImagePath))
-                txt1 = new Texture(SpecularImagePath);
+            if (Txt0 == null && !string.IsNullOrEmpty(DiffuseImagePath))
+                Txt0 = new Texture(DiffuseImagePath);
+            if (Txt1 == null && !string.IsNullOrEmpty(SpecularImagePath))
+                Txt1 = new Texture(SpecularImagePath);
 
             if (Shader == null)
                 Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");

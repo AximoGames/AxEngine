@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 
+#pragma warning disable CA1721 // Property names should not match get methods
+
 namespace Aximo.Engine
 {
 

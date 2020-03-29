@@ -8,7 +8,7 @@ using OpenTK;
 
 using Xunit;
 
-namespace Aximo.AxDemo
+namespace Aximo.AxTests
 {
     internal class Program
     {

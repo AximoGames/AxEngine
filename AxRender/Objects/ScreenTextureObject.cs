@@ -5,6 +5,8 @@ using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
+#pragma warning disable CA1044 // Properties should not be write only
+
 namespace Aximo.Render
 {
     public class ScreenTextureObject : GameObject, IRenderTarget, IScaleRotate, IPosition

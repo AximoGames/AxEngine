@@ -11,6 +11,8 @@ using System.Threading;
 using Aximo.Render;
 using OpenTK;
 
+#pragma warning disable CA1044 // Properties should not be write only
+
 namespace Aximo.Engine
 {
 

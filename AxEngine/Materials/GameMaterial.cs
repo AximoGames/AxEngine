@@ -157,8 +157,8 @@ namespace Aximo.Engine
             }
 
             var mat = InternalMaterial;
-            mat.txt0 = DiffuseTexture?.InternalTexture;
-            mat.txt1 = SpecularTexture?.InternalTexture;
+            mat.Txt0 = DiffuseTexture?.InternalTexture;
+            mat.Txt1 = SpecularTexture?.InternalTexture;
             mat.CastShadow = CastShadow;
 
             mat.Ambient = Ambient;

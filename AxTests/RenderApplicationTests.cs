@@ -3,17 +3,16 @@
 
 using System;
 using System.Drawing;
-using System.Threading;
-using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Threading;
 using Aximo.Engine;
+using Aximo.Render;
 using OpenTK;
 using Xunit;
-using System.IO;
-using Aximo.Render;
 
-namespace Aximo.AxDemo
+namespace Aximo.AxTests
 {
 
     public class RenderApplicationTests : RenderApplication
@@ -44,6 +43,8 @@ namespace Aximo.AxDemo
             });
             UpdaterThread.Start();
             SetupWaiter.WaitOne(4000);
+            SetupWaiter.Dispose();
+            SetupWaiter = null;
             Console.WriteLine("Ready for tests");
         }
 
@@ -54,8 +55,6 @@ namespace Aximo.AxDemo
             GameContext.BackgroundColor = new Vector4(0.2f, 0.3f, 0.3f, 1);
             GameContext.AddActor(new Actor(ScreenshotBuffer = new BufferComponent()));
         }
-
-        private float LightAngle = 0;
 
         protected override void BeforeUpdateFrame()
         {
@@ -96,6 +95,9 @@ namespace Aximo.AxDemo
             TestWaiter.Set();
             RenderWaiter.Set();
             UpdateWaiter.Set();
+
+            SetupWaiter?.Dispose();
+            SetupWaiter = null;
 
             base.Dispose();
 
@@ -188,7 +190,7 @@ namespace Aximo.AxDemo
         private static int GetDistanceBetweenColours(Color a, Color b)
         {
             int dR = a.R - b.R, dG = a.G - b.G, dB = a.B - b.B;
-            return dR * dR + dG * dG + dB * dB;
+            return (dR * dR) + (dG * dG) + (dB * dB);
         }
 
         private Bitmap ResizeImage(Image image)

@@ -107,7 +107,7 @@ namespace Aximo.Render
             GL.Enable(EnableCap.DepthTest);
             //GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-            // At least gPosition requires Color = 0, so the Positions is 0. Used to stencil the background. 
+            // At least gPosition requires Color = 0, so the Positions is 0. Used to stencil the background.
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 

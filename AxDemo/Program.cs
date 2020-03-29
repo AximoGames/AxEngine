@@ -17,7 +17,7 @@ namespace Aximo.AxDemo
         {
             var bits = IntPtr.Size == 4 ? 32 : 64;
             Console.WriteLine($"{bits} Bit System detected. (Pointer Size: {IntPtr.Size} Bytes)");
-            Console.WriteLine($"OS: {Environment.OSVersion.ToString()}");
+            Console.WriteLine($"OS: {Environment.OSVersion}");
 
             UIThreadMain();
             return;
