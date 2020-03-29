@@ -183,8 +183,11 @@ namespace Aximo.AxDemo
             }
 
             var actt = GameContext.GetActor("GroupActor1");
-            var compp = actt.GetComponent<SceneComponent>("CompGroup1");
-            compp.RelativeRotation = new Quaternion(0, 0, LightAngle * 2);
+            if (actt != null)
+            {
+                var compp = actt.GetComponent<SceneComponent>("CompGroup1");
+                compp.RelativeRotation = new Quaternion(0, 0, LightAngle * 2);
+            }
 
             if (CurrentMouseWorldPositionIsValid)
             {
