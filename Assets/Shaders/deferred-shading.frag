@@ -42,46 +42,20 @@ void main()
     if(FragPos == vec3(0))
         discard;
 
-    Normal = texture(gNormal, TexCoords).rgb;
-    vec3 Diffuse = texture(gAlbedoSpec, TexCoords).rgb;
-    float Specular = texture(gAlbedoSpec, TexCoords).a;
-    float ambient = texture(gMaterial, TexCoords).r;
-    float shininess = texture(gMaterial, TexCoords).g;
-
-    // then calculate lighting as usual
-    vec3 lighting  = Diffuse * ambient; // hard-coded ambient component
     vec3 viewDir  = normalize(viewPos - FragPos);
-    //int lightCount = 1;
-    for(int i = 0; i < lightCount; ++i)
-    {
-        Light light = lights[i];
 
-        // diffuse
-        vec3 lightDir = normalize(light.position - FragPos);
-        vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * light.color;
-        // specular
-        vec3 halfwayDir = normalize(lightDir + viewDir);  
-        float spec = pow(max(dot(Normal, halfwayDir), 0.0), shininess);
-        vec3 specular = light.color * spec * Specular;
-        // attenuation
-        float distance = length(light.position - FragPos);
-        float attenuation = 1.0 / (1.0 + light.linear * distance + light.quadratic * distance * distance);
+    vec3 normal = texture(gNormal, TexCoords).rgb;
+    Normal = normal;
 
-        attenuation = 1.0; // debug
+    vec3 matDiffuse = texture(gAlbedoSpec, TexCoords).rgb;
+    float matSpecular = texture(gAlbedoSpec, TexCoords).a;
+    float matAmbient = texture(gMaterial, TexCoords).r;
+    float matShininess = texture(gMaterial, TexCoords).g;
 
-        float shadow;
-        if(light.directionalLight == 1) {
-            shadow = ShadowCalculation(vec4(FragPos, 1.0) * light.lightSpaceMatrix, light);
-            //shadow = 0;
-        }
-        else {
-            shadow = ShadowCalculationCubeSoft(FragPos, light);
-        }
+    LightResult lightResult;
+    lightResult.Diffuse = vec3(0);
+    lightResult.Specular = vec3(0);
+    lightResult.Shadow = 0;
 
-        diffuse *= attenuation;
-        specular *= attenuation;
-        //shadow *= attenuation; // just a test
-        lighting += (diffuse + specular) * (1.0 - shadow);        
-    }
-    FragColor = vec4(lighting, 0.0);
+#include "common/light.glsl"
 }

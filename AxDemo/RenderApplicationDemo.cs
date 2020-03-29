@@ -22,6 +22,7 @@ namespace Aximo.AxDemo
                 DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
                 SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
                 Ambient = 0.2f,
+                Shininess = 32f,
                 PipelineType = PipelineType.Deferred,
             };
 
@@ -41,6 +42,7 @@ namespace Aximo.AxDemo
             {
                 DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
                 SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                Shininess = 32f,
                 Ambient = 0.2f,
                 PipelineType = PipelineType.Forward,
             };

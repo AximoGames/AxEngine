@@ -25,3 +25,8 @@ struct Material {
 	int colorBlendMode;
 };
 
+struct LightResult {
+	float Shadow;
+	vec3 Diffuse;
+	vec3 Specular;
+};
