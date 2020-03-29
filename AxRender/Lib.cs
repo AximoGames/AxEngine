@@ -145,6 +145,8 @@ namespace Aximo.Render
         Camera LightCamera { get; }
         LightType LightType { get; set; }
         Vector3 Color { get; set; }
+        float Linear { get; set; }
+        float Quadric { get; set; }
     }
 
     public enum LightType

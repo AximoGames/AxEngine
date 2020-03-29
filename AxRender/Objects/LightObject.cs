@@ -12,6 +12,8 @@ namespace Aximo.Render
 
         public Vector3 Position { get; set; }
         public Vector3 Color { get; set; } = new Vector3(1);
+        public float Linear { get; set; } = 0.1f;
+        public float Quadric { get; set; } = 0.0f;
 
         public bool Shadows { get; set; }
         public int ShadowTextureIndex { get; set; }

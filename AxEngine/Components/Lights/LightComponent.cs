@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 
 using Aximo.Render;
+using OpenTK;
 
 namespace Aximo.Engine
 {
@@ -17,6 +18,29 @@ namespace Aximo.Engine
         internal ILightObject LightObject;
 
         protected abstract LightType LightType { get; }
+
+        private float _Linear = 0.1f;
+        public float Linear
+        {
+            get => _Linear;
+            set { if (_Linear == value) return; _Linear = value; LightAttributesChanged = true; }
+        }
+
+        private float _Quadric = 0.1f;
+        public float Quadric
+        {
+            get => _Quadric;
+            set { if (_Quadric == value) return; _Quadric = value; LightAttributesChanged = true; }
+        }
+
+        private Vector3 _Color = Vector3.One;
+        public Vector3 Color
+        {
+            get => _Color;
+            set { if (_Color == value) return; _Color = value; LightAttributesChanged = true; }
+        }
+
+        private bool LightAttributesChanged;
 
         private static int ShadowIdx;
 
@@ -32,6 +56,15 @@ namespace Aximo.Engine
                 LightObject.ShadowTextureIndex = ShadowIdx++;
                 LightObject.Name = Name;
                 RenderContext.Current.AddObject(LightObject);
+                LightAttributesChanged = true;
+            }
+
+            if (LightAttributesChanged)
+            {
+                LightAttributesChanged = false;
+                LightObject.Linear = _Linear;
+                LightObject.Quadric = _Quadric;
+                LightObject.Color = _Color;
             }
 
             if (TransformChanged)
