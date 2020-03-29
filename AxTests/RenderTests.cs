@@ -20,18 +20,13 @@ namespace Aximo.AxTests
         }
 
         [Theory]
-        [MemberData(nameof(GetData))]
+        [MemberData(nameof(GetTestData))]
         public void Box(TestCase test)
         {
 
-            if (test.ComparePipelines)
+            if (test.CompareWith != null)
             {
-                test.Pipeline = PipelineType.Forward;
-                var testName1 = test.ToString();
-                test.Pipeline = PipelineType.Deferred;
-                var testName2 = test.ToString();
-
-                //...
+                Compare(nameof(Box), test, test.CompareWith);
             }
             else
             {
@@ -56,28 +51,38 @@ namespace Aximo.AxTests
             }
         }
 
-        public static IEnumerable<object[]> GetData()
+        public static IEnumerable<object[]> GetTestData()
         {
             var pipelines = new PipelineType[] { PipelineType.Forward, PipelineType.Deferred };
 
-            foreach (var test in GetData_())
+            foreach (var test in GetTestCombinations())
             {
                 foreach (var pipe in pipelines)
                 {
-                    var newTest = test.Clone();
+                    var newTest = test.Clone<TestCase>();
                     newTest.Pipeline = pipe;
+                    newTest.ComparisonName = pipe.ToString();
                     yield return new object[] { newTest };
                 }
             }
 
-            foreach (var test in GetData_())
+            foreach (var test in GetTestCombinations())
             {
-                test.ComparePipelines = true;
-                yield return new object[] { test };
+                var test1 = test.Clone<TestCase>();
+                test1.Pipeline = PipelineType.Forward;
+                test1.ComparisonName = test1.Pipeline.ToString();
+
+                var test2 = test.Clone<TestCase>();
+                test2.Pipeline = PipelineType.Deferred;
+                test2.ComparisonName = test2.Pipeline.ToString();
+
+                test1.CompareWith = test2;
+
+                yield return new object[] { test1 };
             }
         }
 
-        public static IEnumerable<TestCase> GetData_()
+        public static IEnumerable<TestCase> GetTestCombinations()
         {
             var diffuseSources = new string[] { "Texture", "Color" };
             //var ambients = new float[] { 0.0f, 0.5f, 1.0f };
@@ -96,30 +101,27 @@ namespace Aximo.AxTests
             }
         }
 
-        public class TestCase
+        public class TestCase : TestCaseBase
         {
             public PipelineType Pipeline;
             public string DiffuseSource; // Texture vs Color
             public float Ambient;
 
-            public bool ComparePipelines = false;
-
-            public TestCase Clone()
+            public override TestCaseBase Clone()
             {
                 return new TestCase
                 {
                     Pipeline = Pipeline,
                     DiffuseSource = DiffuseSource,
                     Ambient = Ambient,
-                    ComparePipelines = ComparePipelines,
+                    ComparisonName = Pipeline.ToString(),
                 };
             }
 
-            public override string ToString()
+            public override string ToStringWithoutComparison()
             {
-                return $"{Pipeline}{DiffuseSource}Ambient{Ambient.ToString("F1")}";
+                return $"{DiffuseSource}Ambient{Ambient.ToString("F1")}";
             }
-
         }
 
     }

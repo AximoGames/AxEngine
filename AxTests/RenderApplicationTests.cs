@@ -110,6 +110,8 @@ namespace Aximo.AxTests
         }
 
         private string TestOutputDir => Path.Combine(DirectoryHelper.GetAssetsPath("TestOutputs"), GetType().Name);
+        private string OriginalDir => Path.Combine(TestOutputDir, "Original");
+        private string DiffsDir => Path.Combine(TestOutputDir, "Diffs");
         public bool OverwriteOriginalImages;
 
         protected void RenderAndCompare(string testName)
@@ -119,16 +121,13 @@ namespace Aximo.AxTests
 
             Directory.CreateDirectory(TestOutputDir);
 
-            var originalDir = Path.Combine(TestOutputDir, "Original");
-            var diffsDir = Path.Combine(TestOutputDir, "Diffs");
-
-            var originalFile = Path.Combine(originalDir, testName + ".png");
-            var originalCopyFile = Path.Combine(diffsDir, testName + ".original.png");
-            var currentFile = Path.Combine(diffsDir, testName + ".current.png");
+            var originalFile = Path.Combine(OriginalDir, testName + ".png");
+            var originalCopyFile = Path.Combine(DiffsDir, testName + ".original.png");
+            var currentFile = Path.Combine(DiffsDir, testName + ".current.png");
 
             if (!File.Exists(originalFile) || OverwriteOriginalImages)
             {
-                Directory.CreateDirectory(originalDir);
+                Directory.CreateDirectory(OriginalDir);
                 bmpCurrent.Save(originalFile);
 
                 if (File.Exists(currentFile))
@@ -143,7 +142,7 @@ namespace Aximo.AxTests
             var diff = CompareImage(bmpCurrent, bmpOriginal, maxDiffAllowed);
             if (diff > maxDiffAllowed)
             {
-                Directory.CreateDirectory(diffsDir);
+                Directory.CreateDirectory(DiffsDir);
                 bmpCurrent.Save(currentFile);
                 Console.WriteLine($"MaxDifference: {diff} MaxDiffAllowed: {maxDiffAllowed}");
                 File.Copy(originalFile, originalCopyFile);
@@ -154,6 +153,75 @@ namespace Aximo.AxTests
                     File.Delete(currentFile);
                 if (File.Exists(originalCopyFile))
                     File.Delete(originalCopyFile);
+            }
+            Assert.InRange(diff, 0, maxDiffAllowed);
+        }
+
+        public abstract class TestCaseBase
+        {
+
+            public string ComparisonName;
+            public TestCaseBase CompareWith;
+
+            public override string ToString()
+            {
+                return ToString(true);
+            }
+
+            public string ToString(bool withComparison)
+            {
+                if (withComparison)
+                    return ComparisonName + ToStringWithoutComparison();
+                else
+                    return ToStringWithoutComparison();
+            }
+
+            public abstract string ToStringWithoutComparison();
+
+            public abstract TestCaseBase Clone();
+            public T Clone<T>()
+                where T : TestCaseBase
+            {
+                return (T)Clone();
+            }
+
+        }
+
+        protected void Compare(string testCase, TestCaseBase test1, TestCaseBase test2)
+        {
+            Directory.CreateDirectory(TestOutputDir);
+
+            var originalFile1 = Path.Combine(OriginalDir, testCase + test1.ToString() + ".png");
+            var originalFile2 = Path.Combine(OriginalDir, testCase + test2.ToString() + ".png");
+            var currentFile1 = Path.Combine(DiffsDir, testCase + test1.ToStringWithoutComparison() + "." + test1.ComparisonName + ".current1.png");
+            var currentFile2 = Path.Combine(DiffsDir, testCase + test2.ToStringWithoutComparison() + "." + test2.ComparisonName + ".current2.png");
+
+            Console.WriteLine($"Comparing Files: {originalFile1} {originalFile2}");
+
+            if (!File.Exists(originalFile1))
+                throw new Exception("Missing file: " + originalFile1);
+            if (!File.Exists(originalFile2))
+                throw new Exception("Missing file: " + originalFile2);
+
+            var bmpOriginal1 = Bitmap.FromFile(originalFile1);
+            var bmpOriginal2 = Bitmap.FromFile(originalFile2);
+
+            var maxDiffAllowed = 1000;
+
+            var diff = CompareImage(bmpOriginal1, bmpOriginal2, maxDiffAllowed);
+            if (diff > maxDiffAllowed)
+            {
+                Console.WriteLine($"MaxDifference: {diff} MaxDiffAllowed: {maxDiffAllowed}");
+                Directory.CreateDirectory(DiffsDir);
+                File.Copy(originalFile1, currentFile1);
+                File.Copy(originalFile2, currentFile2);
+            }
+            else
+            {
+                if (File.Exists(currentFile1))
+                    File.Delete(currentFile1);
+                if (File.Exists(currentFile2))
+                    File.Delete(currentFile2);
             }
             Assert.InRange(diff, 0, maxDiffAllowed);
         }
