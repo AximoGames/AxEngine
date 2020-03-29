@@ -36,4 +36,4 @@ for(int i = 0; i < lightCount; ++i)
 
 lighting += (lightResult.Diffuse + lightResult.Specular) * (1.0 - lightResult.Shadow);
 
-FragColor = vec4(lighting, 0.0);
+FragColor = vec4(lighting, 1.0);

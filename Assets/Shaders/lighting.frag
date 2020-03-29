@@ -43,52 +43,12 @@ void main()
 
     //vec3 color = material.color; // solid color for debugging
     vec3 normal = normalize(Normal);
-    // ambient
-    vec3 ambient = matAmbient * matDiffuse;
 
-    vec3 finalColor = ambient;
+    LightResult lightResult;
+    lightResult.Diffuse = vec3(0);
+    lightResult.Specular = vec3(0);
+    lightResult.Shadow = 0;
 
-    //int lightCount = 1;
-	for(int x = 0; x < lightCount; x++) {
-        Light light = lights[x];
+#include "common/light.glsl"
 
-        // diffuse
-        vec3 lightDir = normalize(light.position - FragPos);
-        float diff = max(dot(lightDir, normal), 0.0);
-        vec3 diffuse = diff * light.color;
-        // specular
-        vec3 reflectDir = reflect(-lightDir, normal);
-        float spec = 0.0;
-        vec3 halfwayDir = normalize(lightDir + viewDir);
-        spec = pow(max(dot(normal, halfwayDir), 0.0), matShininess);
-        // float specularStrength;
-        // //specularStrength = material.specularStrength;
-        // specularStrength = ;
-        vec3 specular = light.color * spec * matSpecular;
-
-        // calculate shadow
-   
-        float shadow;
-        if(light.directionalLight == 1) {
-            shadow = ShadowCalculation(vec4(FragPos, 1.0) * light.lightSpaceMatrix, light);
-        }
-        else {
-            shadow = ShadowCalculationCubeSoft(FragPos, light);
-        }
-
-        //float shadowCube = ShadowCalculationCubeHard(FragPos, light);
-
-        //shadow = 0;
-        vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * matDiffuse;
-        //vec3 lighting = (ambient + (1.0 - shadowCube) * (diffuse + specular)) * color;
-
-        finalColor = finalColor + lighting;
-    }
-
-
-	
-    // Combine both shadows, for debugging
-    //lighting = (lighting + lighting2) / 2;
-
-	FragColor = vec4(finalColor, 1.0);
 }
