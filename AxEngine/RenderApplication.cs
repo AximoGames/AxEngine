@@ -114,10 +114,11 @@ namespace Aximo.Engine
             RenderContext.LightBinding = new BindingPoint();
             Console.WriteLine("LightBinding: " + RenderContext.LightBinding.Number);
 
-            RenderContext.Camera = new PerspectiveFieldOfViewCamera(new Vector3(1f, -5f, 2f), RenderContext.ScreenSize.X / (float)RenderContext.ScreenSize.Y)
+            RenderContext.Camera = new PerspectiveFieldOfViewCamera(new Vector3(2f, -5f, 2f), RenderContext.ScreenSize.X / (float)RenderContext.ScreenSize.Y)
             {
                 NearPlane = 0.1f,
                 FarPlane = 100.0f,
+                Facing = 1.88f,
             };
             // ctx.Camera = new OrthographicCamera(new Vector3(1f, -5f, 2f))
             // {
@@ -225,7 +226,8 @@ namespace Aximo.Engine
             if (Exiting)
                 return;
 
-            Console.WriteLine($"Render Frame #{RenderFrameNumber}");
+            if (RenderFrameNumber <= 2)
+                Console.WriteLine($"Render Frame #{RenderFrameNumber}");
 
             OnRenderFrame(e);
 
@@ -263,6 +265,15 @@ namespace Aximo.Engine
                     {
                         MovingObject = Camera;
                     }
+                }
+                if (kbState[Key.F])
+                {
+                    Console.WriteLine("Dump infos:");
+                    if (MovingObject != null)
+                    {
+                        Console.WriteLine($"MovingObject Position: {MovingObject.Position}");
+                    }
+                    Console.WriteLine($"Camer: Facing {Camera.Facing}, Pitch {Camera.Pitch}");
                 }
                 if (kbState[Key.B])
                 {
@@ -335,7 +346,8 @@ namespace Aximo.Engine
             if (Exiting)
                 return;
 
-            Console.WriteLine($"Update Frame #{UpdateFrameNumber}");
+            if (UpdateFrameNumber <= 2)
+                Console.WriteLine($"Update Frame #{UpdateFrameNumber}");
 
             foreach (var anim in GameContext.Animations)
                 anim.ProcessAnimation();

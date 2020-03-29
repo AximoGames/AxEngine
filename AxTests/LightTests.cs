@@ -47,11 +47,11 @@ namespace Aximo.AxTests
                     Material = material,
                 }));
 
-                GameContext.AddActor(new Actor(new DirectionalLightComponent()
+                GameContext.AddActor(new Actor(new PointLightComponent()
                 {
-                    RelativeTranslation = new Vector3(0, 2, 2.5f),
                     Name = "StaticLight",
-                    //RelativeTranslation = new Vector3(-5f, -0.5f, 1.5f),
+                    //RelativeTranslation = new Vector3(0, 2, 2.5f),
+                    RelativeTranslation = new Vector3(-0.2f, -2.1f, 1.85f),
                 }));
 
                 RenderAndCompare(nameof(Box) + test.ToString());
@@ -61,7 +61,7 @@ namespace Aximo.AxTests
         public static IEnumerable<object[]> GetTestData()
         {
             var diffuseSources = new string[] { "Texture", "Color" };
-            var ambients = new float[] { 0.0f, 0.5f, 1.0f };
+            var ambients = new float[] { 0.0f, 0.2f, 1.0f };
 
             foreach (var diffSource in diffuseSources)
             {
@@ -96,7 +96,7 @@ namespace Aximo.AxTests
 
             test1.CompareWith = test2;
 
-            return TestDataResult(test);
+            return TestDataResult(test1);
         }
 
         public class TestCase : TestCaseBase
@@ -105,14 +105,13 @@ namespace Aximo.AxTests
             public string DiffuseSource; // Texture vs Color
             public float Ambient;
 
-            public override TestCaseBase Clone()
+            protected override TestCaseBase CloneInternal()
             {
                 return new TestCase
                 {
                     Pipeline = Pipeline,
                     DiffuseSource = DiffuseSource,
                     Ambient = Ambient,
-                    ComparisonName = Pipeline.ToString(),
                 };
             }
 

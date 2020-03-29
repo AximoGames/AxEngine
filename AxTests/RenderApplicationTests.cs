@@ -181,7 +181,16 @@ namespace Aximo.AxTests
 
             public abstract string ToStringWithoutComparison();
 
-            public abstract TestCaseBase Clone();
+            protected abstract TestCaseBase CloneInternal();
+            public TestCaseBase Clone()
+            {
+                var test = CloneInternal();
+                test.ComparisonName = ComparisonName;
+                if (CompareWith != null)
+                    test.CompareWith = CompareWith.Clone();
+                return test;
+            }
+
             public T Clone<T>()
                 where T : TestCaseBase
             {
@@ -344,7 +353,7 @@ namespace Aximo.AxTests
 
         protected static object[] TestDataResult(TestCaseBase test)
         {
-            return new object[] { test };
+            return new object[] { test.Clone() };
         }
 
     }

@@ -78,7 +78,7 @@ namespace Aximo.Render
             _shader.Bind();
 
             Matrix4 lampMatrix = Matrix4.Identity;
-            lampMatrix *= Matrix4.CreateScale(0.2f);
+            lampMatrix *= Matrix4.CreateScale(0.1f);
             lampMatrix *= Matrix4.CreateTranslation(Position);
 
             _shader.SetMatrix4("model", lampMatrix);

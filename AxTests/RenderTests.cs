@@ -98,14 +98,13 @@ namespace Aximo.AxTests
             public string DiffuseSource; // Texture vs Color
             public float Ambient;
 
-            public override TestCaseBase Clone()
+            protected override TestCaseBase CloneInternal()
             {
                 return new TestCase
                 {
                     Pipeline = Pipeline,
                     DiffuseSource = DiffuseSource,
                     Ambient = Ambient,
-                    ComparisonName = Pipeline.ToString(),
                 };
             }
 

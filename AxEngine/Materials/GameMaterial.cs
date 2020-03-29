@@ -42,7 +42,7 @@ namespace Aximo.Engine
 
         public Vector3 Color { get; set; }
         public float Ambient { get; set; }
-        public float Shininess { get; set; }
+        public float Shininess { get; set; } = 1.0f;
         public float SpecularStrength { get; set; }
         public MaterialColorBlendMode ColorBlendMode { get; set; }
         public bool CastShadow { get; set; }

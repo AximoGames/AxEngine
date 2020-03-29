@@ -17,6 +17,35 @@ namespace Aximo.AxDemo
 
         protected override void SetupScene()
         {
+            GameMaterial material = new GameMaterial
+            {
+                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
+                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                Ambient = 0.2f,
+                PipelineType = PipelineType.Deferred,
+            };
+
+            GameContext.AddActor(new Actor(new DebugCubeComponent()
+            {
+                Name = "Box1",
+                Transform = new Transform
+                {
+                    Scale = new Vector3(1),
+                    Rotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
+                    Translation = new Vector3(0f, 0, 0.5f),
+                },
+                Material = material,
+            }));
+
+            GameContext.AddActor(new Actor(new DirectionalLightComponent()
+            {
+                RelativeTranslation = new Vector3(-0.2f, -2.1f, 1.85f),
+                Name = "StaticLight",
+            }));
+
+            return;
+            //---
+
             //RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>();
 
             GameContext.AddActor(new Actor(new SphereComponent()
