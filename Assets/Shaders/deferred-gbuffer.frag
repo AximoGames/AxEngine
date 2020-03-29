@@ -33,6 +33,7 @@ void main()
 
     // Extra material parameters
     gMaterial.r = material.ambient;
+    //gMaterial.r = 0;
     gMaterial.g = material.shininess;
     gMaterial.b = material.specularStrength; // Used?
 }

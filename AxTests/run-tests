@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# exit when any command fails
+set -e
+
 ORIGIN_DIR=$(pwd)
 THIS_DIR=$(dirname $0)
 

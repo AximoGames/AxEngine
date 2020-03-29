@@ -18,27 +18,51 @@ namespace Aximo.AxTests
         }
 
         [Fact]
-        public void ForwardBox1()
+        public void BoxSolidColorForward()
         {
             GameContext.AddActor(new Actor(new DebugCubeComponent()
             {
-                Name = "Box2",
+                Name = "Box1",
                 Transform = GetTestTransform(),
-                Material = GetTestMaterial(PipelineType.Forward, new Vector3(0, 1, 0)),
+                Material = SolidColorMaterial(PipelineType.Forward, new Vector3(0, 1, 0)),
             }));
-            RenderAndCompare(nameof(ForwardBox1));
+            RenderAndCompare(nameof(BoxSolidColorForward));
         }
 
         [Fact]
-        public void DeferredBox1()
+        public void BoxSolidColorDeferred()
         {
             GameContext.AddActor(new Actor(new DebugCubeComponent()
             {
-                Name = "Box2",
+                Name = "Box1",
                 Transform = GetTestTransform(),
-                Material = GetTestMaterial(PipelineType.Deferred, new Vector3(0, 1, 0)),
+                Material = SolidColorMaterial(PipelineType.Deferred, new Vector3(0, 1, 0)),
             }));
-            RenderAndCompare(nameof(DeferredBox1));
+            RenderAndCompare(nameof(BoxSolidColorDeferred));
+        }
+
+        [Fact]
+        public void BoxSolidTextureForward()
+        {
+            GameContext.AddActor(new Actor(new DebugCubeComponent()
+            {
+                Name = "Box1",
+                Transform = GetTestTransform(),
+                Material = SolidTextureMaterial(PipelineType.Forward),
+            }));
+            RenderAndCompare(nameof(BoxSolidTextureForward));
+        }
+
+        [Fact]
+        public void BoxSolidTextureDeferred()
+        {
+            GameContext.AddActor(new Actor(new DebugCubeComponent()
+            {
+                Name = "Box1",
+                Transform = GetTestTransform(),
+                Material = SolidTextureMaterial(PipelineType.Deferred),
+            }));
+            RenderAndCompare(nameof(BoxSolidTextureDeferred));
         }
 
     }

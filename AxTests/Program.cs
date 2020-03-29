@@ -16,7 +16,7 @@ namespace Aximo.AxTests
         public static void Main(string[] args)
         {
             var tester = new RenderTests();
-            tester.DeferredBox1();
+            tester.BoxSolidColorDeferred();
             tester.Dispose();
             //Console.ReadLine();
             Environment.Exit(0);

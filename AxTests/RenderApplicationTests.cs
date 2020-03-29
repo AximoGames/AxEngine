@@ -117,13 +117,18 @@ namespace Aximo.AxTests
             RenderSingleFrameSync();
             var bmpCurrent = ScreenshotBuffer.BufferData.CreateBitmap();
 
-            var testCaseFilePrefix = Path.Combine(TestOutputDir, testName);
             Directory.CreateDirectory(TestOutputDir);
-            var originalFile = testCaseFilePrefix + ".original.png";
-            var currentFile = testCaseFilePrefix + ".current.png";
+
+            var originalDir = Path.Combine(TestOutputDir, "Original");
+            var diffsDir = Path.Combine(TestOutputDir, "Diffs");
+
+            var originalFile = Path.Combine(originalDir, testName + ".png");
+            var originalCopyFile = Path.Combine(diffsDir, testName + ".original.png");
+            var currentFile = Path.Combine(diffsDir, testName + ".current.png");
 
             if (!File.Exists(originalFile) || OverwriteOriginalImages)
             {
+                Directory.CreateDirectory(originalDir);
                 bmpCurrent.Save(originalFile);
 
                 if (File.Exists(currentFile))
@@ -138,8 +143,17 @@ namespace Aximo.AxTests
             var diff = CompareImage(bmpCurrent, bmpOriginal, maxDiffAllowed);
             if (diff > maxDiffAllowed)
             {
+                Directory.CreateDirectory(diffsDir);
                 bmpCurrent.Save(currentFile);
                 Console.WriteLine($"MaxDifference: {diff} MaxDiffAllowed: {maxDiffAllowed}");
+                File.Copy(originalFile, originalCopyFile);
+            }
+            else
+            {
+                if (File.Exists(currentFile))
+                    File.Delete(currentFile);
+                if (File.Exists(originalCopyFile))
+                    File.Delete(originalCopyFile);
             }
             Assert.InRange(diff, 0, maxDiffAllowed);
         }
@@ -209,7 +223,19 @@ namespace Aximo.AxTests
             return squeezed;
         }
 
-        protected GameMaterial GetTestMaterial(PipelineType pipelineType, Vector3 color)
+        // public Actor GetDebugActor()
+        // {
+        //     Actor actor;
+        //     GameContext.AddActor(actor = new Actor(new DebugCubeComponent()
+        //     {
+        //         Name = "Box2",
+        //         Transform = GetTestTransform(),
+        //         Material = GetTestMaterial(PipelineType.Deferred, new Vector3(0, 1, 0)),
+        //     }));
+        //     return actor;
+        // }
+
+        protected GameMaterial SolidColorMaterial(PipelineType pipelineType, Vector3 color)
         {
             return new GameMaterial()
             {
@@ -218,6 +244,17 @@ namespace Aximo.AxTests
                 Ambient = 1f,
                 ColorBlendMode = MaterialColorBlendMode.Set,
                 Color = color,
+                PipelineType = pipelineType,
+            };
+        }
+
+        protected GameMaterial SolidTextureMaterial(PipelineType pipelineType)
+        {
+            return new GameMaterial()
+            {
+                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
+                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                Ambient = 1f,
                 PipelineType = pipelineType,
             };
         }
