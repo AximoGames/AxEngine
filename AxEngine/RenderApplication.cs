@@ -361,7 +361,6 @@ namespace Aximo.Engine
 
             if (DefaultKeyBindings)
             {
-
                 var input = Keyboard.GetState();
 
                 if (input.IsKeyDown(Key.Escape))
@@ -374,7 +373,6 @@ namespace Aximo.Engine
 
                 IPosition pos = MovingObject;
                 Camera cam = pos as Camera;
-                var rot = MovingObject as IScaleRotate;
                 bool simpleMove = cam == null;
 
                 var stepSize = 0.1f;
@@ -469,7 +467,7 @@ namespace Aximo.Engine
                     cam.Facing += MouseSpeed[0] * 2;
                     cam.Pitch += MouseSpeed[1] * 2;
                 }
-                else if (rot != null)
+                else if (MovingObject is IScaleRotate rot)
                 {
                     rot.Rotate = new Quaternion(
                         rot.Rotate.X + (MouseSpeed[1] * 2),

@@ -43,10 +43,12 @@ namespace Aximo.Engine
             else
                 bitmap = new Bitmap(imagePath);
 
-            var txt = new GameTexture(bitmap.Width, bitmap.Height);
-            txt.SourcePath = sourcePath;
-            txt.Label = Path.GetFileName(sourcePath);
-            txt.AutoDisposeBitmap = true;
+            var txt = new GameTexture(bitmap.Width, bitmap.Height)
+            {
+                SourcePath = sourcePath,
+                Label = Path.GetFileName(sourcePath),
+                AutoDisposeBitmap = true,
+            };
             txt.SetData(bitmap);
             return txt;
         }
@@ -55,9 +57,11 @@ namespace Aximo.Engine
 
         public static GameTexture GetFromBitmap(Bitmap bitmap, string name = null, bool autoDisposeBitmap = false)
         {
-            var txt = new GameTexture(bitmap.Width, bitmap.Height);
-            txt.Label = name;
-            txt.AutoDisposeBitmap = autoDisposeBitmap;
+            var txt = new GameTexture(bitmap.Width, bitmap.Height)
+            {
+                Label = name,
+                AutoDisposeBitmap = autoDisposeBitmap,
+            };
             txt.SetData(bitmap);
             return txt;
         }
@@ -85,8 +89,10 @@ namespace Aximo.Engine
 
             if (InternalTexture == null)
             {
-                InternalTexture = new Texture(Bitmap);
-                InternalTexture.ObjectLabel = Label;
+                InternalTexture = new Texture(Bitmap)
+                {
+                    ObjectLabel = Label,
+                };
             }
             else
             {
