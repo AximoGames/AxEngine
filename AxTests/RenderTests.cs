@@ -80,6 +80,7 @@ namespace Aximo.AxTests
         public static IEnumerable<TestCase> GetData_()
         {
             var diffuseSources = new string[] { "Texture", "Color" };
+            //var ambients = new float[] { 0.0f, 0.5f, 1.0f };
             var ambients = new float[] { 0.5f, 1.0f };
 
             foreach (var diffSource in diffuseSources)
@@ -116,7 +117,7 @@ namespace Aximo.AxTests
 
             public override string ToString()
             {
-                return $"{Pipeline}{DiffuseSource}Ambient{Ambient}";
+                return $"{Pipeline}{DiffuseSource}Ambient{Ambient.ToString("F1")}";
             }
 
         }
