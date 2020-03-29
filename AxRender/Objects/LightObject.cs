@@ -11,6 +11,7 @@ namespace Aximo.Render
         public Camera Camera => Context.Camera;
 
         public Vector3 Position { get; set; }
+        public Vector3 Color { get; set; } = new Vector3(1);
 
         public bool Shadows { get; set; }
         public int ShadowTextureIndex { get; set; }

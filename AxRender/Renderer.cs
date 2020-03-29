@@ -108,7 +108,7 @@ namespace Aximo.Render
                 {
                     var lightData = new GlslLight();
                     lightData.Position = light.Position;
-                    lightData.Color = new Vector3(0.5f, 0.5f, 0.5f);
+                    lightData.Color = light.Color;
                     lightData.ShadowLayer = light.ShadowTextureIndex;
                     lightData.DirectionalLight = light.LightType == LightType.Directional ? 1 : 0;
                     lightData.LightSpaceMatrix = Matrix4.Transpose(light.LightCamera.ViewMatrix * light.LightCamera.ProjectionMatrix);

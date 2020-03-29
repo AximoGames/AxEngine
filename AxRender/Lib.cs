@@ -144,6 +144,7 @@ namespace Aximo.Render
         int ShadowTextureIndex { get; set; }
         Camera LightCamera { get; }
         LightType LightType { get; set; }
+        Vector3 Color { get; set; }
     }
 
     public enum LightType
