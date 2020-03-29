@@ -12,6 +12,7 @@ namespace Aximo.Render
         public FrameBuffer GBuffer;
         public Texture GPosition;
         public Texture GNormal;
+        public Texture GMaterial;
         public Texture GAlbedoSpec;
 
         private Shader _DefLightShader;
@@ -48,11 +49,18 @@ namespace Aximo.Render
             GBuffer.DestinationTextures.Add(GAlbedoSpec);
             GBuffer.BindTexture(GAlbedoSpec, FramebufferAttachment.ColorAttachment2);
 
-            GL.DrawBuffers(3, new DrawBuffersEnum[]
+            GMaterial = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            GMaterial.ObjectLabel = nameof(GMaterial);
+            GMaterial.SetNearestFilter();
+            GBuffer.DestinationTextures.Add(GMaterial);
+            GBuffer.BindTexture(GMaterial, FramebufferAttachment.ColorAttachment3);
+
+            GL.DrawBuffers(4, new DrawBuffersEnum[]
             {
                 DrawBuffersEnum.ColorAttachment0,
                 DrawBuffersEnum.ColorAttachment1,
                 DrawBuffersEnum.ColorAttachment2,
+                DrawBuffersEnum.ColorAttachment3,
             });
 
             // var rboDepth = new RenderBuffer(gBuffer, RenderbufferStorage.DepthComponent, FramebufferAttachment.DepthAttachment);
@@ -68,6 +76,7 @@ namespace Aximo.Render
             _DefLightShader.SetInt("gPosition", 0);
             _DefLightShader.SetInt("gNormal", 1);
             _DefLightShader.SetInt("gAlbedoSpec", 2);
+            _DefLightShader.SetInt("gMaterial", 3);
 
             vbo = new VertexBufferObject();
             vbo.Create();
@@ -134,6 +143,7 @@ namespace Aximo.Render
             GPosition.Bind(TextureUnit.Texture0);
             GNormal.Bind(TextureUnit.Texture1);
             GAlbedoSpec.Bind(TextureUnit.Texture2);
+            GMaterial.Bind(TextureUnit.Texture3);
 
             context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
             context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture4);
