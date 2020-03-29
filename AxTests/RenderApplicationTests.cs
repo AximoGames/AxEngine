@@ -340,6 +340,13 @@ namespace Aximo.AxTests
             };
         }
 
+        protected static PipelineType[] Pipelines = new PipelineType[] { PipelineType.Forward, PipelineType.Deferred };
+
+        protected static object[] TestDataResult(TestCaseBase test)
+        {
+            return new object[] { test };
+        }
+
     }
 
 }

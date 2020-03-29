@@ -11,10 +11,10 @@ using Xunit;
 namespace Aximo.AxTests
 {
 
-    public class RenderTests : RenderApplicationTests
+    public class LightTests : RenderApplicationTests
     {
 
-        public RenderTests()
+        public LightTests()
         {
 
         }
@@ -45,6 +45,13 @@ namespace Aximo.AxTests
                     Name = "Box1",
                     Transform = GetTestTransform(),
                     Material = material,
+                }));
+
+                GameContext.AddActor(new Actor(new DirectionalLightComponent()
+                {
+                    RelativeTranslation = new Vector3(0, 2, 2.5f),
+                    Name = "StaticLight",
+                    //RelativeTranslation = new Vector3(-5f, -0.5f, 1.5f),
                 }));
 
                 RenderAndCompare(nameof(Box) + test.ToString());

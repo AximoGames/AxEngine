@@ -30,6 +30,7 @@ namespace Aximo.Engine
                 LightObject = new LightObject();
                 LightObject.LightType = LightType;
                 LightObject.ShadowTextureIndex = ShadowIdx++;
+                LightObject.Name = Name;
                 RenderContext.Current.AddObject(LightObject);
             }
 

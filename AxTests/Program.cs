@@ -15,8 +15,8 @@ namespace Aximo.AxTests
 
         public static void Main(string[] args)
         {
-            var tester = new RenderTests();
-            tester.Box(new RenderTests.TestCase
+            var tester = new LightTests();
+            tester.Box(new LightTests.TestCase
             {
                 Pipeline = PipelineType.Deferred,
                 DiffuseSource = "Texture",
