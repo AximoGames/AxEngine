@@ -2,7 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using Aximo.Engine;
+using Aximo.Render;
 using OpenTK;
 using Xunit;
 
@@ -17,52 +19,62 @@ namespace Aximo.AxTests
 
         }
 
-        [Fact]
-        public void BoxSolidColorForward()
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public void Box(TestCase test)
         {
+
+            GameMaterial material = new GameMaterial
+            {
+                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
+                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                Ambient = test.Ambient,
+                ColorBlendMode = test.DiffuseSource == "Texture" ? MaterialColorBlendMode.None : MaterialColorBlendMode.Set,
+                Color = new Vector3(0, 1, 0),
+                PipelineType = test.Pipeline,
+            };
+
             GameContext.AddActor(new Actor(new DebugCubeComponent()
             {
                 Name = "Box1",
                 Transform = GetTestTransform(),
-                Material = SolidColorMaterial(PipelineType.Forward, new Vector3(0, 1, 0)),
+                Material = material,
             }));
-            RenderAndCompare(nameof(BoxSolidColorForward));
+
+
+
+            RenderAndCompare(nameof(Box) + test.ToString());
         }
 
-        [Fact]
-        public void BoxSolidColorDeferred()
+        public static IEnumerable<object[]> GetData()
         {
-            GameContext.AddActor(new Actor(new DebugCubeComponent()
-            {
-                Name = "Box1",
-                Transform = GetTestTransform(),
-                Material = SolidColorMaterial(PipelineType.Deferred, new Vector3(0, 1, 0)),
-            }));
-            RenderAndCompare(nameof(BoxSolidColorDeferred));
+            var pipelines = new PipelineType[] { PipelineType.Forward, PipelineType.Deferred };
+            var diffuseSources = new string[] { "Texture", "Color" };
+            var ambients = new float[] { 0.5f, 1.0f };
+
+            foreach (var pipe in pipelines)
+                foreach (var diffSource in diffuseSources)
+                    foreach (var ambient in ambients)
+                        yield return new object[]
+                        { new TestCase
+                            {
+                                Pipeline = pipe,
+                                DiffuseSource = diffSource,
+                                Ambient = ambient,
+                            }
+                        };
         }
 
-        [Fact]
-        public void BoxSolidTextureForward()
+        public class TestCase
         {
-            GameContext.AddActor(new Actor(new DebugCubeComponent()
-            {
-                Name = "Box1",
-                Transform = GetTestTransform(),
-                Material = SolidTextureMaterial(PipelineType.Forward),
-            }));
-            RenderAndCompare(nameof(BoxSolidTextureForward));
-        }
+            public PipelineType Pipeline;
+            public string DiffuseSource; // Texture vs Color
+            public float Ambient;
 
-        [Fact]
-        public void BoxSolidTextureDeferred()
-        {
-            GameContext.AddActor(new Actor(new DebugCubeComponent()
+            public string ToString()
             {
-                Name = "Box1",
-                Transform = GetTestTransform(),
-                Material = SolidTextureMaterial(PipelineType.Deferred),
-            }));
-            RenderAndCompare(nameof(BoxSolidTextureDeferred));
+                return $"{Pipeline}{DiffuseSource}Ambient{Ambient}";
+            }
         }
 
     }

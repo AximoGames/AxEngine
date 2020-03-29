@@ -241,7 +241,7 @@ namespace Aximo.AxTests
             {
                 DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
                 SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
-                Ambient = 1f,
+                Ambient = 0.2f,
                 ColorBlendMode = MaterialColorBlendMode.Set,
                 Color = color,
                 PipelineType = pipelineType,
@@ -254,7 +254,7 @@ namespace Aximo.AxTests
             {
                 DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
                 SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
-                Ambient = 1f,
+                Ambient = 0.2f,
                 PipelineType = pipelineType,
             };
         }

@@ -16,7 +16,12 @@ namespace Aximo.AxTests
         public static void Main(string[] args)
         {
             var tester = new RenderTests();
-            tester.BoxSolidColorDeferred();
+            tester.Box(new RenderTests.TestCase
+            {
+                Pipeline = PipelineType.Deferred,
+                DiffuseSource = "Texture",
+                Ambient = 1.0f,
+            });
             tester.Dispose();
             //Console.ReadLine();
             Environment.Exit(0);
