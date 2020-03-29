@@ -1,3 +1,5 @@
+#include "lib.frag.small.glsl"
+
 // array of offset direction for sampling
 vec3 gridSamplingDisk[20] = vec3[]
 (

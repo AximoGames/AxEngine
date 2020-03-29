@@ -17,15 +17,16 @@ in vec3 Normal;
 
 uniform Material material;
 
+#include "common/lib.frag.small.glsl"
+
 void main()
 {    
     // store the fragment position vector in the first gbuffer texture
     gPosition = FragPos;
     // also store the per-fragment normals into the gbuffer
     gNormal = normalize(Normal);
-    //gNormal = normalize(vec3(Normal.x, Normal.z, -Normal.y));
     // and the diffuse per-fragment color
-    gAlbedoSpec.rgb = texture(material.diffuse, TexCoords).rgb;
+    gAlbedoSpec.rgb = BlendColor(texture(material.diffuse, TexCoords).rgb, material.color, material.colorBlendMode);
     // store specular intensity in gAlbedoSpec's alpha component
     gAlbedoSpec.a = texture(material.specular, TexCoords).r;
 }
