@@ -578,6 +578,7 @@ namespace Aximo.Engine
         private void OnUnloadInternal(EventArgs e)
         {
             OnUnload(e);
+            RenderContext.Free();
         }
 
         public virtual void Dispose()
