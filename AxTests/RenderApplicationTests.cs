@@ -109,9 +109,10 @@ namespace Aximo.AxTests
             TestWaiter = null;
         }
 
-        private string TestOutputDir => Path.Combine(DirectoryHelper.GetAssetsPath("TestOutputs"), GetType().Name);
-        private string OriginalDir => Path.Combine(TestOutputDir, "Original");
-        private string DiffsDir => Path.Combine(TestOutputDir, "Diffs");
+        private string TestClassName => GetType().Name;
+        private string TestOutputDir => Path.Combine(DirectoryHelper.GetAssetsPath("TestOutputs"), TestClassName);
+        private string OriginalDir => TestOutputDir;
+        private string DiffsDir => Path.Combine(DirectoryHelper.GetAssetsPath("TestOutputs"), "Diffs");
         public bool OverwriteOriginalImages;
 
         protected void RenderAndCompare(string testName)
@@ -122,8 +123,8 @@ namespace Aximo.AxTests
             Directory.CreateDirectory(TestOutputDir);
 
             var originalFile = Path.Combine(OriginalDir, testName + ".png");
-            var originalCopyFile = Path.Combine(DiffsDir, testName + ".original.png");
-            var currentFile = Path.Combine(DiffsDir, testName + ".current.png");
+            var originalCopyFile = Path.Combine(DiffsDir, TestClassName + "." + testName + ".original.png");
+            var currentFile = Path.Combine(DiffsDir, TestClassName + "." + testName + ".current.png");
 
             if (!File.Exists(originalFile) || OverwriteOriginalImages)
             {
@@ -195,8 +196,8 @@ namespace Aximo.AxTests
 
             var originalFile1 = Path.Combine(OriginalDir, testCase + test1.ToString() + ".png");
             var originalFile2 = Path.Combine(OriginalDir, testCase + test2.ToString() + ".png");
-            var currentFile1 = Path.Combine(DiffsDir, testCase + test1.ToStringWithoutComparison() + "." + test1.ComparisonName + ".current1.png");
-            var currentFile2 = Path.Combine(DiffsDir, testCase + test2.ToStringWithoutComparison() + "." + test2.ComparisonName + ".current2.png");
+            var currentFile1 = Path.Combine(DiffsDir, TestClassName + "." + testCase + test1.ToStringWithoutComparison() + "." + test1.ComparisonName + ".current1.png");
+            var currentFile2 = Path.Combine(DiffsDir, TestClassName + "." + testCase + test2.ToStringWithoutComparison() + "." + test2.ComparisonName + ".current2.png");
 
             Console.WriteLine($"Comparing Files: {originalFile1} {originalFile2}");
 
