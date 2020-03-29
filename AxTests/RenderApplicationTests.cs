@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -158,6 +159,11 @@ namespace Aximo.AxTests
                     File.Delete(originalCopyFile);
             }
             Assert.InRange(diff, 0, maxDiffAllowed);
+        }
+
+        public abstract class TestCasePipelineBase : TestCaseBase
+        {
+            public PipelineType Pipeline;
         }
 
         public abstract class TestCaseBase
@@ -354,6 +360,24 @@ namespace Aximo.AxTests
         protected static object[] TestDataResult(TestCaseBase test)
         {
             return new object[] { test.Clone() };
+        }
+
+        protected static IEnumerable<object[]> GetComparePipelineTests(TestCasePipelineBase test)
+        {
+            if (!TestConfig.ComparePipelines)
+                yield break;
+
+            var test1 = test.Clone<TestCasePipelineBase>();
+            test1.Pipeline = PipelineType.Forward;
+            test1.ComparisonName = test1.Pipeline.ToString();
+
+            var test2 = test.Clone<TestCasePipelineBase>();
+            test2.Pipeline = PipelineType.Deferred;
+            test2.ComparisonName = test2.Pipeline.ToString();
+
+            test1.CompareWith = test2;
+
+            yield return new object[] { test1 };
         }
 
     }

@@ -72,29 +72,15 @@ namespace Aximo.AxTests
                         test.ComparisonName = pipe.ToString();
                         yield return TestDataResult(test);
                     }
-                    yield return GetComparePipelineTests(test);
+
+                    foreach (var t in GetComparePipelineTests(test))
+                        yield return t;
                 }
             }
         }
 
-        private static object[] GetComparePipelineTests(TestCase test)
+        public class TestCase : TestCasePipelineBase
         {
-            var test1 = test.Clone<TestCase>();
-            test1.Pipeline = PipelineType.Forward;
-            test1.ComparisonName = test1.Pipeline.ToString();
-
-            var test2 = test.Clone<TestCase>();
-            test2.Pipeline = PipelineType.Deferred;
-            test2.ComparisonName = test2.Pipeline.ToString();
-
-            test1.CompareWith = test2;
-
-            return TestDataResult(test);
-        }
-
-        public class TestCase : TestCaseBase
-        {
-            public PipelineType Pipeline;
             public string DiffuseSource; // Texture vs Color
             public float Ambient;
 
