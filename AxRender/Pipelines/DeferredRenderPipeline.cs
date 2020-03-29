@@ -145,16 +145,16 @@ namespace Aximo.Render
             GAlbedoSpec.Bind(TextureUnit.Texture2);
             GMaterial.Bind(TextureUnit.Texture3);
 
-            context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
-            context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture4);
+            context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture4);
+            context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture5);
 
             _DefLightShader.SetVector3("viewPos", camera.Position);
 
             // TODO: Move to Pass1
             _DefLightShader.SetMaterial("material", Material.Default);
 
-            _DefLightShader.SetInt("shadowMap", 3);
-            _DefLightShader.SetInt("depthMap", 4);
+            _DefLightShader.SetInt("shadowMap", 4);
+            _DefLightShader.SetInt("depthMap", 5);
             _DefLightShader.BindBlock("lightsArray", context.LightBinding);
             _DefLightShader.SetInt("lightCount", context.LightObjects.Count);
 

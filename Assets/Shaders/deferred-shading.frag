@@ -12,6 +12,7 @@ uniform Material material;
 uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gAlbedoSpec;
+uniform sampler2D gMaterial;
 
 // struct Light {
 //     vec3 Position;
@@ -44,9 +45,11 @@ void main()
     Normal = texture(gNormal, TexCoords).rgb;
     vec3 Diffuse = texture(gAlbedoSpec, TexCoords).rgb;
     float Specular = texture(gAlbedoSpec, TexCoords).a;
-    
+    float ambient = texture(gMaterial, TexCoords).a;
+    float shininess = texture(gMaterial, TexCoords).b;
+
     // then calculate lighting as usual
-    vec3 lighting  = Diffuse * material.ambient; // hard-coded ambient component
+    vec3 lighting  = Diffuse * ambient; // hard-coded ambient component
     vec3 viewDir  = normalize(viewPos - FragPos);
     //int lightCount = 1;
     for(int i = 0; i < lightCount; ++i)
@@ -58,7 +61,7 @@ void main()
         vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * light.color;
         // specular
         vec3 halfwayDir = normalize(lightDir + viewDir);  
-        float spec = pow(max(dot(Normal, halfwayDir), 0.0), material.shininess);
+        float spec = pow(max(dot(Normal, halfwayDir), 0.0), shininess);
         vec3 specular = light.color * spec * Specular;
         // attenuation
         float distance = length(light.position - FragPos);
