@@ -24,45 +24,75 @@ namespace Aximo.AxTests
         public void Box(TestCase test)
         {
 
-            GameMaterial material = new GameMaterial
+            if (test.ComparePipelines)
             {
-                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
-                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
-                Ambient = test.Ambient,
-                ColorBlendMode = test.DiffuseSource == "Texture" ? MaterialColorBlendMode.None : MaterialColorBlendMode.Set,
-                Color = new Vector3(0, 1, 0),
-                PipelineType = test.Pipeline,
-            };
+                test.Pipeline = PipelineType.Forward;
+                var testName1 = test.ToString();
+                test.Pipeline = PipelineType.Deferred;
+                var testName2 = test.ToString();
 
-            GameContext.AddActor(new Actor(new DebugCubeComponent()
+                //...
+            }
+            else
             {
-                Name = "Box1",
-                Transform = GetTestTransform(),
-                Material = material,
-            }));
+                GameMaterial material = new GameMaterial
+                {
+                    DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
+                    SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                    Ambient = test.Ambient,
+                    ColorBlendMode = test.DiffuseSource == "Texture" ? MaterialColorBlendMode.None : MaterialColorBlendMode.Set,
+                    Color = new Vector3(0, 1, 0),
+                    PipelineType = test.Pipeline,
+                };
 
+                GameContext.AddActor(new Actor(new DebugCubeComponent()
+                {
+                    Name = "Box1",
+                    Transform = GetTestTransform(),
+                    Material = material,
+                }));
 
-
-            RenderAndCompare(nameof(Box) + test.ToString());
+                RenderAndCompare(nameof(Box) + test.ToString());
+            }
         }
 
         public static IEnumerable<object[]> GetData()
         {
             var pipelines = new PipelineType[] { PipelineType.Forward, PipelineType.Deferred };
+
+            foreach (var test in GetData_())
+            {
+                foreach (var pipe in pipelines)
+                {
+                    var newTest = test.Clone();
+                    newTest.Pipeline = pipe;
+                    yield return new object[] { newTest };
+                }
+            }
+
+            foreach (var test in GetData_())
+            {
+                test.ComparePipelines = true;
+                yield return new object[] { test };
+            }
+        }
+
+        public static IEnumerable<TestCase> GetData_()
+        {
             var diffuseSources = new string[] { "Texture", "Color" };
             var ambients = new float[] { 0.5f, 1.0f };
 
-            foreach (var pipe in pipelines)
-                foreach (var diffSource in diffuseSources)
-                    foreach (var ambient in ambients)
-                        yield return new object[]
-                        { new TestCase
-                            {
-                                Pipeline = pipe,
-                                DiffuseSource = diffSource,
-                                Ambient = ambient,
-                            }
-                        };
+            foreach (var diffSource in diffuseSources)
+            {
+                foreach (var ambient in ambients)
+                {
+                    yield return new TestCase
+                    {
+                        DiffuseSource = diffSource,
+                        Ambient = ambient,
+                    };
+                }
+            }
         }
 
         public class TestCase
@@ -71,10 +101,24 @@ namespace Aximo.AxTests
             public string DiffuseSource; // Texture vs Color
             public float Ambient;
 
-            public string ToString()
+            public bool ComparePipelines = false;
+
+            public TestCase Clone()
+            {
+                return new TestCase
+                {
+                    Pipeline = Pipeline,
+                    DiffuseSource = DiffuseSource,
+                    Ambient = Ambient,
+                    ComparePipelines = ComparePipelines,
+                };
+            }
+
+            public override string ToString()
             {
                 return $"{Pipeline}{DiffuseSource}Ambient{Ambient}";
             }
+
         }
 
     }
