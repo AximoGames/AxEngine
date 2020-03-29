@@ -47,7 +47,7 @@ namespace Aximo.AxTests
                     Material = material,
                 }));
 
-                GameContext.AddActor(new Actor(new PointLightComponent()
+                GameContext.AddActor(new Actor(new DirectionalLightComponent()
                 {
                     Name = "StaticLight",
                     //RelativeTranslation = new Vector3(0, 2, 2.5f),
