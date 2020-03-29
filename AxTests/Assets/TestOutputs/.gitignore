@@ -1,2 +1,7 @@
 *.current
 *.current.*
+*.original1
+*.current1.*
+*.original2
+*.current2.*
+Diffs/
