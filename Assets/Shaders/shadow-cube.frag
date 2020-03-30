@@ -5,7 +5,7 @@
 
 in vec4 FragPos;
 
-uniform Light light;
+uniform SLight light;
 uniform float far_plane;
 
 void main()

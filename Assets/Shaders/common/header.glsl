@@ -4,7 +4,7 @@
 
 #define MAX_NUM_TOTAL_LIGHTS 100
 
-struct Light {
+struct SLight {
 	vec3 position; //The position of the light.
 	vec3 color; //The color of the light.
 	mat4 lightSpaceMatrix;
@@ -15,7 +15,7 @@ struct Light {
     float quadratic;
 };
 
-struct Material {
+struct SMaterial {
 	sampler2D diffuse;
 	sampler2D specular;
 	float shininess;
@@ -25,7 +25,7 @@ struct Material {
 	int colorBlendMode;
 };
 
-struct LightResult {
+struct SLightResult {
 	float Shadow;
 	vec3 Diffuse;
 	vec3 Specular;

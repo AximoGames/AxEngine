@@ -16,7 +16,7 @@ in vec2 TexCoords;
 in vec3 FragPos;
 in vec3 Normal;
 
-uniform Material material;
+uniform SMaterial material;
 
 #include "common/lib.frag.small.glsl"
 

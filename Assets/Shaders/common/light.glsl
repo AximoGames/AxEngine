@@ -1,4 +1,4 @@
-LightResult lightResult;
+SLightResult lightResult;
 lightResult.Diffuse = vec3(0);
 lightResult.Specular = vec3(0);
 lightResult.Shadow = 0;
@@ -8,7 +8,7 @@ vec3 lighting  = matDiffuse * matAmbient; // hard-coded ambient component
 
 for(int i = 0; i < lightCount; ++i)
 {
-    Light light = lights[i];
+    SLight light = lights[i];
 
     // diffuse
     vec3 lightDir = normalize(light.position - FragPos);

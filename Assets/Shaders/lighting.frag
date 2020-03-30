@@ -11,7 +11,7 @@ out vec4 FragColor;
 
 //In order to calculate some basic lighting we need a few things per model basis, and a few things per fragment basis:
 uniform vec3 viewPos; //The position of the view and/or of the player.
-uniform Material material;
+uniform SMaterial material;
 
 uniform sampler2DArray shadowMap;
 
@@ -22,7 +22,7 @@ in vec2 TexCoords;
 uniform float far_plane;
 uniform samplerCubeArray depthMap;
 uniform int lightCount;
-layout(std140) uniform lightsArray { Light lights[MAX_NUM_TOTAL_LIGHTS]; };
+layout(std140) uniform lightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };
 
 #include "common/lib.frag.glsl"
 

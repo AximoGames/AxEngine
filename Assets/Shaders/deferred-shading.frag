@@ -7,7 +7,7 @@ out vec4 FragColor;
 
 in vec2 TexCoords;
 
-uniform Material material;
+uniform SMaterial material;
 
 uniform sampler2D gPosition;
 uniform sampler2D gNormal;
@@ -28,7 +28,7 @@ uniform sampler2DArray shadowMap;
 
 uniform vec3 viewPos;
 uniform int lightCount;
-layout(std140) uniform lightsArray { Light lights[MAX_NUM_TOTAL_LIGHTS]; };
+layout(std140) uniform lightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };
 
 vec3 Normal;
 vec3 FragPos;

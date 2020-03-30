@@ -24,7 +24,7 @@ vec3 GetShadowCoords(vec2 projCoords, int layer) {
     //return vec2(projCoords.x, projCoords.y);
 }
 
-float ShadowCalculationCubeSoft(vec3 fragPos, Light light)
+float ShadowCalculationCubeSoft(vec3 fragPos, SLight light)
 {
     // get vector between fragment position and light position
     vec3 fragToLight = fragPos - light.position;
@@ -76,7 +76,7 @@ float ShadowCalculationCubeSoft(vec3 fragPos, Light light)
     return shadow;
 }
 
-float ShadowCalculationCubeHard(vec3 fragPos, Light light)
+float ShadowCalculationCubeHard(vec3 fragPos, SLight light)
 {
     // get vector between fragment position and light position
     vec3 fragToLight = fragPos - light.position;
@@ -93,7 +93,7 @@ float ShadowCalculationCubeHard(vec3 fragPos, Light light)
     return shadow;
 }  
 
-float ShadowCalculation(vec4 fragPosLightSpace, Light light)
+float ShadowCalculation(vec4 fragPosLightSpace, SLight light)
 {
 	// perform perspective divide
 	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
