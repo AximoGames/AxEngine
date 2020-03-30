@@ -45,5 +45,5 @@ void main()
     vec3 normal = normalize(Normal);
 
 #include "common/lighting.glsl"
-
+-
 }

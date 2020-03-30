@@ -516,6 +516,19 @@ namespace Aximo.Render
                 var dummy = "";
                 sb.Replace(match.Value, LoadSource(includePath, ref dummy, sh, true), match.Index, match.Length);
             }
+            return AddFileNameGroup(sb.ToString(), path);
+        }
+
+        private static string AddFileNameGroup(string source, string label)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine();
+            sb.AppendLine("// --- BEGIN " + label + " ---");
+            sb.AppendLine();
+            sb.Append(source);
+            sb.AppendLine();
+            sb.AppendLine("// --- END " + label + " ---");
+            sb.AppendLine();
             return sb.ToString();
         }
 
