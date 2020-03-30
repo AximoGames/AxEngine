@@ -61,7 +61,7 @@ namespace Aximo.Render
                 Txt1 = new Texture(SpecularImagePath);
 
             if (Shader == null)
-                Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
+                Shader = new Shader("Shaders/forward.vert", "Shaders/forward.frag");
             if (DefGeometryShader == null)
                 DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
             if (ShadowShader == null)

@@ -64,7 +64,7 @@ namespace Aximo.Render
         {
             UsePipeline<ForwardRenderPipeline>();
 
-            _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
+            _shader = new Shader("Shaders/forward.vert", "Shaders/white.frag");
 
             var layout = new VertexLayoutBinded();
             layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 3);

@@ -130,7 +130,7 @@ namespace Aximo.Engine
         internal virtual void SyncChanges()
         {
             // if (Shader == null)
-            //     Shader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
+            //     Shader = new Shader("Shaders/forward.vert", "Shaders/forward.frag");
             // if (DefGeometryShader == null)
             //     DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
             // if (ShadowShader == null)
@@ -146,7 +146,7 @@ namespace Aximo.Engine
                 InternalMaterial = new Material();
 
                 if (Shader == null)
-                    Shader = new GameShader("Shaders/shader.vert", "Shaders/lighting.frag");
+                    Shader = new GameShader("Shaders/forward.vert", "Shaders/forward.frag");
                 if (DefGeometryShader == null)
                     DefGeometryShader = new GameShader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
 
