@@ -63,7 +63,7 @@ float ShadowCalculationCubeSoft(vec3 fragPos, SLight light)
     float diskRadius = (1.0 + (viewDistance / FarPlane)) / 25.0;
     for(int i = 0; i < samples; ++i)
     {
-        float closestDepth = texture(PointShadowMap, ShadowCubeCoords(fragToLight + gridSamplingDisk[i] * diskRadius, light.shadowLayer)).r;
+        float closestDepth = texture(PointShadowMap, ShadowCubeCoords(fragToLight + gridSamplingDisk[i] * diskRadius, light.ShadowLayer)).r;
         closestDepth *= FarPlane;   // undo mapping [0;1]
         if(currentDepth - bias > closestDepth)
             shadow += 1.0;
@@ -81,7 +81,7 @@ float ShadowCalculationCubeHard(vec3 fragPos, SLight light)
     // get vector between fragment position and light position
     vec3 fragToLight = fragPos - light.position;
     // use the light to fragment vector to sample from the depth map    
-    float closestDepth = texture(PointShadowMap, ShadowCubeCoords(fragToLight, light.shadowLayer)).r;
+    float closestDepth = texture(PointShadowMap, ShadowCubeCoords(fragToLight, light.ShadowLayer)).r;
     // it is currently in linear range between [0,1]. Re-transform back to original value
     closestDepth *= FarPlane;
     // now get current linear depth as the length between the fragment and light position
@@ -100,7 +100,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, SLight light)
 	// transform to [0,1] range
 	projCoords = projCoords * 0.5 + 0.5;
 	// get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-	float closestDepth = texture(DirectionalShadowMap, GetShadowCoords(projCoords.xy, light.shadowLayer)).r;
+	float closestDepth = texture(DirectionalShadowMap, GetShadowCoords(projCoords.xy, light.ShadowLayer)).r;
 	// get depth of current fragment from light's perspective
 	float currentDepth = projCoords.z;
 	// calculate bias (based on depth map resolution and slope)
@@ -116,7 +116,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, SLight light)
 	{
 		for(int y =- 1; y <= 1; ++ y)
 		{
-			float pcfDepth = texture(DirectionalShadowMap, GetShadowCoords(projCoords.xy + vec2(x, y) * texelSize, light.shadowLayer)).r;
+			float pcfDepth = texture(DirectionalShadowMap, GetShadowCoords(projCoords.xy + vec2(x, y) * texelSize, light.ShadowLayer)).r;
 			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
 		}
 	}

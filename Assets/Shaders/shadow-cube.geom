@@ -3,13 +3,13 @@ layout(triangles)in;
 layout(triangle_strip, max_vertices = 18)out;
 
 uniform mat4 shadowMatrices[6];
-uniform int shadowLayer;
+uniform int ShadowLayer;
 
 out vec4 FragPos; // FragPos from GS (output per emitvertex)
 
 void main()
 {
-	int offset = shadowLayer * 6;
+	int offset = ShadowLayer * 6;
 	for(int face = 0; face < 6; ++ face)
 	{
 		gl_Layer = offset + face; // built-in variable that specifies to which face we render.

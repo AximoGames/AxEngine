@@ -5,12 +5,12 @@
 
 in vec4 FragPos;
 
-uniform SLight light;
+uniform SLight Light;
 uniform float FarPlane;
 
 void main()
 {
-	float lightDistance = length(FragPos.xyz - light.position);
+	float lightDistance = length(FragPos.xyz - Light.position);
 	
 	// map to [0;1] range by dividing by FarPlane
 	lightDistance = lightDistance / FarPlane;
