@@ -52,5 +52,5 @@ void main()
     float matAmbient = texture(gMaterial, TexCoords).r;
     float matShininess = texture(gMaterial, TexCoords).g;
 
-#include "common/light.glsl"
+#include "common/lighting.glsl"
 }

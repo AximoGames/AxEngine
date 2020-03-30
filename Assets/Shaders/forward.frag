@@ -44,6 +44,6 @@ void main()
     //vec3 color = material.Color; // solid color for debugging
     vec3 normal = normalize(Normal);
 
-#include "common/light.glsl"
+#include "common/lighting.glsl"
 
 }
