@@ -195,7 +195,7 @@ namespace Aximo.Render
         protected override Matrix4 GetProjectionMatrix()
         {
             // float near_plane = 0.01f;
-            // float far_plane = 7.5f;
+            // float FarPlane = 7.5f;
 
             //return Matrix4.CreateOrthographicOffCenter(-Size.X / 2, Size.X / 2, -Size.Y / 2, Size.Y / 2, NearPlane, FarPlane);
             return Matrix4.CreateOrthographic(Size.X, Size.Y, NearPlane, FarPlane);

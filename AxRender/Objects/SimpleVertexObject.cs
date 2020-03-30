@@ -145,7 +145,7 @@ namespace Aximo.Render
                 shader.SetVector3("viewPos", Camera.Position);
 
                 //var shadowCamera = GetShadowLight().LightCamera;
-                shader.SetFloat("far_plane", 25f);
+                shader.SetFloat("FarPlane", 25f);
                 Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
                 shader.SetInt("depthMap", 3);
 
@@ -299,7 +299,7 @@ namespace Aximo.Render
                     for (var i = 0; i < CubeShadowsMatrices.Count; i++)
                         cubeShadowShader.SetMatrix4($"shadowMatrices[{i}]", CubeShadowsMatrices[i]);
                     cubeShadowShader.SetVector3("light.position", light.Position);
-                    cubeShadowShader.SetFloat("far_plane", shadowCamera.FarPlane);
+                    cubeShadowShader.SetFloat("FarPlane", shadowCamera.FarPlane);
                     cubeShadowShader.SetInt("shadowLayer", light.ShadowTextureIndex);
 
                     mat.Vao.Draw();

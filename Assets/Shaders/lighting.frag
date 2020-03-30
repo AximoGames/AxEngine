@@ -19,7 +19,7 @@ in vec3 Normal; //The normal of the fragment is calculated in the vertex shader.
 in vec3 FragPos; //The fragment position.
 in vec2 TexCoords;
 
-uniform float far_plane;
+uniform float FarPlane;
 uniform samplerCubeArray depthMap;
 uniform int lightCount;
 layout(std140) uniform lightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };

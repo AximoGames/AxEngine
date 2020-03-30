@@ -31,11 +31,11 @@ float ShadowCalculationCubeSoft(vec3 fragPos, SLight light)
     // use the fragment to light vector to sample from the depth map    
     // float closestDepth = texture(depthMap, fragToLight).r;
     // it is currently in linear range between [0,1], let's re-transform it back to original depth value
-    // closestDepth *= far_plane;
+    // closestDepth *= FarPlane;
     // now get current linear depth as the length between the fragment and light position
     float currentDepth = length(fragToLight);
     // test for shadows
-    // float bias = 0.05; // we use a much larger bias since depth is now in [near_plane, far_plane] range
+    // float bias = 0.05; // we use a much larger bias since depth is now in [NearPlane, FarPlane] range
     // float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
     // PCF
     // float shadow = 0.0;
@@ -49,7 +49,7 @@ float ShadowCalculationCubeSoft(vec3 fragPos, SLight light)
             // for(float z = -offset; z < offset; z += offset / (samples * 0.5))
             // {
                 // float closestDepth = texture(depthMap, fragToLight + vec3(x, y, z)).r; // use lightdir to lookup cubemap
-                // closestDepth *= far_plane;   // Undo mapping [0;1]
+                // closestDepth *= FarPlane;   // Undo mapping [0;1]
                 // if(currentDepth - bias > closestDepth)
                     // shadow += 1.0;
             // }
@@ -60,18 +60,18 @@ float ShadowCalculationCubeSoft(vec3 fragPos, SLight light)
     float bias = 0.15;
     int samples = 20;
     float viewDistance = length(viewPos - fragPos);
-    float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
+    float diskRadius = (1.0 + (viewDistance / FarPlane)) / 25.0;
     for(int i = 0; i < samples; ++i)
     {
         float closestDepth = texture(depthMap, ShadowCubeCoords(fragToLight + gridSamplingDisk[i] * diskRadius, light.shadowLayer)).r;
-        closestDepth *= far_plane;   // undo mapping [0;1]
+        closestDepth *= FarPlane;   // undo mapping [0;1]
         if(currentDepth - bias > closestDepth)
             shadow += 1.0;
     }
     shadow /= float(samples);
         
     // display closestDepth as debug (to visualize depth cubemap)
-    // FragColor = vec4(vec3(closestDepth / far_plane), 1.0);    
+    // FragColor = vec4(vec3(closestDepth / FarPlane), 1.0);    
         
     return shadow;
 }
@@ -83,7 +83,7 @@ float ShadowCalculationCubeHard(vec3 fragPos, SLight light)
     // use the light to fragment vector to sample from the depth map    
     float closestDepth = texture(depthMap, ShadowCubeCoords(fragToLight, light.shadowLayer)).r;
     // it is currently in linear range between [0,1]. Re-transform back to original value
-    closestDepth *= far_plane;
+    closestDepth *= FarPlane;
     // now get current linear depth as the length between the fragment and light position
     float currentDepth = length(fragToLight);
     // now test for shadows
@@ -122,7 +122,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, SLight light)
 	}
 	shadow /= 9.0;
 	
-	// keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
+	// keep the shadow at 0.0 when outside the FarPlane region of the light's frustum.
 	if (projCoords.z > 1.0)
     	shadow = 0.0;
 

@@ -23,7 +23,7 @@ uniform sampler2D gMaterial;
 // };
 
 uniform samplerCubeArray depthMap;
-uniform float far_plane;
+uniform float FarPlane;
 uniform sampler2DArray shadowMap;
 
 uniform vec3 viewPos;

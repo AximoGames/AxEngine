@@ -149,7 +149,7 @@ namespace Aximo.Render
             context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture5);
 
             _DefLightShader.SetVector3("viewPos", camera.Position);
-            _DefLightShader.SetFloat("far_plane", camera.FarPlane);
+            _DefLightShader.SetFloat("FarPlane", camera.FarPlane);
 
             // TODO: Move to Pass1
             //_DefLightShader.SetMaterial("material", Material.Default);
