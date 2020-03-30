@@ -27,8 +27,8 @@ uniform samplerCubeArray PointShadowMap;
 uniform float FarPlane;
 
 uniform vec3 ViewPos;
-uniform int lightCount;
-layout(std140) uniform lightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };
+uniform int LightCount;
+layout(std140) uniform LightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };
 
 vec3 Normal;
 vec3 FragPos;

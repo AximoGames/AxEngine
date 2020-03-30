@@ -6,7 +6,7 @@ lightResult.Shadow = 0;
 // then calculate lighting as usual
 vec3 lighting  = matDiffuse * matAmbient; // hard-coded ambient component
 
-for(int i = 0; i < lightCount; ++i)
+for(int i = 0; i < LightCount; ++i)
 {
     SLight light = lights[i];
 

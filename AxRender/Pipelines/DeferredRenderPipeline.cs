@@ -156,8 +156,8 @@ namespace Aximo.Render
 
             _DefLightShader.SetInt("DirectionalShadowMap", 4);
             _DefLightShader.SetInt("PointShadowMap", 5);
-            _DefLightShader.BindBlock("lightsArray", context.LightBinding);
-            _DefLightShader.SetInt("lightCount", context.LightObjects.Count);
+            _DefLightShader.BindBlock("LightsArray", context.LightBinding);
+            _DefLightShader.SetInt("LightCount", context.LightObjects.Count);
 
             context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Bind();
             vao.Bind();

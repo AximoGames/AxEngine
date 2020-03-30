@@ -147,8 +147,8 @@ namespace Aximo.Render
                 shader.SetInt("PointShadowMap", 3);
                 shader.SetFloat("FarPlane", 25f);
 
-                shader.BindBlock("lightsArray", Context.LightBinding);
-                shader.SetInt("lightCount", Lights.Count);
+                shader.BindBlock("LightsArray", Context.LightBinding);
+                shader.SetInt("LightCount", Lights.Count);
 
                 mat.Vao.Draw();
             }

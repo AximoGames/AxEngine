@@ -21,8 +21,8 @@ uniform sampler2DArray DirectionalShadowMap;
 uniform samplerCubeArray PointShadowMap;
 uniform float FarPlane;
 
-uniform int lightCount;
-layout(std140) uniform lightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };
+uniform int LightCount;
+layout(std140) uniform LightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };
 
 #include "common/lib.frag.glsl"
 
