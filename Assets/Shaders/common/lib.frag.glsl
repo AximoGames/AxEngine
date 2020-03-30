@@ -27,7 +27,7 @@ vec3 GetShadowCoords(vec2 projCoords, int layer) {
 float ShadowCalculationCubeSoft(vec3 fragPos, SLight light)
 {
     // get vector between fragment position and light position
-    vec3 fragToLight = fragPos - light.position;
+    vec3 fragToLight = fragPos - light.Position;
     // use the fragment to light vector to sample from the depth map    
     // float closestDepth = texture(PointShadowMap, fragToLight).r;
     // it is currently in linear range between [0,1], let's re-transform it back to original depth value
@@ -79,7 +79,7 @@ float ShadowCalculationCubeSoft(vec3 fragPos, SLight light)
 float ShadowCalculationCubeHard(vec3 fragPos, SLight light)
 {
     // get vector between fragment position and light position
-    vec3 fragToLight = fragPos - light.position;
+    vec3 fragToLight = fragPos - light.Position;
     // use the light to fragment vector to sample from the depth map    
     float closestDepth = texture(PointShadowMap, ShadowCubeCoords(fragToLight, light.ShadowLayer)).r;
     // it is currently in linear range between [0,1]. Re-transform back to original value
@@ -105,7 +105,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, SLight light)
 	float currentDepth = projCoords.z;
 	// calculate bias (based on depth map resolution and slope)
 	vec3 normal = normalize(Normal);
-	vec3 lightDir = normalize(light.position - FragPos);
+	vec3 lightDir = normalize(light.Position - FragPos);
 	float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
 	// check whether current frag pos is in shadow
 	// float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;

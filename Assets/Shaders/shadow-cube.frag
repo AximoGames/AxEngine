@@ -10,7 +10,7 @@ uniform float FarPlane;
 
 void main()
 {
-	float lightDistance = length(FragPos.xyz - Light.position);
+	float lightDistance = length(FragPos.xyz - Light.Position);
 	
 	// map to [0;1] range by dividing by FarPlane
 	lightDistance = lightDistance / FarPlane;

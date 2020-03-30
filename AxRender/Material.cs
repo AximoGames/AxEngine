@@ -75,13 +75,13 @@ namespace Aximo.Render
         public void WriteToShader(string name, Shader shader)
         {
             var prefix = name += ".";
-            shader.SetVector3(prefix + "color", Color);
-            shader.SetInt(prefix + "diffuse", 0);
-            shader.SetInt(prefix + "specular", 1);
-            shader.SetFloat(prefix + "ambient", Ambient);
-            shader.SetFloat(prefix + "shininess", Shininess);
-            shader.SetFloat(prefix + "specularStrength", SpecularStrength);
-            shader.SetInt(prefix + "colorBlendMode", (int)ColorBlendMode);
+            shader.SetVector3(prefix + "Color", Color);
+            shader.SetInt(prefix + "Diffuse", 0);
+            shader.SetInt(prefix + "Specular", 1);
+            shader.SetFloat(prefix + "Ambient", Ambient);
+            shader.SetFloat(prefix + "Shininess", Shininess);
+            shader.SetFloat(prefix + "SpecularStrength", SpecularStrength);
+            shader.SetInt(prefix + "ColorBlendMode", (int)ColorBlendMode);
         }
     }
 
