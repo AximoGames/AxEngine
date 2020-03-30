@@ -25,7 +25,7 @@ for(int i = 0; i < LightCount; ++i)
 
     float shadow;
     if(light.directionalLight == 1) {
-        shadow = ShadowCalculation(vec4(FragPos, 1.0) * light.lightSpaceMatrix, light);
+        shadow = ShadowCalculation(vec4(FragPos, 1.0) * light.LightSpaceMatrix, light);
         //shadow = 0;
     }
     else {

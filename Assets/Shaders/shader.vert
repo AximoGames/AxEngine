@@ -7,7 +7,7 @@ layout(location = 2)in vec2 aTexCoords;
 uniform mat4 Model;
 uniform mat4 View;
 uniform mat4 Projection;
-uniform mat4 lightSpaceMatrix;
+uniform mat4 LightSpaceMatrix;
 
 out vec3 Normal;
 out vec3 FragPos;
@@ -21,5 +21,5 @@ void main()
 	Normal = transpose(inverse(mat3(Model))) * aNormal;
 	TexCoords = aTexCoords;
 	// shadow
-	FragPosLightSpace = vec4(FragPos, 1.0) * lightSpaceMatrix; // BUGFIX: aPos --> FragPos
+	FragPosLightSpace = vec4(FragPos, 1.0) * LightSpaceMatrix; // BUGFIX: aPos --> FragPos
 }

@@ -5,9 +5,9 @@ layout(location = 1)in vec3 aNormal;
 layout(location = 2)in vec2 aTexCoords;
 
 uniform mat4 Model;
-uniform mat4 lightSpaceMatrix;
+uniform mat4 LightSpaceMatrix;
 
 void main()
 {
-	gl_Position = vec4(aPos, 1.0) * Model * lightSpaceMatrix;
+	gl_Position = vec4(aPos, 1.0) * Model * LightSpaceMatrix;
 }

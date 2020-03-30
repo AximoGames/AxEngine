@@ -131,7 +131,7 @@ namespace Aximo.Render
                 shader.SetMatrix4("View", Camera.ViewMatrix);
                 shader.SetMatrix4("Projection", Camera.ProjectionMatrix);
 
-                shader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+                shader.SetMatrix4("LightSpaceMatrix", LightSpaceMatrix);
 
                 shader.SetMaterial("material", mat.Material);
 
@@ -207,7 +207,7 @@ namespace Aximo.Render
             }
         }
 
-        private Matrix4 lightSpaceMatrix;
+        private Matrix4 LightSpaceMatrix;
 
         // Because of shared variables in the shaders, only one position is possible yet
         // private int TMP_LIGHT_IDX = 0; // 1= moving, 0=static light
@@ -240,10 +240,10 @@ namespace Aximo.Render
 
                     var lightProjection = shadowCamera.ProjectionMatrix;
                     var lightView = shadowCamera.ViewMatrix;
-                    lightSpaceMatrix = lightView * lightProjection;
+                    LightSpaceMatrix = lightView * lightProjection;
 
                     shadowShader.SetMatrix4("Model", GetModelMatrix());
-                    shadowShader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+                    shadowShader.SetMatrix4("LightSpaceMatrix", LightSpaceMatrix);
                     shadowShader.SetInt("ShadowLayer", light.ShadowTextureIndex);
 
                     //GL.CullFace(CullFaceMode.Front);
