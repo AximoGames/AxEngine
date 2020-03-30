@@ -49,7 +49,7 @@ namespace Aximo.Render
             _shader.SetMatrix4("Projection", Camera.ProjectionMatrix);
 
             txt.Bind(TextureUnit.Texture0);
-            _shader.SetInt("skybox", 0);
+            _shader.SetInt("Skybox", 0);
 
             GL.DepthMask(false);
             GL.DepthFunc(DepthFunction.Equal);

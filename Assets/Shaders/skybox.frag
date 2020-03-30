@@ -3,10 +3,10 @@ out vec4 FragColor;
 
 in vec3 TexCoords;
 
-uniform samplerCube skybox;
+uniform samplerCube Skybox;
 
 void main()
 {
     //gl_FragDepth = 1.0; // TODO, Pereformance: writing to gl_FragDepth disables all depth check optimizations
-    FragColor = texture(skybox, TexCoords.xzy);
+    FragColor = texture(Skybox, TexCoords.xzy);
 }
