@@ -124,7 +124,6 @@ namespace Aximo.Render
                     mat.Material.Txt0.Bind(TextureUnit.Texture0);
                 if (mat.Material.Txt1 != null)
                     mat.Material.Txt1.Bind(TextureUnit.Texture1);
-                Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
 
                 var model = GetModelMatrix();
 
@@ -134,20 +133,19 @@ namespace Aximo.Render
 
                 shader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
-                shader.SetInt("shadowMap", 2);
-
                 shader.SetMaterial("material", mat.Material);
 
                 ApplyShaderParams(shader);
 
                 //_Shader.SetVector3("light.position", GetShadowLight().Position);
                 //_Shader.SetVector3("light.color", new Vector3(0.5f, 0.5f, 0.5f));
-                shader.SetVector3("viewPos", Camera.Position);
+                shader.SetVector3("ViewPos", Camera.Position);
 
-                //var shadowCamera = GetShadowLight().LightCamera;
-                shader.SetFloat("FarPlane", 25f);
+                Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
+                shader.SetInt("DirectionalShadowMap", 2);
                 Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
-                shader.SetInt("depthMap", 3);
+                shader.SetInt("PointShadowMap", 3);
+                shader.SetFloat("FarPlane", 25f);
 
                 shader.BindBlock("lightsArray", Context.LightBinding);
                 shader.SetInt("lightCount", Lights.Count);

@@ -46,7 +46,7 @@ namespace Aximo.Render
             _Shader.SetMatrix4("projection", Camera.ProjectionMatrix);
 
             //_Shader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
-            _Shader.SetVector3("viewPos", Camera.Position);
+            _Shader.SetVector3("ViewPos", Camera.Position);
 
             //GL.Disable(EnableCap.DepthTest);
             vao.Draw();

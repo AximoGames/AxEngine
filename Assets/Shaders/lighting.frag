@@ -10,17 +10,17 @@
 out vec4 FragColor;
 
 //In order to calculate some basic lighting we need a few things per model basis, and a few things per fragment basis:
-uniform vec3 viewPos; //The position of the view and/or of the player.
+uniform vec3 ViewPos; //The position of the view and/or of the player.
 uniform SMaterial material;
-
-uniform sampler2DArray shadowMap;
 
 in vec3 Normal; //The normal of the fragment is calculated in the vertex shader.
 in vec3 FragPos; //The fragment position.
 in vec2 TexCoords;
 
+uniform sampler2DArray DirectionalShadowMap;
+uniform samplerCubeArray PointShadowMap;
 uniform float FarPlane;
-uniform samplerCubeArray depthMap;
+
 uniform int lightCount;
 layout(std140) uniform lightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };
 
@@ -28,7 +28,7 @@ layout(std140) uniform lightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };
 
 void main()
 {
-	vec3 viewDir = normalize(viewPos - FragPos);
+	vec3 viewDir = normalize(ViewPos - FragPos);
     vec3 matDiffuse;
 
 #ifndef OVERRIDE_GET_MATERIAL_DIFFUSE_FILE

@@ -22,11 +22,11 @@ uniform sampler2D gMaterial;
 //     float Quadratic;
 // };
 
-uniform samplerCubeArray depthMap;
+uniform sampler2DArray DirectionalShadowMap;
+uniform samplerCubeArray PointShadowMap;
 uniform float FarPlane;
-uniform sampler2DArray shadowMap;
 
-uniform vec3 viewPos;
+uniform vec3 ViewPos;
 uniform int lightCount;
 layout(std140) uniform lightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };
 
@@ -42,7 +42,7 @@ void main()
     if(FragPos == vec3(0))
         discard;
 
-    vec3 viewDir  = normalize(viewPos - FragPos);
+    vec3 viewDir  = normalize(ViewPos - FragPos);
 
     vec3 normal = texture(gNormal, TexCoords).rgb;
     Normal = normal;
