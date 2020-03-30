@@ -44,11 +44,6 @@ void main()
     //vec3 color = material.color; // solid color for debugging
     vec3 normal = normalize(Normal);
 
-    LightResult lightResult;
-    lightResult.Diffuse = vec3(0);
-    lightResult.Specular = vec3(0);
-    lightResult.Shadow = 0;
-
 #include "common/light.glsl"
 
 }

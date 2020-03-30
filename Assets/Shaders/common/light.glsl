@@ -1,3 +1,8 @@
+LightResult lightResult;
+lightResult.Diffuse = vec3(0);
+lightResult.Specular = vec3(0);
+lightResult.Shadow = 0;
+
 // then calculate lighting as usual
 vec3 lighting  = matDiffuse * matAmbient; // hard-coded ambient component
 
@@ -25,6 +30,7 @@ for(int i = 0; i < lightCount; ++i)
     }
     else {
         shadow = ShadowCalculationCubeSoft(FragPos, light);
+        //shadow = 0;
     }
 
     lightResult.Diffuse += diffuse * attenuation;

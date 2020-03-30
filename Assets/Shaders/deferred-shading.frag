@@ -52,10 +52,5 @@ void main()
     float matAmbient = texture(gMaterial, TexCoords).r;
     float matShininess = texture(gMaterial, TexCoords).g;
 
-    LightResult lightResult;
-    lightResult.Diffuse = vec3(0);
-    lightResult.Specular = vec3(0);
-    lightResult.Shadow = 0;
-
 #include "common/light.glsl"
 }

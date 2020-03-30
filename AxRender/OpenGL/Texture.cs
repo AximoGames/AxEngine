@@ -67,6 +67,7 @@ namespace Aximo.Render
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMap, width, height);
             txt.Bind();
+            txt.ObjectLabel = "CubeShadowMap";
             for (var i = 0; i < 6; i++)
                 GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.DepthComponent, txt.Width, txt.Height, border, format, type, pixels);
 
@@ -81,6 +82,7 @@ namespace Aximo.Render
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.Texture2DArray, width, height);
             txt.Bind();
+            txt.ObjectLabel = "ShadowMapArray";
             GL.TexImage3D(TextureTarget.Texture2DArray, 0, PixelInternalFormat.DepthComponent, width, height, layers, border, format, type, pixels);
 
             txt.SetNearestFilter();
@@ -94,6 +96,7 @@ namespace Aximo.Render
             GL.GenTextures(1, out handle);
             var txt = new Texture(handle, TextureTarget.TextureCubeMapArray, width, height);
             txt.Bind();
+            txt.ObjectLabel = "CubeShadowMapArray";
             GL.TexImage3D(TextureTarget.TextureCubeMapArray, 0, PixelInternalFormat.DepthComponent, width, height, layers * 6, border, format, type, pixels);
 
             txt.SetNearestFilter();
