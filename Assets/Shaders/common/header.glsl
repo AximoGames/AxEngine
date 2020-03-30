@@ -16,12 +16,14 @@ struct SLight {
 };
 
 struct SMaterial {
-	sampler2D Diffuse;
-	sampler2D Specular;
-	float Shininess;
+	sampler2D DiffuseMap;
+	vec3 DiffuseColor;
+
+	sampler2D SpecularMap;
 	float SpecularStrength;
-	vec3 Color;
-	float Ambient; // 0.3
+	float Shininess;
+
+	float Ambient;
 	int ColorBlendMode;
 };
 

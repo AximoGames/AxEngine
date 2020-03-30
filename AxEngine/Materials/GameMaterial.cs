@@ -162,7 +162,7 @@ namespace Aximo.Engine
             mat.CastShadow = CastShadow;
 
             mat.Ambient = Ambient;
-            mat.Color = Color;
+            mat.DiffuseColor = Color;
             mat.Shininess = Shininess;
             mat.SpecularStrength = SpecularStrength;
             mat.ColorBlendMode = ColorBlendMode;

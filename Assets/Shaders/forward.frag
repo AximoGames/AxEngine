@@ -32,16 +32,16 @@ void main()
     vec3 matDiffuse;
 
 #ifndef OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
-    matDiffuse = BlendColor(texture(material.Diffuse, TexCoords).rgb, material.Color, material.ColorBlendMode);
+    matDiffuse = BlendColor(texture(material.DiffuseMap, TexCoords).rgb, material.DiffuseColor, material.ColorBlendMode);
 #else
 #include OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
 #endif
 
-    float matSpecular = texture(material.Specular, TexCoords).r;
+    float matSpecular = texture(material.SpecularMap, TexCoords).r;
     float matAmbient = material.Ambient;
     float matShininess = material.Shininess;
 
-    //vec3 color = material.Color; // solid color for debugging
+    //vec3 color = material.DiffuseColor; // solid color for debugging
     vec3 normal = normalize(Normal);
 
 #include "common/lighting.glsl"

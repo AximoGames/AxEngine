@@ -20,7 +20,7 @@ namespace Aximo.Render
 
         public string DiffuseImagePath { get; set; }
         public string SpecularImagePath { get; set; }
-        public Vector3 Color { get; set; }
+        public Vector3 DiffuseColor { get; set; }
         public float Ambient { get; set; }
         public float Shininess { get; set; }
         public float SpecularStrength { get; set; }
@@ -44,7 +44,7 @@ namespace Aximo.Render
             {
                 DiffuseImagePath = "Textures/woodenbox.png",
                 SpecularImagePath = "Textures/woodenbox_specular.png",
-                Color = new Vector3(1.0f, 1.0f, 0.0f),
+                DiffuseColor = new Vector3(1.0f, 1.0f, 0.0f),
                 Ambient = 0.3f,
                 Shininess = 32.0f,
                 SpecularStrength = 0.5f,
@@ -75,9 +75,9 @@ namespace Aximo.Render
         public void WriteToShader(string name, Shader shader)
         {
             var prefix = name += ".";
-            shader.SetVector3(prefix + "Color", Color);
-            shader.SetInt(prefix + "Diffuse", 0);
-            shader.SetInt(prefix + "Specular", 1);
+            shader.SetVector3(prefix + "DiffuseColor", DiffuseColor);
+            shader.SetInt(prefix + "DiffuseMap", 0);
+            shader.SetInt(prefix + "SpecularMap", 1);
             shader.SetFloat(prefix + "Ambient", Ambient);
             shader.SetFloat(prefix + "Shininess", Shininess);
             shader.SetFloat(prefix + "SpecularStrength", SpecularStrength);
