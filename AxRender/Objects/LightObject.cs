@@ -84,9 +84,9 @@ namespace Aximo.Render
             lampMatrix *= Matrix4.CreateScale(0.1f);
             lampMatrix *= Matrix4.CreateTranslation(Position);
 
-            _shader.SetMatrix4("model", lampMatrix);
-            _shader.SetMatrix4("view", Camera.ViewMatrix);
-            _shader.SetMatrix4("projection", Camera.ProjectionMatrix);
+            _shader.SetMatrix4("Model", lampMatrix);
+            _shader.SetMatrix4("View", Camera.ViewMatrix);
+            _shader.SetMatrix4("Projection", Camera.ProjectionMatrix);
 
             vao.Draw();
         }

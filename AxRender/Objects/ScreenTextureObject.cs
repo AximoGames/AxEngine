@@ -88,7 +88,7 @@ namespace Aximo.Render
 
             _shader.Bind();
             SourceTexture.Bind();
-            _shader.SetMatrix4("model", GetModelMatrix());
+            _shader.SetMatrix4("Model", GetModelMatrix());
 
             GL.Disable(EnableCap.CullFace);
             vao.Draw();

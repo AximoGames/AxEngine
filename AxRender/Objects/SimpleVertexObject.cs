@@ -127,9 +127,9 @@ namespace Aximo.Render
 
                 var model = GetModelMatrix();
 
-                shader.SetMatrix4("model", model);
-                shader.SetMatrix4("view", Camera.ViewMatrix);
-                shader.SetMatrix4("projection", Camera.ProjectionMatrix);
+                shader.SetMatrix4("Model", model);
+                shader.SetMatrix4("View", Camera.ViewMatrix);
+                shader.SetMatrix4("Projection", Camera.ProjectionMatrix);
 
                 shader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
@@ -166,7 +166,7 @@ namespace Aximo.Render
                 if (mat.Material.Txt0 != null)
                     mat.Material.Txt0.Bind(TextureUnit.Texture0);
 
-                shader.SetMatrix4("model", GetModelMatrix());
+                shader.SetMatrix4("Model", GetModelMatrix());
 
                 //GL.Disable(EnableCap.CullFace);
                 GL.CullFace(CullFaceMode.Front);
@@ -196,9 +196,9 @@ namespace Aximo.Render
 
                     defGeometryShader.SetMaterial("material", mat.Material);
 
-                    defGeometryShader.SetMatrix4("model", GetModelMatrix());
-                    defGeometryShader.SetMatrix4("view", Camera.ViewMatrix);
-                    defGeometryShader.SetMatrix4("projection", Camera.ProjectionMatrix);
+                    defGeometryShader.SetMatrix4("Model", GetModelMatrix());
+                    defGeometryShader.SetMatrix4("View", Camera.ViewMatrix);
+                    defGeometryShader.SetMatrix4("Projection", Camera.ProjectionMatrix);
 
                     mat.Vao.Draw();
                 }
@@ -244,7 +244,7 @@ namespace Aximo.Render
                     var lightView = shadowCamera.ViewMatrix;
                     lightSpaceMatrix = lightView * lightProjection;
 
-                    shadowShader.SetMatrix4("model", GetModelMatrix());
+                    shadowShader.SetMatrix4("Model", GetModelMatrix());
                     shadowShader.SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
                     shadowShader.SetInt("shadowLayer", light.ShadowTextureIndex);
 
@@ -293,7 +293,7 @@ namespace Aximo.Render
                         AddShadowCubeMatrix(shadowCamera, new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f));
                     }
 
-                    cubeShadowShader.SetMatrix4("model", GetModelMatrix());
+                    cubeShadowShader.SetMatrix4("Model", GetModelMatrix());
                     for (var i = 0; i < CubeShadowsMatrices.Count; i++)
                         cubeShadowShader.SetMatrix4($"shadowMatrices[{i}]", CubeShadowsMatrices[i]);
                     cubeShadowShader.SetVector3("light.position", light.Position);
