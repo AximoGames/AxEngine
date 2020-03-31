@@ -37,7 +37,7 @@ void main()
 #include OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
 #endif
 
-    float matSpecular = texture(material.SpecularMap, TexCoords).r;
+    float matSpecular = texture(material.SpecularMap, TexCoords).r * material.SpecularStrength;
     float matAmbient = material.Ambient;
     float matShininess = material.Shininess;
 
