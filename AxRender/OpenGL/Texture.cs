@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 
@@ -233,6 +234,17 @@ namespace Aximo.Render
             ObjectLabel = Path.GetFileName(path);
         }
 
+        public Texture(Vector3 color)
+        {
+            using (var bmp = new Bitmap(1, 1))
+            {
+                bmp.SetPixel(0, 0, Color.FromArgb((int)Math.Round(color.X * 255), (int)Math.Round(color.Y * 255), (int)Math.Round(color.Z * 255)));
+                InitFromBitmap(bmp);
+            }
+            Console.WriteLine($"Created Color Texture #{Handle} {color}");
+            ObjectLabel = "ColorTexture" + color.ToString();
+        }
+
         // Create texture from path.
         public Texture(Bitmap image)
         {
@@ -334,5 +346,28 @@ namespace Aximo.Render
             GL.ActiveTexture(unit);
             GL.BindTexture(Target, Handle);
         }
+
     }
+
+    public static class InternalTextureManager
+    {
+        public static Texture White;
+        public static Texture Black;
+        public static Texture Gray;
+        public static Texture Red;
+        public static Texture Green;
+        public static Texture Blue;
+
+        public static void Init()
+        {
+            White = new Texture(new Vector3(1, 1, 1));
+            Black = new Texture(new Vector3(0, 0, 0));
+            Gray = new Texture(new Vector3(0.5f, 0.5f, 0.5f));
+            Red = new Texture(new Vector3(1, 0, 0));
+            Green = new Texture(new Vector3(0, 1, 0));
+            Blue = new Texture(new Vector3(0, 0, 1));
+        }
+
+    }
+
 }

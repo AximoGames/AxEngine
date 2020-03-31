@@ -29,17 +29,17 @@ void main()
     // and the diffuse per-fragment color
     vec3 matDiffuse;
 #ifndef OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
-    matDiffuse = BlendColor(texture(material.DiffuseMap, TexCoords).rgb, material.DiffuseColor, material.ColorBlendMode);
+    matDiffuse = texture(material.DiffuseMap, TexCoords).rgb * material.DiffuseColor;
 #else
 #include OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
 #endif
     gAlbedoSpec.rgb = matDiffuse;
     // store specular intensity in gAlbedoSpec's alpha component
-    gAlbedoSpec.a = texture(material.SpecularMap, TexCoords).r;
+    gAlbedoSpec.a = texture(material.SpecularMap, TexCoords).r * material.SpecularStrength;
 
     // Extra material parameters
     gMaterial.r = material.Ambient;
     //gMaterial.r = 0;
     gMaterial.g = material.Shininess;
-    gMaterial.b = material.SpecularStrength; // Used?
+    gMaterial.b = 0; // unused
 }

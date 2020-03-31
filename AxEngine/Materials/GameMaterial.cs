@@ -44,7 +44,6 @@ namespace Aximo.Engine
         public float Ambient { get; set; }
         public float Shininess { get; set; } = 1.0f;
         public float SpecularStrength { get; set; }
-        public MaterialColorBlendMode ColorBlendMode { get; set; }
         public bool CastShadow { get; set; }
 
         private Dictionary<string, Parameter> Parameters = new Dictionary<string, Parameter>();
@@ -157,15 +156,31 @@ namespace Aximo.Engine
             }
 
             var mat = InternalMaterial;
-            mat.Txt0 = DiffuseTexture?.InternalTexture;
-            mat.Txt1 = SpecularTexture?.InternalTexture;
+            if (DiffuseTexture == null)
+            {
+                mat.DiffuseMap = InternalTextureManager.White;
+                mat.DiffuseColor = Color;
+            }
+            else
+            {
+                mat.DiffuseMap = DiffuseTexture.InternalTexture;
+                mat.DiffuseColor = Vector3.One;
+            }
+
+            if (SpecularTexture == null)
+            {
+                mat.SpecularMap = InternalTextureManager.White;
+                mat.SpecularStrength = SpecularStrength;
+            }
+            else
+            {
+                mat.SpecularMap = SpecularTexture.InternalTexture;
+                mat.SpecularStrength = 1.0f;
+            }
             mat.CastShadow = CastShadow;
 
             mat.Ambient = Ambient;
-            mat.DiffuseColor = Color;
             mat.Shininess = Shininess;
-            mat.SpecularStrength = SpecularStrength;
-            mat.ColorBlendMode = ColorBlendMode;
 
             switch (PipelineType)
             {

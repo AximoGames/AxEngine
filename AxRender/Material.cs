@@ -18,13 +18,12 @@ namespace Aximo.Render
     public class Material
     {
 
-        public string DiffuseImagePath { get; set; }
-        public string SpecularImagePath { get; set; }
         public Vector3 DiffuseColor { get; set; }
-        public float Ambient { get; set; }
-        public float Shininess { get; set; }
+
         public float SpecularStrength { get; set; }
-        public MaterialColorBlendMode ColorBlendMode { get; set; }
+        public float Shininess { get; set; }
+
+        public float Ambient { get; set; }
 
         public bool CastShadow;
 
@@ -33,8 +32,8 @@ namespace Aximo.Render
         public Shader ShadowShader { get; set; }
         public Shader CubeShadowShader { get; set; }
 
-        public Texture Txt0;
-        public Texture Txt1;
+        public Texture DiffuseMap;
+        public Texture SpecularMap;
 
         public IRenderPipeline RenderPipeline;
 
@@ -42,9 +41,7 @@ namespace Aximo.Render
         {
             var mat = new Material()
             {
-                DiffuseImagePath = "Textures/woodenbox.png",
-                SpecularImagePath = "Textures/woodenbox_specular.png",
-                DiffuseColor = new Vector3(1.0f, 1.0f, 0.0f),
+                DiffuseColor = new Vector3(0.5f, 0.5f, 0.5f),
                 Ambient = 0.3f,
                 Shininess = 32.0f,
                 SpecularStrength = 0.5f,
@@ -55,11 +52,6 @@ namespace Aximo.Render
 
         public void CreateShaders()
         {
-            if (Txt0 == null && !string.IsNullOrEmpty(DiffuseImagePath))
-                Txt0 = new Texture(DiffuseImagePath);
-            if (Txt1 == null && !string.IsNullOrEmpty(SpecularImagePath))
-                Txt1 = new Texture(SpecularImagePath);
-
             if (Shader == null)
                 Shader = new Shader("Shaders/forward.vert", "Shaders/forward.frag");
             if (DefGeometryShader == null)
@@ -81,7 +73,6 @@ namespace Aximo.Render
             shader.SetFloat(prefix + "Ambient", Ambient);
             shader.SetFloat(prefix + "Shininess", Shininess);
             shader.SetFloat(prefix + "SpecularStrength", SpecularStrength);
-            shader.SetInt(prefix + "ColorBlendMode", (int)ColorBlendMode);
         }
     }
 

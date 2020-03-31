@@ -106,6 +106,8 @@ namespace Aximo.Engine
 
             RenderContext.LogInfoMessage("Window.OnLoad");
 
+            InternalTextureManager.Init();
+
             ObjectManager.PushDebugGroup("Setup", "Pipelines");
             SetupPipelines();
             ObjectManager.PopDebugGroup();

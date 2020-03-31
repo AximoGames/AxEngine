@@ -15,11 +15,11 @@ namespace Aximo.AxTests
 
         public static void Main(string[] args)
         {
-            var tester = new LightTests();
-            tester.Box(new LightTests.TestCase
+            var tester = new LightTypeTests();
+            tester.Box(new LightTypeTests.TestCase
             {
                 Pipeline = PipelineType.Deferred,
-                DiffuseSource = "Texture",
+                DiffuseSource = "Color",
                 Ambient = 0.5f,
             });
             tester.Dispose();

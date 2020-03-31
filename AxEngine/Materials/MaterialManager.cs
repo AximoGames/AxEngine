@@ -25,9 +25,7 @@ namespace Aximo.Engine
                 {
                     _DefaultMaterial = new GameMaterial
                     {
-                        DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
-                        SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
-                        Color = new Vector3(1.0f, 1.0f, 0.0f),
+                        Color = new Vector3(0.5f, 0.5f, 0.5f),
                         Ambient = 0.3f,
                         Shininess = 32.0f,
                         SpecularStrength = 0.5f,

@@ -16,11 +16,13 @@ struct SLight {
 };
 
 struct SMaterial {
-	sampler2D DiffuseMap;
-	vec3 DiffuseColor;
 
-	sampler2D SpecularMap;
-	float SpecularStrength;
+	// Formular: Map * Color
+	sampler2D DiffuseMap; // White default map, as fallbak
+	vec3 DiffuseColor; // white, if map is used
+
+	sampler2D SpecularMap; // Defaults to white or 1.0
+	float SpecularStrength; // defaults to 1.0
 	float Shininess;
 
 	float Ambient;

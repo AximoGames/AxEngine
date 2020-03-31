@@ -32,13 +32,13 @@ namespace Aximo.AxTests
             {
                 GameMaterial material = new GameMaterial
                 {
-                    DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
                     SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
                     Ambient = test.Ambient,
-                    ColorBlendMode = test.DiffuseSource == "Texture" ? MaterialColorBlendMode.None : MaterialColorBlendMode.Set,
                     Color = new Vector3(0, 1, 0),
                     PipelineType = test.Pipeline,
                 };
+                if (test.DiffuseSource == "Texture")
+                    material.DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png");
 
                 GameContext.AddActor(new Actor(new DebugCubeComponent()
                 {

@@ -120,10 +120,10 @@ namespace Aximo.Render
                 shader.Bind();
                 mat.Vao.Bind();
 
-                if (mat.Material.Txt0 != null)
-                    mat.Material.Txt0.Bind(TextureUnit.Texture0);
-                if (mat.Material.Txt1 != null)
-                    mat.Material.Txt1.Bind(TextureUnit.Texture1);
+                if (mat.Material.DiffuseMap != null)
+                    mat.Material.DiffuseMap.Bind(TextureUnit.Texture0);
+                if (mat.Material.SpecularMap != null)
+                    mat.Material.SpecularMap.Bind(TextureUnit.Texture1);
 
                 var model = GetModelMatrix();
 
@@ -161,8 +161,8 @@ namespace Aximo.Render
 
                 mat.Vao.Bind();
 
-                if (mat.Material.Txt0 != null)
-                    mat.Material.Txt0.Bind(TextureUnit.Texture0);
+                if (mat.Material.DiffuseMap != null)
+                    mat.Material.DiffuseMap.Bind(TextureUnit.Texture0);
 
                 shader.SetMatrix4("Model", GetModelMatrix());
 
@@ -187,10 +187,10 @@ namespace Aximo.Render
 
                     mat.Vao.Bind();
 
-                    if (mat.Material.Txt0 != null)
-                        mat.Material.Txt0.Bind(TextureUnit.Texture0);
-                    if (mat.Material.Txt1 != null)
-                        mat.Material.Txt1.Bind(TextureUnit.Texture1);
+                    if (mat.Material.DiffuseMap != null)
+                        mat.Material.DiffuseMap.Bind(TextureUnit.Texture0);
+                    if (mat.Material.SpecularMap != null)
+                        mat.Material.SpecularMap.Bind(TextureUnit.Texture1);
 
                     defGeometryShader.SetMaterial("material", mat.Material);
 

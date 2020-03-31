@@ -32,7 +32,7 @@ void main()
     vec3 matDiffuse;
 
 #ifndef OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
-    matDiffuse = BlendColor(texture(material.DiffuseMap, TexCoords).rgb, material.DiffuseColor, material.ColorBlendMode);
+    matDiffuse = texture(material.DiffuseMap, TexCoords).rgb * material.DiffuseColor;
 #else
 #include OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
 #endif

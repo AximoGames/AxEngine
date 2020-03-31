@@ -80,17 +80,32 @@ namespace Aximo.AxDemo
 
             //RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>();
 
+            var materialWood1 = new GameMaterial()
+            {
+                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
+                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                Ambient = 0.3f,
+                Shininess = 32.0f,
+                SpecularStrength = 0.5f,
+                CastShadow = true,
+            };
+
+            var materialWood2 = new GameMaterial()
+            {
+                DiffuseTexture = GameTexture.GetFromFile("Textures/wood.png"),
+                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                Ambient = 0.3f,
+                Shininess = 32.0f,
+                SpecularStrength = 0.5f,
+                CastShadow = true,
+            };
+
             GameContext.AddActor(new Actor(new SphereComponent()
             {
                 Name = "CompSphere",
                 RelativeTranslation = new Vector3(-1, 0, 0),
                 RelativeScale = new Vector3(1.5f),
-                Material = new GameMaterial()
-                {
-                    DiffuseTexture = GameTexture.GetFromFile("Textures/wood.png"),
-                    SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
-                    CastShadow = true,
-                },
+                Material = materialWood2,
             }));
 
             GameContext.AddActor(new Actor(new CubeComponent()
@@ -98,6 +113,7 @@ namespace Aximo.AxDemo
                 Name = "Ground",
                 RelativeScale = new Vector3(50, 50, 1),
                 RelativeTranslation = new Vector3(0f, 0f, -0.5f),
+                Material = materialWood1,
             }));
 
             GameContext.AddActor(new Actor(new GridPlaneComponent(10, true)
@@ -156,6 +172,7 @@ namespace Aximo.AxDemo
                 Name = "GroundCursor",
                 RelativeTranslation = new Vector3(0, 1, 0.05f),
                 RelativeScale = new Vector3(1.0f, 1.0f, 0.1f),
+                Material = materialWood1,
             }));
 
             GameContext.AddActor(new Actor(new DebugCubeComponent()
@@ -164,6 +181,7 @@ namespace Aximo.AxDemo
                 RelativeRotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
                 RelativeScale = new Vector3(1),
                 RelativeTranslation = new Vector3(0, 0, 0.5f),
+                Material = materialWood1,
             }));
 
             GameContext.AddActor(new Actor(new CubeComponent()
@@ -171,18 +189,21 @@ namespace Aximo.AxDemo
                 Name = "Box2",
                 RelativeScale = new Vector3(1),
                 RelativeTranslation = new Vector3(1.5f, 1.5f, 0.5f),
+                Material = materialWood1,
             }));
 
             GameContext.AddActor(new Actor(new SphereComponent()
             {
                 Name = "Sphere1",
                 RelativeTranslation = new Vector3(3f, 3f, 0.5f),
+                Material = materialWood1,
             }));
             GameContext.AddActor(new Actor(new CubeComponent()
             {
                 Name = "Box4",
                 RelativeScale = new Vector3(1),
                 RelativeTranslation = new Vector3(4f, 3f, 0.5f),
+                Material = materialWood1,
             }));
 
             GameContext.AddActor(new Actor(
@@ -190,10 +211,12 @@ namespace Aximo.AxDemo
                     new CubeComponent
                     {
                         RelativeTranslation = new Vector3(-1, 0, 0),
+                        Material = materialWood1,
                     },
                     new SphereComponent
                     {
                         RelativeTranslation = new Vector3(1f, 0, 0),
+                        Material = materialWood1,
                     })
                 {
                     Name = "CompGroup1",
@@ -210,12 +233,14 @@ namespace Aximo.AxDemo
                 Name = "BoxFar1",
                 RelativeScale = new Vector3(1),
                 RelativeTranslation = new Vector3(18, 0, 0.5f),
+                Material = materialWood1,
             }));
             GameContext.AddActor(new Actor(new DebugCubeComponent()
             {
                 Name = "BoxFar2",
                 RelativeScale = new Vector3(1),
                 RelativeTranslation = new Vector3(16, 1, 0.5f),
+                Material = materialWood1,
                 // Enabled = false,
             }));
 
