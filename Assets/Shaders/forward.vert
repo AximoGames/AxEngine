@@ -18,7 +18,7 @@ void main()
 {
 	gl_Position = vec4(aPos, 1.0) * Model * View * Projection;
 	FragPos = vec3(vec4(aPos, 1.0) * Model);
-	Normal = transpose(inverse(mat3(Model))) * aNormal;
+	Normal = aNormal * transpose(inverse(mat3(Model)));
 	TexCoords = aTexCoords;
 	// shadow
 	FragPosLightSpace = vec4(FragPos, 1.0) * LightSpaceMatrix; // BUGFIX: aPos --> FragPos
