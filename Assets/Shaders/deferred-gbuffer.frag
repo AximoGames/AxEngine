@@ -15,6 +15,7 @@ layout (location = 3) out vec3 gMaterial;
 in vec2 TexCoords;
 in vec3 FragPos;
 in vec3 Normal;
+in vec3 NormalRotated;
 
 uniform SMaterial material;
 
