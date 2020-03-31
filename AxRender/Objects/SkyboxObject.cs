@@ -52,7 +52,8 @@ namespace Aximo.Render
             _shader.SetInt("Skybox", 0);
 
             GL.DepthMask(false);
-            GL.DepthFunc(DepthFunction.Equal);
+            //GL.DepthFunc(DepthFunction.Equal);
+            GL.DepthFunc(DepthFunction.Lequal);
             vao.Draw();
             GL.DepthFunc(DepthFunction.Less);
             GL.DepthMask(true);

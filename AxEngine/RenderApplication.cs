@@ -68,20 +68,6 @@ namespace Aximo.Engine
 
         public virtual void Init()
         {
-            Renderer = new Renderer();
-            Renderer.Current = Renderer;
-
-            RenderContext = new RenderContext()
-            {
-                ScreenSize = _startup.WindowSize,
-            };
-            RenderContext.Current = RenderContext;
-
-            GameContext = new GameContext
-            {
-            };
-            GameContext.Current = GameContext;
-
             window = new RenderWindow(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle, _startup.IsSingleThread)
             {
                 WindowBorder = _startup.WindowBorder,
@@ -96,6 +82,20 @@ namespace Aximo.Engine
             window.MouseWheel += (s, e) => OnMouseWheelInternal(e);
             window.Unload += (s, e) => OnUnloadInternal(e);
             window.Resize += (s, e) => OnScreenResizeInternal();
+
+            Renderer = new Renderer();
+            Renderer.Current = Renderer;
+
+            RenderContext = new RenderContext()
+            {
+                ScreenSize = new Vector2i(window.Width, window.Height),
+            };
+            RenderContext.Current = RenderContext;
+
+            GameContext = new GameContext
+            {
+            };
+            GameContext.Current = GameContext;
 
             Renderer.Init();
             //window.SwapBuffers();
