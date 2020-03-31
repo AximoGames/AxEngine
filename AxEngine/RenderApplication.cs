@@ -88,6 +88,8 @@ namespace Aximo.Engine
 
             RenderContext = new RenderContext()
             {
+                // It's important to take a the size of the new created window instead of the startupConfig,
+                // Because they may not be accepted or changed because of other DPI than 100%
                 ScreenSize = new Vector2i(window.Width, window.Height),
             };
             RenderContext.Current = RenderContext;
