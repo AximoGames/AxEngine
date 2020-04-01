@@ -5,6 +5,7 @@ using System;
 using OpenToolkit;
 using OpenToolkit.Graphics;
 using OpenToolkit.Input;
+using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using OpenToolkit.Windowing.Desktop;
 
@@ -23,9 +24,11 @@ namespace Aximo.Engine
         //private float Pitch = -0.3f;
         //private float Facing = (float)Math.PI / 2 + 0.15f;
 
-        public RenderWindow(int width, int height, string title, bool isSingleThead = true)
+        public RenderWindow(Vector2i windowSize, string title, bool isMultiThreaded = false)
         //: base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 3, GraphicsContextFlags.Default, GraphicsContext.CurrentContext, isSingleThead) { }
-        : base(GameWindowSettings.Default, NativeWindowSettings.Default) { }
+        : base(new GameWindowSettings { IsMultiThreaded = isMultiThreaded, UpdateFrequency = 60, RenderFrequency = 60 }, new NativeWindowSettings { Size = windowSize })
+        {
+        }
 
         protected override void OnLoad()
         {
@@ -34,17 +37,16 @@ namespace Aximo.Engine
 
         protected override void OnFocusedChanged(FocusedChangedEventArgs e)
         {
-            // TODO: MIG
-            // if (Focused)
-            // {
-            //     TargetRenderFrequency = 1 / 60.0;
-            //     TargetUpdatePeriod = 1 / 60.0;
-            // }
-            // else
-            // {
-            //     TargetRenderFrequency = 1 / 30.0;
-            //     TargetUpdatePeriod = 1 / 30.0;
-            // }
+            if (IsFocused)
+            {
+                RenderFrequency = 2.0;
+                UpdateFrequency = 2.0;
+            }
+            else
+            {
+                RenderFrequency = 2.0;
+                UpdateFrequency = 2.0;
+            }
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

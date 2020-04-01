@@ -1,4 +1,4 @@
-#version 430 core
+#version 330 core
 #extension GL_GOOGLE_include_directive : enable
 
 #include "common/header.glsl"

@@ -1,5 +1,6 @@
-#version 430 core
+#version 330 core
 #extension GL_GOOGLE_include_directive : enable
+#extension GL_ARB_texture_cube_map_array : enable
 
 #include "common/header.glsl"
 

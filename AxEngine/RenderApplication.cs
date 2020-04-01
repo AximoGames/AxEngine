@@ -47,15 +47,9 @@ namespace Aximo.Engine
 
         public void Run()
         {
-            DebugHelper.LogThreadInfo("UI/Render Thread");
-            UIThread = Thread.CurrentThread;
+            DebugHelper.LogThreadInfo("Update Thread");
+            UpdateThread = Thread.CurrentThread;
             Current = this;
-
-            // TODO: MIG
-            // Toolkit.Init(new ToolkitOptions
-            // {
-            //     Backend = PlatformBackend.PreferX11,
-            // });
 
             GLFW.Init();
             var s = GLFW.GetVersionString();
@@ -72,12 +66,12 @@ namespace Aximo.Engine
         public GameContext GameContext { get; private set; }
         public Renderer Renderer { get; private set; }
 
-        private Thread UIThread;
         private Thread UpdateThread;
+        private Thread RenderThread;
 
         public virtual void Init()
         {
-            window = new RenderWindow(_startup.WindowSize.X, _startup.WindowSize.Y, _startup.WindowTitle, _startup.IsSingleThread)
+            window = new RenderWindow(_startup.WindowSize, _startup.WindowTitle, _startup.IsMultiThreaded)
             {
                 WindowBorder = _startup.WindowBorder,
                 Location = new Vector2i((1920 / 2) + 10, 10),
@@ -213,6 +207,15 @@ namespace Aximo.Engine
             ShaderWatcher.EnableRaisingEvents = true;
         }
 
+        public bool IsFocused
+        {
+            get
+            {
+                return true;
+                // return window.IsFocused; // Bug since new OpenTK version
+            }
+        }
+
         protected virtual void OnRenderFrame(FrameEventArgs e) { }
 
         public int UpdateFrameNumber { get; private set; } = 0;
@@ -224,18 +227,53 @@ namespace Aximo.Engine
         protected virtual void BeforeRenderFrame() { }
         protected virtual void AfterRenderFrame() { }
 
+        protected bool RenderingEnabled { get; set; } = true;
+
+        private bool RenderThreadChecked;
+
+        private void SetRenderThread()
+        {
+            if (!RenderThreadChecked)
+            {
+                RenderThreadChecked = true;
+
+                var currentThread = Thread.CurrentThread;
+                if (_startup.IsMultiThreaded && currentThread != UpdateThread)
+                {
+                    RenderThread = currentThread;
+                    DebugHelper.LogThreadInfo("Render Thread");
+                }
+                else
+                {
+                    DebugHelper.LogThreadInfo("Render Thread (Shared with Update Thread)");
+                }
+            }
+        }
+
+        private bool RenderThreadHasContext = false;
+
         private void OnRenderFrameInternal(FrameEventArgs e)
         {
+            if (!RenderingEnabled || UpdateFrameNumber == 0)
+                return;
+
             try
             {
                 if (Exiting)
                     return;
+
+                if (!RenderThreadHasContext)
+                {
+                    window.MakeCurrent();
+                    RenderThreadHasContext = true;
+                }
 
                 if (FirstRenderFrame)
                     FirstRenderFrame = false;
                 else
                     RenderFrameNumber++;
 
+                SetRenderThread();
                 BeforeRenderFrame();
 
                 if (Exiting)
@@ -332,23 +370,6 @@ namespace Aximo.Engine
 
         public bool DefaultKeyBindings = true;
 
-        private bool UpdateThreadChecked;
-
-        private void SetUpdateThread()
-        {
-            if (!UpdateThreadChecked)
-            {
-                UpdateThreadChecked = true;
-
-                var currentThread = Thread.CurrentThread;
-                if (!_startup.IsSingleThread && currentThread != UIThread)
-                {
-                    UpdateThread = currentThread;
-                    DebugHelper.LogThreadInfo("Update Thread");
-                }
-            }
-        }
-
         protected virtual void BeforeUpdateFrame() { }
         protected virtual void AfterUpdateFrame() { }
 
@@ -362,7 +383,6 @@ namespace Aximo.Engine
             else
                 UpdateFrameNumber++;
 
-            SetUpdateThread();
             BeforeUpdateFrame();
 
             if (Exiting)
@@ -388,11 +408,10 @@ namespace Aximo.Engine
 
             ProcessTaskQueue();
 
-            // TODO: MIG
-            // if (!window.Focused)
-            // {
-            //     return;
-            // }
+            if (!IsFocused)
+            {
+                return;
+            }
 
             if (DefaultKeyBindings)
             {
@@ -738,7 +757,7 @@ namespace Aximo.Engine
         public Vector2i WindowSize { get; set; }
         public string WindowTitle { get; set; }
         public WindowBorder WindowBorder { get; set; } = WindowBorder.Resizable;
-        public bool IsSingleThread = false;
+        public bool IsMultiThreaded = true;
     }
 
 }
