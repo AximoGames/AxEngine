@@ -14,7 +14,7 @@ uniform vec3 ViewPos; //The position of the view and/or of the player.
 uniform SMaterial material;
 
 in vec3 Normal; //The normal of the fragment is calculated in the vertex shader.
-in vec3 NormalRotated;
+in vec3 NormalTransposed;
 in vec3 FragPos; //The fragment position.
 in vec2 TexCoords;
 

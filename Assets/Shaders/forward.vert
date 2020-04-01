@@ -10,7 +10,7 @@ uniform mat4 Projection;
 uniform mat4 LightSpaceMatrix;
 
 out vec3 Normal;
-out vec3 NormalRotated;
+out vec3 NormalTransposed;
 out vec3 FragPos;
 out vec2 TexCoords;
 out vec4 FragPosLightSpace;
@@ -22,7 +22,7 @@ void main()
 
     mat3 normalMatrix = transpose(inverse(mat3(Model)));
     Normal = aNormal * normalMatrix;
-    NormalRotated = normalMatrix * aNormal;
+    NormalTransposed = normalMatrix * aNormal;
 
 	TexCoords = aTexCoords;
 	// shadow
