@@ -3,12 +3,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
-using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
+using OpenToolkit;
+using OpenToolkit.Graphics.OpenGL4;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.PixelFormats;
+using System.Runtime.InteropServices;
+using Image = SixLabors.ImageSharp.Image;
+using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
@@ -105,7 +108,7 @@ namespace Aximo.Render
             return txt;
         }
 
-        public static Texture LoadCubeMap(string path)
+        public unsafe static Texture LoadCubeMap(string path)
         {
             //var faces = new string[] { "right", "left", "back", "front", "top", "bottom" };
             //var faces = new string[] { "left", "right", "top", "top", "top", "top" };
@@ -113,7 +116,7 @@ namespace Aximo.Render
             //var faces = new string[] { "right", "left", "top", "bottom", "back", "front" };
             var faces = new string[] { "right", "left", "top", "bottom", "front", "back" };
             //var faces = new string[] { "right", "left", "front", "back", "top", "bottom" };
-            var images = new List<Bitmap>();
+            var images = new List<Image>();
             foreach (var face in faces)
                 images.Add(LoadBitmap(path.Replace("#", face)));
 
@@ -132,12 +135,10 @@ namespace Aximo.Render
 
             for (var i = 0; i < images.Count; i++)
             {
-                var data = images[i].LockBits(
-                    new Rectangle(0, 0, images[i].Width, images[i].Height),
-                    ImageLockMode.ReadOnly,
-                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.Rgba, txt.Width, txt.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
-
+                images[i].UseData(ptr =>
+                {
+                    GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.Rgba, txt.Width, txt.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
+                });
                 images[i].Dispose();
             }
             txt.SetNearestFilter();
@@ -164,7 +165,7 @@ namespace Aximo.Render
             var handle = data.CreateHandle();
             try
             {
-                GL.GetTexImage(Target, 0, PixelFormat.Bgra, PixelType.UnsignedByte, handle.AddrOfPinnedObject());
+                GL.GetTexImage(Target, 0, PixelFormat.Rgba, PixelType.UnsignedByte, handle.AddrOfPinnedObject());
             }
             finally
             {
@@ -236,9 +237,9 @@ namespace Aximo.Render
 
         public Texture(Vector3 color)
         {
-            using (var bmp = new Bitmap(1, 1))
+            using (var bmp = new Image<Rgba32>(1, 1))
             {
-                bmp.SetPixel(0, 0, Color.FromArgb((int)Math.Round(color.X * 255), (int)Math.Round(color.Y * 255), (int)Math.Round(color.Z * 255)));
+                bmp[0, 0] = new Rgba32((int)Math.Round(color.X * 255), (int)Math.Round(color.Y * 255), (int)Math.Round(color.Z * 255));
                 InitFromBitmap(bmp);
             }
             Console.WriteLine($"Created Color Texture #{Handle} {color}");
@@ -246,27 +247,14 @@ namespace Aximo.Render
         }
 
         // Create texture from path.
-        public Texture(Bitmap image)
+        public Texture(Image image)
         {
             InitFromBitmap(image);
         }
 
-        public void SetData(Bitmap image)
+        public void SetData(Image image)
         {
             Bind();
-            // Load the image
-            // First, we get our pixels from the bitmap we loaded.
-            // Arguments:
-            //   The pixel area we want. Typically, you want to leave it as (0,0) to (width,height), but you can
-            //   use other rectangles to get segments of textures, useful for things such as spritesheets.
-            //   The locking mode. Basically, how you want to use the pixels. Since we're passing them to OpenGL,
-            //   we only need ReadOnly.
-            //   Next is the pixel format we want our pixels to be in. In this case, ARGB will suffice.
-            //   We have to fully qualify the name because OpenTK also has an enum named PixelFormat.
-            var data = image.LockBits(
-                new Rectangle(0, 0, image.Width, image.Height),
-                ImageLockMode.ReadOnly,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
             // Now that our pixels are prepared, it's time to generate a texture. We do this with GL.TexImage2D
             // Arguments:
@@ -279,18 +267,20 @@ namespace Aximo.Render
             //   The format of the pixels, explained above. Since we loaded the pixels as ARGB earlier, we need to use BGRA.
             //   Data type of the pixels.
             //   And finally, the actual pixels.
-            GL.TexImage2D(
-                Target,
-                0,
-                PixelInternalFormat.Rgba,
-                image.Width,
-                image.Height,
-                0,
-                PixelFormat.Bgra,
-                PixelType.UnsignedByte,
-                data.Scan0);
 
-            image.UnlockBits(data);
+            image.UseData(ptr =>
+            {
+                GL.TexImage2D(
+                    Target,
+                    0,
+                    PixelInternalFormat.Rgba,
+                    image.Width,
+                    image.Height,
+                    0,
+                    PixelFormat.Rgba,
+                    PixelType.UnsignedByte,
+                    ptr);
+            });
 
             // Next, generate mipmaps.
             // Mipmaps are smaller copies of the texture, scaled down. Each mipmap level is half the size of the previous one
@@ -300,7 +290,7 @@ namespace Aximo.Render
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
         }
 
-        private void InitFromBitmap(Bitmap image)
+        private void InitFromBitmap(Image image)
         {
             Target = TextureTarget.Texture2D;
             // Generate handle
@@ -327,14 +317,11 @@ namespace Aximo.Render
             SetData(image);
         }
 
-        private static Bitmap LoadBitmap(string path)
+        private static Image LoadBitmap(string path)
         {
             var imagePath = DirectoryHelper.GetAssetsPath(path);
             Console.WriteLine(imagePath);
-            if (path.EndsWith(".tga"))
-                return TgaDecoder.FromFile(imagePath);
-            else
-                return new Bitmap(imagePath);
+            return ImageLib.Load(imagePath);
         }
 
         // Activate texture

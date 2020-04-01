@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using OpenTK;
-//using OpenTK.Graphics.OpenGL4;
-using OpenTK.Input;
+using OpenToolkit;
+//using OpenToolkit.Graphics.OpenGL4;
+using OpenToolkit.Input;
 
 namespace Aximo
 {

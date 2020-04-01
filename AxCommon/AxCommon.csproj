@@ -2,14 +2,38 @@
   <PropertyGroup>
     <RootNamespace>AxCommon</RootNamespace>
     <AssemblyName>AxCommon</AssemblyName>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <NoWarn>CS0162</NoWarn>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OpenTK" Version="3.1.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="OpenToolkit.Core">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Graphics">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.GraphicsLibraryFramework">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.GraphicsLibraryFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Input">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Mathematics">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Windowing.Common">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Windowing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Windowing.Desktop">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Windowing.Desktop.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
 </Project>

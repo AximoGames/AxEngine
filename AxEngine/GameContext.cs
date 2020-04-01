@@ -6,7 +6,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Aximo.Render;
-using OpenTK;
+using OpenToolkit;
+using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
@@ -23,7 +24,7 @@ namespace Aximo.Engine
             Animations.Add(animation);
         }
 
-        public IList<Actor> Actors = new SynchronizedCollection<Actor>();
+        public IList<Actor> Actors = new List<Actor>(); //TODO: Sync
         private ConcurrentDictionary<string, List<Actor>> ActorNamehash = new ConcurrentDictionary<string, List<Actor>>();
 
         public Actor GetActor(string name)
@@ -100,7 +101,7 @@ namespace Aximo.Engine
                 act.PropagateChangesDown();
         }
 
-        internal IList<ActorComponent> ComponentsForDeallocation = new SynchronizedCollection<ActorComponent>();
+        internal IList<ActorComponent> ComponentsForDeallocation = new List<ActorComponent>(); //TODO: Sync
 
         public void Sync()
         {

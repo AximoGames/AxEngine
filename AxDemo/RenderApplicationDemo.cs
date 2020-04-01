@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Drawing;
 using Aximo.Engine;
-using OpenTK;
+using OpenToolkit;
+using OpenToolkit.Mathematics;
+using OpenToolkit.Windowing.Common;
+using SixLabors.Primitives;
 
 namespace Aximo.AxDemo
 {

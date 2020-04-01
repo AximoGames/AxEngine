@@ -3,8 +3,8 @@
 
 using System;
 using System.Collections.Generic;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using OpenToolkit;
+using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {

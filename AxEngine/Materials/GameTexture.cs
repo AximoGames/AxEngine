@@ -4,11 +4,13 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Threading;
 using Aximo.Render;
-using OpenTK;
+using OpenToolkit;
+using OpenToolkit.Mathematics;
+using SixLabors.ImageSharp;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace Aximo.Engine
 {
@@ -36,12 +38,7 @@ namespace Aximo.Engine
         {
             Console.WriteLine($"Loading: {sourcePath}");
             var imagePath = DirectoryHelper.GetAssetsPath(sourcePath);
-            Bitmap bitmap;
-
-            if (sourcePath.ToLower().EndsWith(".tga"))
-                bitmap = TgaDecoder.FromFile(imagePath);
-            else
-                bitmap = new Bitmap(imagePath);
+            Image bitmap = ImageLib.Load(imagePath);
 
             var txt = new GameTexture(bitmap.Width, bitmap.Height)
             {
@@ -55,7 +52,7 @@ namespace Aximo.Engine
 
         private bool AutoDisposeBitmap = false;
 
-        public static GameTexture GetFromBitmap(Bitmap bitmap, string name = null, bool autoDisposeBitmap = false)
+        public static GameTexture GetFromBitmap(Image bitmap, string name = null, bool autoDisposeBitmap = false)
         {
             var txt = new GameTexture(bitmap.Width, bitmap.Height)
             {
@@ -66,12 +63,12 @@ namespace Aximo.Engine
             return txt;
         }
 
-        private Bitmap Bitmap;
+        private Image Bitmap;
 
         private bool HasChanges;
         private bool BitmapChanged;
 
-        public void SetData(Bitmap bitmap)
+        public void SetData(Image bitmap)
         {
             if (bitmap.Width != Width || bitmap.Height != Height)
                 throw new InvalidOperationException();

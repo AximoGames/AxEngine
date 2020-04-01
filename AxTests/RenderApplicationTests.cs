@@ -10,7 +10,7 @@ using System.IO;
 using System.Threading;
 using Aximo.Engine;
 using Aximo.Render;
-using OpenTK;
+using OpenToolkit;
 using Xunit;
 
 namespace Aximo.AxTests

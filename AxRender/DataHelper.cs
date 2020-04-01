@@ -5,7 +5,8 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
-using OpenTK;
+using OpenToolkit;
+using OpenToolkit.Mathematics;
 
 #pragma warning disable SA1003 // Symbols should be spaced correctly
 #pragma warning disable SA1137 // Elements should have the same indentation

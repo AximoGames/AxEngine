@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Input;
+using OpenToolkit;
+using OpenToolkit.Graphics;
+using OpenToolkit.Input;
+using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Desktop;
 
 namespace Aximo.Engine
 {
@@ -21,25 +23,28 @@ namespace Aximo.Engine
         //private float Pitch = -0.3f;
         //private float Facing = (float)Math.PI / 2 + 0.15f;
 
-        public RenderWindow(int width, int height, string title, bool isSingleThead = true) : base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 3, GraphicsContextFlags.Default, GraphicsContext.CurrentContext, isSingleThead) { }
+        public RenderWindow(int width, int height, string title, bool isSingleThead = true)
+        //: base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 3, GraphicsContextFlags.Default, GraphicsContext.CurrentContext, isSingleThead) { }
+        : base(GameWindowSettings.Default, NativeWindowSettings.Default) { }
 
-        protected override void OnLoad(EventArgs e)
+        protected override void OnLoad()
         {
-            base.OnLoad(e);
+            base.OnLoad();
         }
 
-        protected override void OnFocusedChanged(EventArgs e)
+        protected override void OnFocusedChanged(FocusedChangedEventArgs e)
         {
-            if (Focused)
-            {
-                TargetRenderFrequency = 1 / 60.0;
-                TargetUpdatePeriod = 1 / 60.0;
-            }
-            else
-            {
-                TargetRenderFrequency = 1 / 30.0;
-                TargetUpdatePeriod = 1 / 30.0;
-            }
+            // TODO: MIG
+            // if (Focused)
+            // {
+            //     TargetRenderFrequency = 1 / 60.0;
+            //     TargetUpdatePeriod = 1 / 60.0;
+            // }
+            // else
+            // {
+            //     TargetRenderFrequency = 1 / 30.0;
+            //     TargetUpdatePeriod = 1 / 30.0;
+            // }
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -67,14 +72,14 @@ namespace Aximo.Engine
             base.OnMouseWheel(e);
         }
 
-        protected override void OnResize(EventArgs e)
+        protected override void OnResize(ResizeEventArgs e)
         {
             base.OnResize(e);
         }
 
-        protected override void OnUnload(EventArgs e)
+        protected override void OnUnload()
         {
-            base.OnUnload(e);
+            base.OnUnload();
         }
 
         // public void Quit()

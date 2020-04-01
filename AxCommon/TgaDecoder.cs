@@ -5,12 +5,13 @@
 // Licensed unter "The Unlicense"
 
 using System;
-using System.Drawing;
 using System.IO;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
-namespace Aximo.Render
+namespace Aximo
 {
-    public static class TgaDecoder
+    internal static class TgaDecoder
     {
         protected class TgaData
         {
@@ -149,7 +150,7 @@ namespace Aximo.Render
             }
         }
 
-        public static Bitmap FromFile(string path)
+        public static Image FromFile(string path)
         {
             try
             {
@@ -167,21 +168,24 @@ namespace Aximo.Render
             }
         }
 
-        public static Bitmap FromBinary(byte[] image)
+        public static Image FromBinary(byte[] image)
         {
             return Decode(image);
         }
 
-        private static Bitmap Decode(byte[] image)
+        private static Image Decode(byte[] image)
         {
             TgaData tga = new TgaData(image);
 
-            Bitmap bitmap = new Bitmap(tga.Width, tga.Height);
+            var bitmap = new Image<Argb32>(tga.Width, tga.Height);
             for (int y = 0; y < tga.Height; ++y)
             {
                 for (int x = 0; x < tga.Width; ++x)
                 {
-                    bitmap.SetPixel(x, y, Color.FromArgb(tga.GetPixel(x, y)));
+                    unchecked
+                    {
+                        bitmap[x, y] = new Argb32((uint)tga.GetPixel(x, y));
+                    }
                 }
             }
             return bitmap;

@@ -4,12 +4,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
+
 using System.IO;
 using System.Linq;
 using System.Threading;
 using Aximo.Render;
-using OpenTK;
+using OpenToolkit;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Aximo.Engine
 {
@@ -18,24 +20,18 @@ namespace Aximo.Engine
     {
         public GraphicsScreenTextureComponent(int width, int height)
         {
-            Image = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            Graphics = Graphics.FromImage(Image);
+            Image = new Image<Rgba32>(width, height);
             Texture = GameTexture.GetFromBitmap(Image, null);
             Material.DiffuseTexture = Texture;
             UpdateTexture();
         }
 
-        private Bitmap Image;
-
-        public Graphics Graphics { get; private set; }
+        protected Image<Rgba32> Image { get; private set; }
 
         public GameTexture Texture { get; private set; }
 
         public void UpdateTexture()
         {
-            // Graphics.Save();
-            Graphics.Flush();
-            // Graphics.Dispose();
             Texture.SetData(Image);
             Update();
         }

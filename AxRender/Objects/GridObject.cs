@@ -2,8 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using OpenToolkit;
+using OpenToolkit.Graphics.OpenGL4;
+using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {

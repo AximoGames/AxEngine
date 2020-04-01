@@ -7,7 +7,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
-using OpenTK;
+using OpenToolkit;
+using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
@@ -37,7 +38,7 @@ namespace Aximo.Engine
 
         public SceneComponent()
         {
-            _Components = new SynchronizedCollection<SceneComponent>();
+            _Components = new List<SceneComponent>(); //TODO: Sync
             Components = new ReadOnlyCollection<SceneComponent>(_Components);
 
             _ParentComponents = new List<SceneComponent>();

@@ -2,9 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Drawing;
-using OpenTK;
-
+using OpenToolkit;
+using OpenToolkit.Mathematics;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.Primitives;
+using SixLabors.Shapes;
 namespace Aximo.Render
 {
     public class GraphicsTexture : IDisposable
@@ -15,29 +20,24 @@ namespace Aximo.Render
 
         public GraphicsTexture(int width, int height)
         {
-            Image = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            Graphics = Graphics.FromImage(Image);
+            Image = new Image<Rgba32>(width, height);
             Texture = new Texture(Image);
             UpdateTexture();
         }
 
-        private Bitmap Image;
-
-        public Graphics Graphics { get; private set; }
+        private Image<Rgba32> Image;
 
         public Texture Texture { get; private set; }
 
         public void UpdateTexture()
         {
             // Graphics.Save();
-            Graphics.Flush();
             // Graphics.Dispose();
             Texture.SetData(Image);
         }
 
         public void Dispose()
         {
-            Graphics?.Dispose();
             Image?.Dispose();
         }
 

@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
-using OpenTK;
+using OpenToolkit;
 
 namespace Aximo
 {
@@ -44,11 +44,11 @@ namespace Aximo
             }
         }
 
-        public static unsafe void SetData(this BufferData2D<int> target, Bitmap source)
+        public static unsafe void SetData(this BufferData2D<int> target, System.Drawing.Bitmap source)
         {
             var targetData = new int[source.Width, source.Height];
             target.SetData(targetData);
-            var lockedBits = source.LockBits(new Rectangle(0, 0, source.Width, source.Height), ImageLockMode.ReadOnly, source.PixelFormat);
+            var lockedBits = source.LockBits(new System.Drawing.Rectangle(0, 0, source.Width, source.Height), ImageLockMode.ReadOnly, source.PixelFormat);
             var destHandle = target.CreateHandle();
             try
             {
@@ -61,9 +61,9 @@ namespace Aximo
             }
         }
 
-        public static unsafe void CopyTo(this BufferData2D<int> source, Bitmap bmp)
+        public static unsafe void CopyTo(this BufferData2D<int> source, System.Drawing.Bitmap bmp)
         {
-            var lockedBits = bmp.LockBits(new Rectangle(0, 0, source.SizeX, source.SizeY), ImageLockMode.ReadOnly, bmp.PixelFormat);
+            var lockedBits = bmp.LockBits(new System.Drawing.Rectangle(0, 0, source.SizeX, source.SizeY), ImageLockMode.ReadOnly, bmp.PixelFormat);
             var destHandle = source.CreateHandle();
             try
             {
@@ -77,9 +77,9 @@ namespace Aximo
             bmp.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
         }
 
-        public static Bitmap CreateBitmap(this BufferData2D<int> source)
+        public static System.Drawing.Bitmap CreateBitmap(this BufferData2D<int> source)
         {
-            var bmp = new Bitmap(source.Width, source.Height);
+            var bmp = new System.Drawing.Bitmap(source.Width, source.Height);
             CopyTo(source, bmp);
             return bmp;
         }

@@ -4,12 +4,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using Aximo.Render;
-using OpenTK;
+using OpenToolkit;
+using OpenToolkit.Mathematics;
+using SixLabors.Primitives;
 
 #pragma warning disable CA1044 // Properties should not be write only
 

@@ -3,7 +3,8 @@
 
 using System.Collections.Generic;
 
-using OpenTK;
+using OpenToolkit;
+using OpenToolkit.Mathematics;
 
 #pragma warning disable SA1649 // File name should match first type name
 

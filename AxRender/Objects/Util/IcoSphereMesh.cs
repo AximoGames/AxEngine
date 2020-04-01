@@ -8,7 +8,8 @@
 using System;
 using System.Collections.Generic;
 using Aximo.Render;
-using OpenTK;
+using OpenToolkit;
+using OpenToolkit.Mathematics;
 
 namespace Aximo.AxRender.Objects.Util.IcoSphere
 {

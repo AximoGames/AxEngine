@@ -4,7 +4,9 @@
 using System;
 using System.Threading;
 using Aximo.Engine;
-using OpenTK;
+using OpenToolkit;
+using OpenToolkit.Mathematics;
+using OpenToolkit.Windowing.Common;
 
 namespace Aximo.AxDemo
 {

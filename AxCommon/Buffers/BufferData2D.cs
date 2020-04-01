@@ -8,7 +8,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
-using OpenTK;
+using OpenToolkit;
+using OpenToolkit.Mathematics;
 
 namespace Aximo
 {

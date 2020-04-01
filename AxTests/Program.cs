@@ -4,7 +4,7 @@
 using System;
 using System.Threading;
 using Aximo.Engine;
-using OpenTK;
+using OpenToolkit;
 
 using Xunit;
 

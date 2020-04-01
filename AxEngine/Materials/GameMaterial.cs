@@ -8,7 +8,8 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using Aximo.Render;
-using OpenTK;
+using OpenToolkit;
+using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {

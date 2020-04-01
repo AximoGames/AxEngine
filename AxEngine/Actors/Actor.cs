@@ -34,7 +34,7 @@ namespace Aximo.Engine
         public Actor()
         {
             ActorId = GetNewGameObjectId();
-            _Components = new SynchronizedCollection<ActorComponent>();
+            _Components = new List<ActorComponent>(); //TODO: Sync
             Components = new ReadOnlyCollection<ActorComponent>(_Components);
         }
 

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using Aximo.Engine;
 using Aximo.Render;
-using OpenTK;
+using OpenToolkit;
 using Xunit;
 
 namespace Aximo.AxTests

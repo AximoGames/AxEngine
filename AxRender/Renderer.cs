@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Aximo.Render;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using OpenToolkit;
+using OpenToolkit.Graphics.OpenGL4;
+using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
@@ -44,8 +45,9 @@ namespace Aximo.Render
             }
         }
 
-        public void Init()
+        public void Init(IBindingsContext bindingsContext)
         {
+            GL.LoadBindings(bindingsContext);
             var vendor = GL.GetString(StringName.Vendor);
             var version = GL.GetString(StringName.Version);
             var shadingLanguageVersion = GL.GetString(StringName.ShadingLanguageVersion);
