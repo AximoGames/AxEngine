@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": "Demo",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -15,26 +15,5 @@
             "stopAtEntry": false,
             "console": "internalConsole"
         },
-        {
-            "name": "Launch",
-            "type": "mono",
-            "request": "launch",
-            "program": "${workspaceRoot}/AxDemo/bin/Debug/net472/AxDemo.exe",
-            "cwd": "${workspaceRoot}"
-        },
-        {
-            "name": "Launch Tests",
-            "type": "mono",
-            "request": "launch",
-            "program": "${workspaceRoot}/AxTests/bin/Debug/net472/AxTests.exe",
-            "cwd": "${workspaceRoot}"
-        },
-        {
-            "name": "Attach",
-            "type": "mono",
-            "request": "attach",
-            "address": "localhost",
-            "port": 55555
-        }
     ]
 }
