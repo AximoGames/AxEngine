@@ -8,6 +8,8 @@ using OpenToolkit;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 
+using Gtk;
+
 namespace Aximo.AxDemo
 {
     internal class Program
@@ -15,11 +17,16 @@ namespace Aximo.AxDemo
 
         private static Thread th;
 
+        private static GtkUI ui;
+
         public static void Main(string[] args)
         {
             var bits = IntPtr.Size == 4 ? 32 : 64;
             Console.WriteLine($"{bits} Bit System detected. (Pointer Size: {IntPtr.Size} Bytes)");
             Console.WriteLine($"OS: {Environment.OSVersion}");
+
+            ui = new GtkUI();
+            ui.Start();
 
             UIThreadMain();
             return;
@@ -69,4 +76,5 @@ namespace Aximo.AxDemo
         }
 
     }
+
 }
