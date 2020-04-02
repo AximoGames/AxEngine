@@ -28,6 +28,7 @@ namespace Aximo.Engine
         //: base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 3, GraphicsContextFlags.Default, GraphicsContext.CurrentContext, isSingleThead) { }
         : base(new GameWindowSettings { IsMultiThreaded = isMultiThreaded, UpdateFrequency = 60, RenderFrequency = 60 }, new NativeWindowSettings { Size = windowSize })
         {
+            VSync = VSyncMode.On;
         }
 
         protected override void OnLoad()
@@ -39,13 +40,13 @@ namespace Aximo.Engine
         {
             if (IsFocused)
             {
-                RenderFrequency = 2.0;
-                UpdateFrequency = 2.0;
+                RenderFrequency = 60.0;
+                UpdateFrequency = 60.0;
             }
             else
             {
-                RenderFrequency = 2.0;
-                UpdateFrequency = 2.0;
+                RenderFrequency = 30.0;
+                UpdateFrequency = 30.0;
             }
         }
 

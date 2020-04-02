@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -38,6 +39,8 @@ namespace Aximo.Engine
 
         public Camera Camera => RenderContext.Camera;
 
+        protected KeyboardState KeyboardState => window.KeyboardState;
+
         public RenderApplication(RenderApplicationStartup startup)
         {
             _startup = startup;
@@ -47,7 +50,8 @@ namespace Aximo.Engine
 
         public void Run()
         {
-            DebugHelper.LogThreadInfo("Update Thread");
+            Thread.CurrentThread.Name = "Update Thread";
+            DebugHelper.LogThreadInfo(Thread.CurrentThread.Name);
             UpdateThread = Thread.CurrentThread;
             Current = this;
 
@@ -241,16 +245,20 @@ namespace Aximo.Engine
                 if (_startup.IsMultiThreaded && currentThread != UpdateThread)
                 {
                     RenderThread = currentThread;
-                    DebugHelper.LogThreadInfo("Render Thread");
+                    RenderThread.Name = "Render Thread";
                 }
                 else
                 {
-                    DebugHelper.LogThreadInfo("Render Thread (Shared with Update Thread)");
+                    currentThread.Name = "Render+Update";
+                    DebugHelper.LogThreadInfo(currentThread.Name);
                 }
             }
         }
 
         private bool RenderThreadHasContext = false;
+
+        public EventCounter UpdateCounter = new EventCounter();
+        public EventCounter RenderCounter = new EventCounter();
 
         private void OnRenderFrameInternal(FrameEventArgs e)
         {
@@ -272,6 +280,8 @@ namespace Aximo.Engine
                     FirstRenderFrame = false;
                 else
                     RenderFrameNumber++;
+
+                RenderCounter.Tick();
 
                 SetRenderThread();
                 BeforeRenderFrame();
@@ -382,6 +392,8 @@ namespace Aximo.Engine
                 FirstUpdateFrame = false;
             else
                 UpdateFrameNumber++;
+
+            UpdateCounter.Tick();
 
             BeforeUpdateFrame();
 
@@ -758,6 +770,39 @@ namespace Aximo.Engine
         public string WindowTitle { get; set; }
         public WindowBorder WindowBorder { get; set; } = WindowBorder.Resizable;
         public bool IsMultiThreaded = true;
+    }
+
+    public class EventCounter
+    {
+        private Stopwatch Watch = new Stopwatch();
+        private double FrameCount = 0;
+        private double DeltaTime = 0.0;
+        private double UpdateRate = 4.0;  // 4 updates per sec.        
+
+        private double _Fps = 0.0;
+        public double EventsPerSecond => _Fps;
+
+        public TimeSpan Elapsed { get; private set; }
+
+        public void Reset()
+        {
+            Watch.Restart();
+        }
+
+        public void Tick()
+        {
+            Watch.Stop();
+            Elapsed = Watch.Elapsed;
+            FrameCount++;
+            DeltaTime += Watch.ElapsedMilliseconds / 1000.0;
+            if (DeltaTime > 1.0 / UpdateRate)
+            {
+                _Fps = FrameCount / DeltaTime;
+                FrameCount = 0;
+                DeltaTime -= 1.0 / UpdateRate;
+            }
+            Watch.Restart();
+        }
     }
 
 }

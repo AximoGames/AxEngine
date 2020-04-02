@@ -41,9 +41,9 @@ namespace Aximo.Engine
             if ((DateTime.UtcNow - LastStatUpdate).TotalSeconds > 1)
             {
                 LastStatUpdate = DateTime.UtcNow;
-                Image.Mutate(ctx => ctx.Fill(Color.Transparent));
-                var txt = "FPS: " + Math.Round(RenderApplication.Current.RenderFrequency).ToString();
-                txt += "\nUPS: " + Math.Round(RenderApplication.Current.UpdateFrequency).ToString();
+                Image.Mutate(ctx => ctx.Fill(Color.Green));
+                var txt = "FPS: " + Math.Round(RenderApplication.Current.RenderCounter.EventsPerSecond).ToString();
+                txt += "\nUPS: " + Math.Round(RenderApplication.Current.UpdateCounter.EventsPerSecond).ToString();
                 Image.Mutate(ctx => ctx.DrawText(txt, DefaultFont, Color.White, new PointF(5, 5)));
                 UpdateTexture();
             }

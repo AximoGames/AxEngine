@@ -8,6 +8,7 @@
     <StartupObject />
     <NoWarn>CS0162</NoWarn>
     <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
+    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Experiment\**" />
@@ -20,8 +21,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="OpenTK.NetStandard" Version="1.0.5.12" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
@@ -30,6 +31,29 @@
     <ProjectReference Include="..\AxEngine\AxEngine.csproj" />
     <ProjectReference Include="..\AxRender\AxRender.csproj" />
     <ProjectReference Include="..\AxCommon\AxCommon.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="OpenToolkit.Core">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Graphics">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.GraphicsLibraryFramework">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.GraphicsLibraryFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Input">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Mathematics">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Windowing.Common">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Windowing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Windowing.Desktop">
+      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Windowing.Desktop.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
 </Project>

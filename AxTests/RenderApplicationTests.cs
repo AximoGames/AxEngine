@@ -11,6 +11,8 @@ using System.Threading;
 using Aximo.Engine;
 using Aximo.Render;
 using OpenToolkit;
+using OpenToolkit.Mathematics;
+using OpenToolkit.Windowing.Common;
 using Xunit;
 
 namespace Aximo.AxTests
