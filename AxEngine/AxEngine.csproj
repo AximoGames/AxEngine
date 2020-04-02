@@ -10,11 +10,6 @@
     <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.ServiceModel">
-      <Name>System.ServiceModel</Name>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="AdvancedDLSupport" Version="3.2.0" />
     <PackageReference Include="GtkSharp" Version="3.22.25.74" />
     <PackageReference Include="NetCoreAudio" Version="1.5.0" />

@@ -70,7 +70,10 @@ namespace Aximo.AxDemo
                 WindowTitle = "AxEngineDemo",
                 WindowSize = new Vector2i(800, 600),
                 WindowBorder = WindowBorder.Fixed,
-            });
+                //RenderFrequency = 490,
+                //UpdateFrequency = 490,
+                //VSync = VSyncMode.Off,
+            }); ; ;
             demo.Run();
             Environment.Exit(0);
         }

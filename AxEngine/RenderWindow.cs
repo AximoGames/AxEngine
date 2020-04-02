@@ -24,11 +24,14 @@ namespace Aximo.Engine
         //private float Pitch = -0.3f;
         //private float Facing = (float)Math.PI / 2 + 0.15f;
 
-        public RenderWindow(Vector2i windowSize, string title, bool isMultiThreaded = false)
+        private RenderApplicationStartup _startup;
+
+        public RenderWindow(RenderApplicationStartup startup)
         //: base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 3, GraphicsContextFlags.Default, GraphicsContext.CurrentContext, isSingleThead) { }
-        : base(new GameWindowSettings { IsMultiThreaded = isMultiThreaded, UpdateFrequency = 60, RenderFrequency = 60 }, new NativeWindowSettings { Size = windowSize })
+        : base(new GameWindowSettings { IsMultiThreaded = startup.IsMultiThreaded, UpdateFrequency = startup.UpdateFrequency, RenderFrequency = startup.RenderFrequency }, new NativeWindowSettings { Size = startup.WindowSize })
         {
-            VSync = VSyncMode.On;
+            _startup = startup;
+            VSync = _startup.VSync;
         }
 
         protected override void OnLoad()
@@ -40,13 +43,13 @@ namespace Aximo.Engine
         {
             if (IsFocused)
             {
-                RenderFrequency = 60.0;
-                UpdateFrequency = 60.0;
+                RenderFrequency = _startup.RenderFrequency;
+                UpdateFrequency = _startup.UpdateFrequency;
             }
             else
             {
-                RenderFrequency = 30.0;
-                UpdateFrequency = 30.0;
+                RenderFrequency = _startup.IdleRenderFrequency;
+                UpdateFrequency = _startup.IdleUpdateFrequency;
             }
         }
 

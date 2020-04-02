@@ -10,7 +10,6 @@ using System.Threading;
 using Aximo.Render;
 using OpenToolkit;
 using OpenToolkit.GraphicsLibraryFramework;
-//using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Input;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
@@ -50,17 +49,14 @@ namespace Aximo.Engine
 
         public void Run()
         {
-            Thread.CurrentThread.Name = "Update Thread";
+            Thread.CurrentThread.Name = _startup.IsMultiThreaded ? "Update Thread" : "Update+Render Thread";
             DebugHelper.LogThreadInfo(Thread.CurrentThread.Name);
             UpdateThread = Thread.CurrentThread;
             Current = this;
 
-            GLFW.Init();
-            var s = GLFW.GetVersionString();
-
             Init();
             AfterApplicationInitialized?.Invoke();
-            window.Run(); // TODO: MIG
+            window.Run();
             Console.WriteLine("Exited Run()");
             WindowExited = true;
         }
@@ -73,9 +69,25 @@ namespace Aximo.Engine
         private Thread UpdateThread;
         private Thread RenderThread;
 
+        private void InitGlfw()
+        {
+            var glfwLibFileName = Environment.OSVersion.Platform == PlatformID.Win32NT ? "glfw3-x64.dll" : "libglfw.so.3.3";
+            var glfwLibFileDest = Path.Combine(DirectoryHelper.BinDir, glfwLibFileName);
+            if (!File.Exists(glfwLibFileDest))
+            {
+                var glfwLibFileSrc = Path.Combine(DirectoryHelper.LibsDir, glfwLibFileName);
+                File.Copy(glfwLibFileSrc, glfwLibFileDest);
+            }
+
+            GLFW.Init();
+            Console.WriteLine(GLFW.GetVersionString());
+        }
+
         public virtual void Init()
         {
-            window = new RenderWindow(_startup.WindowSize, _startup.WindowTitle, _startup.IsMultiThreaded)
+            InitGlfw();
+
+            window = new RenderWindow(_startup)
             {
                 WindowBorder = _startup.WindowBorder,
                 Location = new Vector2i((1920 / 2) + 10, 10),
@@ -106,24 +118,9 @@ namespace Aximo.Engine
             };
             GameContext.Current = GameContext;
 
-            Renderer.Init(new GLFWBindingsContext());
-            //window.SwapBuffers();
-
             RenderContext.SceneOpitons = new SceneOptions
             {
             };
-
-            RenderContext.LogInfoMessage("Window.OnLoad");
-
-            InternalTextureManager.Init();
-
-            ObjectManager.PushDebugGroup("Setup", "Pipelines");
-            SetupPipelines();
-            ObjectManager.PopDebugGroup();
-            RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<DeferredRenderPipeline>();
-
-            RenderContext.LightBinding = new BindingPoint();
-            Console.WriteLine("LightBinding: " + RenderContext.LightBinding.Number);
 
             RenderContext.Camera = new PerspectiveFieldOfViewCamera(new Vector3(2f, -5f, 2f), RenderContext.ScreenSize.X / (float)RenderContext.ScreenSize.Y)
             {
@@ -131,19 +128,10 @@ namespace Aximo.Engine
                 FarPlane = 100.0f,
                 Facing = 1.88f,
             };
-            // ctx.Camera = new OrthographicCamera(new Vector3(1f, -5f, 2f))
-            // {
-            //     NearPlane = 0.01f,
-            //     FarPlane = 100.0f,
-            // };
 
-            RenderContext.AddObject(new ScreenSceneObject()
-            {
-            });
-
-            ObjectManager.PushDebugGroup("Setup", "Scene");
+            //ObjectManager.PushDebugGroup("Setup", "Scene");
             SetupScene();
-            ObjectManager.PopDebugGroup();
+            //ObjectManager.PopDebugGroup();
 
             //CursorVisible = false;
 
@@ -156,42 +144,6 @@ namespace Aximo.Engine
             };
 
             Initialized = true;
-        }
-
-        public void SetupPipelines()
-        {
-            RenderContext.AddPipeline(new DirectionalShadowRenderPipeline());
-            RenderContext.AddPipeline(new PointShadowRenderPipeline());
-            RenderContext.AddPipeline(new DeferredRenderPipeline());
-            RenderContext.AddPipeline(new ForwardRenderPipeline());
-            RenderContext.AddPipeline(new ScreenPipeline());
-
-            ObjectManager.PushDebugGroup("BeforeInit", "Pipelines");
-            foreach (var pipe in RenderContext.RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("BeforeInit", pipe);
-                pipe.BeforeInit();
-                ObjectManager.PopDebugGroup();
-            }
-            ObjectManager.PopDebugGroup();
-
-            ObjectManager.PushDebugGroup("Init", "Pipelines");
-            foreach (var pipe in RenderContext.RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("Init", pipe);
-                pipe.Init();
-                ObjectManager.PopDebugGroup();
-            }
-            ObjectManager.PopDebugGroup();
-
-            ObjectManager.PushDebugGroup("AfterInit", "Pipelines");
-            foreach (var pipe in RenderContext.RenderPipelines)
-            {
-                ObjectManager.PushDebugGroup("AfterInit", pipe);
-                pipe.AfterInit();
-                ObjectManager.PopDebugGroup();
-            }
-            ObjectManager.PopDebugGroup();
         }
 
         protected virtual void SetupScene()
@@ -247,11 +199,6 @@ namespace Aximo.Engine
                     RenderThread = currentThread;
                     RenderThread.Name = "Render Thread";
                 }
-                else
-                {
-                    currentThread.Name = "Render+Update";
-                    DebugHelper.LogThreadInfo(currentThread.Name);
-                }
             }
         }
 
@@ -260,8 +207,19 @@ namespace Aximo.Engine
         public EventCounter UpdateCounter = new EventCounter();
         public EventCounter RenderCounter = new EventCounter();
 
+        private bool RenderInitialized = false;
+
         private void OnRenderFrameInternal(FrameEventArgs e)
         {
+
+            if (!RenderInitialized)
+            {
+                //window.MakeCurrent();
+                Renderer.Init(new GLFWBindingsContext());
+                //window.SwapBuffers();
+                RenderInitialized = true;
+            }
+
             if (!RenderingEnabled || UpdateFrameNumber == 0)
                 return;
 
@@ -762,47 +720,6 @@ namespace Aximo.Engine
             window.Close();
         }
 
-    }
-
-    public class RenderApplicationStartup
-    {
-        public Vector2i WindowSize { get; set; }
-        public string WindowTitle { get; set; }
-        public WindowBorder WindowBorder { get; set; } = WindowBorder.Resizable;
-        public bool IsMultiThreaded = true;
-    }
-
-    public class EventCounter
-    {
-        private Stopwatch Watch = new Stopwatch();
-        private double FrameCount = 0;
-        private double DeltaTime = 0.0;
-        private double UpdateRate = 4.0;  // 4 updates per sec.        
-
-        private double _Fps = 0.0;
-        public double EventsPerSecond => _Fps;
-
-        public TimeSpan Elapsed { get; private set; }
-
-        public void Reset()
-        {
-            Watch.Restart();
-        }
-
-        public void Tick()
-        {
-            Watch.Stop();
-            Elapsed = Watch.Elapsed;
-            FrameCount++;
-            DeltaTime += Watch.ElapsedMilliseconds / 1000.0;
-            if (DeltaTime > 1.0 / UpdateRate)
-            {
-                _Fps = FrameCount / DeltaTime;
-                FrameCount = 0;
-                DeltaTime -= 1.0 / UpdateRate;
-            }
-            Watch.Restart();
-        }
     }
 
 }

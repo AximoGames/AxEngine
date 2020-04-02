@@ -9,14 +9,37 @@ namespace Aximo
 {
     public static class DirectoryHelper
     {
+
+        private static string _BinDir;
+        public static string BinDir
+        {
+            get
+            {
+                if (_BinDir == null)
+                    _BinDir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName;
+                return _BinDir;
+            }
+        }
+
         private static string _AppRootDir;
         public static string AppRootDir
         {
             get
             {
                 if (_AppRootDir == null)
-                    _AppRootDir = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..")).FullName;
+                    _AppRootDir = new DirectoryInfo(Path.Combine(BinDir, "..", "..", "..", "..")).FullName;
                 return _AppRootDir;
+            }
+        }
+
+        private static string _LibsDir;
+        public static string LibsDir
+        {
+            get
+            {
+                if (_LibsDir == null)
+                    _LibsDir = new DirectoryInfo(Path.Combine(AppRootDir, "..", "libs", "OpenToolkit")).FullName;
+                return _LibsDir;
             }
         }
 

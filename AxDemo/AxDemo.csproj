@@ -15,11 +15,6 @@
     <None Remove="Experiment\**" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.ServiceModel">
-      <Name>System.ServiceModel</Name>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="GtkSharp" Version="3.22.25.74" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>

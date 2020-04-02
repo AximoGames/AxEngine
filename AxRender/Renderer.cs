@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -63,10 +63,63 @@ namespace Aximo.Render
             GL.Enable(EnableCap.CullFace);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            InternalTextureManager.Init();
+
+            ObjectManager.PushDebugGroup("Setup", "Pipelines");
+            SetupPipelines();
+            ObjectManager.PopDebugGroup();
+            RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<DeferredRenderPipeline>();
+
+            RenderContext.LightBinding = new BindingPoint();
+            Console.WriteLine("LightBinding: " + RenderContext.LightBinding.Number);
+
+            // ctx.Camera = new OrthographicCamera(new Vector3(1f, -5f, 2f))
+            // {
+            //     NearPlane = 0.01f,
+            //     FarPlane = 100.0f,
+            // };
+
+            RenderContext.AddObject(new ScreenSceneObject()
+            {
+            });
+
         }
 
         public void SetupPipelines()
         {
+            RenderContext.AddPipeline(new DirectionalShadowRenderPipeline());
+            RenderContext.AddPipeline(new PointShadowRenderPipeline());
+            RenderContext.AddPipeline(new DeferredRenderPipeline());
+            RenderContext.AddPipeline(new ForwardRenderPipeline());
+            RenderContext.AddPipeline(new ScreenPipeline());
+
+            ObjectManager.PushDebugGroup("BeforeInit", "Pipelines");
+            foreach (var pipe in RenderContext.RenderPipelines)
+            {
+                ObjectManager.PushDebugGroup("BeforeInit", pipe);
+                pipe.BeforeInit();
+                ObjectManager.PopDebugGroup();
+            }
+            ObjectManager.PopDebugGroup();
+
+            ObjectManager.PushDebugGroup("Init", "Pipelines");
+            foreach (var pipe in RenderContext.RenderPipelines)
+            {
+                ObjectManager.PushDebugGroup("Init", pipe);
+                pipe.Init();
+                ObjectManager.PopDebugGroup();
+            }
+            ObjectManager.PopDebugGroup();
+
+            ObjectManager.PushDebugGroup("AfterInit", "Pipelines");
+            foreach (var pipe in RenderContext.RenderPipelines)
+            {
+                ObjectManager.PushDebugGroup("AfterInit", pipe);
+                pipe.AfterInit();
+                ObjectManager.PopDebugGroup();
+            }
+            ObjectManager.PopDebugGroup();
         }
 
         public void OnScreenResize(Vector2i size)
