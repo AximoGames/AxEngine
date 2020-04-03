@@ -11,7 +11,6 @@ using System.Threading;
 using Aximo.Engine;
 using Aximo.Render;
 using OpenToolkit;
-using OpenToolkit.GraphicsLibraryFramework;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using Xunit;
@@ -21,34 +20,54 @@ namespace Aximo.AxTests
 
     public class RenderApplicationTests : RenderApplication
     {
-        protected Thread UpdaterThread;
+
+        // We need to ensure, that every unit test uses the same UI Thread,
+        // otherwise GLFW will fail.
+        protected static Thread UpdaterThread;
+
+        protected static RenderApplicationTests CurrentTestApp;
+
+        private static AutoResetEvent UpdaterThreadNextTaskWaiter;
+        protected static void UpdaterThreadMain()
+        {
+            while (true)
+            {
+                UpdaterThreadNextTaskWaiter.WaitOne();
+                try
+                {
+                    CurrentTestApp.Run();
+                }
+                catch (Exception ex)
+                {
+                    if (!CurrentTestApp.Exiting)
+                        Console.WriteLine(ex);
+                }
+            }
+        }
+
         private AutoResetEvent SetupWaiter;
         public RenderApplicationTests() : base(new RenderApplicationStartup
         {
             WindowTitle = "AxTests",
             WindowSize = new Vector2i(160, 120),
             WindowBorder = WindowBorder.Fixed,
+            HideTitleBar = true,
         })
         {
             DebugHelper.LogThreadInfo("UnitTestThread");
             SetupWaiter = new AutoResetEvent(false);
+            CurrentTestApp = this;
             AfterApplicationInitialized += () =>
             {
                 SetupWaiter.Set();
             };
-            UpdaterThread = new Thread(() =>
+            if (UpdaterThread == null)
             {
-                try
-                {
-                    Run();
-                }
-                catch (Exception ex)
-                {
-                    if (!Exiting)
-                        throw;
-                }
-            });
-            UpdaterThread.Start();
+                UpdaterThreadNextTaskWaiter = new AutoResetEvent(false);
+                UpdaterThread = new Thread(UpdaterThreadMain);
+                UpdaterThread.Start();
+            }
+            UpdaterThreadNextTaskWaiter.Set();
             SetupWaiter.WaitOne();
             //SetupWaiter.WaitOne(4000);
             SetupWaiter.Dispose();
@@ -177,7 +196,7 @@ namespace Aximo.AxTests
             var maxDiffAllowed = 1000;
 
             var diff = CompareImage(bmpCurrent, bmpOriginal, maxDiffAllowed);
-            if (diff > maxDiffAllowed)
+            if (diff > maxDiffAllowed || diff == -1)
             {
                 Directory.CreateDirectory(DiffsDir);
                 bmpCurrent.Save(currentFile);
