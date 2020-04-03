@@ -51,7 +51,8 @@ namespace Aximo.Engine
 
         public void Run()
         {
-            Thread.CurrentThread.Name = _startup.IsMultiThreaded ? "Update Thread" : "Update+Render Thread";
+            if (Thread.CurrentThread.Name == null)
+                Thread.CurrentThread.Name = _startup.IsMultiThreaded ? "Update Thread" : "Update+Render Thread";
             DebugHelper.LogThreadInfo(Thread.CurrentThread.Name);
             UpdateThread = Thread.CurrentThread;
             Current = this;

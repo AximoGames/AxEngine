@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Runtime.InteropServices;
 using OpenToolkit;
 using OpenToolkit.Graphics;
 using OpenToolkit.Input;
@@ -27,11 +28,18 @@ namespace Aximo.Engine
         private RenderApplicationStartup _startup;
 
         public RenderWindow(RenderApplicationStartup startup)
-        //: base(width, height, GraphicsMode.Default, title, GameWindowFlags.Default, DisplayDevice.Default, 4, 3, GraphicsContextFlags.Default, GraphicsContext.CurrentContext, isSingleThead) { }
         : base(new GameWindowSettings { IsMultiThreaded = startup.IsMultiThreaded, UpdateFrequency = startup.UpdateFrequency, RenderFrequency = startup.RenderFrequency }, new NativeWindowSettings { Size = startup.WindowSize })
         {
             _startup = startup;
             VSync = _startup.VSync;
+
+            if (_startup.HideTitleBar && Environment.OSVersion.Platform == PlatformID.Win32NT)
+                Win32Native.HideTitleBar();
+
+            Size = _startup.WindowSize;
+            var diff = Size - _startup.WindowSize;
+            if (diff != Vector2i.Zero)
+                Size = _startup.WindowSize - diff;
         }
 
         protected override void OnLoad()

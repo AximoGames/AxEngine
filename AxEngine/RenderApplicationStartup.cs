@@ -30,6 +30,7 @@ namespace Aximo.Engine
         public int IdleRenderFrequency { get; set; } = 30;
         public bool IsMultiThreaded { get; set; } = true;
         public VSyncMode VSync { get; set; } = VSyncMode.Adaptive;
+        public bool HideTitleBar { get; set; } = false;
 
         public RenderApplicationStartup()
         {
