@@ -171,6 +171,7 @@ namespace Aximo.AxTests
         protected void RenderAndCompare(string testName)
         {
             RenderSingleFrameSync();
+            ScreenshotBuffer.BufferData.ConvertBgraToRgba();
             var bmpCurrent = ScreenshotBuffer.BufferData.CreateBitmap();
 
             Directory.CreateDirectory(TestOutputDir);
@@ -201,7 +202,7 @@ namespace Aximo.AxTests
                 Directory.CreateDirectory(DiffsDir);
                 bmpCurrent.Save(currentFile);
                 Console.WriteLine($"MaxDifference: {diff} MaxDiffAllowed: {maxDiffAllowed}");
-                File.Copy(originalFile, originalCopyFile);
+                File.Copy(originalFile, originalCopyFile, true);
             }
             else
             {

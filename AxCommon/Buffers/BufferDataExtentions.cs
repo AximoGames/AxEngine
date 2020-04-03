@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using OpenToolkit;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Aximo
 {
@@ -82,6 +84,16 @@ namespace Aximo
             var bmp = new System.Drawing.Bitmap(source.Width, source.Height);
             CopyTo(source, bmp);
             return bmp;
+        }
+
+        public static void ConvertBgraToRgba<T>(this BufferData2D<T> source)
+            where T : struct
+        {
+            var intArray = source.Span;
+            var bgrArray = MemoryMarshal.Cast<T, Bgra32>(intArray);
+            var rgbArray = MemoryMarshal.Cast<T, Rgba32>(intArray);
+            for (var i = 0; i < source.Length; i++)
+                rgbArray[i].FromBgra32(bgrArray[i]);
         }
 
     }

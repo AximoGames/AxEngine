@@ -47,13 +47,42 @@ namespace Aximo
             SetData(data);
         }
 
-        public void SetData(T[,] data)
+        public ref T FirtElement
+        {
+            get
+            {
+                return ref _Data[0];
+            }
+        }
+
+        private Memory<T> _Memory;
+        public Memory<T> Memory => _Memory;
+
+        public Span<T> Span => new Span<T>(_Data);
+
+        public void SetData(T[] data)
+        {
+            SetData(data, Width, Height);
+        }
+
+        public void SetData(T[] data, int width, int height)
         {
             _Data = data;
+            _Length = width * height;
+            _SizeX = width;
+            _SizeY = height;
+            _ElementSize = Marshal.SizeOf<T>();
+            _Memory = _Data.AsMemory();
+        }
+
+        public void SetData(T[,] data)
+        {
+            _Data = data.Cast<T>().ToArray();
             _Length = data.Length;
             _SizeX = data.GetUpperBound(0) + 1;
             _SizeY = data.GetUpperBound(1) + 1;
             _ElementSize = Marshal.SizeOf<T>();
+            _Memory = _Data.AsMemory();
         }
 
         public void Resize(int width, int height)
@@ -61,12 +90,12 @@ namespace Aximo
             SetData(new T[width, height]);
         }
 
-        private T[,] _Data;
+        private T[] _Data;
 
         public T this[int x, int y]
         {
-            get { return _Data[x, y]; }
-            set { _Data[x, y] = value; }
+            get { return _Data[(y * Width) + y]; }
+            set { _Data[(y * Width) + y] = value; }
         }
 
         private int _Length;
