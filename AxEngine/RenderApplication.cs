@@ -32,6 +32,8 @@ namespace Aximo.Engine
 
         private RenderApplicationStartup _startup;
 
+        public bool IsMultiThreaded => _startup.IsMultiThreaded;
+
         private float[] MouseSpeed = new float[3];
         private Vector2 MouseDelta;
         private float UpDownDelta;
@@ -610,13 +612,13 @@ namespace Aximo.Engine
         public virtual void Dispose()
         {
             SignalShutdown();
-            window.Close();
+            window?.Close();
 
             Thread.Sleep(200);
 
-            window.Dispose();
+            window?.Dispose();
             window = null;
-            ShaderWatcher.Dispose();
+            ShaderWatcher?.Dispose();
             ShaderWatcher = null;
         }
 

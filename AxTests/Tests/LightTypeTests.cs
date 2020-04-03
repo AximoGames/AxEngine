@@ -124,7 +124,7 @@ namespace Aximo.AxTests
 
             public override string ToStringWithoutComparison()
             {
-                return $"{DiffuseSource}Ambient{Ambient.ToString("F1")}{LightType}";
+                return $"{DiffuseSource}Ambient{Ambient.ToString("F1", SharedLib.LocaleInvariant)}{LightType}";
             }
         }
 

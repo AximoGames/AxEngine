@@ -11,6 +11,7 @@ using System.Threading;
 using Aximo.Engine;
 using Aximo.Render;
 using OpenToolkit;
+using OpenToolkit.GraphicsLibraryFramework;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using Xunit;
@@ -31,7 +32,10 @@ namespace Aximo.AxTests
         {
             DebugHelper.LogThreadInfo("UnitTestThread");
             SetupWaiter = new AutoResetEvent(false);
-            AfterApplicationInitialized += () => SetupWaiter.Set();
+            AfterApplicationInitialized += () =>
+            {
+                SetupWaiter.Set();
+            };
             UpdaterThread = new Thread(() =>
             {
                 try
@@ -45,7 +49,8 @@ namespace Aximo.AxTests
                 }
             });
             UpdaterThread.Start();
-            SetupWaiter.WaitOne(4000);
+            SetupWaiter.WaitOne();
+            //SetupWaiter.WaitOne(4000);
             SetupWaiter.Dispose();
             SetupWaiter = null;
             Console.WriteLine("Ready for tests");
@@ -64,20 +69,45 @@ namespace Aximo.AxTests
             if (Exiting)
                 return;
 
-            if (UpdateFrameNumber == 0)
-                UpdateWaiter.WaitOne();
+            if (IsMultiThreaded)
+            {
+                if (UpdateFrameNumber == 0)
+                    UpdateWaiter.WaitOne();
+                else
+                    WaitHandle.SignalAndWait(RenderWaiter, UpdateWaiter);
+            }
             else
-                WaitHandle.SignalAndWait(RenderWaiter, UpdateWaiter);
+            {
+                if (WaitForRenderer)
+                    return;
+
+                if (UpdateFrameNumber == 0)
+                {
+                    UpdateWaiter.WaitOne();
+                }
+                else
+                {
+                    WaitHandle.SignalAndWait(TestWaiter, UpdateWaiter);
+                }
+            }
         }
+
+        private bool WaitForRenderer = false;
 
         protected override void BeforeRenderFrame()
         {
+            WaitForRenderer = false;
+
             if (Exiting)
                 return;
-            if (RenderFrameNumber == 0)
-                RenderWaiter.WaitOne();
-            else
-                WaitHandle.SignalAndWait(TestWaiter, RenderWaiter);
+
+            if (IsMultiThreaded)
+            {
+                if (RenderFrameNumber == 0)
+                    RenderWaiter.WaitOne();
+                else
+                    WaitHandle.SignalAndWait(TestWaiter, RenderWaiter);
+            }
         }
 
         public bool RendererEnabled;
@@ -88,6 +118,7 @@ namespace Aximo.AxTests
         public void RenderSingleFrameSync()
         {
             Console.WriteLine(" --- Render Single Frame ---");
+            WaitForRenderer = true;
             WaitHandle.SignalAndWait(UpdateWaiter, TestWaiter);
         }
 
