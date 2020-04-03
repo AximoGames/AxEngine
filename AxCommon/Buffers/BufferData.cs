@@ -37,6 +37,8 @@ namespace Aximo
 
         public int Bytes => Length * ElementSize;
 
+        public abstract BufferData Clone();
+
     }
 
 }

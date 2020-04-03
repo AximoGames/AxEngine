@@ -64,6 +64,12 @@ namespace Aximo
 
         private int _ElementSize;
         public override int ElementSize => _ElementSize;
+
+        public override BufferData Clone()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
 }

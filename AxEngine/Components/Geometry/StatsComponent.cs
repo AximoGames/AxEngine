@@ -9,12 +9,12 @@ using System.Linq;
 using System.Threading;
 using Aximo.Render;
 using OpenToolkit;
+using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
 using SixLabors.Shapes;
-using SixLabors.Fonts;
 using Color = SixLabors.ImageSharp.Color;
 using PointF = SixLabors.Primitives.PointF;
 

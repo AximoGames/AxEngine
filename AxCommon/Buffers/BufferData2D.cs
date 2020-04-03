@@ -22,8 +22,7 @@ namespace Aximo
         public int Width => SizeX;
         public int Height => SizeY;
 
-        // public abstract Bitmap CreateBitmap();
-        // public abstract void SetData(Bitmap bmp);
+        public GamePixelFormat PixelFormat { get; set; }
     }
 
     public class BufferData2D<T> : BufferData2D, IEnumerable<T>
@@ -40,6 +39,11 @@ namespace Aximo
         public BufferData2D(int width, int height)
         {
             Resize(width, height);
+        }
+
+        public BufferData2D(T[] data, int width, int height)
+        {
+            SetData(data, width, height);
         }
 
         public BufferData2D(T[,] data)
@@ -124,6 +128,15 @@ namespace Aximo
 
         private int _ElementSize;
         public override int ElementSize => _ElementSize;
+
+        public override BufferData Clone()
+        {
+            var copy = (T[])_Data.Clone();
+            return new BufferData2D<T>(copy, Width, Height)
+            {
+                PixelFormat = PixelFormat,
+            };
+        }
     }
 
 }

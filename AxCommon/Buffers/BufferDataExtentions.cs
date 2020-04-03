@@ -65,11 +65,15 @@ namespace Aximo
 
         public static unsafe void CopyTo(this BufferData2D<int> source, System.Drawing.Bitmap bmp)
         {
-            var lockedBits = bmp.LockBits(new System.Drawing.Rectangle(0, 0, source.SizeX, source.SizeY), ImageLockMode.ReadOnly, bmp.PixelFormat);
-            var destHandle = source.CreateHandle();
+            var copy = (BufferData2D<int>)source.Clone();
+            if (copy.PixelFormat == GamePixelFormat.Bgra32)
+                copy.ConvertBgraToRgba();
+
+            var lockedBits = bmp.LockBits(new System.Drawing.Rectangle(0, 0, copy.SizeX, copy.SizeY), ImageLockMode.ReadOnly, bmp.PixelFormat);
+            var destHandle = copy.CreateHandle();
             try
             {
-                Buffer.MemoryCopy((void*)destHandle.AddrOfPinnedObject(), (void*)lockedBits.Scan0, source.Bytes, source.Bytes);
+                Buffer.MemoryCopy((void*)destHandle.AddrOfPinnedObject(), (void*)lockedBits.Scan0, copy.Bytes, copy.Bytes);
             }
             finally
             {

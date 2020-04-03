@@ -8,6 +8,7 @@ using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
+
     public class ScreenshotObject : GameObjectBase
     {
 
@@ -30,6 +31,7 @@ namespace Aximo.Render
 
             var fb = Context.GetPipeline<ForwardRenderPipeline>().FrameBuffer;
             var txt = fb.DestinationTextures[0];
+            Data.PixelFormat = txt.Format.ToGamePixelFormat();
             txt.GetTexture(Data);
 
             // var bmpt = Data.CreateBitmap();

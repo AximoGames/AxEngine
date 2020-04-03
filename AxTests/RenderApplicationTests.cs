@@ -171,7 +171,6 @@ namespace Aximo.AxTests
         protected void RenderAndCompare(string testName)
         {
             RenderSingleFrameSync();
-            ScreenshotBuffer.BufferData.ConvertBgraToRgba();
             var bmpCurrent = ScreenshotBuffer.BufferData.CreateBitmap();
 
             Directory.CreateDirectory(TestOutputDir);

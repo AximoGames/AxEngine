@@ -31,6 +31,7 @@ namespace Aximo
             _Data = data;
             _Length = data.Length;
             _ElementSize = Marshal.SizeOf<T>();
+            _Memory = _Data.AsMemory();
         }
 
         public override GCHandle CreateHandle()
@@ -38,8 +39,12 @@ namespace Aximo
             return GCHandle.Alloc(_Data, GCHandleType.Pinned);
         }
 
-        private T[] _Data;
+        private Memory<T> _Memory;
+        public Memory<T> Memory => _Memory;
 
+        public Span<T> Span => new Span<T>(_Data);
+
+        private T[] _Data;
         public T this[int index]
         {
             get { return _Data[index]; }
@@ -53,6 +58,12 @@ namespace Aximo
 
         private int _ElementSize;
         public override int ElementSize => _ElementSize;
+
+        public override BufferData Clone()
+        {
+            var copy = (T[])_Data.Clone();
+            return new BufferData1D<T>(copy);
+        }
     }
 
 }

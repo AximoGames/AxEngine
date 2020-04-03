@@ -105,6 +105,9 @@ namespace Aximo.Render
 
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, txt.Handle, 0);
 
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                txt.SetPixelFormat(PixelFormat.Bgra);
+
             Check();
         }
 

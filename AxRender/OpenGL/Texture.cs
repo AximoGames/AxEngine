@@ -4,14 +4,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
+using OpenToolkit.Mathematics;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Runtime.InteropServices;
 using Image = SixLabors.ImageSharp.Image;
-using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
@@ -24,8 +24,13 @@ namespace Aximo.Render
         private int Level;
         private PixelInternalFormat InternalFormat;
         private int Border;
-        private PixelFormat Format;
+        public PixelFormat Format { get; private set; }
         private PixelType Type;
+
+        public void SetPixelFormat(PixelFormat pixelFormat)
+        {
+            Format = pixelFormat;
+        }
 
         public Texture(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
         {

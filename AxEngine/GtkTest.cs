@@ -1,6 +1,6 @@
 using System.Threading;
-using Gtk;
 using Gdk;
+using Gtk;
 
 namespace Aximo.Engine
 {

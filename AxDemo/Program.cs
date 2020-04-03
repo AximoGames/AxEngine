@@ -4,11 +4,10 @@
 using System;
 using System.Threading;
 using Aximo.Engine;
+using Gtk;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
-
-using Gtk;
 
 namespace Aximo.AxDemo
 {
