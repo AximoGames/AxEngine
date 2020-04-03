@@ -214,7 +214,8 @@ namespace Aximo.Engine
 
             if (!RenderInitialized)
             {
-                //window.MakeCurrent();
+                if (Environment.OSVersion.Platform != PlatformID.Win32NT) // Crash on mswin!
+                    window.MakeCurrent();
                 Renderer.Init(new GLFWBindingsContext());
                 //window.SwapBuffers();
                 RenderInitialized = true;
