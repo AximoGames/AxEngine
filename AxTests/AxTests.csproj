@@ -16,16 +16,15 @@
     <None Remove="Experiment\**" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.ServiceModel">
-      <Name>System.ServiceModel</Name>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AxEngine\AxEngine.csproj" />
