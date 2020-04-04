@@ -304,7 +304,7 @@ namespace Aximo.Render
             }
         }
 
-        public const bool CUBE_MAP_SHADOW_ROTATED = true;
+        private bool CUBE_MAP_SHADOW_ROTATED = true;
 
         private void AddShadowCubeMatrix(Camera camera, Vector3 direction, Vector3 up)
         {

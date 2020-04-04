@@ -26,7 +26,7 @@ namespace Aximo.Render
 
         public static MeshData Sphere(int divisions)
         {
-            var ico = new AxRender.Objects.Util.IcoSphere.IcoSphereMesh(2);
+            var ico = new Objects.Util.IcoSphere.IcoSphereMesh(2);
             return new MeshData<VertexDataPosNormalUV>(BufferData.Create(ico.Vertices), BufferData.Create(ico.Indicies));
         }
 

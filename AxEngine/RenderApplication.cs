@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -155,6 +154,8 @@ namespace Aximo.Engine
         {
         }
 
+
+
         private FileSystemWatcher ShaderWatcher;
 
         private void StartFileListener()
@@ -163,7 +164,7 @@ namespace Aximo.Engine
             ShaderWatcher.Changed += (sender, e) =>
             {
                 // Reload have to be in Main-Thread.
-                Dispatch(() => Reload());
+                DispatchUpdater(() => Reload());
             };
             ShaderWatcher.EnableRaisingEvents = true;
         }
@@ -382,7 +383,7 @@ namespace Aximo.Engine
             if (Exiting)
                 return;
 
-            ProcessTaskQueue();
+            UpdaterTasks.ProcessTasks();
 
             if (!IsFocused)
             {
@@ -530,25 +531,17 @@ namespace Aximo.Engine
             AfterUpdateFrame();
         }
 
-        private Queue<Action> TaskQueue = new Queue<Action>();
-
-        public void Dispatch(Action act)
+        private TaskQueue UpdaterTasks = new TaskQueue();
+        public void DispatchUpdater(Action task)
         {
-            lock (TaskQueue)
-                TaskQueue.Enqueue(act);
+            UpdaterTasks.Dispatch(task);
         }
 
-        private void ProcessTaskQueue()
-        {
-            while (TaskQueue.Count > 0)
-            {
-                Action act;
-                lock (TaskQueue)
-                    act = TaskQueue.Dequeue();
-
-                act?.Invoke();
-            }
-        }
+        // private TaskQueue RenderTasks;
+        // public void DispatchRender(Action task)
+        // {
+        //     RenderTasks.Dispatch(task);
+        // }
 
         private void Reload()
         {
@@ -726,7 +719,6 @@ namespace Aximo.Engine
             SignalShutdown();
             window.Close();
         }
-
     }
 
 }

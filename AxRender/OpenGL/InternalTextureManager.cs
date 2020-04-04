@@ -9,6 +9,8 @@ namespace Aximo.Render
 {
     public static class InternalTextureManager
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext(nameof(InternalTextureManager));
+
         public static Texture White { get; private set; }
         public static Texture Black { get; private set; }
         public static Texture Gray { get; private set; }
@@ -27,6 +29,25 @@ namespace Aximo.Render
         }
 
         private static Dictionary<int, WeakReference<Texture>> References = new Dictionary<int, WeakReference<Texture>>();
+
+        public static void DumpInfo(bool listItems)
+        {
+            Log.Info("Allocated Textures: {TextureCount}", InternalTextureManager.ReferencedCount());
+            if (listItems)
+            {
+                lock (References)
+                {
+                    foreach (var reference in References.Values)
+                    {
+                        Texture texture;
+                        if (reference.TryGetTarget(out texture))
+                        {
+                            Log.Info("Texture #{Handle} {Name}", texture.Handle, texture.ObjectLabel);
+                        }
+                    }
+                }
+            }
+        }
 
         public static int ReferencedCount()
         {

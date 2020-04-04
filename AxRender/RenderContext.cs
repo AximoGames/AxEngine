@@ -26,6 +26,8 @@ namespace Aximo.Render
     public class RenderContext
     {
 
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderContext>();
+
         public Matrix4 WorldPositionMatrix = Matrix4.Identity;
 
         public List<IRenderPipeline> RenderPipelines = new List<IRenderPipeline>();
@@ -190,6 +192,31 @@ namespace Aximo.Render
         {
             LightBinding?.Free();
             LightBinding = null;
+        }
+
+        public void DumpInfo(bool list)
+        {
+            Log.Info("Objects: {ObjectCount}", AllObjects.Count);
+            if (list)
+                lock (AllObjects)
+                    foreach (var obj in AllObjects)
+                        Log.Info("{Id} {Type} {Name}", obj.Id, obj.GetType().Name, obj.Name);
+
+            InternalTextureManager.DumpInfo(list);
+        }
+
+        public void DeleteOrphaned()
+        {
+            for (var i = AllObjects.Count - 1; i >= 0; i--)
+            {
+                var obj = AllObjects[i];
+                if (obj.Orphaned)
+                {
+                    Log.Verbose("Delete Orhpaned Object {Id} {Type} {name}", obj.Id, obj.GetType().Name, obj.Name);
+                    obj.Free();
+                    RemoveObject(obj);
+                }
+            }
         }
 
     }

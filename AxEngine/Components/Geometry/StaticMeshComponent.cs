@@ -17,6 +17,8 @@ namespace Aximo.Engine
     public class StaticMeshComponent : MeshComponent
     {
 
+        private Serilog.ILogger Log = Aximo.Log.ForContext<StaticMeshComponent>();
+
         public StaticMeshComponent()
         {
 
@@ -62,8 +64,9 @@ namespace Aximo.Engine
             if (RenderableObject == null)
                 return;
 
-            RenderContext.Current.RemoveObject(RenderableObject);
-            RenderableObject.Free();
+            Log.Verbose("Set RenderableObject.Orphaned");
+
+            RenderableObject.Orphaned = true;
             RenderableObject = null;
 
             base.DoDeallocation();

@@ -95,5 +95,16 @@ namespace Aximo
         }
 
         #endregion
+
+        public static void Error(this ILogger logger, Exception exception)
+        {
+            logger.Error(exception.ToString());
+        }
+
+        public static ILogger ForContext(this ILogger logger, string sourceContext)
+        {
+            return logger.ForContext("SourceContext", sourceContext);
+        }
+
     }
 }

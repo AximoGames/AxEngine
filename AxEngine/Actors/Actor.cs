@@ -16,6 +16,7 @@ namespace Aximo.Engine
     public class Actor
     {
         public int ActorId { get; private set; }
+        public bool IsAttached { get; internal set; }
 
         public string Name { get; set; }
 
@@ -41,6 +42,12 @@ namespace Aximo.Engine
         public Actor(ActorComponent component) : this()
         {
             AddComponent(component);
+        }
+
+        public virtual void Visit(Action<SceneComponent> action)
+        {
+            foreach (var comp in Components)
+                comp.Visit(action);
         }
 
         private ConcurrentDictionary<string, List<ActorComponent>> ComponentNameHash = new ConcurrentDictionary<string, List<ActorComponent>>();

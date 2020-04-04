@@ -145,6 +145,7 @@ namespace Aximo.AxTests
         {
             SignalShutdown();
             Console.WriteLine("Shutting down Test");
+            ScreenshotBuffer?.Dispose();
             TestWaiter.Set();
             RenderWaiter.Set();
             UpdateWaiter.Set();

@@ -11,7 +11,7 @@ using Aximo.Render;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 
-namespace Aximo.AxRender.Objects.Util.IcoSphere
+namespace Aximo.Render.Objects.Util.IcoSphere
 {
 
     public class IcoSphereMesh

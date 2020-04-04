@@ -46,6 +46,21 @@ namespace Aximo.Engine
                 RenderContext.Current.AddObject(RenderableObject);
         }
 
+        internal override void DoDeallocation()
+        {
+            if (!HasDeallocation)
+                return;
+
+            if (RenderableObject == null)
+                return;
+
+            RenderableObject.Orphaned = true;
+            RenderableObject = null;
+
+            base.DoDeallocation();
+        }
+
+
     }
 
 }

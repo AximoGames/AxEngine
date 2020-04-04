@@ -48,6 +48,7 @@ namespace Aximo.Render
         }
 
         public RenderContext Context { get; private set; }
+        public virtual bool Orphaned { get; set; }
 
         public abstract void Init();
 

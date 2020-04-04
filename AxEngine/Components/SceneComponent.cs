@@ -123,6 +123,13 @@ namespace Aximo.Engine
             base.Deallocate();
         }
 
+        public override void Visit(Action<SceneComponent> action)
+        {
+            base.Visit(action);
+            foreach (var comp in Components)
+                comp.Visit(action);
+        }
+
         public override void Detach()
         {
             if (Parent != null)

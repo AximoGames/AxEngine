@@ -14,6 +14,7 @@ namespace Aximo.Engine
 
     public class GameContext
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<GameContext>();
 
         public static GameContext Current { get; set; }
 
@@ -47,8 +48,31 @@ namespace Aximo.Engine
 
         public void AddActor(Actor actor)
         {
+            if (actor == null)
+                return;
+
+            actor.IsAttached = true;
             Actors.Add(actor);
             RegisterActorName(actor);
+        }
+
+        public virtual void Visit(Action<SceneComponent> action)
+        {
+            foreach (var act in Actors)
+                act.Visit(action);
+        }
+
+        public void RemoveActor(Actor actor)
+        {
+            if (actor == null)
+                return;
+
+            foreach (var comp in actor.Components)
+                comp.Deallocate();
+
+            actor.IsAttached = false;
+            Actors.Remove(actor);
+            UnregisterActorName(actor);
         }
 
         internal void RegisterActorName(Actor actor)
@@ -113,6 +137,8 @@ namespace Aximo.Engine
 
             foreach (var act in Actors.ToArray())
                 act.SyncChanges();
+
+            RenderContext.DeleteOrphaned();
         }
 
         private RenderContext RenderContext => RenderContext.Current;
@@ -121,6 +147,17 @@ namespace Aximo.Engine
         {
             get => RenderContext.BackgroundColor;
             set => RenderContext.BackgroundColor = value;
+        }
+
+        public void DumpInfo(bool list)
+        {
+            Log.Info("Actors: {ActorCount}", Actors.Count);
+            if (list)
+                lock (Actors)
+                    foreach (var obj in Actors)
+                        Log.Info("{Id} {Type} {Name}", obj.ActorId, obj.GetType().Name, obj.Name);
+
+            RenderContext.DumpInfo(list);
         }
 
     }

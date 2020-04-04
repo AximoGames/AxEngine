@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Linq;
 using System.Threading;
 using Aximo.Engine;
 
@@ -79,6 +80,28 @@ namespace Aximo.Engine
                 {
                     case "q":
                         return;
+                    case "diag":
+                        GameContext.Current.DumpInfo(true);
+                        break;
+                    case "actor new":
+                        RenderApplication.Current.DispatchUpdater(() =>
+                        {
+                            GameContext.Current.AddActor(new Actor(new CubeComponent()));
+                        });
+                        break;
+                    case "act del":
+                    case "actor del":
+                        RenderApplication.Current.DispatchUpdater(() =>
+                        {
+                            GameContext.Current.RemoveActor(GameContext.Current.Actors.LastOrDefault());
+                        });
+                        break;
+                    case "map list":
+                        RenderApplication.Current.DispatchUpdater(() =>
+                        {
+                            Render.InternalTextureManager.DumpInfo(true);
+                        });
+                        break;
                     default:
                         Console.WriteLine("Unknown command");
                         break;
