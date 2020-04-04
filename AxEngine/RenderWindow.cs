@@ -16,21 +16,22 @@ namespace Aximo.Engine
     public class RenderWindow : GameWindow
     {
 
-        private RenderApplicationStartup _startup;
+        private RenderApplicationConfig Config;
 
-        public RenderWindow(RenderApplicationStartup startup)
-        : base(new GameWindowSettings { IsMultiThreaded = startup.IsMultiThreaded, UpdateFrequency = startup.UpdateFrequency, RenderFrequency = startup.RenderFrequency }, new NativeWindowSettings { Size = startup.WindowSize })
+        public RenderWindow(RenderApplicationConfig config)
+        : base(new GameWindowSettings { IsMultiThreaded = config.IsMultiThreaded, UpdateFrequency = config.UpdateFrequency, RenderFrequency = config.RenderFrequency }, new NativeWindowSettings { Size = config.WindowSize })
         {
-            _startup = startup;
-            VSync = _startup.VSync;
+            Config = config;
+            Title = Config.WindowTitle;
+            VSync = Config.VSync;
 
-            if (_startup.HideTitleBar && Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (Config.HideTitleBar && Environment.OSVersion.Platform == PlatformID.Win32NT)
                 Win32Native.HideTitleBar();
 
-            Size = _startup.WindowSize;
-            var diff = Size - _startup.WindowSize;
+            Size = Config.WindowSize;
+            var diff = Size - Config.WindowSize;
             if (diff != Vector2i.Zero)
-                Size = _startup.WindowSize - diff;
+                Size = Config.WindowSize - diff;
         }
 
         protected override void OnLoad()
@@ -42,13 +43,13 @@ namespace Aximo.Engine
         {
             if (IsFocused)
             {
-                RenderFrequency = _startup.RenderFrequency;
-                UpdateFrequency = _startup.UpdateFrequency;
+                RenderFrequency = Config.RenderFrequency;
+                UpdateFrequency = Config.UpdateFrequency;
             }
             else
             {
-                RenderFrequency = _startup.IdleRenderFrequency;
-                UpdateFrequency = _startup.IdleUpdateFrequency;
+                RenderFrequency = Config.IdleRenderFrequency;
+                UpdateFrequency = Config.IdleUpdateFrequency;
             }
         }
 

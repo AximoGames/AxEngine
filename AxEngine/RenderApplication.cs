@@ -24,11 +24,6 @@ namespace Aximo.Engine
     public class RenderApplication : IDisposable
     {
 
-        public static Startup(RenderApplicationStartup startup)
-        {
-
-        }
-
         private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderApplication>();
 
         public event AfterApplicationInitializedDelegate AfterApplicationInitialized;
@@ -37,9 +32,9 @@ namespace Aximo.Engine
 
         public Vector2i ScreenSize => window.Size;
 
-        private RenderApplicationStartup _startup;
+        private RenderApplicationConfig config;
 
-        public bool IsMultiThreaded => _startup.IsMultiThreaded;
+        public bool IsMultiThreaded => config.IsMultiThreaded;
 
         private float[] MouseSpeed = new float[3];
         private Vector2 MouseDelta;
@@ -49,9 +44,9 @@ namespace Aximo.Engine
 
         protected KeyboardState KeyboardState => window.KeyboardState;
 
-        public RenderApplication(RenderApplicationStartup startup)
+        public RenderApplication(RenderApplicationConfig startup)
         {
-            _startup = startup;
+            config = startup;
         }
 
         private GameWindow window;
@@ -59,7 +54,7 @@ namespace Aximo.Engine
         public void Run()
         {
             if (Thread.CurrentThread.Name == null)
-                Thread.CurrentThread.Name = _startup.IsMultiThreaded ? "Update Thread" : "Update+Render Thread";
+                Thread.CurrentThread.Name = config.IsMultiThreaded ? "Update Thread" : "Update+Render Thread";
             DebugHelper.LogThreadInfo(Thread.CurrentThread.Name);
             UpdateThread = Thread.CurrentThread;
             Current = this;
@@ -97,10 +92,10 @@ namespace Aximo.Engine
         {
             InitGlfw();
 
-            window = new RenderWindow(_startup)
+            window = new RenderWindow(config)
             {
-                WindowBorder = _startup.WindowBorder,
-                Location = new Vector2i((1920 / 2) + 10, 10),
+                WindowBorder = config.WindowBorder,
+                Location = new Vector2i((1920 / 2) + 10, 50),
             };
             window.RenderFrame += (e) => OnRenderFrameInternal(e);
             window.UpdateFrame += (e) => OnUpdateFrameInternal(e);
@@ -204,7 +199,7 @@ namespace Aximo.Engine
                 RenderThreadChecked = true;
 
                 var currentThread = Thread.CurrentThread;
-                if (_startup.IsMultiThreaded && currentThread != UpdateThread)
+                if (config.IsMultiThreaded && currentThread != UpdateThread)
                 {
                     RenderThread = currentThread;
                     RenderThread.Name = "Render Thread";
@@ -629,6 +624,7 @@ namespace Aximo.Engine
             window = null;
             ShaderWatcher?.Dispose();
             ShaderWatcher = null;
+            Current = null;
         }
 
         private Vector2 _CurrentMousePosition;

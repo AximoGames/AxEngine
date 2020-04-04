@@ -13,6 +13,10 @@ namespace Aximo.AxDemo
 
     public class RenderApplicationDemo : RenderApplication
     {
+        public RenderApplicationDemo(RenderApplicationConfig startup) : base(startup)
+        {
+        }
+
         protected override void SetupScene()
         {
             // GameMaterial material = new GameMaterial

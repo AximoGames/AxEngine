@@ -19,7 +19,7 @@ using OpenToolkit.Windowing.Desktop;
 namespace Aximo.Engine
 {
 
-    public class RenderApplicationStartup
+    public class RenderApplicationConfig
     {
         public Vector2i WindowSize { get; set; } = new Vector2i(600, 800);
         public string WindowTitle { get; set; } = "AxEngine";
@@ -31,8 +31,10 @@ namespace Aximo.Engine
         public bool IsMultiThreaded { get; set; } = true;
         public VSyncMode VSync { get; set; } = VSyncMode.Adaptive;
         public bool HideTitleBar { get; set; } = false;
+        public bool UseConsole { get; set; } = false;
+        public bool UseGtkUI { get; set; } = false;
 
-        public RenderApplicationStartup()
+        public RenderApplicationConfig()
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {

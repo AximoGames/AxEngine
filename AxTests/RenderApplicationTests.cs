@@ -46,7 +46,7 @@ namespace Aximo.AxTests
         }
 
         private AutoResetEvent SetupWaiter;
-        public RenderApplicationTests() : base(new RenderApplicationStartup
+        public RenderApplicationTests() : base(new RenderApplicationConfig
         {
             WindowTitle = "AxTests",
             WindowSize = new Vector2i(160, 120),
