@@ -13,9 +13,8 @@ using System.Threading;
 namespace Aximo.Engine
 {
 
-    public class Actor
+    public class Actor : EngineObject
     {
-        public int ActorId { get; private set; }
         public bool IsAttached { get; internal set; }
 
         public string Name { get; set; }
@@ -25,16 +24,8 @@ namespace Aximo.Engine
 
         public SceneComponent RootComponent { get; private set; }
 
-        private static int LastGameObjectId;
-
-        private static int GetNewGameObjectId()
-        {
-            return Interlocked.Increment(ref LastGameObjectId);
-        }
-
         public Actor()
         {
-            ActorId = GetNewGameObjectId();
             _Components = new List<ActorComponent>(); //TODO: Sync
             Components = new ReadOnlyCollection<ActorComponent>(_Components);
         }
@@ -46,6 +37,14 @@ namespace Aximo.Engine
 
         public virtual void Visit(Action<SceneComponent> action)
         {
+            foreach (var comp in Components)
+                comp.Visit(action);
+        }
+
+        public override void Visit(Action<EngineObject> action)
+        {
+            base.Visit(action); ;
+
             foreach (var comp in Components)
                 comp.Visit(action);
         }
@@ -156,6 +155,7 @@ namespace Aximo.Engine
         {
             component.SetActor(this);
             _Components.Add(component);
+            component.AddRef(this);
 
             if (component is SceneComponent)
                 RootComponent = (SceneComponent)component;
@@ -171,6 +171,7 @@ namespace Aximo.Engine
             if (RootComponent == component)
                 RootComponent = null;
 
+            component.RemoveRef(this);
             UnregisterComponentName(component);
         }
 

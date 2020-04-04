@@ -76,6 +76,7 @@ namespace Aximo.Engine
                 throw new InvalidOperationException("Can't attach this child");
 
             _Components.Add(child);
+            child.AddRef(child);
             child.Parent = this;
 
             child.SetParents();
@@ -103,6 +104,8 @@ namespace Aximo.Engine
             if (!_Components.Remove(child))
                 return;
 
+            child.RemoveRef(this);
+
             child.Parent = null;
 
             Actor?.RegisterComponentName(child);
@@ -124,6 +127,13 @@ namespace Aximo.Engine
         }
 
         public override void Visit(Action<SceneComponent> action)
+        {
+            base.Visit(action);
+            foreach (var comp in Components)
+                comp.Visit(action);
+        }
+
+        public override void Visit(Action<EngineObject> action)
         {
             base.Visit(action);
             foreach (var comp in Components)

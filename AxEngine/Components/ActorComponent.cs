@@ -10,7 +10,7 @@ using System.Threading;
 namespace Aximo.Engine
 {
 
-    public class ActorComponent : IDisposable
+    public class ActorComponent : EngineObject
     {
         public int ComponentId { get; private set; }
 
@@ -82,26 +82,14 @@ namespace Aximo.Engine
             HasChanges = true;
         }
 
-        internal virtual void Deallocate()
+        protected override void Dispose(bool disposing)
         {
-            if (HasDeallocation)
-                return;
-
-            HasDeallocation = true;
-            GameContext.Current.ComponentsForDeallocation.Add(this);
+            if (disposing)
+            {
+                Detach();
+            }
+            base.Dispose(disposing);
         }
 
-        protected bool HasDeallocation;
-
-        // Only this object, no childs
-        internal virtual void DoDeallocation()
-        {
-            HasDeallocation = false;
-        }
-
-        public virtual void Dispose()
-        {
-            Detach();
-        }
     }
 }

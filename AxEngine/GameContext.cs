@@ -12,7 +12,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Engine
 {
 
-    public class GameContext
+    public class GameContext : EngineObject
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<GameContext>();
 
@@ -52,6 +52,7 @@ namespace Aximo.Engine
                 return;
 
             actor.IsAttached = true;
+            actor.AddRef(this);
             Actors.Add(actor);
             RegisterActorName(actor);
         }
@@ -67,12 +68,11 @@ namespace Aximo.Engine
             if (actor == null)
                 return;
 
-            foreach (var comp in actor.Components)
-                comp.Deallocate();
-
             actor.IsAttached = false;
             Actors.Remove(actor);
             UnregisterActorName(actor);
+
+            actor.RemoveRef(this);
         }
 
         internal void RegisterActorName(Actor actor)
@@ -125,14 +125,30 @@ namespace Aximo.Engine
                 act.PropagateChangesDown();
         }
 
-        internal IList<ActorComponent> ComponentsForDeallocation = new List<ActorComponent>(); //TODO: Sync
+        internal IList<EngineObject> ObjectsForDeallocation = new List<EngineObject>(); //TODO: Sync
 
         public void Sync()
         {
-            foreach (var comp in ComponentsForDeallocation.ToArray())
+
+            while (ObjectsForDeallocation.Count > 0)
             {
-                comp.DoDeallocation();
-                ComponentsForDeallocation.Remove(comp);
+                foreach (var obj in ObjectsForDeallocation.ToArray())
+                {
+                    if (obj.RefCount == 0)
+                    {
+                        obj.VisitChilds(obj =>
+                        {
+                            if (obj.RefCount == 1)
+                                obj.Deallocate();
+                        });
+                    }
+                }
+
+                foreach (var obj in ObjectsForDeallocation.ToArray())
+                {
+                    obj.DoDeallocation();
+                    ObjectsForDeallocation.Remove(obj);
+                }
             }
 
             foreach (var act in Actors.ToArray())
@@ -155,7 +171,7 @@ namespace Aximo.Engine
             if (list)
                 lock (Actors)
                     foreach (var obj in Actors)
-                        Log.Info("{Id} {Type} {Name}", obj.ActorId, obj.GetType().Name, obj.Name);
+                        Log.Info("{Id} {Type} {Name}", obj.ObjectId, obj.GetType().Name, obj.Name);
 
             RenderContext.DumpInfo(list);
         }

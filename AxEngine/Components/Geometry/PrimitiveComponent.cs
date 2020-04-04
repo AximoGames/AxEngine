@@ -40,11 +40,13 @@ namespace Aximo.Engine
         public void AddMaterial(GameMaterial material, int index)
         {
             _Materials.Insert(index, material);
+            material.AddRef(this);
         }
 
         public void RemoveMaterial(GameMaterial material)
         {
             _Materials.Remove(material);
+            material.RemoveRef(this);
         }
 
         public GameMaterial Material
@@ -79,6 +81,13 @@ namespace Aximo.Engine
                 mat.SyncChanges();
 
             base.SyncChanges();
+        }
+
+        public override void Visit(Action<EngineObject> action)
+        {
+            base.Visit(action);
+            foreach (var mat in _Materials)
+                mat.Visit(action);
         }
 
     }

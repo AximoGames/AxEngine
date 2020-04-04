@@ -14,7 +14,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Engine
 {
 
-    public class GameMaterial
+    public class GameMaterial : EngineObject
     {
 
         public static GameMaterial Default => MaterialManager.DefaultMaterial;
@@ -23,8 +23,64 @@ namespace Aximo.Engine
         public int MaterialId { get; private set; }
         internal Material InternalMaterial;
 
-        public GameTexture DiffuseTexture;
-        public GameTexture SpecularTexture;
+        private List<GameTexture> Textures = new List<GameTexture>();
+
+        public override void Visit(Action<EngineObject> action)
+        {
+            base.Visit(action);
+            foreach (var txt in Textures)
+                txt.Visit(action);
+        }
+
+        public void AddTexture(GameTexture txt)
+        {
+            Textures.Add(txt);
+            txt.AddRef(this);
+        }
+
+        public void RemoveTexture(GameTexture txt)
+        {
+            Textures.Remove(txt);
+            txt.RemoveRef(txt);
+        }
+
+        private GameTexture _DiffuseTexture;
+        public GameTexture DiffuseTexture
+        {
+            get
+            {
+                return _DiffuseTexture;
+            }
+            set
+            {
+                if (_DiffuseTexture == value)
+                    return;
+                if (_DiffuseTexture != null)
+                    RemoveTexture(_DiffuseTexture);
+
+                _DiffuseTexture = value;
+                AddTexture(value);
+            }
+        }
+
+        private GameTexture _SpecularTexture;
+        public GameTexture SpecularTexture
+        {
+            get
+            {
+                return _SpecularTexture;
+            }
+            set
+            {
+                if (_SpecularTexture == value)
+                    return;
+                if (_SpecularTexture != null)
+                    RemoveTexture(_SpecularTexture);
+
+                _SpecularTexture = value;
+                AddTexture(value);
+            }
+        }
 
         // private Shader Shader;
         // private Shader DefGeometryShader;
