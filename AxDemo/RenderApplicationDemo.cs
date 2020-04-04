@@ -289,7 +289,7 @@ namespace Aximo.AxDemo
             var movingLight = GameContext.GetActor("MovingLight")?.GetComponent<LightComponent>();
             if (movingLight != null)
             {
-                LightAngle -= 0.01f;
+                LightAngle = (float)GameContext.Time.TotalSeconds;
                 var pos = new Vector3((float)(Math.Cos(LightAngle) * 2f), (float)(Math.Sin(LightAngle) * 2f), 1.5f);
 
                 movingLight.RelativeTranslation = pos;

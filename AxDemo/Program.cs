@@ -19,7 +19,7 @@ namespace Aximo.AxDemo
             {
                 WindowTitle = "AxEngineDemo",
                 WindowSize = new Vector2i(800, 600),
-                WindowBorder = WindowBorder.Fixed,
+                WindowBorder = WindowBorder.Resizable,
                 //RenderFrequency = 490,
                 //UpdateFrequency = 490,
                 //VSync = VSyncMode.Off,

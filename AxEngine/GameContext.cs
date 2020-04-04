@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Aximo.Render;
 using OpenToolkit;
@@ -174,6 +175,20 @@ namespace Aximo.Engine
                         Log.Info("{Id} {Type} {Name}", obj.ObjectId, obj.GetType().Name, obj.Name);
 
             RenderContext.DumpInfo(list);
+        }
+
+        public void Init()
+        {
+            TimeWatcher = new Stopwatch();
+            TimeWatcher.Start();
+        }
+
+        private Stopwatch TimeWatcher;
+        public TimeSpan Time { get; set; }
+
+        internal void UpdateTime()
+        {
+            Time = TimeWatcher.Elapsed;
         }
 
     }

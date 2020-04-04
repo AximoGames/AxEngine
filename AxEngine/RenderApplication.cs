@@ -104,7 +104,7 @@ namespace Aximo.Engine
             window.MouseUp += (e) => OnMouseUpInternal(e);
             window.MouseWheel += (e) => OnMouseWheelInternal(e);
             window.Unload += () => OnUnloadInternal();
-            window.Resize += (e) => OnScreenResizeInternal();
+            window.Resize += (e) => OnScreenResizeInternal(e);
 
             Renderer = new Renderer();
             Renderer.Current = Renderer;
@@ -132,6 +132,8 @@ namespace Aximo.Engine
                 FarPlane = 100.0f,
                 Facing = 1.88f,
             };
+
+            GameContext.Init();
 
             //ObjectManager.PushDebugGroup("Setup", "Scene");
             SetupScene();
@@ -249,6 +251,7 @@ namespace Aximo.Engine
                 RenderCounter.Tick();
 
                 SetRenderThread();
+                RenderTasks.ProcessTasks();
                 BeforeRenderFrame();
 
                 if (Exiting)
@@ -329,7 +332,7 @@ namespace Aximo.Engine
 
         public WindowBorder WindowBorder => window.WindowBorder;
 
-        protected void OnScreenResizeInternal()
+        protected void OnScreenResizeInternal(ResizeEventArgs e)
         {
             if (!Initialized)
                 return;
@@ -337,8 +340,12 @@ namespace Aximo.Engine
             if (WindowBorder != WindowBorder.Resizable)
                 return;
 
+            if (e.Size == RenderContext.ScreenSize)
+                return;
+
             Console.WriteLine("OnScreenResize: " + window.Size.X + "x" + window.Size.Y);
-            RenderContext.OnScreenResize();
+            RenderContext.ScreenSize = e.Size;
+            DispatchRender(() => RenderContext.OnScreenResize());
         }
 
         protected virtual void OnUpdateFrame(FrameEventArgs e) { }
@@ -359,6 +366,7 @@ namespace Aximo.Engine
                 UpdateFrameNumber++;
 
             UpdateCounter.Tick();
+            GameContext.UpdateTime();
 
             BeforeUpdateFrame();
 
@@ -537,11 +545,11 @@ namespace Aximo.Engine
             UpdaterTasks.Dispatch(task);
         }
 
-        // private TaskQueue RenderTasks;
-        // public void DispatchRender(Action task)
-        // {
-        //     RenderTasks.Dispatch(task);
-        // }
+        private TaskQueue RenderTasks = new TaskQueue();
+        public void DispatchRender(Action task)
+        {
+            RenderTasks.Dispatch(task);
+        }
 
         private void Reload()
         {
