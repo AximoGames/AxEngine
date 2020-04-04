@@ -11,8 +11,15 @@ using OpenToolkit.Windowing.Common;
 
 namespace Aximo.AxDemo
 {
+
+    public static class GameStartup
+    {
+
+    }
+
     internal class Program
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<Program>();
 
         private static Thread th;
 
@@ -20,15 +27,16 @@ namespace Aximo.AxDemo
 
         public static void Main(string[] args)
         {
+            SharedLib.EnableLogging();
             var bits = IntPtr.Size == 4 ? 32 : 64;
-            Console.WriteLine($"{bits} Bit System detected. (Pointer Size: {IntPtr.Size} Bytes)");
-            Console.WriteLine($"OS: {Environment.OSVersion}");
+            Log.Verbose($"{bits} Bit System detected. (Pointer Size: {IntPtr.Size} Bytes)");
+            Log.Verbose("OS: {OSVersion}", Environment.OSVersion);
 
             ui = new GtkUI();
             ui.Start();
 
-            UIThreadMain();
-            return;
+            //UIThreadMain();
+            //return;
 
             th = new Thread(UIThreadMain);
             th.Start();
@@ -72,7 +80,7 @@ namespace Aximo.AxDemo
                 //RenderFrequency = 490,
                 //UpdateFrequency = 490,
                 //VSync = VSyncMode.Off,
-            }); ; ;
+            });
             demo.Run();
             Environment.Exit(0);
         }
