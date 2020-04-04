@@ -95,10 +95,7 @@ namespace Aximo.Render
 
         public void InitNormal()
         {
-            var txt = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero)
-            {
-                ObjectLabel = ObjectLabel,
-            };
+            var txt = new Texture(ObjectLabel, TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             txt.SetLinearFilter();
             txt.Bind();
             DestinationTextures.Add(txt);

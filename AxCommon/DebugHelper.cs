@@ -15,13 +15,17 @@ namespace Aximo
 
     public static class DebugHelper
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext(nameof(DebugHelper));
+
         public static void LogThreadInfo(string message)
         {
             LogThreadInfo(Thread.CurrentThread, message);
         }
         public static void LogThreadInfo(Thread th, string message)
         {
-            Console.WriteLine($"#{th.ManagedThreadId} {th.Name} {message}");
+            if (message == th.Name)
+                message = "";
+            Log.Info("Thread #{ThreadId} {ThreadName} {Message}", th.ManagedThreadId, th.Name, message);
         }
     }
 

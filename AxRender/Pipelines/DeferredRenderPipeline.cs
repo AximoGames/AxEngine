@@ -27,30 +27,25 @@ namespace Aximo.Render
             var height = RenderContext.Current.ScreenSize.Y;
 
             GBuffer = new FrameBuffer(width, height);
+            GBuffer.ObjectLabel = nameof(GBuffer);
             GBuffer.InitNormal();
 
-            GBuffer.ObjectLabel = nameof(GBuffer);
-
-            GPosition = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-            GPosition.ObjectLabel = nameof(GPosition);
+            GPosition = new Texture(nameof(GPosition), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             GPosition.SetNearestFilter();
             GBuffer.DestinationTextures.Add(GPosition);
             GBuffer.BindTexture(GPosition, FramebufferAttachment.ColorAttachment0);
 
-            GNormal = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-            GNormal.ObjectLabel = nameof(GNormal);
+            GNormal = new Texture(nameof(GNormal), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             GNormal.SetNearestFilter();
             GBuffer.DestinationTextures.Add(GNormal);
             GBuffer.BindTexture(GNormal, FramebufferAttachment.ColorAttachment1);
 
-            GAlbedoSpec = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            GAlbedoSpec = new Texture(nameof(GAlbedoSpec), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             GAlbedoSpec.SetNearestFilter();
-            GAlbedoSpec.ObjectLabel = nameof(GAlbedoSpec);
             GBuffer.DestinationTextures.Add(GAlbedoSpec);
             GBuffer.BindTexture(GAlbedoSpec, FramebufferAttachment.ColorAttachment2);
 
-            GMaterial = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-            GMaterial.ObjectLabel = nameof(GMaterial);
+            GMaterial = new Texture(nameof(GMaterial), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             GMaterial.SetNearestFilter();
             GBuffer.DestinationTextures.Add(GMaterial);
             GBuffer.BindTexture(GMaterial, FramebufferAttachment.ColorAttachment3);

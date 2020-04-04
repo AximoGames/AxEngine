@@ -17,6 +17,9 @@ namespace Aximo.Render
     // A simple class meant to help create shaders.
     public class Shader : IObjectLabel
     {
+
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<Shader>();
+
         public int Handle { get; private set; }
         public string ObjectLabel { get { return Compilations.FirstOrDefault()?.ObjectLabel ?? ""; } set { } }
 
@@ -290,7 +293,7 @@ namespace Aximo.Render
             var attrHandle = GL.GetAttribLocation(Handle, attribName);
             if (attrHandle < 0)
             {
-                Console.WriteLine($"GetAttribLocation({attribName}): attrib not found");
+                Log.Warn($"GetAttribLocation({attribName}): attrib not found");
             }
             return attrHandle;
         }

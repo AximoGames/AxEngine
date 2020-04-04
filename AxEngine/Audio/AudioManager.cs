@@ -16,7 +16,7 @@ namespace Aximo.Engine
         public static AudioManager Default { get; private set; }
 
         //private SoundPlayer Player;
-        Player Player;
+        private Player Player;
 
         static AudioManager()
         {

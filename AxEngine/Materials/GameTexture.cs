@@ -15,8 +15,10 @@ using Image = SixLabors.ImageSharp.Image;
 namespace Aximo.Engine
 {
 
-    public class GameTexture
+    public class GameTexture : IDisposable
     {
+
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<GameTexture>();
 
         internal Texture InternalTexture;
 
@@ -36,7 +38,7 @@ namespace Aximo.Engine
 
         public static GameTexture GetFromFile(string sourcePath)
         {
-            Console.WriteLine($"Loading: {sourcePath}");
+            Log.Info("Loading: {SourcePath}", sourcePath);
             var imagePath = DirectoryHelper.GetAssetsPath(sourcePath);
             Image bitmap = ImageLib.Load(imagePath);
 
@@ -86,10 +88,7 @@ namespace Aximo.Engine
 
             if (InternalTexture == null)
             {
-                InternalTexture = new Texture(Bitmap)
-                {
-                    ObjectLabel = Label,
-                };
+                InternalTexture = new Texture(Bitmap, Label);
             }
             else
             {
@@ -99,6 +98,7 @@ namespace Aximo.Engine
                     InternalTexture.SetData(Bitmap);
                     if (AutoDisposeBitmap)
                     {
+                        Log.Verbose("Disposing Bitmap for {ObjectLabel}", InternalTexture.ObjectLabel);
                         Bitmap.Dispose();
                         Bitmap = null;
                     }
@@ -106,6 +106,11 @@ namespace Aximo.Engine
             }
         }
 
+        public void Dispose()
+        {
+            InternalTexture?.Dispose();
+            InternalTexture = null;
+        }
     }
 
 }

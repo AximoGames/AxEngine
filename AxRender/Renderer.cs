@@ -14,6 +14,7 @@ namespace Aximo.Render
 {
     public class Renderer
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<Renderer>();
 
         public static Renderer Current;
         public Vector2i ScreenSize;
@@ -31,18 +32,28 @@ namespace Aximo.Render
             }
         }
 
-        private DebugProc _debugProcCallback;
-        private GCHandle _debugProcCallbackHandle;
+        private static DebugProc _debugProcCallback;
+        private static GCHandle _debugProcCallbackHandle;
+        private static Serilog.ILogger OpenGlLog = Aximo.Log.ForContext("OpenGL");
         public static void DebugCallback(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
         {
             string messageString = Marshal.PtrToStringAnsi(message, length);
 
-            Console.WriteLine($"{severity} {type} | {messageString}");
+            //Console.WriteLine($"{severity} {type} | {messageString}");
 
             if (type == DebugType.DebugTypeError)
             {
-                throw new Exception(messageString);
+                OpenGlLog.Error(messageString);
+                //throw new Exception(messageString);
             }
+        }
+
+        private void EnableDebugCallback()
+        {
+            _debugProcCallback = DebugCallback;
+            _debugProcCallbackHandle = GCHandle.Alloc(_debugProcCallback);
+            GL.DebugMessageCallback(_debugProcCallback, IntPtr.Zero);
+            GL.Enable(EnableCap.DebugOutput);
         }
 
         public void Init(IBindingsContext bindingsContext)
@@ -53,9 +64,11 @@ namespace Aximo.Render
             var shadingLanguageVersion = GL.GetString(StringName.ShadingLanguageVersion);
             var renderer = GL.GetString(StringName.Renderer);
 
-            Console.WriteLine($"Vendor: {vendor}, version: {version}, shadinglangVersion: {shadingLanguageVersion}, renderer: {renderer}");
+            Log.Info($"Vendor: {vendor}, version: {version}, shadinglangVersion: {shadingLanguageVersion}, renderer: {renderer}");
 
+            EnableDebugCallback();
             //PrintExtensions();
+            CheckMemoryLeak();
 
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -72,7 +85,7 @@ namespace Aximo.Render
             RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<DeferredRenderPipeline>();
 
             RenderContext.LightBinding = new BindingPoint();
-            Console.WriteLine("LightBinding: " + RenderContext.LightBinding.Number);
+            Log.Verbose("LightBinding: {Number}", RenderContext.LightBinding.Number);
 
             // ctx.Camera = new OrthographicCamera(new Vector3(1f, -5f, 2f))
             // {
@@ -120,6 +133,12 @@ namespace Aximo.Render
                 ObjectManager.PopDebugGroup();
             }
             ObjectManager.PopDebugGroup();
+        }
+
+        private void CheckMemoryLeak()
+        {
+            if (InternalTextureManager.ReferencedCount() > 0)
+                Log.Warning("{Path}: {Value}", $"{nameof(InternalTextureManager)}.{nameof(InternalTextureManager.ReferencedCount)}", InternalTextureManager.ReferencedCount());
         }
 
         public void OnScreenResize(Vector2i size)

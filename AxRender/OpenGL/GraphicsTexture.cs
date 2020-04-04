@@ -22,7 +22,7 @@ namespace Aximo.Render
         public GraphicsTexture(int width, int height)
         {
             Image = new Image<Rgba32>(width, height);
-            Texture = new Texture(Image);
+            Texture = new Texture(Image, "GraphicsTexture");
             UpdateTexture();
         }
 

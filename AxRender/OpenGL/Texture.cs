@@ -16,8 +16,10 @@ using Image = SixLabors.ImageSharp.Image;
 namespace Aximo.Render
 {
 
-    public class Texture : IObjectLabel
+    public class Texture : IObjectLabel, IDisposable
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<Texture>();
+
         public int Handle { get; private set; }
         private TextureTarget Target = TextureTarget.Texture2D;
 
@@ -32,7 +34,22 @@ namespace Aximo.Render
             Format = pixelFormat;
         }
 
-        public Texture(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        private void AddRef()
+        {
+            // if (ObjectLabel.IsUnset())
+            //     throw new Exception("ObjectLabel not set!");
+
+            Log.Verbose("Alloc Texture #{Handle} {ObjectLabel}", Handle, ObjectLabel);
+            InternalTextureManager.AddRef(this);
+        }
+
+        private void RemoveRef()
+        {
+            InternalTextureManager.RemoveRef(this);
+            Log.Verbose("Free Texture #{Handle} {ObjectLabel}", Handle, ObjectLabel);
+        }
+
+        public Texture(string objectLabel, TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
         {
             Width = width;
             Height = height;
@@ -46,6 +63,8 @@ namespace Aximo.Render
             GL.GenTextures(1, out handle);
             Handle = handle;
             Bind();
+            ObjectLabel = objectLabel;
+            AddRef();
             AllocData();
         }
 
@@ -77,6 +96,7 @@ namespace Aximo.Render
             var txt = new Texture(handle, TextureTarget.TextureCubeMap, width, height);
             txt.Bind();
             txt.ObjectLabel = "CubeShadowMap";
+            txt.AddRef();
             for (var i = 0; i < 6; i++)
                 GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.DepthComponent, txt.Width, txt.Height, border, format, type, pixels);
 
@@ -92,6 +112,7 @@ namespace Aximo.Render
             var txt = new Texture(handle, TextureTarget.Texture2DArray, width, height);
             txt.Bind();
             txt.ObjectLabel = "ShadowMapArray";
+            txt.AddRef();
             GL.TexImage3D(TextureTarget.Texture2DArray, 0, PixelInternalFormat.DepthComponent, width, height, layers, border, format, type, pixels);
 
             txt.SetNearestFilter();
@@ -106,6 +127,7 @@ namespace Aximo.Render
             var txt = new Texture(handle, TextureTarget.TextureCubeMapArray, width, height);
             txt.Bind();
             txt.ObjectLabel = "CubeShadowMapArray";
+            txt.AddRef();
             GL.TexImage3D(TextureTarget.TextureCubeMapArray, 0, PixelInternalFormat.DepthComponent, width, height, layers * 6, border, format, type, pixels);
 
             txt.SetNearestFilter();
@@ -125,6 +147,8 @@ namespace Aximo.Render
             foreach (var face in faces)
                 images.Add(LoadBitmap(path.Replace("#", face)));
 
+            var name = Path.GetDirectoryName(path);
+
             // images[1].RotateFlip(RotateFlipType.Rotate90FlipY);
             // images[3].RotateFlip(RotateFlipType.RotateNoneFlipX);
             // images[2].RotateFlip(RotateFlipType.Rotate180FlipX);
@@ -136,7 +160,8 @@ namespace Aximo.Render
             var txt = new Texture(handle, TextureTarget.TextureCubeMap, images[0].Width, images[0].Height);
             //txt.ObjectLabel = Path.GetFileName(path);
             txt.Bind();
-            txt.ObjectLabel = Path.GetFileName(path);
+            txt.ObjectLabel = name;
+            txt.AddRef();
 
             for (var i = 0; i < images.Count; i++)
             {
@@ -149,7 +174,7 @@ namespace Aximo.Render
             txt.SetNearestFilter();
             txt.SetClampToEdgeWrap();
 
-            Console.WriteLine($"Loaded Cubemap #{txt.Handle} {path}");
+            //Console.WriteLine($"Loaded Cubemap #{txt.Handle} {path}");
             return txt;
         }
 
@@ -234,27 +259,24 @@ namespace Aximo.Render
         {
             using (var image = LoadBitmap(path))
             {
-                InitFromBitmap(image);
+                InitFromBitmap(image, Path.GetFileName(path));
             }
             Console.WriteLine($"Loaded Texture #{Handle} {path}");
-            ObjectLabel = Path.GetFileName(path);
         }
 
-        public Texture(Vector3 color)
+        public Texture(Vector3 color, string name)
         {
             using (var bmp = new Image<Rgba32>(1, 1))
             {
                 bmp[0, 0] = new Rgba32((int)Math.Round(color.X * 255), (int)Math.Round(color.Y * 255), (int)Math.Round(color.Z * 255));
-                InitFromBitmap(bmp);
+                InitFromBitmap(bmp, "Color/" + name);
             }
-            Console.WriteLine($"Created Color Texture #{Handle} {color}");
-            ObjectLabel = "ColorTexture" + color.ToString();
         }
 
         // Create texture from path.
-        public Texture(Image image)
+        public Texture(Image image, string name)
         {
-            InitFromBitmap(image);
+            InitFromBitmap(image, name);
         }
 
         public void SetData(Image image)
@@ -295,7 +317,7 @@ namespace Aximo.Render
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
         }
 
-        private void InitFromBitmap(Image image)
+        private void InitFromBitmap(Image image, string objectLabel)
         {
             Target = TextureTarget.Texture2D;
             // Generate handle
@@ -303,6 +325,8 @@ namespace Aximo.Render
 
             // Bind the handle
             Bind();
+            ObjectLabel = objectLabel;
+            AddRef();
 
             // Now that our texture is loaded, we can set a few settings to affect how the image appears on rendering.
 
@@ -325,7 +349,7 @@ namespace Aximo.Render
         private static Image LoadBitmap(string path)
         {
             var imagePath = DirectoryHelper.GetAssetsPath(path);
-            Console.WriteLine(imagePath);
+            //Console.WriteLine(imagePath);
             return ImageLib.Load(imagePath);
         }
 
@@ -339,27 +363,14 @@ namespace Aximo.Render
             GL.BindTexture(Target, Handle);
         }
 
-    }
-
-    public static class InternalTextureManager
-    {
-        public static Texture White;
-        public static Texture Black;
-        public static Texture Gray;
-        public static Texture Red;
-        public static Texture Green;
-        public static Texture Blue;
-
-        public static void Init()
+        public void Dispose()
         {
-            White = new Texture(new Vector3(1, 1, 1));
-            Black = new Texture(new Vector3(0, 0, 0));
-            Gray = new Texture(new Vector3(0.5f, 0.5f, 0.5f));
-            Red = new Texture(new Vector3(1, 0, 0));
-            Green = new Texture(new Vector3(0, 1, 0));
-            Blue = new Texture(new Vector3(0, 0, 1));
+            if (Handle == 0)
+                return;
+            RemoveRef();
+            var h = Handle;
+            GL.DeleteTextures(1, ref h);
         }
-
     }
 
 }

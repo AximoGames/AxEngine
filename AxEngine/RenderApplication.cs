@@ -24,6 +24,13 @@ namespace Aximo.Engine
     public class RenderApplication : IDisposable
     {
 
+        public static Startup(RenderApplicationStartup startup)
+        {
+
+        }
+
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderApplication>();
+
         public event AfterApplicationInitializedDelegate AfterApplicationInitialized;
 
         public static RenderApplication Current { get; private set; }
@@ -83,7 +90,7 @@ namespace Aximo.Engine
             }
 
             GLFW.Init();
-            Console.WriteLine(GLFW.GetVersionString());
+            Log.Info("GLFW Version: {Version}", GLFW.GetVersionString());
         }
 
         public virtual void Init()
@@ -252,7 +259,7 @@ namespace Aximo.Engine
                     return;
 
                 if (RenderFrameNumber <= 2)
-                    Console.WriteLine($"Render Frame #{RenderFrameNumber}");
+                    Log.Verbose($"Render Frame #{RenderFrameNumber}");
 
                 OnRenderFrame(e);
 
@@ -363,7 +370,7 @@ namespace Aximo.Engine
                 return;
 
             if (UpdateFrameNumber <= 2)
-                Console.WriteLine($"Update Frame #{UpdateFrameNumber}");
+                Log.Verbose($"Update Frame #{UpdateFrameNumber}");
 
             foreach (var anim in GameContext.Animations)
                 anim.ProcessAnimation();

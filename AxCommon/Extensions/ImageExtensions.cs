@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.Formats.Bmp;
@@ -24,42 +26,32 @@ namespace Aximo
 
         public unsafe static void UseData(this Image<Rgba32> image, Action<IntPtr> ptrCallback)
         {
-            fixed (void* ptr = &image.DangerousGetPinnableReferenceToPixelBuffer())
-            {
-                ptrCallback((IntPtr)ptr);
-            }
+            ref var pixels = ref MemoryMarshal.GetReference(image.GetPixelSpan());
+            ptrCallback((IntPtr)Unsafe.AsPointer(ref pixels));
         }
 
         public unsafe static void UseData(this Image<Argb32> image, Action<IntPtr> ptrCallback)
         {
-            fixed (void* ptr = &image.DangerousGetPinnableReferenceToPixelBuffer())
-            {
-                ptrCallback((IntPtr)ptr);
-            }
+            ref var pixels = ref MemoryMarshal.GetReference(image.GetPixelSpan());
+            ptrCallback((IntPtr)Unsafe.AsPointer(ref pixels));
         }
 
         public unsafe static void UseData(this Image<Bgra32> image, Action<IntPtr> ptrCallback)
         {
-            fixed (void* ptr = &image.DangerousGetPinnableReferenceToPixelBuffer())
-            {
-                ptrCallback((IntPtr)ptr);
-            }
+            ref var pixels = ref MemoryMarshal.GetReference(image.GetPixelSpan());
+            ptrCallback((IntPtr)Unsafe.AsPointer(ref pixels));
         }
 
         public unsafe static void UseData(this Image<Rgb24> image, Action<IntPtr> ptrCallback)
         {
-            fixed (void* ptr = &image.DangerousGetPinnableReferenceToPixelBuffer())
-            {
-                ptrCallback((IntPtr)ptr);
-            }
+            ref var pixels = ref MemoryMarshal.GetReference(image.GetPixelSpan());
+            ptrCallback((IntPtr)Unsafe.AsPointer(ref pixels));
         }
 
         public unsafe static void UseData(this Image<Bgr24> image, Action<IntPtr> ptrCallback)
         {
-            fixed (void* ptr = &image.DangerousGetPinnableReferenceToPixelBuffer())
-            {
-                ptrCallback((IntPtr)ptr);
-            }
+            ref var pixels = ref MemoryMarshal.GetReference(image.GetPixelSpan());
+            ptrCallback((IntPtr)Unsafe.AsPointer(ref pixels));
         }
 
         public unsafe static void UseData(this Image image, Action<IntPtr> ptrCallback)

@@ -166,7 +166,7 @@ namespace Aximo.Render
 
         public void LogInfoMessage(string message)
         {
-            EmmitLogMessage(DebugType.DebugTypeError, DebugSeverity.DebugSeverityNotification, message);
+            EmmitLogMessage(DebugType.DebugTypeOther, DebugSeverity.DebugSeverityNotification, message);
         }
 
         public void OnScreenResize()
