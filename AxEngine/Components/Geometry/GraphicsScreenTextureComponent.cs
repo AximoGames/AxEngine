@@ -12,6 +12,7 @@ using Aximo.Render;
 using OpenToolkit;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.Primitives;
 
 namespace Aximo.Engine
 {
