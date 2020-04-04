@@ -95,7 +95,7 @@ namespace Aximo.Render
 
         public void InitNormal()
         {
-            var txt = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, Width, Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, IntPtr.Zero)
+            var txt = new Texture(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero)
             {
                 ObjectLabel = ObjectLabel,
             };
@@ -105,8 +105,11 @@ namespace Aximo.Render
 
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, txt.Handle, 0);
 
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                txt.SetPixelFormat(PixelFormat.Bgra);
+            // Bind();
+            // GL.GetFramebufferParameter(FramebufferTarget.Framebuffer, (FramebufferDefaultParameter)All.ImplementationColorReadFormat, out int value);
+
+            //if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            txt.SetPixelFormat(PixelFormat.Bgra);
 
             Check();
         }
