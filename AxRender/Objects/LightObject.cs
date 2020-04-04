@@ -38,7 +38,7 @@ namespace Aximo.Render
                     else
                         shadowCamera.LookAt = new Vector3(0, 0, 0);
 
-                    shadowCamera.SetData("Light", this);
+                    shadowCamera.SetExraData("Light", this);
 
                     return shadowCamera;
                 }
@@ -50,7 +50,7 @@ namespace Aximo.Render
                         FarPlane = 25f,
                         Fov = 90f,
                     };
-                    cam.SetData("Light", this);
+                    cam.SetExraData("Light", this);
                     return cam;
                 }
             }

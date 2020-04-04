@@ -35,6 +35,7 @@ namespace Aximo.Engine
         public void AddMaterial(GameMaterial material)
         {
             _Materials.Add(material);
+            material.AddRef(this);
         }
 
         public void AddMaterial(GameMaterial material, int index)
@@ -61,9 +62,14 @@ namespace Aximo.Engine
                     throw new InvalidOperationException();
 
                 if (_Materials.Count == 0)
-                    _Materials.Add(value);
+                {
+                    AddMaterial(value);
+                }
                 else
-                    _Materials[0] = value;
+                {
+                    RemoveMaterial(_Materials[0]);
+                    AddMaterial(value);
+                }
             }
         }
 
@@ -83,11 +89,17 @@ namespace Aximo.Engine
             base.SyncChanges();
         }
 
-        public override void Visit(Action<EngineObject> action)
+        public override void Visit<T>(Action<T> action, Func<T, bool> visitChilds = null)
         {
-            base.Visit(action);
+            base.Visit(action, visitChilds);
+
+            if (visitChilds != null)
+                if (this is T obj)
+                    if (!visitChilds.Invoke(obj))
+                        return;
+
             foreach (var mat in _Materials)
-                mat.Visit(action);
+                mat.Visit(action, visitChilds);
         }
 
     }

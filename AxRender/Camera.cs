@@ -19,17 +19,17 @@ namespace Aximo.Render
     {
         private Dictionary<string, object> Data = new Dictionary<string, object>();
 
-        public T GetData<T>(string name, T defaultValue = default)
+        public T GetExtraData<T>(string name, T defaultValue = default)
         {
             return IDataHelper.GetData(Data, name, defaultValue);
         }
 
-        public bool HasData(string name)
+        public bool HasExtraData(string name)
         {
             return IDataHelper.HasData(Data, name);
         }
 
-        public bool SetData<T>(string name, T value, T defaultValue = default)
+        public bool SetExraData<T>(string name, T value, T defaultValue = default)
         {
             return IDataHelper.SetData(Data, name, value, defaultValue);
         }

@@ -27,9 +27,9 @@ namespace Aximo.Render
 
     public interface IData
     {
-        T GetData<T>(string name, T defaultValue = default);
-        bool HasData(string name);
-        bool SetData<T>(string name, T value, T defaultValue = default);
+        T GetExtraData<T>(string name, T defaultValue = default);
+        bool HasExtraData(string name);
+        bool SetExraData<T>(string name, T value, T defaultValue = default);
     }
 
     internal static class IDataHelper

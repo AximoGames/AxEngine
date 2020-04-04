@@ -251,6 +251,31 @@ namespace Aximo.AxDemo
             {
                 Name = "Sky",
             }));
+
+            var materialWoodRemoveTest = new GameMaterial()
+            {
+                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
+                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                Ambient = 0.3f,
+                Shininess = 32.0f,
+                SpecularStrength = 0.5f,
+                CastShadow = true,
+            };
+
+            GameContext.AddActor(new Actor(new DebugCubeComponent()
+            {
+                Name = "RemoveTets",
+                RelativeScale = new Vector3(1),
+                RelativeTranslation = new Vector3(18, 0, 0.5f),
+                Material = materialWoodRemoveTest,
+            }));
+            GameContext.AddActor(new Actor(new DebugCubeComponent()
+            {
+                Name = "RemoveTets",
+                RelativeScale = new Vector3(1),
+                RelativeTranslation = new Vector3(18, 0, 0.5f),
+                Material = materialWoodRemoveTest,
+            }));
         }
 
         private float LightAngle = 0;

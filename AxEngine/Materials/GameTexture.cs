@@ -36,7 +36,23 @@ namespace Aximo.Engine
         public string SourcePath { get; private set; }
         public string Label { get; private set; }
 
-        public static GameTexture GetFromFile(string sourcePath)
+        internal override void DoDeallocation()
+        {
+            if (!HasDeallocation)
+                return;
+
+            if (InternalTexture == null)
+                return;
+
+            Log.Verbose("Set InternalTexture.Orphaned");
+
+            InternalTexture.Orphaned = true;
+            InternalTexture = null;
+
+            base.DoDeallocation();
+        }
+
+        public static GameTexture CreateFromFile(string sourcePath)
         {
             Log.Info("Loading: {SourcePath}", sourcePath);
             var imagePath = DirectoryHelper.GetAssetsPath(sourcePath);
@@ -50,6 +66,11 @@ namespace Aximo.Engine
             };
             txt.SetData(bitmap);
             return txt;
+        }
+
+        public static GameTexture GetFromFile(string sourcePath)
+        {
+            return TextureManager.GetFromFile(sourcePath);
         }
 
         private bool AutoDisposeBitmap = false;

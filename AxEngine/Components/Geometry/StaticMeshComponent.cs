@@ -17,7 +17,7 @@ namespace Aximo.Engine
     public class StaticMeshComponent : MeshComponent
     {
 
-        private Serilog.ILogger Log = Aximo.Log.ForContext<StaticMeshComponent>();
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<StaticMeshComponent>();
 
         public StaticMeshComponent()
         {

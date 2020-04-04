@@ -16,7 +16,7 @@ using Image = SixLabors.ImageSharp.Image;
 namespace Aximo.Render
 {
 
-    public class Texture : IObjectLabel, IDisposable
+    public class Texture : GameObjectBase, IObjectLabel, IDisposable
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<Texture>();
 
@@ -369,7 +369,17 @@ namespace Aximo.Render
                 return;
             RemoveRef();
             var h = Handle;
-            GL.DeleteTextures(1, ref h);
+            Bind();
+            //GL.DeleteTextures(1, ref h);
+            //Handle = 0;
+        }
+
+        public override void Init()
+        {
+        }
+
+        public override void Free()
+        {
         }
     }
 

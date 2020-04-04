@@ -217,6 +217,8 @@ namespace Aximo.Render
                     RemoveObject(obj);
                 }
             }
+
+            InternalTextureManager.DeleteOrphaned();
         }
 
     }

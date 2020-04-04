@@ -25,11 +25,17 @@ namespace Aximo.Engine
 
         private List<GameTexture> Textures = new List<GameTexture>();
 
-        public override void Visit(Action<EngineObject> action)
+        public override void Visit<T>(Action<T> action, Func<T, bool> visitChilds = null)
         {
-            base.Visit(action);
+            base.Visit(action, visitChilds);
+
+            if (visitChilds != null)
+                if (this is T obj)
+                    if (!visitChilds.Invoke(obj))
+                        return;
+
             foreach (var txt in Textures)
-                txt.Visit(action);
+                txt.Visit(action, visitChilds);
         }
 
         public void AddTexture(GameTexture txt)

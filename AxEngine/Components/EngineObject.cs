@@ -118,18 +118,21 @@ namespace Aximo.Engine
             }
         }
 
-        public virtual void Visit(Action<EngineObject> action)
+        public virtual void Visit<T>(Action<T> action, Func<T, bool> visitChilds = null)
+            where T : EngineObject
         {
-            action(this);
+            if (this is T)
+                action((T)this);
         }
 
-        public void VisitChilds(Action<EngineObject> action)
+        public void VisitChilds<T>(Action<T> action, Func<T, bool> visitChilds = null)
+            where T : EngineObject
         {
-            Visit(obj =>
+            Visit<T>(obj =>
             {
                 if (obj != this)
                     action(obj);
-            });
+            }, visitChilds);
         }
 
     }

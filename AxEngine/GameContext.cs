@@ -57,10 +57,10 @@ namespace Aximo.Engine
             RegisterActorName(actor);
         }
 
-        public virtual void Visit(Action<SceneComponent> action)
+        public override void Visit<T>(Action<T> action, Func<T, bool> visitChilds = null)
         {
             foreach (var act in Actors)
-                act.Visit(action);
+                act.Visit(action, visitChilds);
         }
 
         public void RemoveActor(Actor actor)
@@ -136,11 +136,11 @@ namespace Aximo.Engine
                 {
                     if (obj.RefCount == 0)
                     {
-                        obj.VisitChilds(obj =>
+                        obj.VisitChilds<EngineObject>(obj =>
                         {
                             if (obj.RefCount == 1)
                                 obj.Deallocate();
-                        });
+                        }, child => child.RefCount <= 1);
                     }
                 }
 

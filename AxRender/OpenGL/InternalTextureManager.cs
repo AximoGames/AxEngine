@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using OpenToolkit.Mathematics;
 using System;
+using System.Linq;
 
 namespace Aximo.Render
 {
@@ -29,6 +30,22 @@ namespace Aximo.Render
         }
 
         private static Dictionary<int, WeakReference<Texture>> References = new Dictionary<int, WeakReference<Texture>>();
+
+        internal static void DeleteOrphaned()
+        {
+            lock (References)
+            {
+                foreach (var reference in References.Values.ToArray())
+                {
+                    Texture texture;
+                    if (reference.TryGetTarget(out texture))
+                    {
+                        if (texture.Orphaned)
+                            texture.Dispose();
+                    }
+                }
+            }
+        }
 
         public static void DumpInfo(bool listItems)
         {

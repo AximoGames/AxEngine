@@ -43,16 +43,10 @@ namespace Aximo.Engine
             Actor = actor;
         }
 
-        public virtual void Visit(Action<SceneComponent> action)
-        {
-        }
-
         public virtual void Detach()
         {
             Actor?.RemoveComponent(this);
             Actor = null;
-
-            Deallocate();
         }
 
         internal virtual void UpdateFrameInternal()

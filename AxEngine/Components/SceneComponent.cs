@@ -118,26 +118,17 @@ namespace Aximo.Engine
 
         public override Actor Actor => RootComponent?.Actor ?? base.Actor;
 
-        internal override void Deallocate()
+        public override void Visit<T>(Action<T> action, Func<T, bool> visitChilds = null)
         {
-            foreach (var child in Components)
-                child.Deallocate();
+            base.Visit(action, visitChilds);
 
-            base.Deallocate();
-        }
+            if (visitChilds != null)
+                if (this is T obj)
+                    if (!visitChilds.Invoke(obj))
+                        return;
 
-        public override void Visit(Action<SceneComponent> action)
-        {
-            base.Visit(action);
             foreach (var comp in Components)
-                comp.Visit(action);
-        }
-
-        public override void Visit(Action<EngineObject> action)
-        {
-            base.Visit(action);
-            foreach (var comp in Components)
-                comp.Visit(action);
+                comp.Visit(action, visitChilds);
         }
 
         public override void Detach()

@@ -35,18 +35,17 @@ namespace Aximo.Engine
             AddComponent(component);
         }
 
-        public virtual void Visit(Action<SceneComponent> action)
+        public override void Visit<T>(Action<T> action, Func<T, bool> visitChilds = null)
         {
-            foreach (var comp in Components)
-                comp.Visit(action);
-        }
+            base.Visit(action, visitChilds);
 
-        public override void Visit(Action<EngineObject> action)
-        {
-            base.Visit(action); ;
+            if (visitChilds != null)
+                if (this is T obj)
+                    if (!visitChilds.Invoke(obj))
+                        return;
 
             foreach (var comp in Components)
-                comp.Visit(action);
+                comp.Visit(action, visitChilds);
         }
 
         private ConcurrentDictionary<string, List<ActorComponent>> ComponentNameHash = new ConcurrentDictionary<string, List<ActorComponent>>();

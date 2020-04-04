@@ -70,12 +70,19 @@ namespace Aximo.Engine
 
         private void ConsoleLoop()
         {
+            string prevCmd = "";
             while (true)
             {
-                var cmd = Console.ReadLine();
+                var cmd = Console.ReadLine().Trim();
+                if (cmd == "r")
+                    cmd = prevCmd;
+                else
+                    prevCmd = cmd;
+
                 var args = cmd.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 if (args.Length == 0)
                     continue;
+
                 switch (cmd)
                 {
                     case "q":
