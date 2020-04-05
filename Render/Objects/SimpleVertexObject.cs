@@ -11,7 +11,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Render
 {
 
-    public class SimpleVertexObject : RenderableObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
+    public class SimpleVertexObject : PrimitiveObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
         IForwardRenderable, IDeferredRenderable, IScreenRenderable
     {
 
