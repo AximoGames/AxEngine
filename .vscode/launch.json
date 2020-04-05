@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/AxDemo/bin/Debug/netcoreapp3.1/AxDemo.dll",
+            "program": "${workspaceFolder}/Demo/bin/Debug/netcoreapp3.1/AxDemo.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
