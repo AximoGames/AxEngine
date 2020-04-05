@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Aximo.Render;
 using OpenToolkit.Mathematics;
-using SixLabors.Primitives;
+using SixLabors.ImageSharp;
 
 namespace Aximo.Engine
 {
 
-    public class UIComponent : GraphicsScreenTextureComponent
+    public abstract class UIComponent : GraphicsScreenTextureComponent
     {
 
         public UIComponent() : this(new Vector2i(100, 100))
@@ -19,6 +19,9 @@ namespace Aximo.Engine
 
         public UIComponent(Vector2i size) : base(size)
         {
+            IsAbsoluteScale = true;
+            IsAbsoluteRotation = true;
+            IsAbsoluteTranslation = true;
         }
 
         internal virtual void SetComponentSize()
@@ -26,7 +29,7 @@ namespace Aximo.Engine
             // TODO: Shrink AbsoluteOuterRect if Dock is set.
             // ...
 
-            var oldDrawSize = DrawSize;
+            var oldDrawRect = AbsoluteDrawRect;
 
             Vector2 relSize;
             Vector2 relPos;
@@ -55,10 +58,13 @@ namespace Aximo.Engine
             RelatativePaddingRect = BoxHelper.FromSize(relPos, relSize);
             AbsolutePaddingRect = BoxHelper.FromSize(AbsoluteOuterRect.Min + relPos, relSize);
 
-            if (DrawSize != oldDrawSize)
+            if (AbsoluteDrawRect.Size != oldDrawRect.Size)
             {
                 ResizeImage(DrawSize.ToVector2i());
-                RectanglePixels = AbsoluteClientRect.ToRectangleF();
+            }
+            if (AbsoluteDrawRect != oldDrawRect)
+            {
+                RectanglePixels = AbsoluteDrawRect.ToRectangleF();
             }
         }
 
@@ -77,10 +83,6 @@ namespace Aximo.Engine
         // Overwrite this method for container layouts / flow control
         internal virtual void SetChildBounds()
         {
-            foreach (var child in UIComponents)
-            {
-                child.AbsoluteOuterRect = AbsolutePaddingRect;
-            }
         }
 
         internal void CalculateSizes()
@@ -89,7 +91,7 @@ namespace Aximo.Engine
             SetChildBounds();
             foreach (var child in UIComponents)
             {
-                CalculateSizes();
+                child.CalculateSizes();
             }
         }
 
@@ -103,26 +105,30 @@ namespace Aximo.Engine
         }
 
         // Size+Border+Margin
-        private Box2 AbsoluteOuterRect; // Absoute Rect of this control incl. Margin
+        internal protected Box2 AbsoluteOuterRect; // Absoute Rect of this control incl. Margin
 
         // Size+Border
-        private Box2 RelatativeDrawRect;
-        private Box2 AbsoluteDrawRect;
+        protected internal Box2 RelatativeDrawRect;
+        protected internal Box2 AbsoluteDrawRect;
 
         // Size
-        private Box2 RelatativeClientRect;
-        private Box2 AbsoluteClientRect;
+        protected internal Box2 RelatativeClientRect;
+        protected internal Box2 AbsoluteClientRect;
 
         // Size-Padding
-        private Box2 RelatativePaddingRect;
-        private Box2 AbsolutePaddingRect;
+        protected internal Box2 RelatativePaddingRect;
+        protected internal Box2 AbsolutePaddingRect;
 
         private Vector2 DrawSize => RelatativeDrawRect.Size;
 
         protected internal virtual UIAnchors PaddingInternal => new UIAnchors();
 
         public UIAnchors Margin;
-        public Box2 ClientRect;
+
+        public Vector2 Location;
+        // Inner Padding Size!
+        public Vector2 Size;
+
         public UIAnchors Border;
         public UIDock Dock;
 

@@ -142,6 +142,45 @@ namespace Aximo.Engine
             base.Detach();
         }
 
+        private bool _IsAbsoluteScale;
+        public bool IsAbsoluteScale
+        {
+            get => _IsAbsoluteScale;
+            set
+            {
+                if (_IsAbsoluteScale == value)
+                    return;
+                _IsAbsoluteScale = value;
+                UpdateTransform();
+            }
+        }
+
+        private bool _IsAbsoluteRotation;
+        public bool IsAbsoluteRotation
+        {
+            get => _IsAbsoluteRotation;
+            set
+            {
+                if (_IsAbsoluteRotation == value)
+                    return;
+                _IsAbsoluteRotation = value;
+                UpdateTransform();
+            }
+        }
+
+        private bool _IsAbsoluteTranslation;
+        public bool IsAbsoluteTranslation
+        {
+            get => _IsAbsoluteTranslation;
+            set
+            {
+                if (_IsAbsoluteTranslation == value)
+                    return;
+                _IsAbsoluteTranslation = value;
+                UpdateTransform();
+            }
+        }
+
         private Vector3 _RelativeScale = Vector3.One;
         public Vector3 RelativeScale
         {
@@ -229,6 +268,12 @@ namespace Aximo.Engine
         {
             //var trans = Matrix4.Identity;
             var trans = CalculateTransform().GetMatrix();
+
+            // TODO: respect every component alone
+            if (_IsAbsoluteScale && _IsAbsoluteRotation && _IsAbsoluteTranslation)
+            {
+                return trans;
+            }
 
             //trans *= TransformMatrix.Inverted();
 

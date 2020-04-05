@@ -12,10 +12,9 @@ using OpenToolkit;
 using OpenToolkit.Mathematics;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Shapes;
 using Color = SixLabors.ImageSharp.Color;
-using PointF = SixLabors.Primitives.PointF;
 
 namespace Aximo.Engine
 {

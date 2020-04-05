@@ -10,7 +10,6 @@ using System.Threading;
 using Aximo.Render;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
-using SixLabors.Primitives;
 
 #pragma warning disable CA1044 // Properties should not be write only
 

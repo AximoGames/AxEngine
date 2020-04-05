@@ -6,7 +6,7 @@ using Aximo.Engine;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
-using SixLabors.Primitives;
+using SixLabors.ImageSharp;
 
 namespace Aximo.AxDemo
 {
@@ -143,22 +143,42 @@ namespace Aximo.AxDemo
             }));
             // GameContext.AddActor(new Actor(new UIImage("Textures/wood.png")
             // {
-            //     Name = "ScreenTexture1.1",
+            //     Name = "UI-Image-Alone",
             //     RectanglePixels = new RectangleF(0, 0, 30f, 30f),
             // }));
 
-            GameContext.AddActor(new Actor(new UIImage("Textures/wood.png")
+            // -- UI
+
+            var flowContainer = new UIFlowContainer()
+            {
+                DefaultChildSizes = new Vector2(0, 50),
+                ExtraChildMargin = new UIAnchors(10, 10, 10, 0),
+            };
+            GameContext.AddActor(new Actor(flowContainer));
+
+            flowContainer.AddComponent(new UIImage("Textures/woodenbox_specular.png")
             {
                 Name = "ScreenTexture1.1",
-                //RectanglePixels = new RectangleF(0, 0, 30f, 30f),
-                Margin = new UIAnchors(10, 10, 10, 10),
-            }));
+                RectanglePixels = new RectangleF(0, 0, 30f, 30f),
+                //Size = new Vector2(100, 100),
+                //Margin = new UIAnchors(20, 20, 20, 20),
+            });
 
-            GameContext.AddActor(new Actor(new StatsComponent()
+            flowContainer.AddComponent(new UIImage("Textures/woodenbox_specular.png")
             {
-                Name = "Stats",
-                RectanglePixels = new RectangleF(40, 40, 100f, 100f),
-            }));
+                Name = "ScreenTexture1.1",
+                RectanglePixels = new RectangleF(0, 0, 30f, 30f),
+                //Size = new Vector2(100, 100),
+                //Margin = new UIAnchors(20, 20, 20, 20),
+            });
+
+            // -- 
+
+            // GameContext.AddActor(new Actor(new StatsComponent()
+            // {
+            //     Name = "Stats",
+            //     RectanglePixels = new RectangleF(40, 40, 100f, 100f),
+            // }));
 
             GameContext.AddActor(new Actor(new LineComponent(new Vector3(0, 0, 0), new Vector3(2, 2, 2))
             {

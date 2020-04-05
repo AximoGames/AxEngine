@@ -4,7 +4,7 @@
 using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
-using SixLabors.Primitives;
+using SixLabors.ImageSharp;
 
 #pragma warning disable CA1044 // Properties should not be write only
 

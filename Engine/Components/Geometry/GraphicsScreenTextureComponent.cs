@@ -13,7 +13,7 @@ using OpenToolkit;
 using OpenToolkit.Mathematics;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.Primitives;
+using SixLabors.ImageSharp.Processing;
 
 namespace Aximo.Engine
 {
@@ -30,7 +30,7 @@ namespace Aximo.Engine
 
         protected void ResizeImage(Vector2i size)
         {
-            if (size == Vector2i.Zero)
+            if (size.X == 0 || size.Y == 0)
                 return;
 
             Image = new Image<Rgba32>(size.X, size.Y);
@@ -43,6 +43,7 @@ namespace Aximo.Engine
 
         public void UpdateTexture()
         {
+            //Image.Mutate(c=>c.Clear());
             Texture.SetData(Image);
             Update();
         }

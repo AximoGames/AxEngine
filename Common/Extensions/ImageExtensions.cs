@@ -4,10 +4,10 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Primitives;
 
 namespace Aximo
 {
@@ -112,7 +112,7 @@ namespace Aximo
                 AlphaCompositionMode = PixelAlphaCompositionMode.Clear
             };
             var size = source.GetCurrentSize();
-            source.Fill(graphicsOptions, color, new Rectangle(0, 0, size.Width, size.Height));
+            source.Fill(graphicsOptions, color, new RectangleF(0, 0, size.Width, size.Height));
         }
 
     }

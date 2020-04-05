@@ -23,8 +23,9 @@ namespace Aximo.AxDemo
                 //RenderFrequency = 490,
                 //UpdateFrequency = 490,
                 //VSync = VSyncMode.Off,
-                UseGtkUI = true,
-                UseConsole = true,
+                // UseGtkUI = true,
+                // UseConsole = true,
+                IsMultiThreaded = false,
             };
 
             new GameStartup<RenderApplicationDemo, GtkUI>(config).Start();
