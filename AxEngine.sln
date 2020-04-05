@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AxEngine", "AxEngine\AxEngine.csproj", "{303329F6-C910-4043-81E5-5080659ECB28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{303329F6-C910-4043-81E5-5080659ECB28}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net3dBool", "External\Net3dBool\src\Net3dBool\Net3dBool.csproj", "{09162E62-8F7B-4468-902D-C2253C45D4A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AxCommon", "AxCommon\AxCommon.csproj", "{709018FD-7E2D-4AA0-9EC6-7C67B9D902FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{709018FD-7E2D-4AA0-9EC6-7C67B9D902FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AxRender", "AxRender\AxRender.csproj", "{3B41CDF5-4512-46AF-BAA4-E6F3B5B3F87C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Render", "Render\Render.csproj", "{3B41CDF5-4512-46AF-BAA4-E6F3B5B3F87C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AxDemo", "AxDemo\AxDemo.csproj", "{FBB4132B-0C20-43AA-BD53-0DFAC8E7F693}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo", "Demo\Demo.csproj", "{FBB4132B-0C20-43AA-BD53-0DFAC8E7F693}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AxTests", "AxTests\AxTests.csproj", "{DC37544D-1146-4771-AF8C-8CEC4079C913}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{DC37544D-1146-4771-AF8C-8CEC4079C913}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

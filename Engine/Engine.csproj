@@ -1,35 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <RootNamespace>AxTests</RootNamespace>
-    <AssemblyName>AxTests</AssemblyName>
+    <RootNamespace>Aximo.Engine</RootNamespace>
+    <AssemblyName>AxEngine</AssemblyName>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <ApplicationIcon />
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <StartupObject />
     <NoWarn>CS0162</NoWarn>
     <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
-    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Experiment\**" />
-    <EmbeddedResource Remove="Experiment\**" />
-    <None Remove="Experiment\**" />
-  </ItemGroup>
-  <ItemGroup>
+    <PackageReference Include="AdvancedDLSupport" Version="3.2.0" />
+    <PackageReference Include="GtkSharp" Version="3.22.25.74" />
+    <PackageReference Include="NetCoreAudio" Version="1.5.0" />
+    <PackageReference Include="serilog" Version="2.9.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.console" Version="2.4.1" />
-    <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AxEngine\AxEngine.csproj" />
-    <ProjectReference Include="..\AxRender\AxRender.csproj" />
-    <ProjectReference Include="..\AxCommon\AxCommon.csproj" />
+    <ProjectReference Include="..\Render\Render.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenToolkit.Core">
@@ -53,6 +44,9 @@
     <Reference Include="OpenToolkit.Windowing.Desktop">
       <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Windowing.Desktop.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Experiment\" />
   </ItemGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
 </Project>
