@@ -1,6 +1,8 @@
 // This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
+using System.Linq;
 using Aximo.Render;
 using OpenToolkit.Mathematics;
 using SixLabors.Primitives;
@@ -19,16 +21,8 @@ namespace Aximo.Engine
         {
         }
 
-        internal virtual void CalculateSizes()
+        internal virtual void SetComponentSize()
         {
-            // if (Parent == null)
-            //     return;
-
-            if (Parent is UIComponent p)
-                AbsoluteOuterRect = p.AbsoluteClientRect;
-            else
-                AbsoluteOuterRect = new Box2(Vector2.Zero, RenderContext.Current.ScreenSize.ToVector2());
-
             // TODO: Shrink AbsoluteOuterRect if Dock is set.
             // ...
 
@@ -68,9 +62,44 @@ namespace Aximo.Engine
             }
         }
 
+        protected IEnumerable<UIComponent> UIComponents
+        {
+            get
+            {
+                foreach (var comp in Components)
+                {
+                    if (comp is UIComponent c)
+                        yield return c;
+                }
+            }
+        }
+
+        // Overwrite this method for container layouts / flow control
+        internal virtual void SetChildBounds()
+        {
+            foreach (var child in UIComponents)
+            {
+                child.AbsoluteOuterRect = AbsolutePaddingRect;
+            }
+        }
+
+        internal void CalculateSizes()
+        {
+            SetComponentSize();
+            SetChildBounds();
+            foreach (var child in UIComponents)
+            {
+                CalculateSizes();
+            }
+        }
+
         public override void UpdateFrame()
         {
-            CalculateSizes();
+            if (Parent == null || !(Parent is UIComponent))
+            {
+                AbsoluteOuterRect = new Box2(Vector2.Zero, RenderContext.Current.ScreenSize.ToVector2());
+                CalculateSizes();
+            }
         }
 
         // Size+Border+Margin
