@@ -3,6 +3,10 @@
     <!--<CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)default.ruleset</CodeAnalysisRuleSet>-->
   </PropertyGroup>
 
+  <PropertyGroup>
+    <RestoreSources>$(RestoreSources);https://www.myget.org/F/gdalcore/api/v3/index.json</RestoreSources>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeQuality.Analyzers">
       <Version>2.9.8</Version>

@@ -10,6 +10,7 @@
     <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
+  <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
     <Compile Remove="Experiment\**" />
     <EmbeddedResource Remove="Experiment\**" />
@@ -54,5 +55,4 @@
       <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Windowing.Desktop.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Import Project="..\props\SharedProjectSettings.props" />
 </Project>

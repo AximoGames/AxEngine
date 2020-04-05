@@ -9,6 +9,7 @@
     <NoWarn>CS0162</NoWarn>
     <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
     <PackageReference Include="AdvancedDLSupport" Version="3.2.0" />
     <PackageReference Include="GtkSharp" Version="3.22.25.74" />
@@ -48,5 +49,4 @@
   <ItemGroup>
     <Folder Include="Experiment\" />
   </ItemGroup>
-  <Import Project="..\props\SharedProjectSettings.props" />
 </Project>

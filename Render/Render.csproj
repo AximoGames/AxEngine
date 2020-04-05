@@ -7,6 +7,7 @@
   	<CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
     <PackageReference Include="serilog" Version="2.9.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
@@ -39,5 +40,4 @@
       <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Windowing.Desktop.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Import Project="..\props\SharedProjectSettings.props" />
 </Project>

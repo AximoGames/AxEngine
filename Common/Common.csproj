@@ -5,8 +5,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <NoWarn>CS0162</NoWarn>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
+  	<CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
     <PackageReference Include="serilog" Version="2.9.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
@@ -37,5 +38,4 @@
       <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Windowing.Desktop.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Import Project="..\props\SharedProjectSettings.props" />
 </Project>
