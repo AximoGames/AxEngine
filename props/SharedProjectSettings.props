@@ -4,7 +4,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <RestoreSources>$(RestoreSources);https://www.myget.org/F/gdalcore/api/v3/index.json</RestoreSources>
+    <!-- <RestoreSources>$(RestoreSources);https://www.myget.org/F/sixlabors/api/v3/index.json</RestoreSources> -->
   </PropertyGroup>
 
   <ItemGroup>
