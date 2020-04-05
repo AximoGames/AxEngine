@@ -7,9 +7,9 @@ namespace Aximo.Engine
 {
     public class UIContainerComponent : UIComponent
     {
-        public Box2 Padding;
+        public UIAnchors Padding;
 
-        protected internal override Box2 PaddingInternal => Padding;
+        protected internal override UIAnchors PaddingInternal => Padding;
     }
 
 }

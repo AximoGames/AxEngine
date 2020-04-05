@@ -21,8 +21,8 @@ namespace Aximo.Engine
 
         internal virtual void CalculateSizes()
         {
-            if (Parent == null)
-                return;
+            // if (Parent == null)
+            //     return;
 
             if (Parent is UIComponent p)
                 AbsoluteOuterRect = p.AbsoluteClientRect;
@@ -32,6 +32,8 @@ namespace Aximo.Engine
             // TODO: Shrink AbsoluteOuterRect if Dock is set.
             // ...
 
+            var oldDrawSize = DrawSize;
+
             Vector2 relSize;
             Vector2 relPos;
 
@@ -40,25 +42,35 @@ namespace Aximo.Engine
             relSize = AbsoluteOuterRect.Size - Margin.Size;
             relPos = Margin.Min;
 
-            RelatativeDrawRect = new Box2(relPos, relPos + relSize);
-            AbsoluteDrawRect = new Box2(AbsoluteOuterRect.Min + relPos, relSize);
+            RelatativeDrawRect = BoxHelper.FromSize(relPos, relSize);
+            AbsoluteDrawRect = BoxHelper.FromSize(AbsoluteOuterRect.Min + relPos, relSize);
 
             // Client
 
             relSize = AbsoluteOuterRect.Size - Margin.Size - Border.Size;
             relPos = Margin.Min + Border.Min;
 
-            RelatativeClientRect = new Box2(relPos, relPos + relSize);
-            AbsoluteClientRect = new Box2(AbsoluteOuterRect.Min + relPos, relSize);
+            RelatativeClientRect = BoxHelper.FromSize(relPos, relSize);
+            AbsoluteClientRect = BoxHelper.FromSize(AbsoluteOuterRect.Min + relPos, relSize);
 
             // Padding
 
             relSize = AbsoluteOuterRect.Size - Margin.Size - Border.Size - PaddingInternal.Size;
             relPos = Margin.Min + Border.Min + PaddingInternal.Min;
 
-            RelatativePaddingRect = new Box2(relPos, relPos + relSize);
-            AbsolutePaddingRect = new Box2(AbsoluteOuterRect.Min + relPos, relSize);
+            RelatativePaddingRect = BoxHelper.FromSize(relPos, relSize);
+            AbsolutePaddingRect = BoxHelper.FromSize(AbsoluteOuterRect.Min + relPos, relSize);
 
+            if (DrawSize != oldDrawSize)
+            {
+                ResizeImage(DrawSize.ToVector2i());
+                RectanglePixels = AbsoluteClientRect.ToRectangleF();
+            }
+        }
+
+        public override void UpdateFrame()
+        {
+            CalculateSizes();
         }
 
         // Size+Border+Margin
@@ -76,11 +88,13 @@ namespace Aximo.Engine
         private Box2 RelatativePaddingRect;
         private Box2 AbsolutePaddingRect;
 
-        protected internal virtual Box2 PaddingInternal => new Box2();
+        private Vector2 DrawSize => RelatativeDrawRect.Size;
 
-        public Box2 Margin;
+        protected internal virtual UIAnchors PaddingInternal => new UIAnchors();
+
+        public UIAnchors Margin;
         public Box2 ClientRect;
-        public Box2 Border;
+        public UIAnchors Border;
         public UIDock Dock;
 
         private RectangleF? _RectangleUV;

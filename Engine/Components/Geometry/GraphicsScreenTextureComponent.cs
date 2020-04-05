@@ -28,6 +28,15 @@ namespace Aximo.Engine
             UpdateTexture();
         }
 
+        protected void ResizeImage(Vector2i size)
+        {
+            if (size == Vector2i.Zero)
+                return;
+
+            Image = new Image<Rgba32>(size.X, size.Y);
+            UpdateTexture();
+        }
+
         protected Image<Rgba32> Image { get; private set; }
 
         public GameTexture Texture { get; private set; }

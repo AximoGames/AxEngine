@@ -93,8 +93,8 @@ namespace Aximo.Engine
 
         public void SetData(Image bitmap)
         {
-            if (bitmap.Width != Width || bitmap.Height != Height)
-                throw new InvalidOperationException();
+            // if (bitmap.Width != Width || bitmap.Height != Height)
+            //     throw new InvalidOperationException();
 
             Bitmap = bitmap;
             BitmapChanged = true;
