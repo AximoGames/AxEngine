@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.Drawing;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -109,10 +111,60 @@ namespace Aximo
         {
             var graphicsOptions = new GraphicsOptions
             {
-                AlphaCompositionMode = PixelAlphaCompositionMode.Clear
             };
+            if (color == Color.Transparent)
+                graphicsOptions.AlphaCompositionMode = PixelAlphaCompositionMode.Clear;
+
             var size = source.GetCurrentSize();
             source.Fill(graphicsOptions, color, new RectangleF(0, 0, size.Width, size.Height));
+        }
+
+        public static IImageProcessingContext DrawButton(this IImageProcessingContext processingContext, float borderTickness, Color borderColor, float cornerRadius)
+        {
+            var size = processingContext.GetCurrentSize();
+            var options = new ShapeGraphicsOptions();
+            processingContext.DrawLines(options, borderColor, borderTickness * 2, new PointF(0, 0), new PointF(size.Width, 0), new PointF(size.Width, size.Height), new PointF(0, size.Height), new PointF(0, 0));
+            return processingContext.ApplyRoundedCorners(borderTickness, borderColor, cornerRadius);
+        }
+
+        // This method can be seen as an inline implementation of an `IImageProcessor`:
+        // (The combination of `IImageOperations.Apply()` + this could be replaced with an `IImageProcessor`)
+        private static IImageProcessingContext ApplyRoundedCorners(this IImageProcessingContext ctx, float borderThickness, Color borderColor, float cornerRadius)
+        {
+            Size size = ctx.GetCurrentSize();
+            var corners = BuildCorners(size.Width, size.Height, cornerRadius);
+
+            ctx.Draw(borderColor, borderThickness * 2, corners);
+
+            var graphicOptions = new GraphicsOptions()
+            {
+                AlphaCompositionMode = PixelAlphaCompositionMode.DestOut, // enforces that any part of this shape that has color is punched out of the background
+            };
+            // mutating in here as we already have a cloned original
+            // use any color (not Transparent), so the corners will be clipped
+            return ctx.Fill(graphicOptions, Color.LimeGreen, new PathCollection(corners));
+        }
+
+        private static IPathCollection BuildCorners(int imageWidth, int imageHeight, float cornerRadius)
+        {
+            // first create a square
+            var rect = new RectangularPolygon(-0.5f, -0.5f, cornerRadius, cornerRadius);
+
+            // then cut out of the square a circle so we are left with a corner
+            IPath cornerTopLeft = rect.Clip(new EllipsePolygon(cornerRadius - 0.5f, cornerRadius - 0.5f, cornerRadius));
+
+            // corner is now a corner shape positions top left
+            //lets make 3 more positioned correctly, we can do that by translating the original around the center of the image
+
+            float rightPos = imageWidth - cornerTopLeft.Bounds.Width + 1;
+            float bottomPos = imageHeight - cornerTopLeft.Bounds.Height + 1;
+
+            // move it across the width of the image - the width of the shape
+            IPath cornerTopRight = cornerTopLeft.RotateDegree(90).Translate(rightPos, 0);
+            IPath cornerBottomLeft = cornerTopLeft.RotateDegree(-90).Translate(0, bottomPos);
+            IPath cornerBottomRight = cornerTopLeft.RotateDegree(180).Translate(rightPos, bottomPos);
+
+            return new PathCollection(cornerTopLeft, cornerBottomLeft, cornerTopRight, cornerBottomRight);
         }
 
     }

@@ -172,13 +172,21 @@ namespace Aximo.AxDemo
                 //Margin = new UIAnchors(20, 20, 20, 20),
             });
 
+            flowContainer.AddComponent(new UIButton()
+            {
+                Name = "bt1",
+                RectanglePixels = new RectangleF(0, 0, 30f, 30f),
+                //Size = new Vector2(100, 100),
+                //Margin = new UIAnchors(20, 20, 20, 20),
+            });
+
             // -- 
 
-            // GameContext.AddActor(new Actor(new StatsComponent()
-            // {
-            //     Name = "Stats",
-            //     RectanglePixels = new RectangleF(40, 40, 100f, 100f),
-            // }));
+            GameContext.AddActor(new Actor(new StatsComponent()
+            {
+                Name = "Stats",
+                RectanglePixels = new RectangleF(40, 40, 100f, 100f),
+            }));
 
             GameContext.AddActor(new Actor(new LineComponent(new Vector3(0, 0, 0), new Vector3(2, 2, 2))
             {

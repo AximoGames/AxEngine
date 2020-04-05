@@ -174,6 +174,21 @@ namespace Aximo.Engine
             UnregisterComponentName(component);
         }
 
+        public virtual void OnScreenResize(ScreenResizeEventArgs e)
+        {
+            RootComponent?.Visit<SceneComponent>(obj => obj.OnScreenResize(e));
+        }
+
+        public virtual void OnMouseButton(MouseButtonArgs e)
+        {
+            RootComponent?.Visit<SceneComponent>(obj => obj.OnMouseButton(e));
+        }
+
+        public virtual void OnMouseMove(MouseMoveArgs e)
+        {
+            RootComponent?.Visit<SceneComponent>(obj => obj.OnMouseMove(e));
+        }
+
     }
 
 }

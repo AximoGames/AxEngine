@@ -4,6 +4,14 @@ using SixLabors.ImageSharp;
 namespace Aximo
 {
 
+    public static class RectangleExtensions
+    {
+        public static Box2 ToBox2(this RectangleF rect)
+        {
+            return new Box2(rect.Left, rect.Top, rect.Right, rect.Bottom);
+        }
+    }
+
     public static class BoxHelper
     {
         public static Box2 FromSize(Vector2 location, Vector2 size)
@@ -21,4 +29,5 @@ namespace Aximo
         }
 
     }
+
 }

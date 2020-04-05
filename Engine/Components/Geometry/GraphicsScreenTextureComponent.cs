@@ -43,7 +43,6 @@ namespace Aximo.Engine
 
         public void UpdateTexture()
         {
-            //Image.Mutate(c=>c.Clear());
             Texture.SetData(Image);
             Update();
         }

@@ -59,6 +59,14 @@ namespace Aximo.Engine
         public UIAnchors Padding;
 
         protected internal override UIAnchors PaddingInternal => Padding;
+
+        internal override void SetChildBounds()
+        {
+            foreach (var child in UIComponents)
+            {
+                child.AbsoluteOuterRect = AbsolutePaddingRect;
+            }
+        }
     }
 
 }

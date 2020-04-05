@@ -561,11 +561,11 @@ namespace Aximo.Engine
                     reloadable.OnReload();
         }
 
-        protected virtual void OnMouseMove(MouseMoveEventArgs e) { }
+        protected virtual void OnMouseMove(MouseMoveArgs e) { }
 
         private void OnMouseMoveInternal(MouseMoveEventArgs e)
         {
-            OnMouseMove(e);
+            var args = new MouseMoveArgs(e);
 
             // TODO: MIG
             // if (e.Mouse.LeftButton == ButtonState.Pressed)
@@ -575,6 +575,14 @@ namespace Aximo.Engine
             var y = (float)(((double)e.Y / (double)ScreenSize.Y * 2.0) - 1.0);
 
             CurrentMousePosition = new Vector2(x, y);
+
+
+            OnMouseMove(args);
+            if (args.Handled)
+                return;
+
+            GameContext.OnMouseMove(args);
+
             // Console.WriteLine(CurrentMouseWorldPosition.ToString());
             // Console.WriteLine(CurrentMousePosition.ToString());
         }

@@ -12,6 +12,7 @@ namespace Aximo.Engine
 
     public abstract class UIComponent : GraphicsScreenTextureComponent
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<UIComponent>();
 
         public UIComponent() : this(new Vector2i(100, 100))
         {
@@ -65,6 +66,8 @@ namespace Aximo.Engine
             if (AbsoluteDrawRect != oldDrawRect)
             {
                 RectanglePixels = AbsoluteDrawRect.ToRectangleF();
+                if (AbsoluteClientRect.Size != oldDrawRect.Size)
+                    OnResized();
             }
         }
 
@@ -169,6 +172,64 @@ namespace Aximo.Engine
                 _RectanglePixels = value;
             }
         }
+
+        protected virtual void DrawControl()
+        {
+
+        }
+
+        protected void InvokeDrawControl()
+        {
+            DrawControl();
+            UpdateTexture();
+        }
+
+        protected virtual void OnResized()
+        {
+            InvokeDrawControl();
+        }
+
+        public virtual void OnMouseEnter(MouseMoveArgs e)
+        {
+
+        }
+
+        public virtual void OnMouseLeave(MouseMoveArgs e)
+        {
+
+        }
+
+        public virtual void OnMouseMove2(MouseMoveArgs e)
+        {
+
+        }
+
+        public bool MouseEntered { get; private set; }
+
+        public override void OnMouseMove(MouseMoveArgs e)
+        {
+            if (AbsoluteDrawRect.Contains(e.Position))
+            {
+                if (!MouseEntered)
+                {
+                    MouseEntered = true;
+                    Log.Verbose("MouseEnter #{ObjectId} {Name}", ObjectId, Name);
+                    OnMouseEnter(e);
+                }
+
+                OnMouseMove2(e);
+            }
+            else
+            {
+                if (MouseEntered)
+                {
+                    MouseEntered = false;
+                    Log.Verbose("MouseLeave #{ObjectId} {Name}", ObjectId, Name);
+                    OnMouseLeave(e);
+                }
+            }
+        }
+
     }
 
 }

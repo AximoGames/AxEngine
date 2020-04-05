@@ -64,6 +64,12 @@ namespace Aximo.Engine
                 act.Visit(action, visitChilds);
         }
 
+        public void Visit(Action<Actor> action)
+        {
+            foreach (var act in Actors)
+                action(act);
+        }
+
         public void RemoveActor(Actor actor)
         {
             if (actor == null)
@@ -193,7 +199,17 @@ namespace Aximo.Engine
 
         public void OnScreenResize(ScreenResizeEventArgs e)
         {
-            Visit<SceneComponent>(c => c.OnScreenResize(e));
+            Visit<Actor>(c => c.OnScreenResize(e));
+        }
+
+        public void OnMouseButton(MouseButtonArgs e)
+        {
+            Visit<Actor>(c => c.OnMouseButton(e), c => !e.Handled);
+        }
+
+        public void OnMouseMove(MouseMoveArgs e)
+        {
+            Visit<Actor>(c => c.OnMouseMove(e), c => !e.Handled);
         }
 
     }

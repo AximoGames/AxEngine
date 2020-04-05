@@ -351,6 +351,14 @@ namespace Aximo.Engine
         {
         }
 
+        public virtual void OnMouseButton(MouseButtonArgs e)
+        {
+        }
+
+        public virtual void OnMouseMove(MouseMoveArgs e)
+        {
+        }
+
     }
 
 }
