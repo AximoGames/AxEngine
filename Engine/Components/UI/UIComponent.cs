@@ -8,36 +8,6 @@ using SixLabors.Primitives;
 namespace Aximo.Engine
 {
 
-    public class UIImage : UIComponent
-    {
-
-        public UIImage(GameMaterial material) : this(material, new Vector2i(100, 100))
-        {
-        }
-
-        public UIImage(GameMaterial material, Vector2i size) : base(size)
-        {
-            Material = material;
-        }
-
-        public UIImage(string imagePath) : this(GameTexture.GetFromFile(imagePath), new Vector2i(100, 100))
-        {
-        }
-
-        public UIImage(string imagePath, Vector2i size) : this(GameTexture.GetFromFile(imagePath), size)
-        {
-        }
-
-        public UIImage(GameTexture image) : this(image, new Vector2i(100, 100))
-        {
-        }
-
-        public UIImage(GameTexture image, Vector2i size) : base(size)
-        {
-            Material.DiffuseTexture = image;
-        }
-    }
-
     public class UIComponent : GraphicsScreenTextureComponent
     {
 
@@ -49,8 +19,69 @@ namespace Aximo.Engine
         {
         }
 
-        public UIAnchors Margin;
-        public UIRect ClientRect;
+        internal virtual void CalculateSizes()
+        {
+            if (Parent == null)
+                return;
+
+            if (Parent is UIComponent p)
+                AbsoluteOuterRect = p.AbsoluteClientRect;
+            else
+                AbsoluteOuterRect = new Box2(Vector2.Zero, RenderContext.Current.ScreenSize.ToVector2());
+
+            // TODO: Shrink AbsoluteOuterRect if Dock is set.
+            // ...
+
+            Vector2 relSize;
+            Vector2 relPos;
+
+            // Draw
+
+            relSize = AbsoluteOuterRect.Size - Margin.Size;
+            relPos = Margin.Min;
+
+            RelatativeDrawRect = new Box2(relPos, relPos + relSize);
+            AbsoluteDrawRect = new Box2(AbsoluteOuterRect.Min + relPos, relSize);
+
+            // Client
+
+            relSize = AbsoluteOuterRect.Size - Margin.Size - Border.Size;
+            relPos = Margin.Min + Border.Min;
+
+            RelatativeClientRect = new Box2(relPos, relPos + relSize);
+            AbsoluteClientRect = new Box2(AbsoluteOuterRect.Min + relPos, relSize);
+
+            // Padding
+
+            relSize = AbsoluteOuterRect.Size - Margin.Size - Border.Size - PaddingInternal.Size;
+            relPos = Margin.Min + Border.Min + PaddingInternal.Min;
+
+            RelatativePaddingRect = new Box2(relPos, relPos + relSize);
+            AbsolutePaddingRect = new Box2(AbsoluteOuterRect.Min + relPos, relSize);
+
+        }
+
+        // Size+Border+Margin
+        private Box2 AbsoluteOuterRect; // Absoute Rect of this control incl. Margin
+
+        // Size+Border
+        private Box2 RelatativeDrawRect;
+        private Box2 AbsoluteDrawRect;
+
+        // Size
+        private Box2 RelatativeClientRect;
+        private Box2 AbsoluteClientRect;
+
+        // Size-Padding
+        private Box2 RelatativePaddingRect;
+        private Box2 AbsolutePaddingRect;
+
+        protected internal virtual Box2 PaddingInternal => new Box2();
+
+        public Box2 Margin;
+        public Box2 ClientRect;
+        public Box2 Border;
+        public UIDock Dock;
 
         private RectangleF? _RectangleUV;
         public RectangleF RectangleUV
