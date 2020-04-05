@@ -7,14 +7,14 @@ using System.Threading;
 namespace Aximo.Render
 {
 
-    public abstract class GameObjectBase : IGameObject
+    public abstract class RenderObjectBase : IRenderObject
     {
 
         public int Id { get; }
         public string Name { get; set; }
         public bool Enabled { get; set; } = true;
 
-        public GameObjectBase()
+        public RenderObjectBase()
         {
             Id = GetNextGameObjectId();
         }

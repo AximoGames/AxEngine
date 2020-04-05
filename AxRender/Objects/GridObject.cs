@@ -8,7 +8,7 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-    public class GridObject : GameObject, IRenderableObject
+    public class GridObject : RenderObject, IRenderableObject
     {
 
         public Camera Camera => Context.Camera;

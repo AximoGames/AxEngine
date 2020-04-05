@@ -11,7 +11,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Render
 {
 
-    public interface IGameObject : IData
+    public interface IRenderObject : IData
     {
         int Id { get; }
         string Name { get; set; }
@@ -76,7 +76,7 @@ namespace Aximo.Render
 
     }
 
-    public interface IRenderableObject : IGameObject
+    public interface IRenderableObject : IRenderObject
     {
         void OnRender();
         List<IRenderPipeline> RenderPipelines { get; }
@@ -102,12 +102,12 @@ namespace Aximo.Render
         List<ILightObject> Lights { get; }
     }
 
-    public interface IReloadable : IGameObject
+    public interface IReloadable : IRenderObject
     {
         void OnReload();
     }
 
-    public interface IShadowObject : IGameObject, IRenderableObject
+    public interface IShadowObject : IRenderObject, IRenderableObject
     {
         void OnRenderShadow();
         void OnRenderCubeShadow();
@@ -140,7 +140,7 @@ namespace Aximo.Render
         Quaternion Rotate { get; set; }
     }
 
-    public interface ILightObject : IPosition, IGameObject
+    public interface ILightObject : IPosition, IRenderObject
     {
         bool Shadows { get; set; }
         int ShadowTextureIndex { get; set; }

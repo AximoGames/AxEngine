@@ -26,7 +26,7 @@ namespace Aximo.Render
             GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, -1, name.Length, name);
         }
 
-        public static void PushDebugGroup(string verb, IGameObject obj)
+        public static void PushDebugGroup(string verb, IRenderObject obj)
         {
             var objName = obj.Name;
             if (string.IsNullOrEmpty(objName))

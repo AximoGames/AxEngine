@@ -13,7 +13,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Engine
 {
 
-    public class GameContext : EngineObject
+    public class GameContext : GameObject
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<GameContext>();
 
@@ -126,7 +126,7 @@ namespace Aximo.Engine
                 act.PropagateChangesDown();
         }
 
-        internal IList<EngineObject> ObjectsForDeallocation = new List<EngineObject>(); //TODO: Sync
+        internal IList<GameObject> ObjectsForDeallocation = new List<GameObject>(); //TODO: Sync
 
         public void Sync()
         {
@@ -137,7 +137,7 @@ namespace Aximo.Engine
                 {
                     if (obj.RefCount == 0)
                     {
-                        obj.VisitChilds<EngineObject>(obj =>
+                        obj.VisitChilds<GameObject>(obj =>
                         {
                             if (obj.RefCount == 1)
                                 obj.Deallocate();

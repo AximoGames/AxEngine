@@ -10,7 +10,7 @@ using System.Threading;
 namespace Aximo.Engine
 {
 
-    public class ActorComponent : EngineObject
+    public class ActorComponent : GameObject
     {
         public int ComponentId { get; private set; }
 

@@ -9,7 +9,7 @@ using OpenToolkit.Graphics.OpenGL4;
 namespace Aximo.Render
 {
 
-    public class ScreenshotObject : GameObjectBase
+    public class ScreenshotObject : RenderObjectBase
     {
 
         public ScreenshotObject(BufferData2D<int> data)

@@ -7,7 +7,7 @@ using System.Threading;
 namespace Aximo.Render
 {
 
-    public abstract class GameObject : GameObjectBase
+    public abstract class RenderObject : RenderObjectBase
     {
         public virtual List<IRenderPipeline> RenderPipelines { get; } = new List<IRenderPipeline>();
 

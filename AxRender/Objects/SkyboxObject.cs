@@ -13,7 +13,7 @@ namespace Aximo.Render
     // together with https://stackoverflow.com/questions/2588875/whats-the-best-way-to-draw-a-fullscreen-quad-in-opengl-3-2/59739538#59739538
     // https://community.khronos.org/t/rendering-a-skybox-after-drawing-post-process-effects-to-a-screen-quad/74002
 
-    public class SkyboxObject : GameObject, IRenderableObject
+    public class SkyboxObject : RenderObject, IRenderableObject
     {
         public Camera Camera => Context.Camera;
 

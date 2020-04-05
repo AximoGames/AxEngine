@@ -15,7 +15,7 @@ using Image = SixLabors.ImageSharp.Image;
 namespace Aximo.Engine
 {
 
-    public class GameTexture : EngineObject
+    public class GameTexture : GameObject
     {
 
         private static Serilog.ILogger Log = Aximo.Log.ForContext<GameTexture>();

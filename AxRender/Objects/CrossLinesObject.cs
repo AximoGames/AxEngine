@@ -7,7 +7,7 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-    public class CrossLinesObject : GameObject, IRenderableObject
+    public class CrossLinesObject : RenderObject, IRenderableObject
     {
 
         public Camera Camera => Context.Camera;

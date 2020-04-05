@@ -10,7 +10,7 @@ using SixLabors.Primitives;
 
 namespace Aximo.Render
 {
-    public class ScreenTextureObject : GameObject, IRenderTarget, IScaleRotate, IPosition
+    public class ScreenTextureObject : RenderObject, IRenderTarget, IScaleRotate, IPosition
     {
         private Shader _shader;
 

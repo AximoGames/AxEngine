@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Aximo.Engine
 {
-    public abstract class EngineObject : IDisposable
+    public abstract class GameObject : IDisposable
     {
 
         private static int LastGameObjectId;
@@ -15,7 +15,7 @@ namespace Aximo.Engine
         private int _ObjectId;
         public int ObjectId => _ObjectId;
 
-        public EngineObject()
+        public GameObject()
         {
             _ObjectId = GetNewGameObjectId();
         }
@@ -27,9 +27,9 @@ namespace Aximo.Engine
 
         internal int RefCount => Consumers.Count;
 
-        private List<EngineObject> Consumers = new List<EngineObject>();
+        private List<GameObject> Consumers = new List<GameObject>();
 
-        internal void AddRef(EngineObject consumer)
+        internal void AddRef(GameObject consumer)
         {
             lock (Consumers)
             {
@@ -42,7 +42,7 @@ namespace Aximo.Engine
             DeallocateUndo();
         }
 
-        internal void RemoveRef(EngineObject consumer)
+        internal void RemoveRef(GameObject consumer)
         {
             lock (Consumers)
             {
@@ -102,7 +102,7 @@ namespace Aximo.Engine
             Disposed = true;
         }
 
-        ~EngineObject()
+        ~GameObject()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: false);
@@ -119,14 +119,14 @@ namespace Aximo.Engine
         }
 
         public virtual void Visit<T>(Action<T> action, Func<T, bool> visitChilds = null)
-            where T : EngineObject
+            where T : GameObject
         {
             if (this is T)
                 action((T)this);
         }
 
         public void VisitChilds<T>(Action<T> action, Func<T, bool> visitChilds = null)
-            where T : EngineObject
+            where T : GameObject
         {
             Visit<T>(obj =>
             {

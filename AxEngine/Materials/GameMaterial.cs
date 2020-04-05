@@ -14,7 +14,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Engine
 {
 
-    public class GameMaterial : EngineObject
+    public class GameMaterial : GameObject
     {
 
         public static GameMaterial Default => MaterialManager.DefaultMaterial;

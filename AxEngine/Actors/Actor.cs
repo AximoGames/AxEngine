@@ -13,7 +13,7 @@ using System.Threading;
 namespace Aximo.Engine
 {
 
-    public class Actor : EngineObject
+    public class Actor : GameObject
     {
         public bool IsAttached { get; internal set; }
 

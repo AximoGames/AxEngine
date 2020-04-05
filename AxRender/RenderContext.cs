@@ -92,13 +92,13 @@ namespace Aximo.Render
 
         public SceneOptions SceneOpitons;
         public Camera Camera;
-        public List<IGameObject> AllObjects = new List<IGameObject>();
+        public List<IRenderObject> AllObjects = new List<IRenderObject>();
         public List<IRenderableObject> RenderableObjects = new List<IRenderableObject>();
         public List<IUpdateFrame> UpdateFrameObjects = new List<IUpdateFrame>();
         public List<IShadowObject> ShadowObjects = new List<IShadowObject>();
         public List<ILightObject> LightObjects = new List<ILightObject>();
 
-        public IGameObject GetObjectByName(string name)
+        public IRenderObject GetObjectByName(string name)
         {
             // TODO: Hash
             return AllObjects.FirstOrDefault(o => o.Name == name);
@@ -118,7 +118,7 @@ namespace Aximo.Render
             RenderPipelines.Add(pipeline);
         }
 
-        public void AddObject(IGameObject obj)
+        public void AddObject(IRenderObject obj)
         {
             obj.AssignContext(this);
 
@@ -142,7 +142,7 @@ namespace Aximo.Render
                 LightObjects.Add(lightObj);
         }
 
-        public void RemoveObject(IGameObject obj)
+        public void RemoveObject(IRenderObject obj)
         {
             AllObjects.Remove(obj);
 

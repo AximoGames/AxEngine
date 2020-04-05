@@ -10,7 +10,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Render
 {
 
-    public abstract class RenderableObject : GameObject, IRenderableObject
+    public abstract class RenderableObject : RenderObject, IRenderableObject
     {
         public void OnRender()
         {
