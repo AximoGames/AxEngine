@@ -343,9 +343,12 @@ namespace Aximo.Engine
             if (e.Size == RenderContext.ScreenSize)
                 return;
 
-            Console.WriteLine("OnScreenResize: " + window.Size.X + "x" + window.Size.Y);
+            var eventArgs = new ScreenResizeEventArgs(RenderContext.ScreenSize, e.Size);
+
+            Console.WriteLine("OnScreenResize: " + e.Size.X + "x" + e.Size.Y);
             RenderContext.ScreenSize = e.Size;
-            DispatchRender(() => RenderContext.OnScreenResize());
+            GameContext.OnScreenResize(eventArgs);
+            DispatchRender(() => RenderContext.OnScreenResize(eventArgs));
         }
 
         protected virtual void OnUpdateFrame(FrameEventArgs e) { }

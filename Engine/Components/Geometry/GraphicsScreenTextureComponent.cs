@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading;
 using Aximo.Render;
 using OpenToolkit;
+using OpenToolkit.Mathematics;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.Primitives;
@@ -19,9 +20,9 @@ namespace Aximo.Engine
 
     public class GraphicsScreenTextureComponent : ScreenTextureComponent
     {
-        public GraphicsScreenTextureComponent(int width, int height)
+        public GraphicsScreenTextureComponent(Vector2i size)
         {
-            Image = new Image<Rgba32>(width, height);
+            Image = new Image<Rgba32>(size.X, size.Y);
             Texture = GameTexture.GetFromBitmap(Image, null);
             Material.DiffuseTexture = Texture;
             UpdateTexture();

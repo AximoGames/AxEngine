@@ -6,6 +6,8 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.Primitives;
 
 namespace Aximo
 {
@@ -101,6 +103,16 @@ namespace Aximo
             // {
             //     ptrCallback((IntPtr)ptr);
             // }
+        }
+
+        public static void Clear(this IImageProcessingContext source, Color color)
+        {
+            var graphicsOptions = new GraphicsOptions
+            {
+                AlphaCompositionMode = PixelAlphaCompositionMode.Clear
+            };
+            var size = source.GetCurrentSize();
+            source.Fill(graphicsOptions, color, new Rectangle(0, 0, size.Width, size.Height));
         }
 
     }

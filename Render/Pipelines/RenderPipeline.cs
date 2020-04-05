@@ -31,7 +31,7 @@ namespace Aximo.Render
                         yield return obj;
         }
 
-        public virtual void OnScreenResize()
+        public virtual void OnScreenResize(ScreenResizeEventArgs e)
         {
         }
     }
@@ -41,7 +41,7 @@ namespace Aximo.Render
         void BeforeInit();
         void Init();
         void AfterInit();
-        void OnScreenResize();
+        void OnScreenResize(ScreenResizeEventArgs e);
         void InitRender(RenderContext context, Camera camera);
         void Render(RenderContext context, Camera camera);
         IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera);

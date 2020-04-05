@@ -191,6 +191,11 @@ namespace Aximo.Engine
             Time = TimeWatcher.Elapsed;
         }
 
+        public void OnScreenResize(ScreenResizeEventArgs e)
+        {
+            Visit<SceneComponent>(c => c.OnScreenResize(e));
+        }
+
     }
 
 }

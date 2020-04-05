@@ -21,7 +21,7 @@ namespace Aximo.Render
         void Init();
         void Free();
         void AssignContext(RenderContext ctx);
-        void OnScreenResize();
+        void OnScreenResize(ScreenResizeEventArgs e);
         void OnWorldRendered();
     }
 

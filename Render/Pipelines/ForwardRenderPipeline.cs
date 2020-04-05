@@ -50,11 +50,11 @@ namespace Aximo.Render
                 Render(context, camera, obj);
         }
 
-        public override void OnScreenResize()
+        public override void OnScreenResize(ScreenResizeEventArgs e)
         {
             // if (RenderContext.Current.ScreenSize.X == 100)
             //     throw new Exception();
-            FrameBuffer.Resize(RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
+            FrameBuffer.Resize(e.Size.X, e.Size.Y);
         }
 
     }

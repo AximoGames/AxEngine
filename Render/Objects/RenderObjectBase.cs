@@ -54,7 +54,7 @@ namespace Aximo.Render
 
         public abstract void Free();
 
-        public virtual void OnScreenResize()
+        public virtual void OnScreenResize(ScreenResizeEventArgs e)
         {
         }
 

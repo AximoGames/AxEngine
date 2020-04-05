@@ -302,6 +302,10 @@ namespace Aximo.Engine
             base.SyncChanges();
         }
 
+        public virtual void OnScreenResize(ScreenResizeEventArgs e)
+        {
+        }
+
     }
 
 }

@@ -163,9 +163,9 @@ namespace Aximo.Render
             ObjectManager.PopDebugGroup();
         }
 
-        public override void OnScreenResize()
+        public override void OnScreenResize(ScreenResizeEventArgs e)
         {
-            GBuffer.Resize(RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
+            GBuffer.Resize(e.Size.X, e.Size.Y);
         }
     }
 

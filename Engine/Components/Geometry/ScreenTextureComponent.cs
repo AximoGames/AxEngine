@@ -32,32 +32,6 @@ namespace Aximo.Engine
             base.SyncChanges();
         }
 
-        public RectangleF RectangleUV
-        {
-            set
-            {
-                var pos = new Vector3(
-                    ((value.X + (value.Width / 2f)) * 2) - 1.0f,
-                    ((1 - (value.Y + (value.Height / 2f))) * 2) - 1.0f,
-                    0);
-
-                var scale = new Vector3(value.Width, -value.Height, 1.0f);
-                RelativeTranslation = pos;
-                RelativeScale = scale;
-            }
-        }
-
-        public RectangleF RectanglePixels
-        {
-            set
-            {
-                var pos1 = new Vector2(value.X, value.Y) * RenderContext.Current.PixelToUVFactor;
-                var pos2 = new Vector2(value.Right, value.Bottom) * RenderContext.Current.PixelToUVFactor;
-
-                RectangleUV = new RectangleF(pos1.X, pos1.Y, pos2.X - pos1.X, pos2.Y - pos1.Y);
-            }
-        }
-
     }
 
 }

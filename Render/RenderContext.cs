@@ -10,18 +10,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-    //public class MeshObject : GameObject, IMeshObject
-    //{
-    //    public int[] GetIndices()
-    //    {
-    //        return DefaultCoordinates.DEFAULT_BOX_COORDINATES;
-    //    }
-
-    //    public Vector3[] GetVertices()
-    //    {
-    //        return DefaultCoordinates.DEFAULT_BOX_VERTICES;
-    //    }
-    //}
 
     public class RenderContext
     {
@@ -62,7 +50,7 @@ namespace Aximo.Render
                 obj.OnWorldRendered();
         }
 
-        public Vector2i _ScreenSize;
+        private Vector2i _ScreenSize;
         public Vector2i ScreenSize
         {
             get { return _ScreenSize; }
@@ -171,7 +159,7 @@ namespace Aximo.Render
             EmmitLogMessage(DebugType.DebugTypeOther, DebugSeverity.DebugSeverityNotification, message);
         }
 
-        public void OnScreenResize()
+        public void OnScreenResize(ScreenResizeEventArgs e)
         {
             GL.Viewport(0, 0, ScreenSize.X, ScreenSize.Y);
 
@@ -180,10 +168,10 @@ namespace Aximo.Render
             Camera.SetAspectRatio(ScreenSize.X, ScreenSize.Y);
 
             foreach (var pipe in RenderPipelines)
-                pipe.OnScreenResize();
+                pipe.OnScreenResize(e);
 
             foreach (var obj in AllObjects)
-                obj.OnScreenResize();
+                obj.OnScreenResize(e);
         }
 
         public Vector4 BackgroundColor { get; set; } = new Vector4(0.2f, 0.3f, 0.3f, 1.0f);

@@ -9,11 +9,10 @@ using System.Linq;
 using System.Threading;
 using Aximo.Render;
 using OpenToolkit;
+using OpenToolkit.Mathematics;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Primitives;
 using SixLabors.Shapes;
 using Color = SixLabors.ImageSharp.Color;
 using PointF = SixLabors.Primitives.PointF;
@@ -21,18 +20,18 @@ using PointF = SixLabors.Primitives.PointF;
 namespace Aximo.Engine
 {
 
-    public class StatsComponent : GraphicsScreenTextureComponent
+    public class StatsComponent : UIComponent
     {
         private DateTime LastStatUpdate;
         private Font DefaultFont = new Font(SystemFonts.Families.First(), 15, FontStyle.Regular);
 
-        public StatsComponent() : base(100, 100)
+        public StatsComponent() : this(new Vector2i(100, 100))
         {
         }
 
-        public StatsComponent(int width, int height) : base(width, height)
+        public StatsComponent(Vector2i size) : base(size)
         {
-            Image.Mutate(ctx => ctx.Fill(Color.Green));
+            Image.Mutate(ctx => ctx.Clear(Color.Transparent));
             UpdateTexture();
         }
 
@@ -41,7 +40,7 @@ namespace Aximo.Engine
             if ((DateTime.UtcNow - LastStatUpdate).TotalSeconds > 1)
             {
                 LastStatUpdate = DateTime.UtcNow;
-                Image.Mutate(ctx => ctx.Fill(Color.Green));
+                Image.Mutate(ctx => ctx.Clear(Color.Transparent));
                 var txt = "FPS: " + Math.Round(RenderApplication.Current.RenderCounter.EventsPerSecond).ToString();
                 txt += "\nUPS: " + Math.Round(RenderApplication.Current.UpdateCounter.EventsPerSecond).ToString();
                 Image.Mutate(ctx => ctx.DrawText(txt, DefaultFont, Color.White, new PointF(5, 5)));
