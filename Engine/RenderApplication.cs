@@ -76,7 +76,6 @@ namespace Aximo.Engine
 
         private void InitGlfw()
         {
-            Log.Info("Init Glfw");
             var glfwLibFileName = Environment.OSVersion.Platform == PlatformID.Win32NT ? "glfw3-x64.dll" : "libglfw.so.3.3";
             var glfwLibFileDest = Path.Combine(DirectoryHelper.BinDir, glfwLibFileName);
             if (!File.Exists(glfwLibFileDest))
@@ -85,6 +84,7 @@ namespace Aximo.Engine
                 File.Copy(glfwLibFileSrc, glfwLibFileDest);
             }
 
+            Log.Info("Init Glfw");
             GLFW.Init();
             Log.Info("GLFW Version: {Version}", GLFW.GetVersionString());
         }

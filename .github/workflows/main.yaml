@@ -18,6 +18,8 @@ jobs:
       run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
     - run: .github/workflows/setup-xvfb
     - run: .github/workflows/xvfb-daemon-run dotnet test Tests -v detailed -- RunConfiguration.TestSessionTimeout=10000
+      env:
+      - LIBGL_ALWAYS_SOFTWARE: true
     # - name: Running tests
     #   run: dotnet test -p Tests
     #   env:
