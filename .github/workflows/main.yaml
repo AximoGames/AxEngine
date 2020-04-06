@@ -16,7 +16,17 @@ jobs:
     #- run: dotnet build
     - name: Update Package respository
       run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
-    - run: sudo .github/workflows/setup-xvfb
+    #- run: sudo .github/workflows/setup-xvfb
+    - run: |
+        sudo apt-get  install -y xvfb x11vnc x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic x11-apps \
+          libgl1-mesa-glx
+
+        sudo cp xvfb_init /etc/init.d/xvfb
+        sudo chmod a+x /etc/init.d/xvfb
+
+        sudo cp xvfb_daemon_run /usr/bin/xvfb-daemon-run
+        sudo chmod a+x /usr/bin/xvfb-daemon-run
+
     - run: .github/workflows/xvfb_daemon_run dotnet test Tests
     # - name: Running tests
     #   run: dotnet test -p Tests
