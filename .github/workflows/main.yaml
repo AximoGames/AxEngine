@@ -13,7 +13,7 @@ jobs:
     - uses: actions/setup-dotnet@v1.4.0
       with:
         dotnet-version: '3.1.100' # SDK Version to use.
-    - run: dotnet build
+    #- run: dotnet build
     - name: Update Package respository
       run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
     - run: sudo .github/workflows/setup-xvfb
