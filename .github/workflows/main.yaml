@@ -19,7 +19,7 @@ jobs:
     - run: .github/workflows/setup-xvfb
     - run: .github/workflows/xvfb-daemon-run dotnet test Tests -v detailed -- RunConfiguration.TestSessionTimeout=10000
       env:
-      - LIBGL_ALWAYS_SOFTWARE: true
+        LIBGL_ALWAYS_SOFTWARE: true
     # - name: Running tests
     #   run: dotnet test -p Tests
     #   env:
