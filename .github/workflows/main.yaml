@@ -15,6 +15,7 @@ jobs:
         dotnet-version: '3.1.100' # SDK Version to use.
     - run: dotnet build
     - run: .github/workflows/setup-xvfb
+    - run: xvfb_daemon_run dotnet test Tests
     # - name: Running tests
     #   run: dotnet test -p Tests
     #   env:
