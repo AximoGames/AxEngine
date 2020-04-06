@@ -28,19 +28,21 @@ namespace Aximo.Engine
 
         public void Start()
         {
-
             var bits = IntPtr.Size == 4 ? 32 : 64;
             Log.Verbose($"{bits} Bit System detected. (Pointer Size: {IntPtr.Size} Bytes)");
             Log.Verbose("OS: {OSVersion}", Environment.OSVersion);
 
             if (Config.UseGtkUI)
             {
+                Log.Verbose("Init GtkUI");
                 ui = new GtkUI();
                 ui.Start();
+                Log.Verbose("GtkUI initialized");
             }
 
             if (Config.UseConsole)
             {
+                Log.Verbose("Configure for console session");
                 th = new Thread(UIThreadMain);
                 th.Start();
 

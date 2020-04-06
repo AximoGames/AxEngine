@@ -58,6 +58,7 @@ namespace Aximo.Render
 
         public void Init(IBindingsContext bindingsContext)
         {
+            Log.Verbose("Load OpenGL Bindings");
             GL.LoadBindings(bindingsContext);
             var vendor = GL.GetString(StringName.Vendor);
             var version = GL.GetString(StringName.Version);

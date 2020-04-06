@@ -60,6 +60,7 @@ namespace Aximo.Engine
 
             Init();
             AfterApplicationInitialized?.Invoke();
+            Log.Verbose("Call Window.Run()");
             window.Run();
             Console.WriteLine("Exited Run()");
             WindowExited = true;
@@ -75,6 +76,7 @@ namespace Aximo.Engine
 
         private void InitGlfw()
         {
+            Log.Info("Init Glfw");
             var glfwLibFileName = Environment.OSVersion.Platform == PlatformID.Win32NT ? "glfw3-x64.dll" : "libglfw.so.3.3";
             var glfwLibFileDest = Path.Combine(DirectoryHelper.BinDir, glfwLibFileName);
             if (!File.Exists(glfwLibFileDest))
@@ -91,6 +93,7 @@ namespace Aximo.Engine
         {
             InitGlfw();
 
+            Log.Info("Create Window");
             window = new RenderWindow(config)
             {
                 WindowBorder = config.WindowBorder,
@@ -222,11 +225,16 @@ namespace Aximo.Engine
 
             if (!RenderInitialized)
             {
+                Log.Verbose("Init Renderer");
+
+                Log.Verbose("Grab Context");
                 if (Environment.OSVersion.Platform != PlatformID.Win32NT) // Crash on mswin!
                     window.MakeCurrent();
+
                 Renderer.Init(new GLFWBindingsContext());
                 //window.SwapBuffers();
                 RenderInitialized = true;
+                Log.Verbose("Renderer initialized");
             }
 
             if (!RenderingEnabled || UpdateFrameNumber == 0)
