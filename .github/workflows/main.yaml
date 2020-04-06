@@ -20,6 +20,9 @@ jobs:
     - run: |
         cd .github/workflows
 
+        ls
+        pwd
+
         sudo apt-get  install -y xvfb x11vnc x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic x11-apps \
           libgl1-mesa-glx
 
@@ -29,7 +32,7 @@ jobs:
         sudo cp xvfb_daemon_run /usr/bin/xvfb-daemon-run
         sudo chmod a+x /usr/bin/xvfb-daemon-run
 
-    - run: .github/workflows/xvfb_daemon_run dotnet test Tests
+    - run: xvfb_daemon_run dotnet test Tests
     # - name: Running tests
     #   run: dotnet test -p Tests
     #   env:
