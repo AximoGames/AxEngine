@@ -1,0 +1,10 @@
+#!/bin/bash
+
+apt-get  install -y xvfb x11vnc x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic x11-apps \
+    libgl1-mesa-swx11
+
+cp xvfb_init /etc/init.d/xvfb
+chmod a+x /etc/init.d/xvfb
+cp xvfb_daemon_run /usr/bin/xvfb-daemon-run
+chmod a+x /usr/bin/xvfb-daemon-run
+export DISPLAY=:99
