@@ -9,32 +9,10 @@
   </PropertyGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
+    <PackageReference Include="OpenTK" Version="4.0.0-pre4" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="OpenToolkit.Core">
-      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenToolkit.Graphics">
-      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Graphics.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenToolkit.GraphicsLibraryFramework">
-      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.GraphicsLibraryFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenToolkit.Input">
-      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Input.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenToolkit.Mathematics">
-      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Mathematics.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenToolkit.Windowing.Common">
-      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Windowing.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenToolkit.Windowing.Desktop">
-      <HintPath>..\..\libs\OpenToolkit\OpenToolkit.Windowing.Desktop.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>

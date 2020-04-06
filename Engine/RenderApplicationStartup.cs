@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Aximo.Render;
 using OpenToolkit;
-using OpenToolkit.GraphicsLibraryFramework;
 using OpenToolkit.Input;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;

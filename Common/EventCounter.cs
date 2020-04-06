@@ -8,7 +8,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using OpenToolkit;
-using OpenToolkit.GraphicsLibraryFramework;
 using OpenToolkit.Input;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
