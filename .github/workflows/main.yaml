@@ -16,7 +16,7 @@ jobs:
     - run: dotnet build
     - name: Update Package respository
       run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
-    - run: .github/workflows/setup-xvfb
+    - run: sudo .github/workflows/setup-xvfb
     - run: .github/workflows/xvfb_daemon_run dotnet test Tests
     # - name: Running tests
     #   run: dotnet test -p Tests
