@@ -13,6 +13,7 @@ namespace Aximo.Render
         public int Id { get; }
         public string Name { get; set; }
         public bool Enabled { get; set; } = true;
+        public int Order { get; set; }
 
         public RenderObjectBase()
         {

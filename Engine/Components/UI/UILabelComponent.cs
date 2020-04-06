@@ -26,7 +26,11 @@ namespace Aximo.Engine
 
         protected override void DrawControl()
         {
-            Image.Mutate(ctx => ctx.DrawText("blubb", DefaultFont, Color.Red, new PointF(0, 0)));
+            var options = new TextGraphicsOptions
+            {
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+            Image.Mutate(ctx => ctx.DrawText(options, "blubb", DefaultFont, Color.Red, new PointF(0, RelatativePaddingRect.Size.Y / 2)));
         }
 
         protected override void OnResized()

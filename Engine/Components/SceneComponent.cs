@@ -84,6 +84,16 @@ namespace Aximo.Engine
             Actor?.RegisterComponentName(child);
 
             child.UpdateParent();
+
+            child.OnAttached();
+        }
+
+        protected virtual void OnAttached()
+        {
+        }
+
+        protected virtual void OnDetached()
+        {
         }
 
         private void SetParents()

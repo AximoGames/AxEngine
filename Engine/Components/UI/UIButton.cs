@@ -15,6 +15,7 @@ namespace Aximo.Engine
 
         public UIButton()
         {
+            Padding = new UIAnchors(10, 10, 10, 10);
             LabelComponent = new UILabelComponent();
             AddComponent(LabelComponent);
         }

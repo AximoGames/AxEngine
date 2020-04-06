@@ -28,7 +28,43 @@ namespace Aximo.Engine
 
         internal override void SyncChanges()
         {
+            if (!HasChanges)
+                return;
+
             base.SyncChanges();
+
+            if (OrderChanged)
+            {
+                RenderableObject.Order = Order;
+                OrderChanged = false;
+            }
+        }
+
+        private bool OrderChanged = false;
+        private int Order = 5000;
+
+        internal void SetOrders()
+        {
+            SetOrders(Order);
+        }
+
+        internal void SetOrders(int order)
+        {
+            Visit<ScreenTextureComponent>(c =>
+            {
+                c.Order = order++;
+                c.OrderChanged = true;
+                c.Update();
+
+            });
+        }
+
+        protected override void OnAttached()
+        {
+            if (Parent is ScreenTextureComponent s)
+                s.SetOrders();
+            else
+                SetOrders();
         }
 
     }

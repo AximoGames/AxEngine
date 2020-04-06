@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using OpenToolkit.Graphics.OpenGL4;
+using System.Linq;
 
 namespace Aximo.Render
 {
@@ -19,7 +20,7 @@ namespace Aximo.Render
             GL.ClearColor(1.0f, 0.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            foreach (var obj in GetRenderObjects(context, camera))
+            foreach (var obj in GetRenderObjects(context, camera).OrderBy(o => o.Order))
                 Render(context, camera, obj);
         }
 

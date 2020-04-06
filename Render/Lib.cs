@@ -17,6 +17,7 @@ namespace Aximo.Render
         string Name { get; set; }
         bool Enabled { get; set; }
         bool Orphaned { get; set; }
+        int Order { get; set; }
         RenderContext Context { get; }
         void Init();
         void Free();
