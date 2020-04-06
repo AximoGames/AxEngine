@@ -17,7 +17,7 @@ jobs:
     - name: Update Package respository
       run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
     - run: .github/workflows/setup-xvfb
-    - run: .github/workflows/xvfb-daemon-run dotnet test Tests
+    - run: .github/workflows/xvfb-daemon-run dotnet test Tests -v detailed -- RunConfiguration.TestSessionTimeout=10000
     # - name: Running tests
     #   run: dotnet test -p Tests
     #   env:

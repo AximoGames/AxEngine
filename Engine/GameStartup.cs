@@ -28,7 +28,7 @@ namespace Aximo.Engine
 
         public void Start()
         {
-            SharedLib.EnableLogging();
+
             var bits = IntPtr.Size == 4 ? 32 : 64;
             Log.Verbose($"{bits} Bit System detected. (Pointer Size: {IntPtr.Size} Bytes)");
             Log.Verbose("OS: {OSVersion}", Environment.OSVersion);
