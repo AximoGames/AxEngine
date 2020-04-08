@@ -12,6 +12,8 @@ echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sources
 apt-get wget zsh git-lfs
 
 # comfort
-apt-get -y zsh
+apt-get -y install zsh
+git clone --recursive https://github.com/Arakis/prezto.git ~/.zprezto
+# Manual: launch zsh and run: ~/.zprezto/install
 
 ./install-dotnet-debian9
