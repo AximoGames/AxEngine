@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cd $(dirname $0)
+
+# Stage 1 Preparation (manual)
+# apt-get update && apt-get -y install git sudo
+# git clone https://github.com/AximoGames/AxEngine.git
+# Now Call .github/workfows/install-chroot
+
+# Stage 2
+echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sources.list
+apt-get wget zsh git-lfs
+
+# comfort
+apt-get -y zsh
+
+./install-dotnet-debian9
