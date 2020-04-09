@@ -3,9 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using OpenToolkit.Graphics.OpenGL4;
-//using System.Drawing.Imaging;
 
 namespace Aximo.Render
 {
