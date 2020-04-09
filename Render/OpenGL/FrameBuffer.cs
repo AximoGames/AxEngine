@@ -50,19 +50,6 @@ namespace Aximo.Render
             GL.ReadBuffer(ReadBufferMode.Back);
             DataHelper.GetData(target, (ptr) => GL.ReadPixels(0, 0, Width, Height, PixelFormat.DepthComponent, PixelType.UnsignedByte, ptr));
             GL.ReadBuffer(ReadBufferMode.None);
-
-            // Bitmap bitmap = new Bitmap(Width, Height);
-            // var bits = bitmap.LockBits(new Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            // //BindToRead(ReadBufferMode.ColorAttachment0 + AttachmentIndex);
-            // GL.ReadPixels(0, 0, Width, Height, PixelFormat.Bgra, PixelType.UnsignedByte, bits.Scan0);
-            // //GL.BindTexture(TextureTarget.Texture2D, texColorBuffer);
-            // //GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Rgb, PixelType.UnsignedByte, bits.Scan0);
-            // bitmap.UnlockBits(bits);
-
-            // //bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
-            // //bitmap.Save("test.bmp");
-
-            // return bitmap;
         }
 
         public void GetDepthData(BufferData2D<float> target)

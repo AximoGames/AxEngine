@@ -203,27 +203,10 @@ namespace Aximo.Render
             }
         }
 
-        // public Bitmap GetTexture()
-        // {
-        //     Bitmap bitmap = new Bitmap(Width, Height);
-        //     var bits = bitmap.LockBits(new Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-        //     //BindToRead(ReadBufferMode.ColorAttachment0 + AttachmentIndex);
-        //     //GL.ReadPixels(0, 0, 800, 600, PixelFormat.Rgb, PixelType.Float, bits.Scan0);
-        //     GL.BindTexture(Target, Handle);
-        //     GL.GetTexImage(Target, 0, PixelFormat.Bgra, PixelType.UnsignedByte, bits.Scan0);
-        //     bitmap.UnlockBits(bits);
-
-        //     bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
-        //     bitmap.Save("/tmp/test.bmp");
-
-        //     return bitmap;
-        // }
-
         public void GetDepthTexture(BufferData2D<float> target, bool normalize = false)
         {
             GL.BindTexture(Target, Handle);
             DataHelper.GetDepthData(target, (ptr) => GL.GetTexImage(Target, 0, PixelFormat.DepthComponent, PixelType.Float, ptr));
-            //bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
         }
 
         public void SetLinearFilter()
