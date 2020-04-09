@@ -84,6 +84,22 @@ namespace Aximo.Engine
                 File.Copy(glfwLibFileSrc, glfwLibFileDest);
             }
 
+            // On some unix systems, the we need to the major version, too.
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                // .so.x.x --> .so.x
+                var glfwLibFilePathMajor = Path.Combine(DirectoryHelper.BinDir, Path.GetFileNameWithoutExtension(glfwLibFileName));
+
+                // .so.x --> .so
+                var glfwLibFilePathDefault = Path.Combine(DirectoryHelper.BinDir, Path.GetFileNameWithoutExtension(glfwLibFilePathMajor));
+
+                if (!File.Exists(glfwLibFilePathMajor))
+                    File.Copy(glfwLibFileDest, glfwLibFilePathMajor);
+
+                if (!File.Exists(glfwLibFilePathDefault))
+                    File.Copy(glfwLibFileDest, glfwLibFilePathDefault);
+            }
+
             Log.Info("Init Glfw");
             GLFW.Init();
             Log.Info("GLFW Version: {Version}", GLFW.GetVersionString());
