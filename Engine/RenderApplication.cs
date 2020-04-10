@@ -48,7 +48,9 @@ namespace Aximo.Engine
             config = startup;
         }
 
-        private GameWindow window;
+        private WindowContext WindowContext => WindowContext.Current;
+
+        private GameWindow window => WindowContext.Current.window;
 
         public void Run()
         {
@@ -74,56 +76,10 @@ namespace Aximo.Engine
         private Thread UpdateThread;
         private Thread RenderThread;
 
-        private void InitGlfw()
-        {
-            var glfwLibFileName = Environment.OSVersion.Platform == PlatformID.Win32NT ? "glfw3-x64.dll" : "libglfw.so.3.3";
-            var glfwLibFileDest = Path.Combine(DirectoryHelper.BinDir, glfwLibFileName);
-            if (!File.Exists(glfwLibFileDest))
-            {
-                var glfwLibFileSrc = Path.Combine(DirectoryHelper.LibsDir, glfwLibFileName);
-                File.Copy(glfwLibFileSrc, glfwLibFileDest);
-            }
-
-            // On some unix systems, the we need to the major version, too.
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
-            {
-                // .so.x.x --> .so.x
-                var glfwLibFilePathMajor = Path.Combine(DirectoryHelper.BinDir, Path.GetFileNameWithoutExtension(glfwLibFileName));
-
-                // .so.x --> .so
-                var glfwLibFilePathDefault = Path.Combine(DirectoryHelper.BinDir, Path.GetFileNameWithoutExtension(glfwLibFilePathMajor));
-
-                if (!File.Exists(glfwLibFilePathMajor))
-                    File.Copy(glfwLibFileDest, glfwLibFilePathMajor);
-
-                if (!File.Exists(glfwLibFilePathDefault))
-                    File.Copy(glfwLibFileDest, glfwLibFilePathDefault);
-            }
-
-            Log.Info("Init Glfw");
-            GLFW.Init();
-            Log.Info("GLFW Version: {Version}", GLFW.GetVersionString());
-        }
-
         public virtual void Init()
         {
-            InitGlfw();
-
-            Log.Info("Create Window");
-            window = new RenderWindow(config)
-            {
-                WindowBorder = config.WindowBorder,
-                Location = new Vector2i((1920 / 2) + 10, 50),
-            };
-            window.RenderFrame += (e) => OnRenderFrameInternal(e);
-            window.UpdateFrame += (e) => OnUpdateFrameInternal(e);
-            window.MouseMove += (e) => OnMouseMoveInternal(e);
-            window.KeyDown += (e) => OnKeyDownInternal(e);
-            window.MouseDown += (e) => OnMouseDownInternal(e);
-            window.MouseUp += (e) => OnMouseUpInternal(e);
-            window.MouseWheel += (e) => OnMouseWheelInternal(e);
-            window.Unload += () => OnUnloadInternal();
-            window.Resize += (e) => OnScreenResizeInternal(e);
+            WindowContext.Init(config);
+            RegisterWindowEvents();
 
             Renderer = new Renderer();
             Renderer.Current = Renderer;
@@ -169,6 +125,33 @@ namespace Aximo.Engine
             };
 
             Initialized = true;
+        }
+
+        private void RegisterWindowEvents()
+        {
+            // Dont's forget UnregisterWindowEvents!
+            window.RenderFrame += (e) => OnRenderFrameInternal(e);
+            window.UpdateFrame += (e) => OnUpdateFrameInternal(e);
+            window.MouseMove += (e) => OnMouseMoveInternal(e);
+            window.KeyDown += (e) => OnKeyDownInternal(e);
+            window.MouseDown += (e) => OnMouseDownInternal(e);
+            window.MouseUp += (e) => OnMouseUpInternal(e);
+            window.MouseWheel += (e) => OnMouseWheelInternal(e);
+            window.Unload += () => OnUnloadInternal();
+            window.Resize += (e) => OnScreenResizeInternal(e);
+        }
+
+        private void UnregisterWindowEvents()
+        {
+            window.RenderFrame -= (e) => OnRenderFrameInternal(e);
+            window.UpdateFrame -= (e) => OnUpdateFrameInternal(e);
+            window.MouseMove -= (e) => OnMouseMoveInternal(e);
+            window.KeyDown -= (e) => OnKeyDownInternal(e);
+            window.MouseDown -= (e) => OnMouseDownInternal(e);
+            window.MouseUp -= (e) => OnMouseUpInternal(e);
+            window.MouseWheel -= (e) => OnMouseWheelInternal(e);
+            window.Unload -= () => OnUnloadInternal();
+            window.Resize -= (e) => OnScreenResizeInternal(e);
         }
 
         protected virtual void SetupScene()
@@ -652,12 +635,10 @@ namespace Aximo.Engine
         public virtual void Dispose()
         {
             SignalShutdown();
-            window?.Close();
+            UnregisterWindowEvents();
 
             Thread.Sleep(200);
 
-            window?.Dispose();
-            window = null;
             ShaderWatcher?.Dispose();
             ShaderWatcher = null;
             Current = null;
@@ -762,6 +743,7 @@ namespace Aximo.Engine
             SignalShutdown();
             window.Close();
         }
+
     }
 
 }

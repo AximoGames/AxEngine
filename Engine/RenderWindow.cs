@@ -95,5 +95,9 @@ namespace Aximo.Engine
         //     base.Exit();
         // }
 
+        internal void Reset()
+        {
+        }
+
     }
 }
