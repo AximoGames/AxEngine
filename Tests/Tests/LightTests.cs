@@ -12,7 +12,7 @@ using Xunit;
 namespace Aximo.AxTests
 {
 
-    public class LightTests : RenderApplicationTests
+    public class LightTests : TestBase
     {
 
         public LightTests()
