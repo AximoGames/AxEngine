@@ -185,7 +185,7 @@ namespace Aximo.AxTests
             var pixelBlock = 3;
             int newWidth = (int)Math.Round(image.Width / (double)pixelBlock);
             int newHeight = (int)Math.Round((double)image.Height / (double)pixelBlock);
-            var squeezed = new Image<Rgba32>(newWidth, newHeight);
+            var squeezed = image.CloneAs<Rgba32>();
 
             squeezed.Mutate(c => c.Resize(new ResizeOptions
             {
@@ -275,6 +275,11 @@ namespace Aximo.AxTests
         {
             App.RenderSingleFrameSync();
             var bmpCurrent = App.ScreenshotBuffer.BufferData.CreateBitmap();
+
+            if (testName == "BoxForwardTextureAmbient0.0")
+            {
+                var debug = "";
+            }
 
             Directory.CreateDirectory(TestOutputDir);
 
