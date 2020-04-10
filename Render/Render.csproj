@@ -10,7 +10,6 @@
   <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.0.0-pre5" />
-    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />

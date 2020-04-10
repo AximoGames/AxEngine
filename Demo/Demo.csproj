@@ -17,7 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GtkSharp" Version="3.22.25.74" />
-    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.csproj" />
