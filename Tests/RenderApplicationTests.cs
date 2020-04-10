@@ -3,9 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 using Aximo.Engine;
@@ -13,6 +10,12 @@ using Aximo.Render;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.Formats.Bmp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using Xunit;
 
 namespace Aximo.AxTests
@@ -192,7 +195,7 @@ namespace Aximo.AxTests
                 return;
             }
 
-            var bmpOriginal = Bitmap.FromFile(originalFile);
+            var bmpOriginal = Image.Load(originalFile);
 
             var maxDiffAllowed = 1000;
 
@@ -274,8 +277,8 @@ namespace Aximo.AxTests
             if (!File.Exists(originalFile2))
                 throw new Exception("Missing file: " + originalFile2);
 
-            var bmpOriginal1 = Bitmap.FromFile(originalFile1);
-            var bmpOriginal2 = Bitmap.FromFile(originalFile2);
+            var bmpOriginal1 = Image.Load(originalFile1);
+            var bmpOriginal2 = Image.Load(originalFile2);
 
             var maxDiffAllowed = 1000;
 
@@ -299,7 +302,6 @@ namespace Aximo.AxTests
 
         protected int CompareImage(Image img1, Image img2, int maxDiffAllowed)
         {
-
             if (img1 == null || img2 == null | img1.Width != img2.Width || img1.Height != img2.Height)
                 return -1;
 
@@ -315,9 +317,11 @@ namespace Aximo.AxTests
             return maxDiff;
         }
 
-        private int Analyzse(Bitmap bmp1, Bitmap bmp2, int maxDiffAllowed, bool showChanges = false)
+        private int Analyzse(Image bmp1, Image bmp2, int maxDiffAllowed, bool showChanges = false)
         {
             int maxDiff = 0;
+            var _bmp1 = bmp1 as Image<Rgba32>;
+            var _bmp2 = bmp2 as Image<Rgba32>;
 
             if (showChanges)
                 Console.WriteLine();
@@ -326,7 +330,7 @@ namespace Aximo.AxTests
             {
                 for (var x = 0; x < bmp1.Width; x++)
                 {
-                    var dist = GetDistanceBetweenColours(bmp1.GetPixel(x, y), bmp2.GetPixel(x, y));
+                    var dist = GetDistanceBetweenColours(_bmp1[x, y], _bmp2[x, y]);
 
                     if (showChanges)
                         Console.Write(dist > maxDiffAllowed ? "#" : ".");
@@ -340,25 +344,26 @@ namespace Aximo.AxTests
             return maxDiff;
         }
 
-        private static int GetDistanceBetweenColours(Color a, Color b)
+        private static int GetDistanceBetweenColours(Rgba32 a, Rgba32 b)
         {
             int dR = a.R - b.R, dG = a.G - b.G, dB = a.B - b.B;
             return (dR * dR) + (dG * dG) + (dB * dB);
         }
 
-        private Bitmap ResizeImage(Image image)
+        private Image ResizeImage(Image image)
         {
             var pixelBlock = 3;
             int newWidth = (int)Math.Round(image.Width / (double)pixelBlock);
             int newHeight = (int)Math.Round((double)image.Height / (double)pixelBlock);
-            Bitmap squeezed = new Bitmap(newWidth, newHeight, PixelFormat.Format32bppRgb);
-            Graphics canvas = Graphics.FromImage(squeezed);
-            canvas.CompositingQuality = CompositingQuality.HighQuality;
-            canvas.InterpolationMode = InterpolationMode.HighQualityBilinear;
-            canvas.SmoothingMode = SmoothingMode.HighQuality;
-            canvas.DrawImage(image, 0, 0, newWidth, newHeight);
-            canvas.Flush();
-            canvas.Dispose();
+            var squeezed = new Image<Rgba32>(newWidth, newHeight);
+
+            squeezed.Mutate(c => c.Resize(new ResizeOptions
+            {
+                Mode = ResizeMode.Stretch,
+                Size = new Size(newWidth, newHeight),
+                Sampler = KnownResamplers.Triangle,
+            }));
+
             return squeezed;
         }
 

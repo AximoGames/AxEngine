@@ -21,6 +21,9 @@ namespace Aximo
         public int Height => SizeY;
 
         public GamePixelFormat PixelFormat { get; set; }
+
+        public abstract void FlipY();
+
     }
 
     public class BufferData2D<T> : BufferData2D, IEnumerable<T>
@@ -135,6 +138,28 @@ namespace Aximo
                 PixelFormat = PixelFormat,
             };
         }
+
+        public override void FlipY()
+        {
+            // TODO: Copy complete Row
+            int rows = Height;
+            int cols = Width;
+
+            for (int i = 0; i < cols; i++)
+            {
+                int start = 0;
+                int end = rows - 1;
+                while (start < end)
+                {
+                    var temp = this[i, start];
+                    this[i, start] = this[i, end];
+                    this[i, end] = temp;
+                    start++;
+                    end--;
+                }
+            }
+        }
+
     }
 
 }

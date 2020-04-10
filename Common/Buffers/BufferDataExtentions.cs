@@ -4,12 +4,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using OpenToolkit;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Advanced;
 
 namespace Aximo
 {
@@ -45,46 +46,54 @@ namespace Aximo
             }
         }
 
-        public static unsafe void SetData(this BufferData2D<int> target, System.Drawing.Bitmap source)
+        public static void FlipY<TPixel>(this Image<TPixel> array)
+            where TPixel : unmanaged, IPixel<TPixel>
         {
-            var targetData = new int[source.Width, source.Height];
-            target.SetData(targetData);
-            var lockedBits = source.LockBits(new System.Drawing.Rectangle(0, 0, source.Width, source.Height), ImageLockMode.ReadOnly, source.PixelFormat);
-            var destHandle = target.CreateHandle();
-            try
+            // TODO: Copy complete Row
+
+            int rows = array.Height;
+            int cols = array.Width;
+
+            for (int i = 0; i < cols; i++)
             {
-                Buffer.MemoryCopy((void*)lockedBits.Scan0, (void*)destHandle.AddrOfPinnedObject(), target.Bytes, target.Bytes);
-            }
-            finally
-            {
-                source.UnlockBits(lockedBits);
-                destHandle.Free();
+                int start = 0;
+                int end = rows - 1;
+                while (start < end)
+                {
+                    TPixel temp = array[i, start];
+                    array[i, start] = array[i, end];
+                    array[i, end] = temp;
+                    start++;
+                    end--;
+                }
             }
         }
 
-        public static unsafe void CopyTo(this BufferData2D<int> source, System.Drawing.Bitmap bmp)
+        public static unsafe void CopyTo<T>(this BufferData2D<T> source, Image destination)
+            where T : struct
         {
-            var copy = (BufferData2D<int>)source.Clone();
-            if (copy.PixelFormat == GamePixelFormat.Bgra32)
-                copy.ConvertBgraToRgba();
+            // var copy = (BufferData2D<int>)source.Clone();
+            // if (copy.PixelFormat == GamePixelFormat.Bgra32)
+            //     copy.ConvertBgraToRgba();
 
-            var lockedBits = bmp.LockBits(new System.Drawing.Rectangle(0, 0, copy.SizeX, copy.SizeY), ImageLockMode.ReadOnly, bmp.PixelFormat);
-            var destHandle = copy.CreateHandle();
-            try
+            if (destination is Image<Rgba32> destinationRgba)
             {
-                Buffer.MemoryCopy((void*)destHandle.AddrOfPinnedObject(), (void*)lockedBits.Scan0, copy.Bytes, copy.Bytes);
+                var sourceSpan = source.Span;
+                var sourceIntSpan = MemoryMarshal.Cast<T, int>(sourceSpan);
+                var destColorSpan = destinationRgba.GetPixelSpan();
+                var destIntSpan = MemoryMarshal.Cast<Rgba32, int>(destColorSpan);
+                sourceIntSpan.CopyTo(destIntSpan);
+                destinationRgba.FlipY();
+
+                return;
             }
-            finally
-            {
-                bmp.UnlockBits(lockedBits);
-                destHandle.Free();
-            }
-            bmp.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
+
+            throw new NotImplementedException();
         }
 
-        public static System.Drawing.Bitmap CreateBitmap(this BufferData2D<int> source)
+        public static Image CreateBitmap(this BufferData2D<int> source)
         {
-            var bmp = new System.Drawing.Bitmap(source.Width, source.Height);
+            var bmp = new Image<Rgba32>(source.Width, source.Height);
             CopyTo(source, bmp);
             return bmp;
         }
