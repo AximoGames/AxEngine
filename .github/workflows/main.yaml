@@ -11,17 +11,19 @@ jobs:
         with:
           submodules: recursive
           lfs: true
-      - uses: actions/setup-dotnet@v1.4.0
-        with:
-          dotnet-version: "3.1.100" # SDK Version to use.
+      # - uses: actions/setup-dotnet@v1.4.0
+      #   with:
+      #     dotnet-version: "3.1.100" # SDK Version to use.
       - name: Build
         run: dotnet build
       # - name: Update Package respository
       #   run: .github/workflows/upgrade-debian
-      - run: .github/workflows/setup-xvfb
-      - run: .github/workflows/xvfb-daemon-run dotnet test Tests -v detailed --no-build -- RunConfiguration.TestSessionTimeout=120000
-        env:
-          LIBGL_ALWAYS_SOFTWARE: true
+      - name: Install xvfb
+        run: .github/workflows/setup-xvfb
+      - name: Run Render Tests
+        run: .github/workflows/xvfb-daemon-run dotnet test Tests -v detailed --no-build -- RunConfiguration.TestSessionTimeout=120000
+        # env:
+        #   LIBGL_ALWAYS_SOFTWARE: true
     # - name: Running tests
     #   run: dotnet test -p Tests
     #   env:
