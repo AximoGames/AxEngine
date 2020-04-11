@@ -10,13 +10,13 @@ jobs:
       - uses: actions/checkout@master
         with:
           submodules: recursive
-          lfs: "true"
+          lfs: true
       - uses: actions/setup-dotnet@v1.4.0
         with:
           dotnet-version: "3.1.100" # SDK Version to use.
       #- run: dotnet build
-      - name: Update Package respository
-        #run: .github/workflows/upgrade-debian
+      #- name: Update Package respository
+      #run: .github/workflows/upgrade-debian
       - run: .github/workflows/setup-xvfb
       - run: .github/workflows/xvfb-daemon-run dotnet test Tests -v detailed -- RunConfiguration.TestSessionTimeout=10000
         env:
