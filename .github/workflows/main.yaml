@@ -18,7 +18,7 @@ jobs:
       #- name: Update Package respository
       #run: .github/workflows/upgrade-debian
       - run: .github/workflows/setup-xvfb
-      - run: .github/workflows/xvfb-daemon-run dotnet test Tests -v detailed -- RunConfiguration.TestSessionTimeout=10000
+      - run: .github/workflows/xvfb-daemon-run dotnet test Tests -v detailed -- RunConfiguration.TestSessionTimeout=60000
         env:
           LIBGL_ALWAYS_SOFTWARE: true
     # - name: Running tests
