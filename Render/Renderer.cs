@@ -32,42 +32,8 @@ namespace Aximo.Render
             }
         }
 
-        private static DebugProc _debugProcCallback;
-        private static GCHandle _debugProcCallbackHandle;
-        private static Serilog.ILogger OpenGlLog = Aximo.Log.ForContext("OpenGL");
-        public static void DebugCallback(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
+        public void Init()
         {
-            string messageString = Marshal.PtrToStringAnsi(message, length);
-
-            //Console.WriteLine($"{severity} {type} | {messageString}");
-
-            if (type == DebugType.DebugTypeError)
-            {
-                OpenGlLog.Error(messageString);
-                //throw new Exception(messageString);
-            }
-        }
-
-        private void EnableDebugCallback()
-        {
-            _debugProcCallback = DebugCallback;
-            _debugProcCallbackHandle = GCHandle.Alloc(_debugProcCallback);
-            GL.DebugMessageCallback(_debugProcCallback, IntPtr.Zero);
-            GL.Enable(EnableCap.DebugOutput);
-        }
-
-        public void Init(IBindingsContext bindingsContext)
-        {
-            Log.Verbose("Load OpenGL Bindings");
-            GL.LoadBindings(bindingsContext);
-            var vendor = GL.GetString(StringName.Vendor);
-            var version = GL.GetString(StringName.Version);
-            var shadingLanguageVersion = GL.GetString(StringName.ShadingLanguageVersion);
-            var renderer = GL.GetString(StringName.Renderer);
-
-            Log.Info($"Vendor: {vendor}, version: {version}, shadinglangVersion: {shadingLanguageVersion}, renderer: {renderer}");
-
-            EnableDebugCallback();
             //PrintExtensions();
             CheckMemoryLeak();
 

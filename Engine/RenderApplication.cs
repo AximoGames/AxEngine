@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Aximo.Render;
 using OpenToolkit;
+using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Input;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
@@ -48,16 +49,11 @@ namespace Aximo.Engine
             config = startup;
         }
 
-        private WindowContext WindowContext => WindowContext.Current;
-
+        public WindowContext WindowContext => WindowContext.Current;
         private GameWindow window => WindowContext.Current.window;
 
         public void Run()
         {
-            if (Thread.CurrentThread.Name == null)
-                Thread.CurrentThread.Name = config.IsMultiThreaded ? "Update Thread" : "Update+Render Thread";
-            DebugHelper.LogThreadInfo(Thread.CurrentThread.Name);
-            UpdateThread = Thread.CurrentThread;
             Current = this;
 
             Init();
@@ -72,9 +68,6 @@ namespace Aximo.Engine
         public RenderContext RenderContext { get; private set; }
         public GameContext GameContext { get; private set; }
         public Renderer Renderer { get; private set; }
-
-        private Thread UpdateThread;
-        private Thread RenderThread;
 
         public virtual void Init()
         {
@@ -130,8 +123,8 @@ namespace Aximo.Engine
         private void RegisterWindowEvents()
         {
             // Dont's forget UnregisterWindowEvents!
-            window.RenderFrame += (e) => OnRenderFrameInternal(e);
-            window.UpdateFrame += (e) => OnUpdateFrameInternal(e);
+            WindowContext.RenderFrame += (e) => OnRenderFrameInternal(e);
+            WindowContext.UpdateFrame += (e) => OnUpdateFrameInternal(e);
             window.MouseMove += (e) => OnMouseMoveInternal(e);
             window.KeyDown += (e) => OnKeyDownInternal(e);
             window.MouseDown += (e) => OnMouseDownInternal(e);
@@ -195,25 +188,6 @@ namespace Aximo.Engine
 
         protected bool RenderingEnabled { get; set; } = true;
 
-        private bool RenderThreadChecked;
-
-        private void SetRenderThread()
-        {
-            if (!RenderThreadChecked)
-            {
-                RenderThreadChecked = true;
-
-                var currentThread = Thread.CurrentThread;
-                if (config.IsMultiThreaded && currentThread != UpdateThread)
-                {
-                    RenderThread = currentThread;
-                    RenderThread.Name = "Render Thread";
-                }
-            }
-        }
-
-        private bool RenderThreadHasContext = false;
-
         public EventCounter UpdateCounter = new EventCounter();
         public EventCounter RenderCounter = new EventCounter();
 
@@ -221,19 +195,10 @@ namespace Aximo.Engine
 
         private void OnRenderFrameInternal(FrameEventArgs e)
         {
-
             if (!RenderInitialized)
             {
-                Log.Verbose("Init Renderer");
-
-                Log.Verbose("Grab Context");
-                if (Environment.OSVersion.Platform != PlatformID.Win32NT) // Crash on mswin!
-                    window.MakeCurrent();
-
-                Renderer.Init(new GLFWBindingsContext());
-                //window.SwapBuffers();
+                Renderer.Init();
                 RenderInitialized = true;
-                Log.Verbose("Renderer initialized");
             }
 
             if (!RenderingEnabled || UpdateFrameNumber == 0)
@@ -244,11 +209,6 @@ namespace Aximo.Engine
                 if (Exiting)
                     return;
 
-                if (!RenderThreadHasContext)
-                {
-                    window.MakeCurrent();
-                    RenderThreadHasContext = true;
-                }
 
                 if (FirstRenderFrame)
                     FirstRenderFrame = false;
@@ -257,7 +217,6 @@ namespace Aximo.Engine
 
                 RenderCounter.Tick();
 
-                SetRenderThread();
                 RenderTasks.ProcessTasks();
                 BeforeRenderFrame();
 

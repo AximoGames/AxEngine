@@ -4,6 +4,9 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
+using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using OpenToolkit.Windowing.GraphicsLibraryFramework;
@@ -11,12 +14,21 @@ using OpenToolkit.Windowing.GraphicsLibraryFramework;
 namespace Aximo.Engine
 {
 
+    /// <summary>
+    /// Holds the Window and OpenGL Context.
+    /// </summary>
+    /// <remarks>
+    /// Usefull when keeping the window over multiple unit tests.
+    /// </remarks>
     public class WindowContext
     {
 
         private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderApplication>();
 
         public RenderWindow window { get; private set; }
+
+        private Thread UpdateThread;
+        private Thread RenderThread;
 
         internal void CreateWindow()
         {
@@ -25,7 +37,80 @@ namespace Aximo.Engine
                 WindowBorder = Config.WindowBorder,
                 Location = new Vector2i((1920 / 2) + 10, 50),
             };
+
+            window.RenderFrame += OnRenderFrameInternal;
+            window.UpdateFrame += OnUpdateFrameInternal;
         }
+
+        public event Action<FrameEventArgs> UpdateFrame;
+        public event Action<FrameEventArgs> RenderFrame;
+
+        private static DebugProc _debugProcCallback;
+        private static GCHandle _debugProcCallbackHandle;
+        private static Serilog.ILogger OpenGlLog = Aximo.Log.ForContext("OpenGL");
+        public static void DebugCallback(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
+        {
+            string messageString = Marshal.PtrToStringAnsi(message, length);
+
+            //Console.WriteLine($"{severity} {type} | {messageString}");
+
+            if (type == DebugType.DebugTypeError)
+            {
+                OpenGlLog.Error(messageString);
+                //throw new Exception(messageString);
+            }
+        }
+
+        private void EnableDebugCallback()
+        {
+            _debugProcCallback = DebugCallback;
+            _debugProcCallbackHandle = GCHandle.Alloc(_debugProcCallback);
+            GL.DebugMessageCallback(_debugProcCallback, IntPtr.Zero);
+            GL.Enable(EnableCap.DebugOutput);
+        }
+
+        private void OnUpdateFrameInternal(FrameEventArgs e)
+        {
+            UpdateFrame?.Invoke(e);
+        }
+
+        private bool RenderInitialized = false;
+
+        private void OnRenderFrameInternal(FrameEventArgs e)
+        {
+            if (!RenderInitialized)
+            {
+                Log.Verbose("Init OpenGL Bindings");
+                Log.Verbose("Grab Context");
+                if (Environment.OSVersion.Platform != PlatformID.Win32NT) // Crash on mswin!
+                    window.MakeCurrent();
+
+                Log.Verbose("Load OpenGL Bindings");
+                GL.LoadBindings(new GLFWBindingsContext());
+                var vendor = GL.GetString(StringName.Vendor);
+                var version = GL.GetString(StringName.Version);
+                var shadingLanguageVersion = GL.GetString(StringName.ShadingLanguageVersion);
+                var renderer = GL.GetString(StringName.Renderer);
+
+                Log.Info($"Vendor: {vendor}, version: {version}, shadinglangVersion: {shadingLanguageVersion}, renderer: {renderer}");
+
+                EnableDebugCallback();
+
+                RenderInitialized = true;
+            }
+
+            if (!RenderThreadHasContext)
+            {
+                window.MakeCurrent();
+                RenderThreadHasContext = true;
+            }
+
+            SetRenderThread();
+
+            RenderFrame?.Invoke(e);
+        }
+
+        private bool RenderThreadHasContext = false;
 
         private void InitGlfw()
         {
@@ -68,6 +153,11 @@ namespace Aximo.Engine
 
         private void InitLocal(RenderApplicationConfig config)
         {
+            if (Thread.CurrentThread.Name == null)
+                Thread.CurrentThread.Name = config.IsMultiThreaded ? "Update Thread" : "Update+Render Thread";
+            DebugHelper.LogThreadInfo(Thread.CurrentThread.Name);
+            UpdateThread = Thread.CurrentThread;
+
             Config = config;
             InitGlfw();
 
@@ -76,6 +166,23 @@ namespace Aximo.Engine
         }
 
         public static WindowContext Current { get; private set; }
+
+        private bool RenderThreadChecked;
+
+        private void SetRenderThread()
+        {
+            if (!RenderThreadChecked)
+            {
+                RenderThreadChecked = true;
+
+                var currentThread = Thread.CurrentThread;
+                if (Config.IsMultiThreaded && currentThread != UpdateThread)
+                {
+                    RenderThread = currentThread;
+                    RenderThread.Name = "Render Thread";
+                }
+            }
+        }
 
     }
 
