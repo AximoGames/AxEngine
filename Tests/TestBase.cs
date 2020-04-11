@@ -33,7 +33,7 @@ namespace Aximo.AxTests
             AppWaiter.WaitOne();
             Log.Verbose("Waiting {Name} done", nameof(AppWaiter));
             App = new RenderApplicationTests();
-            App.Start();
+            App.Run();
             Console.WriteLine("Ready for tests");
         }
 

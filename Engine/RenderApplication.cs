@@ -52,7 +52,17 @@ namespace Aximo.Engine
         public WindowContext WindowContext => WindowContext.Current;
         private GameWindow window => WindowContext.Current.window;
 
-        public virtual void Start()
+        private AutoResetEvent RunSyncWaiter;
+        public void RunSync()
+        {
+            RunSyncWaiter = new AutoResetEvent(false);
+            Run();
+            RunSyncWaiter.WaitOne();
+            RunSyncWaiter?.Dispose();
+            RunSyncWaiter = null;
+        }
+
+        public virtual void Run()
         {
             Current = this;
             Init();
@@ -201,7 +211,7 @@ namespace Aximo.Engine
 
             try
             {
-                if (Exiting)
+                if (Closing)
                     return;
 
 
@@ -215,7 +225,7 @@ namespace Aximo.Engine
                 RenderTasks.ProcessTasks();
                 BeforeRenderFrame();
 
-                if (Exiting)
+                if (Closing)
                     return;
 
                 if (RenderFrameNumber <= 2)
@@ -223,7 +233,7 @@ namespace Aximo.Engine
 
                 OnRenderFrame(e);
 
-                if (Exiting)
+                if (Closing)
                     return;
 
                 GameContext.Sync();
@@ -321,7 +331,7 @@ namespace Aximo.Engine
 
         private void OnUpdateFrameInternal(FrameEventArgs e)
         {
-            if (Exiting)
+            if (Closing)
                 return;
 
             if (FirstUpdateFrame)
@@ -334,7 +344,7 @@ namespace Aximo.Engine
 
             BeforeUpdateFrame();
 
-            if (Exiting)
+            if (Closing)
                 return;
 
             if (UpdateFrameNumber <= 2)
@@ -344,7 +354,7 @@ namespace Aximo.Engine
                 anim.ProcessAnimation();
 
             GameContext.OnUpdateFrame();
-            if (Exiting)
+            if (Closing)
                 return;
 
             foreach (var obj in RenderContext.UpdateFrameObjects)
@@ -352,7 +362,7 @@ namespace Aximo.Engine
 
             OnUpdateFrame(e);
 
-            if (Exiting)
+            if (Closing)
                 return;
 
             UpdaterTasks.ProcessTasks();
@@ -368,7 +378,7 @@ namespace Aximo.Engine
 
                 if (input.IsKeyDown(Key.Escape))
                 {
-                    window.Close();
+                    Close();
                     return;
                 }
 
@@ -378,9 +388,9 @@ namespace Aximo.Engine
                 Camera cam = pos as Camera;
                 bool simpleMove = cam == null;
 
-                var stepSize = 0.1f;
+                var stepSize = (float)(0.0025f * e.Time);
                 if (kbState[Key.ControlLeft])
-                    stepSize = 0.01f;
+                    stepSize *= 0.1f;
 
                 if (kbState[Key.W])
                 {
@@ -456,38 +466,43 @@ namespace Aximo.Engine
                 if (kbState[Key.PageDown])
                     UpDownDelta = 3;
 
-                MouseSpeed[0] *= 0.9f;
-                MouseSpeed[1] *= 0.9f;
-                MouseSpeed[2] *= 0.9f;
-                MouseSpeed[0] -= MouseDelta.X / 1000f;
-                MouseSpeed[1] -= MouseDelta.Y / 1000f;
-                MouseSpeed[2] -= UpDownDelta / 1000f;
+                float reduce = 0.0035f * (float)e.Time;
+                float reduceFactor = 1f - reduce;
+
+                MouseSpeed[0] *= reduceFactor;
+                MouseSpeed[1] *= reduceFactor;
+                MouseSpeed[2] *= reduceFactor;
+
+                MouseSpeed[0] = -(MouseDelta.X / (4000f) * (float)e.Time);
+                MouseSpeed[1] = -(MouseDelta.Y / 4000f) * (float)e.Time;
+                MouseSpeed[2] = -(UpDownDelta / 4000f) * (float)e.Time;
                 MouseDelta = new Vector2();
                 UpDownDelta = 0;
 
                 if (cam != null)
                 {
-                    cam.Facing += MouseSpeed[0] * 2;
-                    cam.Pitch += MouseSpeed[1] * 2;
+                    //Console.WriteLine(MouseSpeed[0]);
+                    cam.Facing += MouseSpeed[0];
+                    cam.Pitch += MouseSpeed[1];
                 }
                 else if (MovingObject is IScaleRotate rot)
                 {
                     rot.Rotate = new Quaternion(
-                        rot.Rotate.X + (MouseSpeed[1] * 2),
+                        rot.Rotate.X + (MouseSpeed[1]),
                         rot.Rotate.Y,
-                        rot.Rotate.Z + (MouseSpeed[0] * 2));
+                        rot.Rotate.Z + (MouseSpeed[0]));
                 }
                 //Console.WriteLine(Camera.Pitch + " : " + Math.Round(MouseSpeed[1], 3));
                 if (simpleMove)
                     pos.Position = new Vector3(
                         pos.Position.X,
                         pos.Position.Y,
-                        pos.Position.Z + (MouseSpeed[2] * 2));
+                        pos.Position.Z + (MouseSpeed[2]));
                 else
                     pos.Position = new Vector3(
                         pos.Position.X,
                         pos.Position.Y,
-                        pos.Position.Z + (MouseSpeed[2] * 2));
+                        pos.Position.Z + (MouseSpeed[2]));
 
                 if (kbState[Key.F11])
                 {
@@ -684,21 +699,27 @@ namespace Aximo.Engine
         public double RenderFrequency => window.RenderFrequency;
         public double UpdateFrequency => window.UpdateFrequency;
 
-        private bool _Exiting;
-        public bool Exiting => _Exiting || window == null || window.IsExiting;
+        private bool _Closing;
+        public bool Closing => _Closing || window == null || window.IsExiting;
 
         // Foreign Thread
         protected void SignalShutdown()
         {
             WindowContext.Enabled = false;
-            _Exiting = true;
+            _Closing = true;
         }
 
+        public bool Closed { get; private set; }
+
         // UI Thread
-        public void Close()
+        public virtual void Close()
         {
+            if (_Closing || Closed)
+                return;
+
             SignalShutdown();
-            window.Close();
+            Closed = true;
+            RunSyncWaiter?.Set();
         }
 
     }

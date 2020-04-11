@@ -35,13 +35,13 @@ namespace Aximo.AxTests
         {
         }
 
-        public override void Start()
+        public override void Run()
         {
             CurrentTestApp = this;
             AfterApplicationInitialized += () =>
             {
             };
-            base.Start();
+            base.Run();
         }
 
         public BufferComponent ScreenshotBuffer;
@@ -54,7 +54,7 @@ namespace Aximo.AxTests
 
         protected override void BeforeUpdateFrame()
         {
-            if (Exiting)
+            if (Closing)
                 return;
 
             if (IsMultiThreaded)
@@ -86,7 +86,7 @@ namespace Aximo.AxTests
         {
             WaitForRenderer = false;
 
-            if (Exiting)
+            if (Closing)
                 return;
 
             if (IsMultiThreaded)
