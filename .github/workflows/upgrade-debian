@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+cd $(dirname $0)
+
+sudo sed -i s/stretch/buster/g /etc/apt/sources.list
+sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+sudo dist-upgrade
