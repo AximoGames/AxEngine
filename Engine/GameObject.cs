@@ -9,11 +9,13 @@ namespace Aximo.Engine
 {
     public abstract class GameObject : IDisposable
     {
-
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<GameObject>();
         private static int LastGameObjectId;
 
         private int _ObjectId;
         public int ObjectId => _ObjectId;
+
+        public string Name { get; set; }
 
         public GameObject()
         {
@@ -133,6 +135,13 @@ namespace Aximo.Engine
                 if (obj != this)
                     action(obj);
             }, visitChilds);
+        }
+
+        internal virtual void DumpInfo(bool list)
+        {
+            Log.ForContext("DumpInfo").Info("{Type} #{Id} {Name}", GetType().Name, ObjectId, Name);
+            if (list)
+                VisitChilds<GameObject>(a => a.DumpInfo(false));
         }
 
     }

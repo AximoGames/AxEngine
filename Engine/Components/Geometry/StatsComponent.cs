@@ -22,9 +22,9 @@ namespace Aximo.Engine
     public class StatsComponent : UIComponent
     {
         private DateTime LastStatUpdate;
-        private Font DefaultFont = new Font(SystemFonts.Families.First(), 15, FontStyle.Regular);
+        private Font DefaultFont = new Font(SystemFonts.Families.First(), 12, FontStyle.Regular);
 
-        public StatsComponent() : this(new Vector2i(100, 100))
+        public StatsComponent() : this(new Vector2i(200, 100))
         {
         }
 

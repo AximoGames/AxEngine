@@ -178,7 +178,7 @@ namespace Aximo.Engine
             if (list)
                 lock (Actors)
                     foreach (var obj in Actors)
-                        Log.Info("{Id} {Type} {Name}", obj.ObjectId, obj.GetType().Name, obj.Name);
+                        obj.DumpInfo(list);
 
             RenderContext.DumpInfo(list);
         }

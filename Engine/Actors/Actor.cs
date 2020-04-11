@@ -15,9 +15,9 @@ namespace Aximo.Engine
 
     public class Actor : GameObject
     {
-        public bool IsAttached { get; internal set; }
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<GameContext>();
 
-        public string Name { get; set; }
+        public bool IsAttached { get; internal set; }
 
         private IList<ActorComponent> _Components;
         public IList<ActorComponent> Components { get; private set; }

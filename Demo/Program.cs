@@ -24,7 +24,7 @@ namespace Aximo.AxDemo
                 //UpdateFrequency = 490,
                 //VSync = VSyncMode.Off,
                 // UseGtkUI = true,
-                // UseConsole = true,
+                UseConsole = true,
                 IsMultiThreaded = false,
             };
 

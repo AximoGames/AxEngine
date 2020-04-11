@@ -43,9 +43,25 @@ namespace Aximo.Engine
         private bool OrderChanged = false;
         private int Order = 5000;
 
+        private int _CustomOrder;
+        public int CustomOrder
+        {
+            get
+            {
+                return _CustomOrder;
+            }
+            set
+            {
+                if (_CustomOrder == value)
+                    return;
+                _CustomOrder = value;
+                SetOrders();
+            }
+        }
+
         internal void SetOrders()
         {
-            SetOrders(Order);
+            SetOrders(Order * (_CustomOrder + 1));
         }
 
         internal void SetOrders(int order)
@@ -55,7 +71,6 @@ namespace Aximo.Engine
                 c.Order = order++;
                 c.OrderChanged = true;
                 c.Update();
-
             });
         }
 

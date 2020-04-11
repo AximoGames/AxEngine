@@ -112,10 +112,13 @@ namespace Aximo
             var graphicsOptions = new GraphicsOptions
             {
             };
-            if (color == Color.Transparent)
-                graphicsOptions.AlphaCompositionMode = PixelAlphaCompositionMode.Clear;
+            //if (color == Color.Transparent)
+            graphicsOptions.AlphaCompositionMode = PixelAlphaCompositionMode.Src;
+            //graphicsOptions.ColorBlendingMode=PixelColorBlendingMode.
 
             var size = source.GetCurrentSize();
+            //source.Fill(graphicsOptions, Color.Transparent, new RectangleF(0, 0, size.Width, size.Height));
+            //graphicsOptions.AlphaCompositionMode = PixelAlphaCompositionMode.Clear;
             source.Fill(graphicsOptions, color, new RectangleF(0, 0, size.Width, size.Height));
         }
 

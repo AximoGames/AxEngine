@@ -186,6 +186,7 @@ namespace Aximo.AxDemo
             {
                 Name = "Stats",
                 RectanglePixels = new RectangleF(40, 40, 100f, 100f),
+                CustomOrder = 10,
             }));
 
             GameContext.AddActor(new Actor(new LineComponent(new Vector3(0, 0, 0), new Vector3(2, 2, 2))

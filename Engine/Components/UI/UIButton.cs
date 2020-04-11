@@ -20,24 +20,50 @@ namespace Aximo.Engine
             AddComponent(LabelComponent);
         }
 
+        public string Text
+        {
+            get => LabelComponent.Text;
+            set => LabelComponent.Text = value;
+        }
+
+        public Color Color
+        {
+            get => LabelComponent.Color;
+            set => LabelComponent.Color = value;
+        }
+
+        public float FontSize
+        {
+            get => LabelComponent.FontSize;
+            set => LabelComponent.FontSize = value;
+        }
+
+        public Color BackColor { get; set; } = Color.Gray;
+        public Color BackColorHover { get; set; } = Color.LightGray;
+
+        public Color BorderColor { get; set; } = Color.Black;
+        public Color BorderColorHover { get; set; } = Color.Black;
+
+        public float BorderSize { get; set; } = 1;
+
         protected override void DrawControl()
         {
-            var bgNormal = Color.Gray;
-            var bgHover = Color.DarkGray;
-
             Color bgColor;
+            Color borderColor;
 
             if (MouseEntered)
             {
-                bgColor = bgHover;
+                bgColor = BackColorHover;
+                borderColor = BorderColorHover;
             }
             else
             {
-                bgColor = bgNormal;
+                bgColor = BackColor;
+                borderColor = BorderColor;
             }
 
             Image.Mutate(ctx => ctx.Clear(bgColor));
-            Image.Mutate(ctx => ctx.DrawButton(5f, Color.Black, 10f));
+            Image.Mutate(ctx => ctx.DrawButton(BorderSize, borderColor, 10f));
         }
 
         public override void OnMouseEnter(MouseMoveArgs e)
@@ -52,6 +78,7 @@ namespace Aximo.Engine
 
         protected override void OnResized()
         {
+            base.OnResized();
             var s = "";
         }
 

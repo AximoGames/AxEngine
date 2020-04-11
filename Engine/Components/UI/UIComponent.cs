@@ -102,7 +102,13 @@ namespace Aximo.Engine
         {
             if (Parent == null || !(Parent is UIComponent))
             {
-                AbsoluteOuterRect = new Box2(Vector2.Zero, RenderContext.Current.ScreenSize.ToVector2());
+                var size = Size;
+                if (size.X == 0)
+                    size.X = RenderContext.Current.ScreenSize.X;
+                if (size.Y == 0)
+                    size.Y = RenderContext.Current.ScreenSize.Y;
+                AbsoluteOuterRect = BoxHelper.FromSize(Location, size);
+
                 CalculateSizes();
             }
         }

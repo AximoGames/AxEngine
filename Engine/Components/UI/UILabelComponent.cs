@@ -12,7 +12,8 @@ namespace Aximo.Engine
     public class UILabelComponent : UIComponent
     {
         public string Text { get; set; }
-        private Font DefaultFont = new Font(SystemFonts.Families.First(), 30, FontStyle.Regular);
+        private static FontFamily DefaultFamily = SystemFonts.Families.First();
+        public float FontSize { get; set; } = 15;
 
         public UILabelComponent()
         {
@@ -24,18 +25,28 @@ namespace Aximo.Engine
             Name = "Label";
         }
 
+        public Color Color { get; set; } = Color.Black;
+
         protected override void DrawControl()
         {
             var options = new TextGraphicsOptions
             {
                 VerticalAlignment = VerticalAlignment.Center,
             };
-            Image.Mutate(ctx => ctx.DrawText(options, "blubb", DefaultFont, Color.Red, new PointF(0, RelatativePaddingRect.Size.Y / 2)));
+            if (Text != null)
+                Image.Mutate(ctx => ctx.DrawText(options, Text, new Font(DefaultFamily, FontSize, FontStyle.Regular), Color, new PointF(0, RelatativePaddingRect.Size.Y / 2)));
         }
 
         protected override void OnResized()
         {
             InvokeDrawControl();
+        }
+
+        internal override void DumpInfo(bool list)
+        {
+            Log.ForContext("DumpInfo").Info(new string(' ', (Level + 1) * 2) + "{Type} #{Id} {Name} Text={Text}", GetType().Name, ObjectId, Name, Text);
+            if (list)
+                VisitChilds<GameObject>(a => a.DumpInfo(false));
         }
 
     }

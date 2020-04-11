@@ -14,8 +14,6 @@ namespace Aximo.Engine
     {
         public int ComponentId { get; private set; }
 
-        public string Name { get; set; }
-
         public bool HasChanges { get; internal set; } = true;
 
         private static int LastComponentId;

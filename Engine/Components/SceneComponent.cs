@@ -14,6 +14,7 @@ namespace Aximo.Engine
 {
     public class SceneComponent : ActorComponent
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<GameObject>();
 
         private IList<SceneComponent> _Components;
         public ICollection<SceneComponent> Components { get; private set; }
@@ -367,6 +368,15 @@ namespace Aximo.Engine
 
         public virtual void OnMouseMove(MouseMoveArgs e)
         {
+        }
+
+        public int Level => ParentComponents.Count;
+
+        internal override void DumpInfo(bool list)
+        {
+            Log.ForContext("DumpInfo").Info(new string(' ', (Level + 1) * 2) + "{Type} #{Id} {Name}", GetType().Name, ObjectId, Name);
+            if (list)
+                VisitChilds<GameObject>(a => a.DumpInfo(false));
         }
 
     }
