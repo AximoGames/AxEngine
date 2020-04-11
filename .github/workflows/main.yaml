@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@master
         with:
           submodules: recursive
-          lfs: true
+          lfs: "true"
       - uses: actions/setup-dotnet@v1.4.0
         with:
           dotnet-version: "3.1.100" # SDK Version to use.
