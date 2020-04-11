@@ -67,7 +67,11 @@ namespace Aximo.Engine
         private void UIThreadMain()
         {
             demo = (TApp)Activator.CreateInstance(typeof(TApp), Config);
-            demo.Run();
+            demo.Start();
+            while (true)
+            {
+                Thread.Sleep(100);
+            }
             Environment.Exit(0);
         }
 

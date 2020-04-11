@@ -27,10 +27,14 @@ namespace Aximo.AxTests
 
         public TestBase()
         {
+            DebugHelper.LogThreadInfo("UnitTestThread");
+
             Log.Verbose("Waiting for {Name}", nameof(AppWaiter));
             AppWaiter.WaitOne();
             Log.Verbose("Waiting {Name} done", nameof(AppWaiter));
             App = new RenderApplicationTests();
+            App.Start();
+            Console.WriteLine("Ready for tests");
         }
 
         public void Dispose()

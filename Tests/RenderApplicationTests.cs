@@ -23,31 +23,8 @@ namespace Aximo.AxTests
     public class RenderApplicationTests : RenderApplication
     {
 
-        // We need to ensure, that every unit test uses the same UI Thread,
-        // otherwise GLFW will fail.
-        protected static Thread UpdaterThread;
-
         protected static RenderApplicationTests CurrentTestApp;
 
-        private static AutoResetEvent UpdaterThreadNextTaskWaiter;
-        protected static void UpdaterThreadMain()
-        {
-            while (true)
-            {
-                UpdaterThreadNextTaskWaiter.WaitOne();
-                try
-                {
-                    CurrentTestApp.Run();
-                }
-                catch (Exception ex)
-                {
-                    if (!CurrentTestApp.Exiting)
-                        Console.WriteLine(ex);
-                }
-            }
-        }
-
-        private AutoResetEvent SetupWaiter;
         public RenderApplicationTests() : base(new RenderApplicationConfig
         {
             WindowTitle = "AxTests",
@@ -56,25 +33,15 @@ namespace Aximo.AxTests
             HideTitleBar = true,
         })
         {
-            DebugHelper.LogThreadInfo("UnitTestThread");
-            SetupWaiter = new AutoResetEvent(false);
+        }
+
+        public override void Start()
+        {
             CurrentTestApp = this;
             AfterApplicationInitialized += () =>
             {
-                SetupWaiter.Set();
             };
-            if (UpdaterThread == null)
-            {
-                UpdaterThreadNextTaskWaiter = new AutoResetEvent(false);
-                UpdaterThread = new Thread(UpdaterThreadMain);
-                UpdaterThread.Start();
-            }
-            UpdaterThreadNextTaskWaiter.Set();
-            SetupWaiter.WaitOne();
-            //SetupWaiter.WaitOne(4000);
-            SetupWaiter.Dispose();
-            SetupWaiter = null;
-            Console.WriteLine("Ready for tests");
+            base.Start();
         }
 
         public BufferComponent ScreenshotBuffer;
@@ -151,9 +118,6 @@ namespace Aximo.AxTests
             TestWaiter.Set();
             RenderWaiter.Set();
             UpdateWaiter.Set();
-
-            SetupWaiter?.Dispose();
-            SetupWaiter = null;
 
             base.Dispose();
 

@@ -52,22 +52,13 @@ namespace Aximo.Engine
         public WindowContext WindowContext => WindowContext.Current;
         private GameWindow window => WindowContext.Current.window;
 
-        public void Run()
+        public virtual void Start()
         {
             Current = this;
-
             Init();
             AfterApplicationInitialized?.Invoke();
             WindowContext.Enabled = true;
-            Log.Verbose("Call Window.Run()");
-            while (true)
-            {
-                Thread.Sleep(100);
-            }
-            Console.WriteLine("Exited Run()");
-            WindowExited = true;
         }
-        protected bool WindowExited;
 
         public RenderContext RenderContext { get; private set; }
         public GameContext GameContext { get; private set; }
@@ -592,7 +583,6 @@ namespace Aximo.Engine
         private void OnUnloadInternal()
         {
             OnUnload();
-            RenderContext.Free();
         }
 
         public virtual void Dispose()
@@ -601,6 +591,9 @@ namespace Aximo.Engine
             UnregisterWindowEvents();
 
             Thread.Sleep(200);
+
+            RenderContext.Free();
+            RenderContext = null;
 
             ShaderWatcher?.Dispose();
             ShaderWatcher = null;
@@ -697,6 +690,7 @@ namespace Aximo.Engine
         // Foreign Thread
         protected void SignalShutdown()
         {
+            WindowContext.Enabled = false;
             _Exiting = true;
         }
 
