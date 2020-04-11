@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -137,6 +138,8 @@ namespace Aximo.Engine
             window.MouseWheel += (e) => OnMouseWheelInternal(e);
             window.Unload += () => OnUnloadInternal();
             window.Resize += (e) => OnScreenResizeInternal(e);
+            window.Closing += (e) => OnClosingInternal(e);
+            window.Closed += OnClosed;
         }
 
         private void UnregisterWindowEvents()
@@ -150,6 +153,8 @@ namespace Aximo.Engine
             window.MouseWheel -= (e) => OnMouseWheelInternal(e);
             window.Unload -= () => OnUnloadInternal();
             window.Resize -= (e) => OnScreenResizeInternal(e);
+            window.Closing -= (e) => OnClosingInternal(e);
+            window.Closed -= OnClosed;
         }
 
         protected virtual void SetupScene()
@@ -308,9 +313,6 @@ namespace Aximo.Engine
             if (!Initialized)
                 return;
 
-            if (WindowBorder != WindowBorder.Resizable)
-                return;
-
             if (e.Size == RenderContext.ScreenSize)
                 return;
 
@@ -378,7 +380,7 @@ namespace Aximo.Engine
 
                 if (input.IsKeyDown(Key.Escape))
                 {
-                    Close();
+                    Stop();
                     return;
                 }
 
@@ -619,6 +621,24 @@ namespace Aximo.Engine
             OnUnload();
         }
 
+        protected virtual void OnClosing(CancelEventArgs e) { }
+
+        private void OnClosingInternal(CancelEventArgs e)
+        {
+            OnClosing(e);
+            if (e.Cancel)
+                return;
+            Stop();
+        }
+
+        protected virtual void OnClosed() { }
+
+        private void OnClosedInternal()
+        {
+            OnClosed();
+            Stop();
+        }
+
         public virtual void Dispose()
         {
             SignalShutdown();
@@ -728,16 +748,16 @@ namespace Aximo.Engine
             _Closing = true;
         }
 
-        public bool Closed { get; private set; }
+        public bool Stopped { get; private set; }
 
         // UI Thread
-        public virtual void Close()
+        public virtual void Stop()
         {
-            if (_Closing || Closed)
+            if (_Closing || Stopped)
                 return;
 
             SignalShutdown();
-            Closed = true;
+            Stopped = true;
             RunSyncWaiter?.Set();
         }
 

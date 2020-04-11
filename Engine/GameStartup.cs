@@ -50,7 +50,7 @@ namespace Aximo.Engine
 
                 ConsoleLoop();
 
-                demo.Close();
+                demo.Stop();
                 demo.Dispose();
                 th.Abort();
                 Environment.Exit(0);
