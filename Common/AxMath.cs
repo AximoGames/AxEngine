@@ -53,5 +53,43 @@ namespace Aximo
             return QuaternionFromNormalizedAngles(normalizedAngle);
         }
 
+        public static float Map(float input, float fromMin, float fromMax, float toMin, float toMax)
+        {
+            return ((input - fromMin) / (fromMax - fromMin)) * (toMax - toMin) + toMin;
+        }
+
+        public static Vector2 Map(Vector2 input, Vector2 fromMin, Vector2 fromMax, Vector2 toMin, Vector2 toMax)
+        {
+            return new Vector2(
+                Map(input.X, fromMin.X, fromMax.X, toMin.X, toMax.X),
+                Map(input.Y, fromMin.Y, fromMax.Y, toMin.Y, toMax.Y)
+            );
+        }
+
+        public static float MapToNDC(float input, float fromMin, float fromMax)
+        {
+            return Map(input, fromMin, fromMax, -1, 1);
+        }
+
+        public static float MapFromNDC(float input, float fromMin, float fromMax, float toMin, float toMax)
+        {
+            return Map(input, -1, 1, toMin, toMax);
+        }
+
+        public static Vector2 MapToNDC(Vector2 input, Vector2 fromMax)
+        {
+            return Map(input, Vector2.Zero, fromMax, new Vector2(-1), new Vector2(1));
+        }
+
+        public static Vector2 MapFromNDC(Vector2 input, Vector2 toMax)
+        {
+            return Map(input, new Vector2(-1), new Vector2(1), Vector2.Zero, toMax);
+        }
+
+        public static Vector2 MapFromNDC(Vector2 input, Vector2i toMax)
+        {
+            return Map(input, new Vector2(-1), new Vector2(1), Vector2.Zero, toMax.ToVector2());
+        }
+
     }
 }

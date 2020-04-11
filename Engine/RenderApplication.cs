@@ -557,24 +557,43 @@ namespace Aximo.Engine
             if (args.Handled)
                 return;
 
-            GameContext.OnMouseMove(args);
+            GameContext.OnScreenMouseMove(args);
 
             // Console.WriteLine(CurrentMouseWorldPosition.ToString());
             // Console.WriteLine(CurrentMousePosition.ToString());
         }
 
-        protected virtual void OnMouseDown(MouseButtonEventArgs e) { }
+        protected virtual void OnMouseDown(MouseButtonArgs e)
+        {
+        }
 
         private void OnMouseDownInternal(MouseButtonEventArgs e)
         {
-            OnMouseDown(e);
+            var args = new MouseButtonArgs(OldMouseButtonPos, CurrentMousePosition, e);
+            OldMouseButtonPos = CurrentMousePosition;
+
+            OnMouseDown(args);
+            if (args.Handled)
+                return;
+
+            GameContext.OnScreenMouseDown(args);
         }
 
-        protected virtual void OnMouseUp(MouseButtonEventArgs e) { }
+        private Vector2 OldMouseButtonPos;
+        protected virtual void OnMouseUp(MouseButtonArgs e)
+        {
+        }
 
         private void OnMouseUpInternal(MouseButtonEventArgs e)
         {
-            OnMouseUp(e);
+            var args = new MouseButtonArgs(OldMouseButtonPos, CurrentMousePosition, e);
+            OldMouseButtonPos = CurrentMousePosition;
+
+            OnMouseUp(args);
+            if (args.Handled)
+                return;
+
+            GameContext.OnScreenMouseUp(args);
         }
 
         protected virtual void OnMouseWheel(MouseWheelEventArgs e) { }

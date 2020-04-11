@@ -130,6 +130,9 @@ namespace Aximo.Engine
 
             foreach (var act in Actors)
                 act.PropagateChangesDown();
+
+            foreach (var act in Actors)
+                act.PostUpdate();
         }
 
         internal IList<GameObject> ObjectsForDeallocation = new List<GameObject>(); //TODO: Sync
@@ -202,14 +205,19 @@ namespace Aximo.Engine
             Visit<Actor>(c => c.OnScreenResize(e));
         }
 
-        public void OnMouseButton(MouseButtonArgs e)
+        public void OnScreenMouseUp(MouseButtonArgs e)
         {
-            Visit<Actor>(c => c.OnMouseButton(e), c => !e.Handled);
+            Visit<Actor>(c => c.OnScreenMouseUp(e), c => !e.Handled);
         }
 
-        public void OnMouseMove(MouseMoveArgs e)
+        public void OnScreenMouseDown(MouseButtonArgs e)
         {
-            Visit<Actor>(c => c.OnMouseMove(e), c => !e.Handled);
+            Visit<Actor>(c => c.OnScreenMouseDown(e), c => !e.Handled);
+        }
+
+        public void OnScreenMouseMove(MouseMoveArgs e)
+        {
+            Visit<Actor>(c => c.OnScreenMouseMove(e), c => !e.Handled);
         }
 
     }

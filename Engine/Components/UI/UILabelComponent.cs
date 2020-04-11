@@ -11,7 +11,19 @@ namespace Aximo.Engine
 {
     public class UILabelComponent : UIComponent
     {
-        public string Text { get; set; }
+        private string _Text;
+        public string Text
+        {
+            get => _Text;
+            set
+            {
+                if (_Text == value)
+                    return;
+                _Text = value;
+                Redraw();
+            }
+        }
+
         private static FontFamily DefaultFamily = SystemFonts.Families.First();
         public float FontSize { get; set; } = 15;
 
@@ -33,6 +45,9 @@ namespace Aximo.Engine
             {
                 VerticalAlignment = VerticalAlignment.Center,
             };
+
+            Image.Mutate(ctx => ctx.Clear(Color.Transparent));
+
             if (Text != null)
                 Image.Mutate(ctx => ctx.DrawText(options, Text, new Font(DefaultFamily, FontSize, FontStyle.Regular), Color, new PointF(0, RelatativePaddingRect.Size.Y / 2)));
         }

@@ -83,5 +83,9 @@ namespace Aximo.Engine
             base.Dispose(disposing);
         }
 
+        internal virtual void PostUpdate()
+        {
+        }
+
     }
 }

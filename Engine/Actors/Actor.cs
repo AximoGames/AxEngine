@@ -179,14 +179,24 @@ namespace Aximo.Engine
             RootComponent?.Visit<SceneComponent>(obj => obj.OnScreenResize(e));
         }
 
-        public virtual void OnMouseButton(MouseButtonArgs e)
+        public virtual void OnScreenMouseMove(MouseMoveArgs e)
         {
-            RootComponent?.Visit<SceneComponent>(obj => obj.OnMouseButton(e));
+            RootComponent?.Visit<SceneComponent>(obj => obj.OnScreenMouseMove(e));
         }
 
-        public virtual void OnMouseMove(MouseMoveArgs e)
+        public virtual void OnScreenMouseDown(MouseButtonArgs e)
         {
-            RootComponent?.Visit<SceneComponent>(obj => obj.OnMouseMove(e));
+            RootComponent?.Visit<SceneComponent>(obj => obj.OnScreenMouseDown(e));
+        }
+
+        public virtual void OnScreenMouseUp(MouseButtonArgs e)
+        {
+            RootComponent?.Visit<SceneComponent>(obj => obj.OnScreenMouseUp(e));
+        }
+
+        internal virtual void PostUpdate()
+        {
+            RootComponent?.Visit<ActorComponent>(obj => obj.PostUpdate());
         }
 
     }

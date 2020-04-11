@@ -179,6 +179,21 @@ namespace Aximo.Engine
             }
         }
 
+        protected bool _NeedRedraw = false;
+        protected void Redraw()
+        {
+            _NeedRedraw = true;
+        }
+
+        internal override void PostUpdate()
+        {
+            if (!_NeedRedraw)
+                return;
+
+            _NeedRedraw = false;
+            InvokeDrawControl();
+        }
+
         protected virtual void DrawControl()
         {
 
@@ -192,7 +207,7 @@ namespace Aximo.Engine
 
         protected virtual void OnResized()
         {
-            InvokeDrawControl();
+            Redraw();
         }
 
         public virtual void OnMouseEnter(MouseMoveArgs e)
@@ -205,14 +220,9 @@ namespace Aximo.Engine
 
         }
 
-        public virtual void OnMouseMove2(MouseMoveArgs e)
-        {
-
-        }
-
         public bool MouseEntered { get; private set; }
 
-        public override void OnMouseMove(MouseMoveArgs e)
+        public override void OnScreenMouseMove(MouseMoveArgs e)
         {
             if (AbsoluteDrawRect.Contains(e.Position))
             {
@@ -223,7 +233,7 @@ namespace Aximo.Engine
                     OnMouseEnter(e);
                 }
 
-                OnMouseMove2(e);
+                OnMouseMove(e);
             }
             else
             {
@@ -234,6 +244,18 @@ namespace Aximo.Engine
                     OnMouseLeave(e);
                 }
             }
+        }
+
+        public override void OnScreenMouseDown(MouseButtonArgs e)
+        {
+            if (MouseEntered && AbsoluteDrawRect.Contains(e.Position))
+                OnMouseDown(e);
+        }
+
+        public override void OnScreenMouseUp(MouseButtonArgs e)
+        {
+            if (MouseEntered && AbsoluteDrawRect.Contains(e.Position))
+                OnMouseUp(e);
         }
 
     }

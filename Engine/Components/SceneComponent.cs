@@ -362,12 +362,46 @@ namespace Aximo.Engine
         {
         }
 
-        public virtual void OnMouseButton(MouseButtonArgs e)
+        public virtual void OnScreenMouseMove(MouseMoveArgs e)
         {
         }
 
+        public virtual void OnScreenMouseDown(MouseButtonArgs e)
+        {
+        }
+
+        public virtual void OnScreenMouseUp(MouseButtonArgs e)
+        {
+        }
+
+        public event Action<MouseMoveArgs> MouseMove;
+        public event Action<MouseButtonArgs> MouseUp;
+        public event Action<MouseButtonArgs> MouseDown;
+        public event Action<MouseButtonArgs> Click;
+
         public virtual void OnMouseMove(MouseMoveArgs e)
         {
+            MouseMove?.Invoke(e);
+        }
+
+        public virtual void OnMouseDown(MouseButtonArgs e)
+        {
+            MouseDown?.Invoke(e);
+        }
+
+        public virtual void OnMouseUp(MouseButtonArgs e)
+        {
+            MouseUp?.Invoke(e);
+
+            if (e.Handled)
+                return;
+
+            OnMouseClick(e);
+        }
+
+        public virtual void OnMouseClick(MouseButtonArgs e)
+        {
+            Click?.Invoke(e);
         }
 
         public int Level => ParentComponents.Count;
