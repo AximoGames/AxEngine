@@ -48,17 +48,12 @@ namespace Aximo.Engine
         private static DebugProc _debugProcCallback;
         private static GCHandle _debugProcCallbackHandle;
         private static Serilog.ILogger OpenGlLog = Aximo.Log.ForContext("OpenGL");
-        public static void DebugCallback(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
+        private static void DebugCallback(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
         {
             string messageString = Marshal.PtrToStringAnsi(message, length);
 
-            //Console.WriteLine($"{severity} {type} | {messageString}");
-
             if (type == DebugType.DebugTypeError)
-            {
                 OpenGlLog.Error(messageString);
-                //throw new Exception(messageString);
-            }
         }
 
         private void EnableDebugCallback()
@@ -71,7 +66,10 @@ namespace Aximo.Engine
 
         private void OnUpdateFrameInternal(FrameEventArgs e)
         {
-            UpdateFrame?.Invoke(e);
+            UpdateReady = true;
+
+            if (Enabled)
+                UpdateFrame?.Invoke(e);
         }
 
         private bool RenderInitialized = false;
@@ -106,9 +104,14 @@ namespace Aximo.Engine
             }
 
             SetRenderThread();
+            RenderReady = true;
 
-            RenderFrame?.Invoke(e);
+            if (Enabled)
+                RenderFrame?.Invoke(e);
         }
+
+        private bool RenderReady = false;
+        private bool UpdateReady = false;
 
         private bool RenderThreadHasContext = false;
 
@@ -147,22 +150,38 @@ namespace Aximo.Engine
 
         public static void Init(RenderApplicationConfig config)
         {
+            if (Current != null)
+                return;
+
             Current = new WindowContext();
             Current.InitLocal(config);
         }
 
         private void InitLocal(RenderApplicationConfig config)
         {
+            Config = config;
+
+            UpdateThread = new Thread(UIThread);
+            UpdateThread.Start();
+            while (!UpdateReady || !RenderReady)
+                Thread.Sleep(50);
+        }
+
+        public bool Enabled = false;
+
+        private void UIThread()
+        {
             if (Thread.CurrentThread.Name == null)
-                Thread.CurrentThread.Name = config.IsMultiThreaded ? "Update Thread" : "Update+Render Thread";
+                Thread.CurrentThread.Name = Config.IsMultiThreaded ? "Update Thread" : "Update+Render Thread";
+
             DebugHelper.LogThreadInfo(Thread.CurrentThread.Name);
             UpdateThread = Thread.CurrentThread;
 
-            Config = config;
             InitGlfw();
 
             Log.Info("Create Window");
             CreateWindow();
+            window.Run();
         }
 
         public static WindowContext Current { get; private set; }

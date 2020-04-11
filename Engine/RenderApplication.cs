@@ -58,8 +58,12 @@ namespace Aximo.Engine
 
             Init();
             AfterApplicationInitialized?.Invoke();
+            WindowContext.Enabled = true;
             Log.Verbose("Call Window.Run()");
-            window.Run();
+            while (true)
+            {
+                Thread.Sleep(100);
+            }
             Console.WriteLine("Exited Run()");
             WindowExited = true;
         }
@@ -136,8 +140,8 @@ namespace Aximo.Engine
 
         private void UnregisterWindowEvents()
         {
-            window.RenderFrame -= (e) => OnRenderFrameInternal(e);
-            window.UpdateFrame -= (e) => OnUpdateFrameInternal(e);
+            WindowContext.RenderFrame -= (e) => OnRenderFrameInternal(e);
+            WindowContext.UpdateFrame -= (e) => OnUpdateFrameInternal(e);
             window.MouseMove -= (e) => OnMouseMoveInternal(e);
             window.KeyDown -= (e) => OnKeyDownInternal(e);
             window.MouseDown -= (e) => OnMouseDownInternal(e);
