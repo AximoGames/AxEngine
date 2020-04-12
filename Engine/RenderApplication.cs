@@ -94,10 +94,6 @@ namespace Aximo.Engine
             };
             GameContext.Current = GameContext;
 
-            RenderContext.SceneOpitons = new SceneOptions
-            {
-            };
-
             RenderContext.Camera = new PerspectiveFieldOfViewCamera(new Vector3(2f, -5f, 2f), RenderContext.ScreenSize.X / (float)RenderContext.ScreenSize.Y)
             {
                 NearPlane = 0.1f,

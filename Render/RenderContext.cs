@@ -76,7 +76,6 @@ namespace Aximo.Render
 
         public BindingPoint LightBinding;
 
-        public SceneOptions SceneOpitons;
         public Camera Camera;
         public List<IRenderObject> AllObjects = new List<IRenderObject>();
         public List<IRenderableObject> RenderableObjects = new List<IRenderableObject>();
@@ -206,9 +205,5 @@ namespace Aximo.Render
 
             InternalTextureManager.DeleteOrphaned();
         }
-    }
-
-    public class SceneOptions
-    {
     }
 }

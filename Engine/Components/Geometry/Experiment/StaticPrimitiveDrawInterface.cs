@@ -5,7 +5,10 @@ using Aximo.Render;
 
 namespace Aximo.Engine
 {
-    public class PrimitiveDrawInterface
+    public class StaticPrimitiveDrawInterface : PrimitiveDrawInterface
     {
+        // public void DrawMesh(MeshBatch mesh)
+        // {
+        // }
     }
 }
