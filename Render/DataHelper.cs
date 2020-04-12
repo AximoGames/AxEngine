@@ -34,23 +34,38 @@ namespace Aximo.Render
             foreach (var direction in directions)
             {
                 var quad = GetQuad();
-                foreach (var vert in quad)
-                {
-                    var q = Quaternion.FromEulerAngles(direction * MathF.PI / 2);
-                    if (direction == -Vector3.UnitY)
-                        q = Quaternion.Identity;
-                    else if (direction == Vector3.UnitY)
-                        q = new Quaternion(0, 0, -1, 0);
 
-                    var v = vert;
-                    v.Normal = Vector3.Transform(v.Normal, q);
-                    v.Position.Y = -0.5f;
-                    v.Position = Vector3.Transform(v.Position, q);
-                    vertices.Add(v);
-                }
+                AddPositionY(quad, -0.5f);
+
+                var q = Quaternion.FromEulerAngles(direction * MathF.PI / 2);
+                if (direction == -Vector3.UnitY)
+                    q = Quaternion.Identity;
+                else if (direction == Vector3.UnitY)
+                    q = new Quaternion(0, 0, -1, 0);
+
+                Rotate(quad, q);
+
+                vertices.AddRange(quad);
             }
 
             return vertices.ToArray();
+        }
+
+        private static void Rotate(VertexDataPosNormalUV[] vertices, Quaternion q)
+        {
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                var v = vertices[i];
+                v.Normal = Vector3.Transform(v.Normal, q);
+                v.Position = Vector3.Transform(v.Position, q);
+                vertices[i] = v;
+            }
+        }
+
+        private static void AddPositionY(VertexDataPosNormalUV[] vertices, float value)
+        {
+            for (var i = 0; i < vertices.Length; i++)
+                vertices[i].Position.Y += value;
         }
 
         /// <summary>
@@ -60,18 +75,18 @@ namespace Aximo.Render
         {
             return new VertexDataPosNormalUV[]
             {
-            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 1.0f)), // Front face
-            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.5f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 1.0f)),
-            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.5f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 0.0f)),
-            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.5f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 0.0f)),
-            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 0.0f)),
-            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.0f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 1.0f)), // Front face
+            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.0f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.0f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.0f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.0f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.0f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 1.0f)),
             };
         }
 
-        public static VertexDataPosNormalUV[] Cube_ => GetCube();
+        public static VertexDataPosNormalUV[] Cube => GetCube();
 
-        public static readonly VertexDataPosNormalUV[] Cube =
+        public static readonly VertexDataPosNormalUV[] Cube_ =
         {
              // Position          Normal
             new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f, -0.5f),  new Vector3(0.0f,  0.0f, -1.0f),  new Vector2(0.0f, 0.0f)), // Bottom face
