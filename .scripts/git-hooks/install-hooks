@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#set -e
+
+cd $(dirname $0)
+
+ln -s ../../.scripts/git-hooks/dotnet-pre-push ../../.git/hooks
