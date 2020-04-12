@@ -58,7 +58,7 @@ namespace Aximo.Render
         private Shader _shader;
         private VertexArrayObject vao;
 
-        private float[] _vertices = DataHelper.Cube;
+        private VertexDataPosNormalUV[] _vertices = DataHelper.Cube;
 
         public override void Init()
         {
@@ -66,11 +66,7 @@ namespace Aximo.Render
 
             _shader = new Shader("Shaders/forward.vert", "Shaders/white.frag");
 
-            var layout = new VertexLayoutBinded();
-            layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 3);
-            layout.AddAttribute<float>(_shader.GetAttribLocation("aNormal"), 3);
-            layout.AddAttribute<float>(_shader.GetAttribLocation("aTexCoords"), 2);
-
+            var layout = VertexLayoutDefinition.CreateDefinitionFromVertexStruct<VertexDataPosNormalUV>().BindToShader(_shader);
             vao = new VertexArrayObject(layout);
             vao.SetData(BufferData.Create(_vertices));
         }

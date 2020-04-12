@@ -104,7 +104,7 @@ namespace Aximo.AxDemo
             GameContext.AddActor(new Actor(new SphereComponent()
             {
                 Name = "CompSphere",
-                RelativeTranslation = new Vector3(-1, 0, 0),
+                RelativeTranslation = new Vector3(-3, 0, 0),
                 RelativeScale = new Vector3(1.5f),
                 Material = materialWood2,
             }));
@@ -155,26 +155,26 @@ namespace Aximo.AxDemo
             };
             GameContext.AddActor(new Actor(flowContainer));
 
-            flowContainer.AddComponent(new UIImage("Textures/woodenbox_specular.png")
-            {
-                Name = "ScreenTexture1.1",
-                //Size = new Vector2(100, 100),
-                //Margin = new UIAnchors(20, 20, 20, 20),
-            });
+            //flowContainer.AddComponent(new UIImage("Textures/woodenbox_specular.png")
+            //{
+            //    Name = "ScreenTexture1.1",
+            //    //Size = new Vector2(100, 100),
+            //    //Margin = new UIAnchors(20, 20, 20, 20),
+            //});
 
-            flowContainer.AddComponent(new UIImage("Textures/woodenbox_specular.png")
-            {
-                Name = "ScreenTexture1.1",
-                //Size = new Vector2(100, 100),
-                //Margin = new UIAnchors(20, 20, 20, 20),
-            });
+            //flowContainer.AddComponent(new UIImage("Textures/woodenbox_specular.png")
+            //{
+            //    Name = "ScreenTexture1.1",
+            //    //Size = new Vector2(100, 100),
+            //    //Margin = new UIAnchors(20, 20, 20, 20),
+            //});
 
-            flowContainer.AddComponent(new UIButton()
-            {
-                Name = "bt1",
-                //Size = new Vector2(100, 100),
-                //Margin = new UIAnchors(20, 20, 20, 20),
-            });
+            //flowContainer.AddComponent(new UIButton()
+            //{
+            //    Name = "bt1",
+            //    //Size = new Vector2(100, 100),
+            //    //Margin = new UIAnchors(20, 20, 20, 20),
+            //});
 
             // --
 

@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace Aximo.Render
     {
         public static MeshData Cube()
         {
-            return new MeshData<float>(typeof(VertexDataPosNormalUV), BufferData.Create(DataHelper.Cube));
+            return new MeshData<VertexDataPosNormalUV>(BufferData.Create(DataHelper.Cube));
         }
 
         public static MeshData DebugCube()
