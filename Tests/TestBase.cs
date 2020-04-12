@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -154,8 +154,8 @@ namespace Aximo.AxTests
         private int Analyzse(Image bmp1, Image bmp2, int maxDiffAllowed, bool showChanges = false)
         {
             int maxDiff = 0;
-            var _bmp1 = bmp1 as Image<Rgba32>;
-            var _bmp2 = bmp2 as Image<Rgba32>;
+            var bmp1_ = bmp1 as Image<Rgba32>;
+            var bmp2_ = bmp2 as Image<Rgba32>;
 
             if (showChanges)
                 Console.WriteLine();
@@ -164,7 +164,7 @@ namespace Aximo.AxTests
             {
                 for (var x = 0; x < bmp1.Width; x++)
                 {
-                    var dist = GetDistanceBetweenColours(_bmp1[x, y], _bmp2[x, y]);
+                    var dist = GetDistanceBetweenColours(bmp1_[x, y], bmp2_[x, y]);
 
                     if (showChanges)
                         Console.Write(dist > maxDiffAllowed ? "#" : ".");

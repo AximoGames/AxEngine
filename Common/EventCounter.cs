@@ -22,7 +22,7 @@ namespace Aximo
         private Stopwatch Watch = new Stopwatch();
         private double FrameCount = 0;
         private double DeltaTime = 0.0;
-        private double UpdateRate = 4.0;  // 4 updates per sec.        
+        private double UpdateRate = 4.0;  // 4 updates per sec.
 
         private double _Fps = 0.0;
         public double EventsPerSecond => _Fps;

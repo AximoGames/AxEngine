@@ -110,8 +110,11 @@ namespace Aximo.AxTests
             WaitHandle.SignalAndWait(UpdateWaiter, TestWaiter);
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
+            if (Disposed)
+                return;
+
             SignalShutdown();
             Console.WriteLine("Shutting down Test");
             ScreenshotBuffer?.Dispose();
@@ -119,7 +122,7 @@ namespace Aximo.AxTests
             RenderWaiter.Set();
             UpdateWaiter.Set();
 
-            base.Dispose();
+            base.Dispose(disposing);
 
             UpdateWaiter.Dispose();
             UpdateWaiter = null;

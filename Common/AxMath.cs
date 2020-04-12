@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -55,15 +55,14 @@ namespace Aximo
 
         public static float Map(float input, float fromMin, float fromMax, float toMin, float toMax)
         {
-            return ((input - fromMin) / (fromMax - fromMin)) * (toMax - toMin) + toMin;
+            return ((input - fromMin) / (fromMax - fromMin) * (toMax - toMin)) + toMin;
         }
 
         public static Vector2 Map(Vector2 input, Vector2 fromMin, Vector2 fromMax, Vector2 toMin, Vector2 toMax)
         {
             return new Vector2(
                 Map(input.X, fromMin.X, fromMax.X, toMin.X, toMax.X),
-                Map(input.Y, fromMin.Y, fromMax.Y, toMin.Y, toMax.Y)
-            );
+                Map(input.Y, fromMin.Y, fromMax.Y, toMin.Y, toMax.Y));
         }
 
         public static float MapToNDC(float input, float fromMin, float fromMax)

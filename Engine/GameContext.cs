@@ -175,7 +175,7 @@ namespace Aximo.Engine
             set => RenderContext.BackgroundColor = value;
         }
 
-        public void DumpInfo(bool list)
+        internal override void DumpInfo(bool list)
         {
             Log.Info("Actors: {ActorCount}", Actors.Count);
             if (list)

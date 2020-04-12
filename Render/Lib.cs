@@ -1,6 +1,7 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 
 using OpenToolkit;
@@ -11,7 +12,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Render
 {
 
-    public interface IRenderObject : IData
+    public interface IRenderObject : IData, IDisposable
     {
         int Id { get; }
         string Name { get; set; }

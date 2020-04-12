@@ -63,8 +63,6 @@ namespace Aximo.Render
                 CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
         }
 
-        public static Material Default { get; } = GetDefault();
-
         public void WriteToShader(string name, Shader shader)
         {
             var prefix = name += ".";

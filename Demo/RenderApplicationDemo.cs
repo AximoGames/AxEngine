@@ -180,7 +180,7 @@ namespace Aximo.AxDemo
                 //Margin = new UIAnchors(20, 20, 20, 20),
             });
 
-            // -- 
+            // --
 
             GameContext.AddActor(new Actor(new StatsComponent()
             {

@@ -316,6 +316,19 @@ namespace Aximo.Render
                 CubeShadowsMatrices.Add(view * proj * Matrix4.CreateScale(1, -1, 1));
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (Disposed)
+                return;
+
+            if (disposing)
+            {
+                Free();
+            }
+
+            base.Dispose(disposing);
+        }
+
         public override void Free()
         {
             foreach (var itm in vaoList)

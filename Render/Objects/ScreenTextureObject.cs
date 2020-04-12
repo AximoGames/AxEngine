@@ -22,20 +22,13 @@ namespace Aximo.Render
 
         private VertexArrayObject vao;
 
-        public Texture SourceTexture;
-
-        public string TexturePath;
+        public Texture SourceTexture { get; set; }
 
         public override void Init()
         {
             UsePipeline<ScreenPipeline>();
 
             _shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag");
-
-            if (!string.IsNullOrEmpty(TexturePath))
-            {
-                SourceTexture = new Texture(TexturePath);
-            }
 
             var layout = new VertexLayoutBinded();
             layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 2);
@@ -97,10 +90,25 @@ namespace Aximo.Render
             GL.Enable(EnableCap.CullFace);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (Disposed)
+                return;
+
+            if (disposing)
+            {
+                Free();
+                SourceTexture = null;
+            }
+
+            base.Dispose(disposing);
+        }
+
         public override void Free()
         {
             vao.Free();
             _shader.Free();
+            SourceTexture = null;
         }
 
     }

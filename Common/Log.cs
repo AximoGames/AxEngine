@@ -1,3 +1,6 @@
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Serilog;
 
 namespace Aximo
@@ -15,6 +18,8 @@ namespace Aximo
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] <{SourceContext}> {Message:lj}{NewLine}{Exception}")
                 .MinimumLevel.Verbose()
                 .CreateLogger();
+
+            Initialized = true;
         }
 
         public static ILogger ForContext<T>()

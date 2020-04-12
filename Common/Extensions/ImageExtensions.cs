@@ -1,3 +1,6 @@
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,51 +17,43 @@ using SixLabors.ImageSharp.Processing;
 namespace Aximo
 {
 
-    public static class ImageLib
-    {
-        public static Image Load(string path)
-        {
-            if (path.ToLower().EndsWith(".tga"))
-                return TgaDecoder.FromFile(path);
-            else
-                return Image.Load(path);
-        }
-    }
-
     public static class ImageExtensions
     {
+#pragma warning disable CS0618 // Type or member is obsolete
 
-        public unsafe static void UseData(this Image<Rgba32> image, Action<IntPtr> ptrCallback)
+        public static unsafe void UseData(this Image<Rgba32> image, Action<IntPtr> ptrCallback)
         {
             ref var pixels = ref MemoryMarshal.GetReference(image.GetPixelSpan());
             ptrCallback((IntPtr)Unsafe.AsPointer(ref pixels));
         }
 
-        public unsafe static void UseData(this Image<Argb32> image, Action<IntPtr> ptrCallback)
+        public static unsafe void UseData(this Image<Argb32> image, Action<IntPtr> ptrCallback)
         {
             ref var pixels = ref MemoryMarshal.GetReference(image.GetPixelSpan());
             ptrCallback((IntPtr)Unsafe.AsPointer(ref pixels));
         }
 
-        public unsafe static void UseData(this Image<Bgra32> image, Action<IntPtr> ptrCallback)
+        public static unsafe void UseData(this Image<Bgra32> image, Action<IntPtr> ptrCallback)
         {
             ref var pixels = ref MemoryMarshal.GetReference(image.GetPixelSpan());
             ptrCallback((IntPtr)Unsafe.AsPointer(ref pixels));
         }
 
-        public unsafe static void UseData(this Image<Rgb24> image, Action<IntPtr> ptrCallback)
+        public static unsafe void UseData(this Image<Rgb24> image, Action<IntPtr> ptrCallback)
         {
             ref var pixels = ref MemoryMarshal.GetReference(image.GetPixelSpan());
             ptrCallback((IntPtr)Unsafe.AsPointer(ref pixels));
         }
 
-        public unsafe static void UseData(this Image<Bgr24> image, Action<IntPtr> ptrCallback)
+        public static unsafe void UseData(this Image<Bgr24> image, Action<IntPtr> ptrCallback)
         {
             ref var pixels = ref MemoryMarshal.GetReference(image.GetPixelSpan());
             ptrCallback((IntPtr)Unsafe.AsPointer(ref pixels));
         }
 
-        public unsafe static void UseData(this Image image, Action<IntPtr> ptrCallback)
+#pragma warning restore CS0618 // Type or member is obsolete
+
+        public static unsafe void UseData(this Image image, Action<IntPtr> ptrCallback)
         {
             if (image is Image<Rgba32> rgba32)
             {

@@ -1,6 +1,7 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 
 namespace Aximo.Render
@@ -34,9 +35,30 @@ namespace Aximo.Render
         public virtual void OnScreenResize(ScreenResizeEventArgs e)
         {
         }
+
+        #region IDisposable Support
+        protected bool Disposed { get; private set; } // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (Disposed)
+                return;
+
+            if (disposing)
+            {
+            }
+
+            Disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 
-    public interface IRenderPipeline
+    public interface IRenderPipeline : IDisposable
     {
         void BeforeInit();
         void Init();

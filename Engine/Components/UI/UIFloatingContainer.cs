@@ -6,19 +6,18 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Engine
 {
 
-    public abstract class UIContainerComponent : UIComponent
+    public class UIFloatingContainer : UIContainerComponent
     {
-        public UIAnchors Padding;
-
-        protected internal override UIAnchors PaddingInternal => Padding;
-
         internal override void SetChildBounds()
         {
             foreach (var child in UIComponents)
             {
-                child.AbsoluteOuterRect = AbsolutePaddingRect;
+                var location = child.Location;
+                var size = child.Size + Padding.Size + Border.Size + Margin.Size;
+                child.AbsoluteOuterRect = BoxHelper.FromSize(AbsolutePaddingRect.Min + location, size);
             }
         }
+
     }
 
 }

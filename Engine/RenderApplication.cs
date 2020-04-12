@@ -31,7 +31,7 @@ namespace Aximo.Engine
 
         public static RenderApplication Current { get; private set; }
 
-        public Vector2i ScreenSize => window.Size;
+        public Vector2i ScreenSize => Window.Size;
 
         private RenderApplicationConfig config;
 
@@ -43,7 +43,7 @@ namespace Aximo.Engine
 
         public Camera Camera => RenderContext.Camera;
 
-        protected KeyboardState KeyboardState => window.KeyboardState;
+        protected KeyboardState KeyboardState => Window.KeyboardState;
 
         public RenderApplication(RenderApplicationConfig startup)
         {
@@ -51,7 +51,7 @@ namespace Aximo.Engine
         }
 
         public WindowContext WindowContext => WindowContext.Current;
-        private GameWindow window => WindowContext.Current.window;
+        private GameWindow Window => WindowContext.Current.Window;
 
         private AutoResetEvent RunSyncWaiter;
         public void RunSync()
@@ -87,7 +87,7 @@ namespace Aximo.Engine
             {
                 // It's important to take a the size of the new created window instead of the startupConfig,
                 // Because they may not be accepted or changed because of other DPI than 100%
-                ScreenSize = window.Size,
+                ScreenSize = Window.Size,
             };
             RenderContext.Current = RenderContext;
 
@@ -131,37 +131,35 @@ namespace Aximo.Engine
             // Dont's forget UnregisterWindowEvents!
             WindowContext.RenderFrame += (e) => OnRenderFrameInternal(e);
             WindowContext.UpdateFrame += (e) => OnUpdateFrameInternal(e);
-            window.MouseMove += (e) => OnMouseMoveInternal(e);
-            window.KeyDown += (e) => OnKeyDownInternal(e);
-            window.MouseDown += (e) => OnMouseDownInternal(e);
-            window.MouseUp += (e) => OnMouseUpInternal(e);
-            window.MouseWheel += (e) => OnMouseWheelInternal(e);
-            window.Unload += () => OnUnloadInternal();
-            window.Resize += (e) => OnScreenResizeInternal(e);
-            window.Closing += (e) => OnClosingInternal(e);
-            window.Closed += OnClosed;
+            Window.MouseMove += (e) => OnMouseMoveInternal(e);
+            Window.KeyDown += (e) => OnKeyDownInternal(e);
+            Window.MouseDown += (e) => OnMouseDownInternal(e);
+            Window.MouseUp += (e) => OnMouseUpInternal(e);
+            Window.MouseWheel += (e) => OnMouseWheelInternal(e);
+            Window.Unload += () => OnUnloadInternal();
+            Window.Resize += (e) => OnScreenResizeInternal(e);
+            Window.Closing += (e) => OnClosingInternal(e);
+            Window.Closed += OnClosed;
         }
 
         private void UnregisterWindowEvents()
         {
             WindowContext.RenderFrame -= (e) => OnRenderFrameInternal(e);
             WindowContext.UpdateFrame -= (e) => OnUpdateFrameInternal(e);
-            window.MouseMove -= (e) => OnMouseMoveInternal(e);
-            window.KeyDown -= (e) => OnKeyDownInternal(e);
-            window.MouseDown -= (e) => OnMouseDownInternal(e);
-            window.MouseUp -= (e) => OnMouseUpInternal(e);
-            window.MouseWheel -= (e) => OnMouseWheelInternal(e);
-            window.Unload -= () => OnUnloadInternal();
-            window.Resize -= (e) => OnScreenResizeInternal(e);
-            window.Closing -= (e) => OnClosingInternal(e);
-            window.Closed -= OnClosed;
+            Window.MouseMove -= (e) => OnMouseMoveInternal(e);
+            Window.KeyDown -= (e) => OnKeyDownInternal(e);
+            Window.MouseDown -= (e) => OnMouseDownInternal(e);
+            Window.MouseUp -= (e) => OnMouseUpInternal(e);
+            Window.MouseWheel -= (e) => OnMouseWheelInternal(e);
+            Window.Unload -= () => OnUnloadInternal();
+            Window.Resize -= (e) => OnScreenResizeInternal(e);
+            Window.Closing -= (e) => OnClosingInternal(e);
+            Window.Closed -= OnClosed;
         }
 
         protected virtual void SetupScene()
         {
         }
-
-
 
         private FileSystemWatcher ShaderWatcher;
 
@@ -219,7 +217,6 @@ namespace Aximo.Engine
                 if (Closing)
                     return;
 
-
                 if (FirstRenderFrame)
                     FirstRenderFrame = false;
                 else
@@ -243,7 +240,7 @@ namespace Aximo.Engine
 
                 GameContext.Sync();
                 Renderer.Render();
-                window.SwapBuffers();
+                Window.SwapBuffers();
                 AfterRenderFrame();
             }
             catch (Exception ex)
@@ -265,7 +262,7 @@ namespace Aximo.Engine
             OnKeyDown(e);
             if (DefaultKeyBindings)
             {
-                var kbState = window.KeyboardState;
+                var kbState = Window.KeyboardState;
                 if (kbState[Key.C])
                 {
                     if (e.Shift)
@@ -306,7 +303,7 @@ namespace Aximo.Engine
 
         protected bool Initialized { get; private set; }
 
-        public WindowBorder WindowBorder => window.WindowBorder;
+        public WindowBorder WindowBorder => Window.WindowBorder;
 
         protected void OnScreenResizeInternal(ResizeEventArgs e)
         {
@@ -376,7 +373,7 @@ namespace Aximo.Engine
 
             if (DefaultKeyBindings)
             {
-                var input = window.KeyboardState;
+                var input = Window.KeyboardState;
 
                 if (input.IsKeyDown(Key.Escape))
                 {
@@ -384,7 +381,7 @@ namespace Aximo.Engine
                     return;
                 }
 
-                var kbState = window.KeyboardState;
+                var kbState = Window.KeyboardState;
 
                 IPosition pos = MovingObject;
                 Camera cam = pos as Camera;
@@ -475,7 +472,7 @@ namespace Aximo.Engine
                 MouseSpeed[1] *= reduceFactor;
                 MouseSpeed[2] *= reduceFactor;
 
-                MouseSpeed[0] = -(MouseDelta.X / (4000f) * (float)e.Time);
+                MouseSpeed[0] = -(MouseDelta.X / 4000f * (float)e.Time);
                 MouseSpeed[1] = -(MouseDelta.Y / 4000f) * (float)e.Time;
                 MouseSpeed[2] = -(UpDownDelta / 4000f) * (float)e.Time;
                 MouseDelta = new Vector2();
@@ -490,21 +487,21 @@ namespace Aximo.Engine
                 else if (MovingObject is IScaleRotate rot)
                 {
                     rot.Rotate = new Quaternion(
-                        rot.Rotate.X + (MouseSpeed[1]),
+                        rot.Rotate.X + MouseSpeed[1],
                         rot.Rotate.Y,
-                        rot.Rotate.Z + (MouseSpeed[0]));
+                        rot.Rotate.Z + MouseSpeed[0]);
                 }
                 //Console.WriteLine(Camera.Pitch + " : " + Math.Round(MouseSpeed[1], 3));
                 if (simpleMove)
                     pos.Position = new Vector3(
                         pos.Position.X,
                         pos.Position.Y,
-                        pos.Position.Z + (MouseSpeed[2]));
+                        pos.Position.Z + MouseSpeed[2]);
                 else
                     pos.Position = new Vector3(
                         pos.Position.X,
                         pos.Position.Y,
-                        pos.Position.Z + (MouseSpeed[2]));
+                        pos.Position.Z + MouseSpeed[2]);
 
                 if (kbState[Key.F11])
                 {
@@ -553,7 +550,6 @@ namespace Aximo.Engine
             var y = (float)(((double)e.Y / (double)ScreenSize.Y * 2.0) - 1.0);
 
             CurrentMousePosition = new Vector2(x, y);
-
 
             OnMouseMove(args);
             if (args.Handled)
@@ -639,19 +635,39 @@ namespace Aximo.Engine
             Stop();
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            SignalShutdown();
-            UnregisterWindowEvents();
+            Dispose(true);
+        }
 
-            Thread.Sleep(200);
+        protected bool Disposed { get; private set; }
 
-            RenderContext.Free();
-            RenderContext = null;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (Disposed)
+                return;
 
-            ShaderWatcher?.Dispose();
-            ShaderWatcher = null;
-            Current = null;
+            if (disposing)
+            {
+                SignalShutdown();
+                UnregisterWindowEvents();
+
+                Thread.Sleep(200);
+
+                RenderContext.Free();
+                RenderContext = null;
+
+                ShaderWatcher?.Dispose();
+                ShaderWatcher = null;
+
+                RunSyncWaiter?.WaitOne();
+                RunSyncWaiter?.Dispose();
+                RunSyncWaiter = null;
+
+                Current = null;
+            }
+
+            Disposed = true;
         }
 
         private Vector2 _CurrentMousePosition;
@@ -735,11 +751,11 @@ namespace Aximo.Engine
             return vec.Xyz / vec.W;
         }
 
-        public double RenderFrequency => window.RenderFrequency;
-        public double UpdateFrequency => window.UpdateFrequency;
+        public double RenderFrequency => Window.RenderFrequency;
+        public double UpdateFrequency => Window.UpdateFrequency;
 
         private bool _Closing;
-        public bool Closing => _Closing || window == null || window.IsExiting;
+        public bool Closing => _Closing || Window == null || Window.IsExiting;
 
         // Foreign Thread
         protected void SignalShutdown()

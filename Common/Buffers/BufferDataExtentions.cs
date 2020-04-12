@@ -9,8 +9,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using OpenToolkit;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Aximo
 {
@@ -80,7 +80,9 @@ namespace Aximo
             {
                 var sourceSpan = source.Span;
                 var sourceIntSpan = MemoryMarshal.Cast<T, int>(sourceSpan);
+#pragma warning disable CS0618 // Type or member is obsolete
                 var destColorSpan = destinationRgba.GetPixelSpan();
+#pragma warning restore CS0618 // Type or member is obsolete
                 var destIntSpan = MemoryMarshal.Cast<Rgba32, int>(destColorSpan);
                 sourceIntSpan.CopyTo(destIntSpan);
                 destinationRgba.FlipY();

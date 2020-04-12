@@ -56,7 +56,7 @@ namespace Aximo.Engine
         {
             Log.Info("Loading: {SourcePath}", sourcePath);
             var imagePath = DirectoryHelper.GetAssetsPath(sourcePath);
-            Image bitmap = ImageLib.Load(imagePath);
+            Image bitmap = Image.Load(imagePath);
 
             var txt = new GameTexture(bitmap.Width, bitmap.Height)
             {

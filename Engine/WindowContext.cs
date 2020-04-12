@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -25,21 +25,21 @@ namespace Aximo.Engine
 
         private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderApplication>();
 
-        public RenderWindow window { get; private set; }
+        public RenderWindow Window { get; private set; }
 
         private Thread UpdateThread;
         private Thread RenderThread;
 
         internal void CreateWindow()
         {
-            window = new RenderWindow(Config)
+            Window = new RenderWindow(Config)
             {
                 WindowBorder = Config.WindowBorder,
                 Location = new Vector2i((1920 / 2) + 10, 50),
             };
 
-            window.RenderFrame += OnRenderFrameInternal;
-            window.UpdateFrame += OnUpdateFrameInternal;
+            Window.RenderFrame += OnRenderFrameInternal;
+            Window.UpdateFrame += OnUpdateFrameInternal;
         }
 
         public event Action<FrameEventArgs> UpdateFrame;
@@ -81,7 +81,7 @@ namespace Aximo.Engine
                 Log.Verbose("Init OpenGL Bindings");
                 Log.Verbose("Grab Context");
                 if (Environment.OSVersion.Platform != PlatformID.Win32NT) // Crash on mswin!
-                    window.MakeCurrent();
+                    Window.MakeCurrent();
 
                 Log.Verbose("Load OpenGL Bindings");
                 GL.LoadBindings(new GLFWBindingsContext());
@@ -99,7 +99,7 @@ namespace Aximo.Engine
 
             if (!RenderThreadHasContext)
             {
-                window.MakeCurrent();
+                Window.MakeCurrent();
                 RenderThreadHasContext = true;
             }
 
@@ -181,7 +181,7 @@ namespace Aximo.Engine
 
             Log.Info("Create Window");
             CreateWindow();
-            window.Run();
+            Window.Run();
         }
 
         public static WindowContext Current { get; private set; }

@@ -9,11 +9,11 @@ namespace Aximo.Render
     public class DeferredRenderPipeline : RenderPipeline
     {
 
-        public FrameBuffer GBuffer;
-        public Texture GPosition;
-        public Texture GNormal;
-        public Texture GMaterial;
-        public Texture GAlbedoSpec;
+        private FrameBuffer GBuffer;
+        private Texture GPosition;
+        private Texture GNormal;
+        private Texture GMaterial;
+        private Texture GAlbedoSpec;
 
         private Shader _DefLightShader;
         private float[] _vertices = DataHelper.Quad;
@@ -167,6 +167,32 @@ namespace Aximo.Render
         {
             GBuffer.Resize(e.Size.X, e.Size.Y);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                //GBuffer.Dispose(
+                GPosition.Dispose();
+                GNormal.Dispose();
+                GMaterial.Dispose();
+                GAlbedoSpec.Dispose();
+
+                //_DefLightShader.Dispose();
+                //_vertices.dis;
+
+                //vao;
+                //vbo
+            }
+
+            GPosition = null;
+            GNormal = null;
+            GMaterial = null;
+            GAlbedoSpec = null;
+
+            base.Dispose(disposing);
+        }
+
     }
 
     public enum DeferredPass

@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -10,7 +10,7 @@ using OpenToolkit.Windowing.GraphicsLibraryFramework;
 
 namespace Aximo.Engine
 {
-    public class GameStartup<TApp, TGtk>
+    public class GameStartup<TApp, TGtk> : IDisposable
         where TApp : RenderApplication
         where TGtk : GtkUI
     {
@@ -71,7 +71,6 @@ namespace Aximo.Engine
             Environment.Exit(0);
         }
 
-
         private void ConsoleLoop()
         {
             string prevCmd = "";
@@ -119,6 +118,31 @@ namespace Aximo.Engine
                 }
             }
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    demo.Dispose();
+                    ui.Dispose();
+                }
+                demo = null;
+                ui = null;
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
 
     }
 

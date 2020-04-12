@@ -135,7 +135,7 @@ namespace Aximo.Render
             return txt;
         }
 
-        public unsafe static Texture LoadCubeMap(string path)
+        public static unsafe Texture LoadCubeMap(string path)
         {
             //var faces = new string[] { "right", "left", "back", "front", "top", "bottom" };
             //var faces = new string[] { "left", "right", "top", "top", "top", "top" };
@@ -238,15 +238,6 @@ namespace Aximo.Render
             GL.TexParameter(Target, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
         }
 
-        public Texture(string path)
-        {
-            using (var image = LoadBitmap(path))
-            {
-                InitFromBitmap(image, Path.GetFileName(path));
-            }
-            Console.WriteLine($"Loaded Texture #{Handle} {path}");
-        }
-
         public Texture(Vector3 color, string name)
         {
             using (var bmp = new Image<Rgba32>(1, 1))
@@ -333,7 +324,7 @@ namespace Aximo.Render
         {
             var imagePath = DirectoryHelper.GetAssetsPath(path);
             //Console.WriteLine(imagePath);
-            return ImageLib.Load(imagePath);
+            return Image.Load(imagePath);
         }
 
         // Activate texture
@@ -346,15 +337,18 @@ namespace Aximo.Render
             GL.BindTexture(Target, Handle);
         }
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            if (Handle == 0)
-                return;
-            RemoveRef();
-            var h = Handle;
-            Bind();
-            //GL.DeleteTextures(1, ref h);
-            //Handle = 0;
+            if (disposing)
+            {
+                if (Handle == 0)
+                    return;
+                RemoveRef();
+                var h = Handle;
+                Bind();
+                //GL.DeleteTextures(1, ref h);
+                //Handle = 0;
+            }
         }
 
         public override void Init()
