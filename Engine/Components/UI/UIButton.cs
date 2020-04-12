@@ -79,7 +79,6 @@ namespace Aximo.Engine
         protected override void OnResized()
         {
             base.OnResized();
-            var s = "";
         }
 
     }

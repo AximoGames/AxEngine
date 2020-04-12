@@ -58,6 +58,7 @@ namespace Aximo.Render
             Border = border;
             Format = format;
             Type = type;
+            Level = level;
 
             int handle;
             GL.GenTextures(1, out handle);
