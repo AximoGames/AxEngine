@@ -159,7 +159,6 @@ namespace Aximo.AxDemo
             flowContainer.AddComponent(new UIImage("Textures/woodenbox_specular.png")
             {
                 Name = "ScreenTexture1.1",
-                RectanglePixels = new RectangleF(0, 0, 30f, 30f),
                 //Size = new Vector2(100, 100),
                 //Margin = new UIAnchors(20, 20, 20, 20),
             });
@@ -167,7 +166,6 @@ namespace Aximo.AxDemo
             flowContainer.AddComponent(new UIImage("Textures/woodenbox_specular.png")
             {
                 Name = "ScreenTexture1.1",
-                RectanglePixels = new RectangleF(0, 0, 30f, 30f),
                 //Size = new Vector2(100, 100),
                 //Margin = new UIAnchors(20, 20, 20, 20),
             });
@@ -175,7 +173,6 @@ namespace Aximo.AxDemo
             flowContainer.AddComponent(new UIButton()
             {
                 Name = "bt1",
-                RectanglePixels = new RectangleF(0, 0, 30f, 30f),
                 //Size = new Vector2(100, 100),
                 //Margin = new UIAnchors(20, 20, 20, 20),
             });
@@ -185,7 +182,6 @@ namespace Aximo.AxDemo
             GameContext.AddActor(new Actor(new StatsComponent()
             {
                 Name = "Stats",
-                RectanglePixels = new RectangleF(40, 40, 100f, 100f),
                 CustomOrder = 10,
             }));
 

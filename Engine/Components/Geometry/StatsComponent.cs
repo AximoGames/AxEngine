@@ -45,6 +45,7 @@ namespace Aximo.Engine
                 Image.Mutate(ctx => ctx.DrawText(txt, DefaultFont, Color.White, new PointF(5, 5)));
                 UpdateTexture();
             }
+            base.UpdateFrame();
         }
 
     }

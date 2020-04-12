@@ -65,7 +65,7 @@ namespace Aximo.Engine
             }
             if (AbsoluteDrawRect != oldDrawRect)
             {
-                RectanglePixels = AbsoluteDrawRect.ToRectangleF();
+                SetRectanglePixels(AbsoluteDrawRect.ToRectangleF());
                 if (AbsoluteClientRect.Size != oldDrawRect.Size)
                     OnResized();
             }
@@ -136,47 +136,52 @@ namespace Aximo.Engine
 
         public Vector2 Location;
         // Inner Padding Size!
-        public Vector2 Size;
+        private Vector2 _Size;
+        public Vector2 Size
+        {
+            get => _Size;
+            set
+            {
+                if (_Size == value)
+                    return;
+                _Size = value;
+                Update();
+            }
+        }
 
         public UIAnchors Border;
         public UIDock Dock;
 
         private RectangleF? _RectangleUV;
-        public RectangleF RectangleUV
+        public void SetRectangleUV(RectangleF value)
         {
-            set
-            {
-                if (_RectangleUV == value)
-                    return;
+            if (_RectangleUV == value)
+                return;
 
-                var pos = new Vector3(
-                    ((value.X + (value.Width / 2f)) * 2) - 1.0f,
-                    ((1 - (value.Y + (value.Height / 2f))) * 2) - 1.0f,
-                    0);
+            var pos = new Vector3(
+                ((value.X + (value.Width / 2f)) * 2) - 1.0f,
+                ((1 - (value.Y + (value.Height / 2f))) * 2) - 1.0f,
+                0);
 
-                var scale = new Vector3(value.Width, -value.Height, 1.0f);
-                RelativeTranslation = pos;
-                RelativeScale = scale;
-                _RectanglePixels = null;
-                _RectangleUV = value;
-            }
+            var scale = new Vector3(value.Width, -value.Height, 1.0f);
+            RelativeTranslation = pos;
+            RelativeScale = scale;
+            _RectanglePixels = null;
+            _RectangleUV = value;
         }
 
         private RectangleF? _RectanglePixels;
-        public RectangleF RectanglePixels
+        public void SetRectanglePixels(RectangleF value)
         {
-            set
-            {
-                if (_RectanglePixels == value)
-                    return;
+            if (_RectanglePixels == value)
+                return;
 
-                var pos1 = new Vector2(value.X, value.Y) * RenderContext.Current.PixelToUVFactor;
-                var pos2 = new Vector2(value.Right, value.Bottom) * RenderContext.Current.PixelToUVFactor;
+            var pos1 = new Vector2(value.X, value.Y) * RenderContext.Current.PixelToUVFactor;
+            var pos2 = new Vector2(value.Right, value.Bottom) * RenderContext.Current.PixelToUVFactor;
 
-                RectangleUV = new RectangleF(pos1.X, pos1.Y, pos2.X - pos1.X, pos2.Y - pos1.Y);
-                _RectangleUV = null;
-                _RectanglePixels = value;
-            }
+            SetRectangleUV(new RectangleF(pos1.X, pos1.Y, pos2.X - pos1.X, pos2.Y - pos1.Y));
+            _RectangleUV = null;
+            _RectanglePixels = value;
         }
 
         protected bool _NeedRedraw = false;

@@ -280,11 +280,6 @@ namespace Aximo.AxTests
             App.RenderSingleFrameSync();
             var bmpCurrent = App.ScreenshotBuffer.BufferData.CreateBitmap();
 
-            if (testName == "BoxForwardTextureAmbient0.0")
-            {
-                var debug = "";
-            }
-
             Directory.CreateDirectory(TestOutputDir);
 
             var originalFile = Path.Combine(OriginalDir, testName + ".png");
