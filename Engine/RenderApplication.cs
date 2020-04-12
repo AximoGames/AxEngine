@@ -262,8 +262,8 @@ namespace Aximo.Engine
                     if (e.Shift)
                     {
                         DebugCamera = !DebugCamera;
-                        var debugLine = RenderContext.GetObjectByName("DebugLine") as LineObject;
-                        debugLine.Enabled = DebugCamera;
+                        var debugLine = GameContext.GetActor("DebugLine").RootComponent as LineComponent;
+                        debugLine.Visible = DebugCamera;
                         Console.WriteLine($"DebugCamera: {DebugCamera}");
                     }
                     else
