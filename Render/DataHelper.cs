@@ -35,15 +35,20 @@ namespace Aximo.Render
             {
                 var quad = GetQuad();
 
-                AddPositionY(quad, -0.5f);
+                AddPositionZ(quad, 1f);
 
-                var q = Quaternion.FromEulerAngles(direction * MathF.PI / 2);
+                Rotate(quad, new Quaternion(1, 0, 0, 1).Normalized());
+
+                Quaternion q;
                 if (direction == -Vector3.UnitY)
                     q = Quaternion.Identity;
                 else if (direction == Vector3.UnitY)
                     q = new Quaternion(0, 0, -1, 0);
+                else
+                    q = Quaternion.FromEulerAngles(direction * MathF.PI / 2);
 
                 Rotate(quad, q);
+                Scale(quad, new Vector3(0.5f));
 
                 vertices.AddRange(quad);
             }
@@ -68,6 +73,18 @@ namespace Aximo.Render
                 vertices[i].Position.Y += value;
         }
 
+        private static void Scale(VertexDataPosNormalUV[] vertices, Vector3 scale)
+        {
+            for (var i = 0; i < vertices.Length; i++)
+                vertices[i].Position *= scale;
+        }
+
+        private static void AddPositionZ(VertexDataPosNormalUV[] vertices, float value)
+        {
+            for (var i = 0; i < vertices.Length; i++)
+                vertices[i].Position.Z += value;
+        }
+
         /// <summary>
         /// Returns a Quad, grounded to XY, facing Z-Up
         /// </summary>
@@ -75,12 +92,19 @@ namespace Aximo.Render
         {
             return new VertexDataPosNormalUV[]
             {
-            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.0f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 1.0f)), // Front face
-            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.0f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 1.0f)),
-            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.0f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 0.0f)),
-            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.0f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 0.0f)),
-            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.0f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 0.0f)),
-            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.0f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 1.0f)),
+            //new VertexDataPosNormalUV(new Vector3(-0.5f, -0.0f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 1.0f)), // Front face
+            //new VertexDataPosNormalUV(new Vector3( 0.5f, -0.0f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 1.0f)),
+            //new VertexDataPosNormalUV(new Vector3( 0.5f, -0.0f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 0.0f)),
+            //new VertexDataPosNormalUV(new Vector3( 0.5f, -0.0f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(1.0f, 0.0f)),
+            //new VertexDataPosNormalUV(new Vector3(-0.5f, -0.0f,  0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 0.0f)),
+            //new VertexDataPosNormalUV(new Vector3(-0.5f, -0.0f, -0.5f),  new Vector3(0.0f, -1.0f,  0.0f),  new Vector2(0.0f, 1.0f)),
+
+            new VertexDataPosNormalUV(new Vector3(-1f, -1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(0.0f, 1.0f)), // Top face
+            new VertexDataPosNormalUV(new Vector3( 1f, -1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 1f,  1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 1f,  1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-1f,  1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-1f, -1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(0.0f, 1.0f)),
             };
         }
 
