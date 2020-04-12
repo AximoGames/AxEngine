@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/aximogames/axengine/badge/develop)](https://www.codefactor.io/repository/github/aximogames/axengine/overview/develop)
+
 To clone this repository, you need git LFS, otherwise you need to download the Assets folder manually.
 
 Don't forget the `--recursive` option:
