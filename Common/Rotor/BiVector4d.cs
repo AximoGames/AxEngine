@@ -16,7 +16,7 @@ using Aximo;
 #pragma warning disable SA1616 // Element return value documentation should have text
 #pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
 
-namespace OpenToolkit.Mathematics.Rotors
+namespace OpenToolkit.Mathematics
 {
     /// <summary>
     /// A four dimentional bi-vector i.e. a line.

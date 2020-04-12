@@ -38,6 +38,7 @@ namespace Aximo.Render
                 AddPositionZ(quad, 1f);
 
                 Rotate(quad, new Quaternion(1, 0, 0, 1).Normalized());
+                //Rotate(quad, new Rotor3(Vector3.UnitZ, -Vector3.UnitY));
 
                 Quaternion q;
                 if (direction == -Vector3.UnitY)
@@ -49,6 +50,8 @@ namespace Aximo.Render
 
                 Rotate(quad, q);
                 Scale(quad, new Vector3(0.5f));
+
+                RoundSmooth(quad);
 
                 vertices.AddRange(quad);
             }
@@ -65,6 +68,37 @@ namespace Aximo.Render
                 v.Position = Vector3.Transform(v.Position, q);
                 vertices[i] = v;
             }
+        }
+
+        private static void Rotate(VertexDataPosNormalUV[] vertices, Rotor3 q)
+        {
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                //var r = new Rotor3(Vector3.UnitZ, -Vector3.UnitY);
+                //var pos = Vector3.UnitZ;
+                //var newPos = Rotor3.Rotate(q, pos);
+
+                var v = vertices[i];
+                v.Normal = Rotor3.Rotate(q, v.Normal);
+                v.Position = Rotor3.Rotate(q, v.Position);
+                vertices[i] = v;
+            }
+        }
+
+        private static void Round(VertexDataPosNormalUV[] vertices, int digits)
+        {
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                var v = vertices[i];
+                v.Normal = v.Normal.Round(digits);
+                v.Position = v.Position.Round(digits);
+                vertices[i] = v;
+            }
+        }
+
+        private static void RoundSmooth(VertexDataPosNormalUV[] vertices)
+        {
+            Round(vertices, 6);
         }
 
         private static void AddPositionY(VertexDataPosNormalUV[] vertices, float value)
