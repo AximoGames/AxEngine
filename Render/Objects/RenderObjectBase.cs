@@ -92,6 +92,5 @@ namespace Aximo.Render
             GC.SuppressFinalize(this);
         }
         #endregion
-
     }
 }
