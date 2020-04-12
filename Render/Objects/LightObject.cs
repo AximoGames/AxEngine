@@ -6,7 +6,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-
     public class LightObject : RenderObject, IRenderableObject, IPosition, ILightObject
     {
         public Camera Camera => Context.Camera;
@@ -97,7 +96,5 @@ namespace Aximo.Render
             vao.Free();
             _shader.Free();
         }
-
     }
-
 }

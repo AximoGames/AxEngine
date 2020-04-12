@@ -10,7 +10,6 @@ namespace Aximo.Render
 {
     public static class StructHelper
     {
-
         public static VertexAttribPointerType GetVertexAttribPointerType(Type type)
         {
             if (type == typeof(float))
@@ -39,7 +38,5 @@ namespace Aximo.Render
 
             return type.GetFields().Length;
         }
-
     }
-
 }

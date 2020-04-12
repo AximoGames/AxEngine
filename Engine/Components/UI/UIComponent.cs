@@ -9,7 +9,6 @@ using SixLabors.ImageSharp;
 
 namespace Aximo.Engine
 {
-
     public abstract class UIComponent : GraphicsScreenTextureComponent
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<UIComponent>();
@@ -201,7 +200,6 @@ namespace Aximo.Engine
 
         protected virtual void DrawControl()
         {
-
         }
 
         protected void InvokeDrawControl()
@@ -217,12 +215,10 @@ namespace Aximo.Engine
 
         public virtual void OnMouseEnter(MouseMoveArgs e)
         {
-
         }
 
         public virtual void OnMouseLeave(MouseMoveArgs e)
         {
-
         }
 
         public bool MouseEntered { get; private set; }
@@ -262,7 +258,5 @@ namespace Aximo.Engine
             if (MouseEntered && AbsoluteDrawRect.Contains(e.Position))
                 OnMouseUp(e);
         }
-
     }
-
 }

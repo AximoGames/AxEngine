@@ -7,7 +7,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-
     // TODO: Use a Quad instead of a cube
     // https://stackoverflow.com/questions/30015940/why-dont-people-use-tetrahedrons-for-skyboxes/30038392#30038392
     // together with https://stackoverflow.com/questions/2588875/whats-the-best-way-to-draw-a-fullscreen-quad-in-opengl-3-2/59739538#59739538
@@ -65,7 +64,5 @@ namespace Aximo.Render
             vao.Free();
             _shader.Free();
         }
-
     }
-
 }

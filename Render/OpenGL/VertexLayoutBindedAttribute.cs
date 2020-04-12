@@ -13,7 +13,5 @@ namespace Aximo.Render
         {
             return $"{base.GetDumpString()}, Index: {Index}";
         }
-
     }
-
 }

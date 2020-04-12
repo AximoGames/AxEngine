@@ -8,7 +8,6 @@ namespace Aximo.Engine
 {
     public class CommandLineOptions
     {
-
         public bool Mute { get; set; }
 
         public CommandLineOptions(string[] commandLineArgs)
@@ -27,6 +26,5 @@ namespace Aximo.Engine
                 return _Current;
             }
         }
-
     }
 }

@@ -12,13 +12,10 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
-
     public class SkyBoxComponent : MeshComponent
     {
-
         public SkyBoxComponent()
         {
-
         }
 
         public SkyBoxComponent(string skyBoxPath)
@@ -58,7 +55,5 @@ namespace Aximo.Engine
 
             base.DoDeallocation();
         }
-
     }
-
 }

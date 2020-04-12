@@ -7,7 +7,6 @@ namespace Aximo.Engine
 {
     public class UIImage : UIComponent
     {
-
         public UIImage(GameMaterial material) : this(material, new Vector2i(100, 100))
         {
         }
@@ -34,5 +33,4 @@ namespace Aximo.Engine
             Material.DiffuseTexture = image;
         }
     }
-
 }

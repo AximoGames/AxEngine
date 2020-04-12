@@ -18,7 +18,6 @@ namespace Aximo.Render
 
     public class Material
     {
-
         public Vector3 DiffuseColor { get; set; }
 
         public float SpecularStrength { get; set; }
@@ -74,5 +73,4 @@ namespace Aximo.Render
             shader.SetFloat(prefix + "SpecularStrength", SpecularStrength);
         }
     }
-
 }

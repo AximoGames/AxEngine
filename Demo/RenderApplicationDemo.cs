@@ -10,7 +10,6 @@ using SixLabors.ImageSharp;
 
 namespace Aximo.AxDemo
 {
-
     public class RenderApplicationDemo : RenderApplication
     {
         public RenderApplicationDemo(RenderApplicationConfig startup) : base(startup)
@@ -340,9 +339,6 @@ namespace Aximo.AxDemo
                 if (cursor != null)
                     cursor.RelativeTranslation = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.RelativeTranslation.Z);
             }
-
         }
-
     }
-
 }

@@ -7,10 +7,8 @@ using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
-
     public class FrameBuffer : IObjectLabel
     {
-
         private static FrameBuffer _Default;
         public static FrameBuffer Default
         {
@@ -162,7 +160,5 @@ namespace Aximo.Render
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, _Handle);
         }
-
     }
-
 }

@@ -14,7 +14,6 @@ namespace Aximo.Engine
         where TApp : RenderApplication
         where TGtk : GtkUI
     {
-
         private RenderApplicationConfig Config;
 
         public GameStartup(RenderApplicationConfig config)
@@ -145,5 +144,4 @@ namespace Aximo.Engine
         #endregion
 
     }
-
 }

@@ -12,12 +12,10 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
-
     public class CrossLineComponent : StaticMeshComponent
     {
         public CrossLineComponent(int size, bool center) : base(MeshDataBuilder.CrossLine(), MaterialManager.DefaultLineMaterial)
         {
         }
     }
-
 }

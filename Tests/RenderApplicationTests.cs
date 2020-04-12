@@ -19,10 +19,8 @@ using Xunit;
 
 namespace Aximo.AxTests
 {
-
     public class RenderApplicationTests : RenderApplication
     {
-
         protected static RenderApplicationTests CurrentTestApp;
 
         public RenderApplicationTests() : base(new RenderApplicationConfig
@@ -131,7 +129,5 @@ namespace Aximo.AxTests
             TestWaiter.Dispose();
             TestWaiter = null;
         }
-
     }
-
 }

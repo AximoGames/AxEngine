@@ -6,7 +6,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo
 {
-
     public struct Ray
     {
         private Vector3 _Origin;
@@ -47,6 +46,5 @@ namespace Aximo
         {
             return $"[{_Origin}, {_Direction}]";
         }
-
     }
 }

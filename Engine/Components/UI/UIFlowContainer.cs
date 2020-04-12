@@ -5,10 +5,8 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public class UIFlowContainer : UIContainerComponent
     {
-
         public Vector2 DefaultChildSizes;
         public UIAnchors ExtraChildMargin;
 
@@ -17,7 +15,6 @@ namespace Aximo.Engine
             var location = Vector2.Zero;
             foreach (var child in UIComponents)
             {
-
                 var extra = child.PaddingInternal.Size + child.Border.Size + child.Margin.Size;
 
                 var defaultSize = DefaultChildSizes;
@@ -37,7 +34,5 @@ namespace Aximo.Engine
                 location.Y += size.Y + ExtraChildMargin.Size.Y; // TODO: Use X for other alignment
             }
         }
-
     }
-
 }

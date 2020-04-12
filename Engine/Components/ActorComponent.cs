@@ -9,7 +9,6 @@ using System.Threading;
 
 namespace Aximo.Engine
 {
-
     public class ActorComponent : GameObject
     {
         public int ComponentId { get; private set; }
@@ -86,6 +85,5 @@ namespace Aximo.Engine
         internal virtual void PostUpdate()
         {
         }
-
     }
 }

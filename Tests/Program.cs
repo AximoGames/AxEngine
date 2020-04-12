@@ -12,7 +12,6 @@ namespace Aximo.AxTests
 {
     internal class Program
     {
-
         public static void Main(string[] args)
         {
             var tester = new LightTypeTests();
@@ -26,6 +25,5 @@ namespace Aximo.AxTests
             //Console.ReadLine();
             Environment.Exit(0);
         }
-
     }
 }

@@ -12,9 +12,7 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
-
     public class MeshComponent : PrimitiveComponent
     {
     }
-
 }

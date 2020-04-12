@@ -7,7 +7,6 @@ namespace Aximo.Engine
 {
     public struct UIAnchors
     {
-
         public UIAnchors(float left, float top, float right, float bottom)
         {
             Left = left;
@@ -31,5 +30,4 @@ namespace Aximo.Engine
 
         public Vector2 Size => new Vector2(Width, Height);
     }
-
 }

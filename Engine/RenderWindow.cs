@@ -12,7 +12,6 @@ using OpenToolkit.Windowing.Desktop;
 
 namespace Aximo.Engine
 {
-
     public class RenderWindow : GameWindow
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderWindow>();
@@ -98,6 +97,5 @@ namespace Aximo.Engine
         internal void Reset()
         {
         }
-
     }
 }

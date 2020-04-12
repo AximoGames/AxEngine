@@ -17,7 +17,6 @@ using OpenToolkit.Windowing.Desktop;
 
 namespace Aximo.Engine
 {
-
     public class RenderApplicationConfig
     {
         public Vector2i WindowSize { get; set; } = new Vector2i(600, 800);
@@ -44,7 +43,5 @@ namespace Aximo.Engine
                 IsMultiThreaded = true;
             }
         }
-
     }
-
 }

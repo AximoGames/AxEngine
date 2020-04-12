@@ -82,7 +82,5 @@ namespace Aximo.Render
             lock (References)
                 References.Remove(texture.Handle);
         }
-
     }
-
 }

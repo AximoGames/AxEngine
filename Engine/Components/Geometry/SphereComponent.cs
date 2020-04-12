@@ -12,12 +12,10 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
-
     public class SphereComponent : StaticMeshComponent
     {
         public SphereComponent(int divisions = 2) : base(MeshDataBuilder.Sphere(2), GameMaterial.Default)
         {
         }
     }
-
 }

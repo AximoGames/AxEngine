@@ -13,7 +13,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public class LineComponent : StaticMeshComponent
     {
         public LineComponent(Vector3 start, Vector3 end)
@@ -31,5 +30,4 @@ namespace Aximo.Engine
         {
         }
     }
-
 }

@@ -27,7 +27,5 @@ namespace Aximo.Engine
                 act?.Invoke();
             }
         }
-
     }
-
 }

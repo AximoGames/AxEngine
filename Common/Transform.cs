@@ -41,7 +41,5 @@ namespace Aximo
         {
             return new Transform(new Vector3(scale), Quaternion.Identity, Vector3.Zero);
         }
-
     }
-
 }

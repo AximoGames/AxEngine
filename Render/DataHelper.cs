@@ -198,7 +198,6 @@ namespace Aximo.Render
             -0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
              0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
             -0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-
         };
 
         // Here we now have added the normals of the vertices
@@ -311,7 +310,5 @@ namespace Aximo.Render
             -1.0f, -1.0f,  1.0f,
             1.0f, -1.0f,  1.0f,
         };
-
     }
-
 }

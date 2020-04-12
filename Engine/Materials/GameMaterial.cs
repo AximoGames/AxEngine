@@ -12,10 +12,8 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public class GameMaterial : GameObject
     {
-
         public static GameMaterial Default => MaterialManager.DefaultMaterial;
 
         private static int LastMaterialId = 0;
@@ -327,7 +325,5 @@ namespace Aximo.Engine
             Bool,
             Texture,
         }
-
     }
-
 }

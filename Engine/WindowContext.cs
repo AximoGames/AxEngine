@@ -13,7 +13,6 @@ using OpenToolkit.Windowing.GraphicsLibraryFramework;
 
 namespace Aximo.Engine
 {
-
     /// <summary>
     /// Holds the Window and OpenGL Context.
     /// </summary>
@@ -22,7 +21,6 @@ namespace Aximo.Engine
     /// </remarks>
     public class WindowContext
     {
-
         private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderApplication>();
 
         public RenderWindow Window { get; private set; }
@@ -202,7 +200,5 @@ namespace Aximo.Engine
                 }
             }
         }
-
     }
-
 }

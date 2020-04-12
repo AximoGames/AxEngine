@@ -7,7 +7,6 @@ namespace Aximo.Render
 {
     public class ForwardRenderPipeline : RenderPipeline
     {
-
         public FrameBuffer FrameBuffer;
 
         private void CreateFrameBuffer()
@@ -56,7 +55,5 @@ namespace Aximo.Render
             //     throw new Exception();
             FrameBuffer.Resize(e.Size.X, e.Size.Y);
         }
-
     }
-
 }

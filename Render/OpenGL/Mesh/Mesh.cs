@@ -6,10 +6,8 @@ using System.Collections.Generic;
 
 namespace Aximo.Render
 {
-
     public abstract class Mesh
     {
-
         public Mesh() { }
         public Mesh(MeshData meshData)
         {
@@ -50,5 +48,4 @@ namespace Aximo.Render
 
         public int VertexCount => MeshData?.VertexCount ?? 0;
     }
-
 }

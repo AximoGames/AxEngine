@@ -12,7 +12,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public class GameContext : GameObject
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<GameContext>();
@@ -139,7 +138,6 @@ namespace Aximo.Engine
 
         public void Sync()
         {
-
             while (ObjectsForDeallocation.Count > 0)
             {
                 foreach (var obj in ObjectsForDeallocation.ToArray())
@@ -219,7 +217,5 @@ namespace Aximo.Engine
         {
             Visit<Actor>(c => c.OnScreenMouseMove(e), c => !e.Handled);
         }
-
     }
-
 }

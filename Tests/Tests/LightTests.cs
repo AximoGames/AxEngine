@@ -11,20 +11,16 @@ using Xunit;
 
 namespace Aximo.AxTests
 {
-
     public class LightTests : TestBase
     {
-
         public LightTests()
         {
-
         }
 
         [Theory]
         [MemberData(nameof(GetTestData))]
         public void Box(TestCase test)
         {
-
             if (test.CompareWith != null)
             {
                 Compare(nameof(Box), test, test.CompareWith);
@@ -107,7 +103,5 @@ namespace Aximo.AxTests
                 return $"{DiffuseSource}Ambient{Ambient.ToString("F1", SharedLib.LocaleInvariant)}";
             }
         }
-
     }
-
 }

@@ -17,7 +17,6 @@ namespace Aximo.Render
     // A simple class meant to help create shaders.
     public class Shader : IObjectLabel
     {
-
         private static Serilog.ILogger Log = Aximo.Log.ForContext<Shader>();
 
         public int Handle { get; private set; }
@@ -183,7 +182,6 @@ namespace Aximo.Render
                         _uniformLocations.Add(keyN, GL.GetUniformLocation(Handle, keyN));
                     }
                 }
-
             }
 
             // First, we have to get the number of active uniforms in the shader.
@@ -201,7 +199,6 @@ namespace Aximo.Render
                 // and then add it to the dictionary.
                 _uniformBlockLocations.Add(key, location);
             }
-
         }
 
         public void Reload()
@@ -220,7 +217,6 @@ namespace Aximo.Render
             {
                 Console.WriteLine(ex.ToString());
             }
-
         }
 
         private void SetFrom(Shader source)
@@ -422,7 +418,6 @@ namespace Aximo.Render
                 GL.UniformBlockBinding(Handle, location, bindingPoint.Number);
             }
         }
-
     }
 
     public class ShaderCompilation : IObjectLabel
@@ -566,7 +561,5 @@ namespace Aximo.Render
                 return sr.ReadToEnd();
             }
         }
-
     }
-
 }

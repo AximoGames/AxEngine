@@ -9,7 +9,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-
     public abstract class PrimitiveObject : RenderObject, IRenderableObject
     {
         public void OnRender()
@@ -55,7 +54,5 @@ namespace Aximo.Render
                     throw new NotSupportedException(type.Name);
             }
         }
-
     }
-
 }

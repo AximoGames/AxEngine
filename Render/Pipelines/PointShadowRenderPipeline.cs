@@ -8,7 +8,6 @@ namespace Aximo.Render
 {
     public class PointShadowRenderPipeline : RenderPipeline
     {
-
         public FrameBuffer FrameBuffer { get; private set; }
 
         public override void Init()
@@ -34,7 +33,5 @@ namespace Aximo.Render
                     if (m.RenderShadow)
                         yield return m;
         }
-
     }
-
 }

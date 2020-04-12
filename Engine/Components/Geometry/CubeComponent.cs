@@ -12,12 +12,10 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
-
     public class CubeComponent : StaticMeshComponent
     {
         public CubeComponent() : base(MeshDataBuilder.Cube(), GameMaterial.Default)
         {
         }
     }
-
 }

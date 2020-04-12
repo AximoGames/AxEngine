@@ -12,7 +12,6 @@ using System.Threading;
 
 namespace Aximo.Engine
 {
-
     public class Actor : GameObject
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<GameContext>();
@@ -68,7 +67,6 @@ namespace Aximo.Engine
         public T GetComponent<T>()
             where T : ActorComponent
         {
-
             foreach (var comp in Components)
             {
                 if (comp is T)
@@ -198,7 +196,5 @@ namespace Aximo.Engine
         {
             RootComponent?.Visit<ActorComponent>(obj => obj.PostUpdate());
         }
-
     }
-
 }

@@ -12,10 +12,8 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public static class MaterialManager
     {
-
         public static GameMaterial _DefaultMaterial;
         public static GameMaterial DefaultMaterial
         {
@@ -68,7 +66,5 @@ namespace Aximo.Engine
         {
             return new GameMaterial();
         }
-
     }
-
 }

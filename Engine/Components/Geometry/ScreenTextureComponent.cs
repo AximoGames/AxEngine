@@ -15,7 +15,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public class ScreenTextureComponent : StaticMeshComponent
     {
         public ScreenTextureComponent() : base(MeshDataBuilder.Quad(), MaterialManager.CreateScreenMaterial())
@@ -81,7 +80,5 @@ namespace Aximo.Engine
             else
                 SetOrders();
         }
-
     }
-
 }

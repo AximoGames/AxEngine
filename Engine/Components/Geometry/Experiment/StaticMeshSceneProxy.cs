@@ -12,7 +12,6 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
-
     public class StaticMeshSceneProxy : PrimitiveSceneProxy
     {
         public StaticMeshSceneProxy(StaticMeshComponent component) : base(component) { }
@@ -20,7 +19,5 @@ namespace Aximo.Engine
         public void DrawStaticElements(StaticPrimitiveDrawInterface pdi)
         {
         }
-
     }
-
 }

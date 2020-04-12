@@ -8,7 +8,6 @@ namespace Aximo.Render
 {
     public class DeferredRenderPipeline : RenderPipeline
     {
-
         private FrameBuffer GBuffer;
         private Texture GPosition;
         private Texture GNormal;
@@ -192,7 +191,6 @@ namespace Aximo.Render
 
             base.Dispose(disposing);
         }
-
     }
 
     public enum DeferredPass
@@ -200,5 +198,4 @@ namespace Aximo.Render
         Pass1,
         Pass2,
     }
-
 }

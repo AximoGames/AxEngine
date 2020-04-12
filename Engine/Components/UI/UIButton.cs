@@ -10,7 +10,6 @@ namespace Aximo.Engine
 {
     public class UIButton : UIContainerComponent
     {
-
         public UILabelComponent LabelComponent;
 
         public UIButton()
@@ -80,7 +79,5 @@ namespace Aximo.Engine
         {
             base.OnResized();
         }
-
     }
-
 }

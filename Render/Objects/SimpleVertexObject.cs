@@ -10,11 +10,9 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-
     public class SimpleVertexObject : PrimitiveObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
         IForwardRenderable, IDeferredRenderable, IScreenRenderable
     {
-
         public Camera Camera => Context.Camera;
         public Vector3 Position { get; set; }
         public Vector3 Scale { get; set; } = new Vector3(1.0f);
@@ -180,7 +178,6 @@ namespace Aximo.Render
             var pipe = Context.GetPipeline<DeferredRenderPipeline>();
             if (pipe.Pass == DeferredPass.Pass1)
             {
-
                 foreach (var mat in vaoList)
                 {
                     var defGeometryShader = mat.Material.DefGeometryShader;
@@ -343,7 +340,5 @@ namespace Aximo.Render
         }
 
         public List<ILightObject> Lights => Context.LightObjects;
-
     }
-
 }

@@ -18,7 +18,6 @@ using Color = SixLabors.ImageSharp.Color;
 
 namespace Aximo.Engine
 {
-
     public class StatsComponent : UIComponent
     {
         private DateTime LastStatUpdate;
@@ -47,7 +46,5 @@ namespace Aximo.Engine
             }
             base.UpdateFrame();
         }
-
     }
-
 }

@@ -10,7 +10,6 @@ namespace Aximo.Engine
 {
     public class GtkUI : IDisposable
     {
-
         private Thread th;
 
         public void Start()

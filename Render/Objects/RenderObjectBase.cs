@@ -7,10 +7,8 @@ using System.Threading;
 
 namespace Aximo.Render
 {
-
     public abstract class RenderObjectBase : IRenderObject
     {
-
         public int Id { get; }
         public string Name { get; set; }
         public bool Enabled { get; set; } = true;
@@ -96,5 +94,4 @@ namespace Aximo.Render
         #endregion
 
     }
-
 }

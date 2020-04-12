@@ -39,7 +39,5 @@ namespace Aximo.Render
         {
             Image?.Dispose();
         }
-
     }
-
 }

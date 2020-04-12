@@ -6,5 +6,4 @@ namespace Aximo.Engine
     public class UIPanelComponent : UIContainerComponent
     {
     }
-
 }

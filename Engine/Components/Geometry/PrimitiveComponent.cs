@@ -10,10 +10,8 @@ using Aximo.Render;
 
 namespace Aximo.Engine
 {
-
     public class PrimitiveComponent : SceneComponent
     {
-
         internal IRenderableObject RenderableObject;
 
         public bool CastShadow { get; set; }
@@ -101,7 +99,5 @@ namespace Aximo.Engine
             foreach (var mat in _Materials)
                 mat.Visit(action, visitChilds);
         }
-
     }
-
 }

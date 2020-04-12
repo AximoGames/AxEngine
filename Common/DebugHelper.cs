@@ -12,7 +12,6 @@ using OpenToolkit.Input;
 
 namespace Aximo
 {
-
     public static class DebugHelper
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext(nameof(DebugHelper));
@@ -28,5 +27,4 @@ namespace Aximo
             Log.Info("Thread #{ThreadId} {ThreadName} {Message}", th.ManagedThreadId, th.Name, message);
         }
     }
-
 }

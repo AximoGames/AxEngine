@@ -7,7 +7,6 @@ using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
-
     public class VertexArrayObject
     {
         private int _Handle = -1;
@@ -148,5 +147,4 @@ namespace Aximo.Render
             GL.DeleteVertexArray(_Handle);
         }
     }
-
 }

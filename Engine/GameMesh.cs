@@ -6,7 +6,6 @@ using Aximo.Render;
 
 namespace Aximo.Engine
 {
-
     // public class GameStaticMesh : GameMesh
     // {
     //     public GameStaticMesh() : base() { }
@@ -58,5 +57,4 @@ namespace Aximo.Engine
 
     //     public int VertexCount => MeshData?.VertexCount ?? 0;
     // }
-
 }

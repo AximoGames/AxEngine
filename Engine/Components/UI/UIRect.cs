@@ -23,5 +23,4 @@ namespace Aximo.Engine
         Bottom = 8,
         Fill = Top | Left | Right | Bottom,
     }
-
 }

@@ -125,6 +125,5 @@ namespace Aximo
         {
             return $"[{_Normal}, {_Distance}]";
         }
-
     }
 }

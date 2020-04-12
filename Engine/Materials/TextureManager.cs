@@ -7,7 +7,6 @@ namespace Aximo.Engine
 {
     public static class TextureManager
     {
-
         private static Dictionary<string, GameTexture> FileTextures = new Dictionary<string, GameTexture>();
 
         public static GameTexture GetFromFile(string path)
@@ -22,7 +21,5 @@ namespace Aximo.Engine
                 return txt;
             }
         }
-
     }
-
 }

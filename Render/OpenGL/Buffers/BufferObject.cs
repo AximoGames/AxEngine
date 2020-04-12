@@ -10,7 +10,6 @@ namespace Aximo.Render
 {
     public abstract class BufferObject
     {
-
         public BufferObject()
         {
         }
@@ -70,12 +69,10 @@ namespace Aximo.Render
         {
             GL.DeleteBuffer(_Handle);
         }
-
     }
 
     public class BindingPoint
     {
-
         private int _Number;
         public int Number => _Number;
 
@@ -114,5 +111,4 @@ namespace Aximo.Render
             _Number = -1;
         }
     }
-
 }

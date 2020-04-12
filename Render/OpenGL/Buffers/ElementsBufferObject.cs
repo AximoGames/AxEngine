@@ -7,12 +7,9 @@ namespace Aximo.Render
 {
     public class ElementsBufferObject : BufferObject
     {
-
         public ElementsBufferObject()
         {
             Target = BufferTarget.ElementArrayBuffer;
         }
-
     }
-
 }

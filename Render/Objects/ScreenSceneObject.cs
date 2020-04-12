@@ -11,5 +11,4 @@ namespace Aximo.Render
             base.Init();
         }
     }
-
 }

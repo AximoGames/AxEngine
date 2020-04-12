@@ -8,10 +8,8 @@ using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
-
     public static class PixelFormatExtensions
     {
-
         public static GamePixelFormat ToGamePixelFormat(this PixelFormat format)
         {
             switch (format)
@@ -28,7 +26,5 @@ namespace Aximo.Render
                     return GamePixelFormat.None;
             }
         }
-
     }
-
 }

@@ -29,7 +29,5 @@ namespace Aximo.Render
         {
             return $"Name: {Name}, Size: {Size}, Type: {Type}, Normalized: {Normalized}, Stride: {Stride}, Offset: {Offset}";
         }
-
     }
-
 }

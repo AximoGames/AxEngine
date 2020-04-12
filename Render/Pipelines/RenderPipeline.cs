@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 namespace Aximo.Render
 {
-
     public abstract class RenderPipeline : IRenderPipeline
     {
         public virtual void BeforeInit() { }
@@ -68,5 +67,4 @@ namespace Aximo.Render
         void Render(RenderContext context, Camera camera);
         IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera);
     }
-
 }

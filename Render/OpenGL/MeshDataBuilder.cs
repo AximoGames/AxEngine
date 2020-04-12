@@ -81,7 +81,5 @@ namespace Aximo.Render
 
             return new MeshData<VertexDataPosColor>(BufferData.Create(vertices.ToArray()), null, AxPrimitiveType.Lines);
         }
-
     }
-
 }

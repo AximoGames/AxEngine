@@ -16,7 +16,6 @@ namespace Aximo.AxTests
 {
     public class TestBase : IDisposable
     {
-
         private static Serilog.ILogger Log = Aximo.Log.ForContext<TestBase>();
 
         protected RenderApplicationTests App;
@@ -58,7 +57,6 @@ namespace Aximo.AxTests
 
         public abstract class TestCaseBase
         {
-
             public string ComparisonName;
             public TestCaseBase CompareWith;
 
@@ -92,7 +90,6 @@ namespace Aximo.AxTests
             {
                 return (T)Clone();
             }
-
         }
 
         protected void Compare(string testCase, TestCaseBase test1, TestCaseBase test2)
@@ -319,7 +316,5 @@ namespace Aximo.AxTests
             }
             Assert.InRange(diff, 0, maxDiffAllowed);
         }
-
     }
-
 }

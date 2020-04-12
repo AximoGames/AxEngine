@@ -11,7 +11,6 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
-
     public class GameShader
     {
         public string VertexShaderPath;
@@ -25,5 +24,4 @@ namespace Aximo.Engine
             GeometryShaderPath = geometryShaderPath;
         }
     }
-
 }

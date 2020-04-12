@@ -6,14 +6,11 @@ using SixLabors.ImageSharp;
 
 namespace Aximo
 {
-
     public static class BoxExtensions
     {
         public static RectangleF ToRectangleF(this Box2 value)
         {
             return new RectangleF(value.Min.X, value.Min.Y, value.Size.X, value.Size.Y);
         }
-
     }
-
 }

@@ -63,7 +63,6 @@ namespace Aximo.Render
             RenderContext.AddObject(new ScreenSceneObject()
             {
             });
-
         }
 
         public void SetupPipelines()
@@ -219,7 +218,5 @@ namespace Aximo.Render
             [FieldOffset(108)]
             public float Quadric;
         }
-
     }
-
 }

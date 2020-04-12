@@ -110,7 +110,5 @@ namespace Aximo.Render
             _shader.Free();
             SourceTexture = null;
         }
-
     }
-
 }

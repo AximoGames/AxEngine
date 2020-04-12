@@ -10,7 +10,6 @@ using OpenToolkit;
 
 namespace Aximo
 {
-
     public abstract class BufferData3D : BufferData
     {
         public abstract int SizeX { get; }
@@ -67,7 +66,5 @@ namespace Aximo
         {
             throw new NotImplementedException();
         }
-
     }
-
 }

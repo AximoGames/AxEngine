@@ -6,12 +6,10 @@ using System.Collections.Generic;
 
 namespace Aximo.Render
 {
-
     public class StaticMesh : Mesh
     {
         public StaticMesh() : base() { }
         public StaticMesh(MeshData meshData) : base(meshData) { }
         public StaticMesh(MeshData meshData, Material material) : base(meshData, material) { }
     }
-
 }

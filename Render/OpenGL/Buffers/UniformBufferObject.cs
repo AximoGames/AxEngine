@@ -8,7 +8,6 @@ namespace Aximo.Render
 {
     public class UniformBufferObject : BufferObject
     {
-
         public UniformBufferObject()
         {
             Target = BufferTarget.UniformBuffer;
@@ -21,7 +20,5 @@ namespace Aximo.Render
 
             GL.BindBufferBase(BufferRangeTarget.UniformBuffer, bindingPoint.Number, Handle);
         }
-
     }
-
 }

@@ -10,5 +10,4 @@ namespace Aximo.Engine
         Deferred,
         Screen,
     }
-
 }

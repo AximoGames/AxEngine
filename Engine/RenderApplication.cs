@@ -19,12 +19,10 @@ using OpenToolkit.Windowing.GraphicsLibraryFramework;
 
 namespace Aximo.Engine
 {
-
     public delegate void AfterApplicationInitializedDelegate();
 
     public class RenderApplication : IDisposable
     {
-
         private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderApplication>();
 
         public event AfterApplicationInitializedDelegate AfterApplicationInitialized;
@@ -776,7 +774,5 @@ namespace Aximo.Engine
             Stopped = true;
             RunSyncWaiter?.Set();
         }
-
     }
-
 }

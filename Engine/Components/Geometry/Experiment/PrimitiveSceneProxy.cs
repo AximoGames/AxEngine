@@ -12,14 +12,10 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
-
     public class PrimitiveSceneProxy
     {
-
         public List<Material> Materials = new List<Material>();
 
         public PrimitiveSceneProxy(PrimitiveComponent component) { }
-
     }
-
 }

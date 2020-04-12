@@ -7,12 +7,9 @@ namespace Aximo.Render
 {
     public class VertexBufferObject : BufferObject
     {
-
         public VertexBufferObject()
         {
             Target = BufferTarget.ArrayBuffer;
         }
-
     }
-
 }

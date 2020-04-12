@@ -5,10 +5,8 @@ using Aximo.Render;
 
 namespace Aximo.Engine
 {
-
     public class PrimitiveDrawInterface
     {
-
     }
 
     public class StaticPrimitiveDrawInterface : PrimitiveDrawInterface
@@ -17,5 +15,4 @@ namespace Aximo.Engine
         // {
         // }
     }
-
 }

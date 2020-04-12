@@ -7,7 +7,6 @@ namespace Aximo.Render
 {
     public class RenderBuffer : IObjectLabel
     {
-
         private int _Handle;
         public int Handle => _Handle;
 
@@ -44,7 +43,5 @@ namespace Aximo.Render
             fb.Bind();
             GL.RenderbufferStorage(Target, RenderBufferStorage, fb.Width, fb.Height);
         }
-
     }
-
 }

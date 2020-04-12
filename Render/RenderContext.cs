@@ -10,10 +10,8 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-
     public class RenderContext
     {
-
         private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderContext>();
 
         public Matrix4 WorldPositionMatrix = Matrix4.Identity;
@@ -208,11 +206,9 @@ namespace Aximo.Render
 
             InternalTextureManager.DeleteOrphaned();
         }
-
     }
 
     public class SceneOptions
     {
     }
-
 }

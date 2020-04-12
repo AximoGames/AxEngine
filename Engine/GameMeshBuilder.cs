@@ -5,7 +5,6 @@ using Aximo.Render;
 
 namespace Aximo.Engine
 {
-
     public static class GameMeshBuilder
     {
         public static StaticMeshComponent Cube()
@@ -23,5 +22,4 @@ namespace Aximo.Engine
             return new StaticMeshComponent(MeshDataBuilder.Sphere(divisions), GameMaterial.Default);
         }
     }
-
 }

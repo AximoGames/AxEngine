@@ -6,14 +6,11 @@ using SixLabors.ImageSharp;
 
 namespace Aximo
 {
-
     public static class BoxHelper
     {
         public static Box2 FromSize(Vector2 location, Vector2 size)
         {
             return new Box2(location, location + size);
         }
-
     }
-
 }

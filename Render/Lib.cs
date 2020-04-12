@@ -11,7 +11,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-
     public interface IRenderObject : IData, IDisposable
     {
         int Id { get; }
@@ -75,7 +74,6 @@ namespace Aximo.Render
                 return true;
             }
         }
-
     }
 
     public interface IRenderableObject : IRenderObject
@@ -158,5 +156,4 @@ namespace Aximo.Render
         Directional,
         Point,
     }
-
 }

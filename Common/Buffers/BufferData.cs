@@ -10,7 +10,6 @@ using OpenToolkit;
 
 namespace Aximo
 {
-
     public abstract class BufferData
     {
         public abstract int Length { get; }
@@ -36,7 +35,5 @@ namespace Aximo
         public int Bytes => Length * ElementSize;
 
         public abstract BufferData Clone();
-
     }
-
 }

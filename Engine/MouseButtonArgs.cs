@@ -7,7 +7,6 @@ using OpenToolkit.Windowing.Common.Input;
 
 namespace Aximo.Engine
 {
-
     public class MouseButtonArgs
     {
         public Vector2 OldPosition { get; private set; }
@@ -38,7 +37,5 @@ namespace Aximo.Engine
             Modifiers = e.Modifiers;
             IsPressed = e.IsPressed;
         }
-
     }
-
 }

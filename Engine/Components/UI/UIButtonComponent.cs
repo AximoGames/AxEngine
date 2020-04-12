@@ -5,9 +5,6 @@ namespace Aximo.Engine
 {
     public class UIButtonComponent : UIContainerComponent
     {
-
         public UILabelComponent LabelComponent;
-
     }
-
 }

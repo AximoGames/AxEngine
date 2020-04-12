@@ -10,7 +10,6 @@ using OpenToolkit;
 
 namespace Aximo
 {
-
     public abstract class BufferData1D : BufferData
     {
         public abstract int SizeX { get; }
@@ -18,7 +17,6 @@ namespace Aximo
 
     public class BufferData1D<T> : BufferData1D
     {
-
         public BufferData1D(T[] data)
         {
             SetData(data);
@@ -63,5 +61,4 @@ namespace Aximo
             return new BufferData1D<T>(copy);
         }
     }
-
 }

@@ -11,7 +11,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo
 {
-
     public abstract class BufferData2D : BufferData
     {
         public abstract int SizeX { get; }
@@ -23,7 +22,6 @@ namespace Aximo
         public GamePixelFormat PixelFormat { get; set; }
 
         public abstract void FlipY();
-
     }
 
     public class BufferData2D<T> : BufferData2D, IEnumerable<T>
@@ -159,7 +157,5 @@ namespace Aximo
                 }
             }
         }
-
     }
-
 }

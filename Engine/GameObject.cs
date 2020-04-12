@@ -143,6 +143,5 @@ namespace Aximo.Engine
             if (list)
                 VisitChilds<GameObject>(a => a.DumpInfo(false));
         }
-
     }
 }

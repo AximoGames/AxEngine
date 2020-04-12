@@ -11,7 +11,6 @@ namespace Aximo.Render
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct VertexDataPosColor
     {
-
         public Vector3 Position;
         public Vector4 Color;
 
@@ -41,5 +40,4 @@ namespace Aximo.Render
             list.Add(new VertexDataPosColor(position, color));
         }
     }
-
 }

@@ -7,7 +7,6 @@ namespace Aximo
 {
     public static class MathF
     {
-
         public const float PI = (float)Math.PI;
 
         public static float Round(float d)
@@ -24,6 +23,5 @@ namespace Aximo
         {
             return (float)Math.Floor(d);
         }
-
     }
 }

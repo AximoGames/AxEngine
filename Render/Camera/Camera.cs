@@ -8,7 +8,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-
     public enum CameraType
     {
         PerspectiveFieldOfView,
@@ -157,5 +156,4 @@ namespace Aximo.Render
             AspectRatio = width / height;
         }
     }
-
 }

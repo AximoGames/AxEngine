@@ -9,10 +9,8 @@ using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
-
     public class VertexLayoutDefinition
     {
-
         public VertexLayoutBinded BindToShader(Shader shader)
         {
             var layout = new VertexLayoutBinded();
@@ -109,7 +107,5 @@ namespace Aximo.Render
             foreach (var attr in Attributes)
                 Console.WriteLine(attr.GetDumpString());
         }
-
     }
-
 }

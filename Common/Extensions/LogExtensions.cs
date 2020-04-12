@@ -8,7 +8,6 @@ namespace Aximo
 {
     public static class LogExtensions
     {
-
         #region Info Alias
 
         public static void Info<T0, T1>(this ILogger log, string messageTemplate, T0 propertyValue0, T1 propertyValue1)
@@ -108,6 +107,5 @@ namespace Aximo
         {
             return logger.ForContext("SourceContext", sourceContext);
         }
-
     }
 }

@@ -18,7 +18,5 @@ namespace Aximo
             OldSize = oldSize;
             Size = size;
         }
-
     }
-
 }

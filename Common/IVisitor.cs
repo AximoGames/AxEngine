@@ -3,7 +3,6 @@
 
 namespace Aximo
 {
-
     public interface IVisitor
     {
         void Visit(IVisitorNode node);
@@ -13,5 +12,4 @@ namespace Aximo
     {
         void Accept(IVisitor visitor);
     }
-
 }

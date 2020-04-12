@@ -17,7 +17,6 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Aximo.Engine
 {
-
     public class GraphicsScreenTextureComponent : ScreenTextureComponent
     {
         public GraphicsScreenTextureComponent(Vector2i size)
@@ -46,7 +45,5 @@ namespace Aximo.Engine
             Texture.SetData(Image);
             Update();
         }
-
     }
-
 }

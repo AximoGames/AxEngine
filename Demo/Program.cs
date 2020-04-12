@@ -9,10 +9,8 @@ using OpenToolkit.Windowing.Common;
 
 namespace Aximo.AxDemo
 {
-
     internal class Program
     {
-
         public static void Main(string[] args)
         {
             var config = new RenderApplicationConfig
@@ -30,7 +28,5 @@ namespace Aximo.AxDemo
 
             new GameStartup<RenderApplicationDemo, GtkUI>(config).Start();
         }
-
     }
-
 }

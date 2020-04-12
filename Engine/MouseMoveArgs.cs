@@ -25,7 +25,5 @@ namespace Aximo.Engine
             DeltaY = e.DeltaY;
             OldPosition = Position - Delta;
         }
-
     }
-
 }

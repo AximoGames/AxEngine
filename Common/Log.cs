@@ -7,7 +7,6 @@ namespace Aximo
 {
     public static class Log
     {
-
         private static bool Initialized;
         public static void Init()
         {

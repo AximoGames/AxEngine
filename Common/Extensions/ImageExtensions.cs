@@ -16,7 +16,6 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Aximo
 {
-
     public static class ImageExtensions
     {
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -164,7 +163,5 @@ namespace Aximo
 
             return new PathCollection(cornerTopLeft, cornerBottomLeft, cornerTopRight, cornerBottomRight);
         }
-
     }
-
 }

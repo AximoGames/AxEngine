@@ -5,10 +5,8 @@ using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
-
     public static class ObjectManager
     {
-
         public static void SetLabel(IObjectLabel obj)
         {
             // if (MaxLabelLength == -1)
@@ -45,7 +43,6 @@ namespace Aximo.Render
         {
             GL.PopDebugGroup();
         }
-
     }
 
     public interface IObjectHandle
@@ -62,5 +59,4 @@ namespace Aximo.Render
     {
         string ObjectLabel { get; set; }
     }
-
 }

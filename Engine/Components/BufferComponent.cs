@@ -11,10 +11,8 @@ using Aximo.Render;
 
 namespace Aximo.Engine
 {
-
     public class BufferComponent : ActorComponent
     {
-
         public BufferComponent()
         {
             SetData(new BufferData2D<int>());
@@ -46,7 +44,5 @@ namespace Aximo.Engine
             if (created)
                 RenderContext.Current.AddObject(RenderObject);
         }
-
     }
-
 }

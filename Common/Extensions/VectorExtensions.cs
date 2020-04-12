@@ -16,7 +16,5 @@ namespace Aximo
         {
             return new Vector2(value.X, -value.Y);
         }
-
     }
-
 }

@@ -5,7 +5,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public class UIFloatingContainer : UIContainerComponent
     {
         internal override void SetChildBounds()
@@ -17,7 +16,5 @@ namespace Aximo.Engine
                 child.AbsoluteOuterRect = BoxHelper.FromSize(AbsolutePaddingRect.Min + location, size);
             }
         }
-
     }
-
 }

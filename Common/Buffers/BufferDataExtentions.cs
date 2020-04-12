@@ -14,10 +14,8 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Aximo
 {
-
     public static class BufferDataExtentions
     {
-
         public static void Normalize(this BufferData2D<float> target)
         {
             var collection = target.Where(v => v != 1);
@@ -109,7 +107,5 @@ namespace Aximo
             for (var i = 0; i < source.Length; i++)
                 rgbArray[i].FromBgra32(bgrArray[i]);
         }
-
     }
-
 }

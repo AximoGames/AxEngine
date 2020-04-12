@@ -10,12 +10,8 @@ using Aximo.Render;
 
 namespace Aximo.Engine
 {
-
     public class DirectionalLightComponent : LightComponent
     {
-
         protected override LightType LightType => LightType.Directional;
-
     }
-
 }

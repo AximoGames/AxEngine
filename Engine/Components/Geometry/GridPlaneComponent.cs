@@ -12,12 +12,10 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
-
     public class GridPlaneComponent : StaticMeshComponent
     {
         public GridPlaneComponent(int size, bool center) : base(MeshDataBuilder.Grid(size, center), MaterialManager.DefaultLineMaterial)
         {
         }
     }
-
 }

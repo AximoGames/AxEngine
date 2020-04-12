@@ -10,7 +10,6 @@ using OpenToolkit;
 
 namespace Aximo.Render
 {
-
     public enum AxPrimitiveType
     {
         Triangles,
@@ -72,7 +71,5 @@ namespace Aximo.Render
             VertexCount = data == null ? 0 : data.Length;
             IndiciesCount = indicies == null ? 0 : indicies.Length;
         }
-
     }
-
 }

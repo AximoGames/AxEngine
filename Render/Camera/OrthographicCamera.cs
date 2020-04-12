@@ -28,7 +28,5 @@ namespace Aximo.Render
             //return Matrix4.CreateOrthographicOffCenter(-Size.X / 2, Size.X / 2, -Size.Y / 2, Size.Y / 2, NearPlane, FarPlane);
             return Matrix4.CreateOrthographic(Size.X, Size.Y, NearPlane, FarPlane);
         }
-
     }
-
 }

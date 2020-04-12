@@ -8,10 +8,8 @@ using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
-
     public class VertexLayoutBinded : VertexLayoutDefinition
     {
-
         protected override VertexLayoutDefinitionAttribute CreateAttributeInstance()
         {
             return new VertexLayoutBindedAttribute();
@@ -58,7 +56,5 @@ namespace Aximo.Render
             }
             ObjectManager.PopDebugGroup();
         }
-
     }
-
 }

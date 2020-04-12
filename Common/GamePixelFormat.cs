@@ -11,5 +11,4 @@ namespace Aximo
         Rgb24,
         Bgr24,
     }
-
 }

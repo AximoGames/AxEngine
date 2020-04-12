@@ -12,15 +12,12 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
-
     public class StaticMeshComponent : MeshComponent
     {
-
         private static Serilog.ILogger Log = Aximo.Log.ForContext<StaticMeshComponent>();
 
         public StaticMeshComponent()
         {
-
         }
 
         public StaticMeshComponent(MeshData mesh)
@@ -115,7 +112,5 @@ namespace Aximo.Engine
             if (created)
                 RenderContext.Current.AddObject(RenderableObject);
         }
-
     }
-
 }

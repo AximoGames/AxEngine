@@ -6,7 +6,6 @@ using System.Threading;
 
 namespace Aximo.Render
 {
-
     public abstract class RenderObject : RenderObjectBase
     {
         public virtual List<IRenderPipeline> RenderPipelines { get; } = new List<IRenderPipeline>();
@@ -25,7 +24,5 @@ namespace Aximo.Render
             if (!RenderPipelines.Contains(pipeline))
                 RenderPipelines.Add(pipeline);
         }
-
     }
-
 }

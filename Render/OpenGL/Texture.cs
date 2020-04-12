@@ -15,7 +15,6 @@ using Image = SixLabors.ImageSharp.Image;
 
 namespace Aximo.Render
 {
-
     public class Texture : RenderObjectBase, IObjectLabel, IDisposable
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<Texture>();
@@ -360,5 +359,4 @@ namespace Aximo.Render
         {
         }
     }
-
 }

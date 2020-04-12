@@ -190,6 +190,5 @@ namespace Aximo
             }
             return bitmap;
         }
-
     }
 }

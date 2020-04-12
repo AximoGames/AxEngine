@@ -16,7 +16,6 @@ using OpenToolkit.Windowing.Desktop;
 
 namespace Aximo
 {
-
     public class EventCounter
     {
         private Stopwatch Watch = new Stopwatch();
@@ -49,5 +48,4 @@ namespace Aximo
             Watch.Restart();
         }
     }
-
 }

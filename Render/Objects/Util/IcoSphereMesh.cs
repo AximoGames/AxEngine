@@ -13,7 +13,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render.Objects.Util.IcoSphere
 {
-
     public class IcoSphereMesh
     {
         public VertexDataPosNormalUV[] Vertices;
@@ -131,9 +130,7 @@ namespace Aximo.Render.Objects.Util.IcoSphere
             {
                 Vertices[i].Position *= 0.5f;
             }
-
         }
-
     }
 
     public class IcoSphereCreator
@@ -271,7 +268,6 @@ namespace Aximo.Render.Objects.Util.IcoSphere
 
     public class VertexSoup<TVertexStruct>
     {
-
         private Dictionary<TVertexStruct, ushort> vertexToIndexMap = new Dictionary<TVertexStruct, ushort>();
         public List<TVertexStruct> Verticies = new List<TVertexStruct>();
         private readonly bool deDup;
@@ -330,7 +326,5 @@ namespace Aximo.Render.Objects.Util.IcoSphere
         public List<Vector3> Positions = new List<Vector3>();
         public List<int> MeshIndicies = new List<int>();
         public List<TriangleIndices> Faces = new List<TriangleIndices>();
-
     }
-
 }

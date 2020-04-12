@@ -3,7 +3,6 @@
 
 namespace Aximo.Engine
 {
-
     public interface ISceneInterface
     {
         void AddLight(LightComponent light);
@@ -12,5 +11,4 @@ namespace Aximo.Engine
         void AddPrimitive(PrimitiveComponent primitive);
         void RemovePrimitive(PrimitiveComponent primitive);
     }
-
 }

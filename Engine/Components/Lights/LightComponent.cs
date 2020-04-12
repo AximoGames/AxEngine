@@ -13,7 +13,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public abstract class LightComponent : SceneComponent
     {
         internal ILightObject LightObject;
@@ -77,5 +76,4 @@ namespace Aximo.Engine
             base.SyncChanges();
         }
     }
-
 }

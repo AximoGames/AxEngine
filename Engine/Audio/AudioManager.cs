@@ -7,10 +7,8 @@ using NetCoreAudio;
 
 namespace Aximo.Engine
 {
-
     public class AudioManager
     {
-
         public bool Mute => CommandLineOptions.Current.Mute;
 
         public static AudioManager Default { get; private set; }
@@ -56,7 +54,5 @@ namespace Aximo.Engine
 
             throw new NotSupportedException();
         }
-
     }
-
 }

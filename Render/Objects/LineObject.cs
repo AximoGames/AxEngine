@@ -9,7 +9,6 @@ namespace Aximo.Render
 {
     public class LineObject : RenderObject, IRenderableObject
     {
-
         public Camera Camera => Context.Camera;
         public Matrix4 ModelMatrix { get; set; } = Matrix4.Identity;
 
@@ -76,7 +75,5 @@ namespace Aximo.Render
             vao.Free();
             _Shader.Free();
         }
-
     }
-
 }

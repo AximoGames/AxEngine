@@ -8,7 +8,6 @@ namespace Aximo.Render
 {
     public class ScreenPipeline : RenderPipeline
     {
-
         public override void Init()
         {
         }
@@ -23,7 +22,5 @@ namespace Aximo.Render
             foreach (var obj in GetRenderObjects(context, camera).OrderBy(o => o.Order))
                 Render(context, camera, obj);
         }
-
     }
-
 }

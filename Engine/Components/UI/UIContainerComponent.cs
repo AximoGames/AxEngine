@@ -5,7 +5,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public abstract class UIContainerComponent : UIComponent
     {
         public UIAnchors Padding;
@@ -20,5 +19,4 @@ namespace Aximo.Engine
             }
         }
     }
-
 }

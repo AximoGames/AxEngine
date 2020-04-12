@@ -9,7 +9,6 @@ namespace Aximo
 {
     public static class DirectoryHelper
     {
-
         private static string _BinDir;
         public static string BinDir
         {
@@ -100,7 +99,5 @@ namespace Aximo
             }
             return "";
         }
-
     }
-
 }

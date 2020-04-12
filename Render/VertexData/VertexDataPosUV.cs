@@ -11,7 +11,6 @@ namespace Aximo.Render
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct VertexDataPosUV
     {
-
         public Vector3 Position;
         public Vector2 UV;
 
@@ -20,7 +19,6 @@ namespace Aximo.Render
             Position = position;
             UV = uv;
         }
-
     }
 
     public static partial class EngineExtensions
@@ -30,5 +28,4 @@ namespace Aximo.Render
             list.Add(new VertexDataPosUV(position, uv));
         }
     }
-
 }

@@ -5,7 +5,6 @@ using System;
 
 namespace Aximo.Engine
 {
-
     public delegate float AnimationFunc(float position);
     public delegate void AnimationFinishedDelegate();
 
@@ -64,7 +63,6 @@ namespace Aximo.Engine
                 return AnimationFunc(Position);
             }
         }
-
     }
 
     public static class AnimationFuncs
@@ -89,5 +87,4 @@ namespace Aximo.Engine
             return (p) => { return scale - (p * scale); };
         }
     }
-
 }

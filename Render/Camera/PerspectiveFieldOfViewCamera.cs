@@ -8,7 +8,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-
     public class PerspectiveFieldOfViewCamera : Camera
     {
         public override CameraType Type => CameraType.PerspectiveFieldOfView;
@@ -26,7 +25,5 @@ namespace Aximo.Render
         {
             return Matrix4.CreatePerspectiveFieldOfView(FovInternal, AspectRatio, NearPlane, FarPlane);
         }
-
     }
-
 }

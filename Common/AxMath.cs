@@ -9,7 +9,6 @@ namespace Aximo
 {
     public static class AxMath
     {
-
         /// <summary
         /// Compares two floating point values if they are similar.
         /// <summary>
@@ -89,6 +88,5 @@ namespace Aximo
         {
             return Map(input, new Vector2(-1), new Vector2(1), Vector2.Zero, toMax.ToVector2());
         }
-
     }
 }

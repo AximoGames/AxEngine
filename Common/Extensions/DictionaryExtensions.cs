@@ -6,10 +6,8 @@ using System.Collections.Generic;
 
 namespace Aximo
 {
-
     public static class DictionaryExtensions
     {
-
         public static bool TryAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value)
         {
             lock (dict)
@@ -43,6 +41,5 @@ namespace Aximo
                     dict.Add(key, getValue());
             }
         }
-
     }
 }
