@@ -62,14 +62,14 @@ namespace Aximo.Render
 
         public static void SetPosition<TSource>(this ref Quad<VertexDataPos2UV> quad, Quad<TSource> source)
         {
-            if (typeof(TSource).IsSubclassOf(typeof(IVertexPosition2)))
+            if (typeof(IVertexPosition2).IsAssignableFrom(typeof(TSource)))
             {
                 quad.Vertex0.Position = ((IVertexPosition2)source[0]).Position;
                 quad.Vertex0.Position = ((IVertexPosition2)source[1]).Position;
                 quad.Vertex0.Position = ((IVertexPosition2)source[2]).Position;
                 quad.Vertex0.Position = ((IVertexPosition2)source[3]).Position;
             }
-            else if (typeof(TSource).IsSubclassOf(typeof(IVertexPosition3)))
+            else if (typeof(IVertexPosition3).IsAssignableFrom(typeof(TSource)))
             {
                 quad.Vertex0.Position = ((IVertexPosition3)source[0]).Position.Xy;
                 quad.Vertex0.Position = ((IVertexPosition3)source[1]).Position.Xy;
