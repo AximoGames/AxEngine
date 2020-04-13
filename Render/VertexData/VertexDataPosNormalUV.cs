@@ -84,5 +84,6 @@ namespace Aximo.Render
             quad.Vertex2.Position = source.Vertex2.Position;
             quad.Vertex3.Position = source.Vertex3.Position;
         }
+
     }
 }

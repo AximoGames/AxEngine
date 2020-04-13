@@ -117,5 +117,6 @@ namespace Aximo.Render
         {
             return new TVertex[] { Vertex0, Vertex1, Vertex3, Vertex2, Vertex3, Vertex1 };
         }
+
     }
 }

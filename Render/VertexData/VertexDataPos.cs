@@ -19,11 +19,15 @@ namespace Aximo.Render
         //
         // 0  1
 
-        public static Quad<VertexDataPos> DefaultQuad => new Quad<VertexDataPos>(
-            new VertexDataPos(new Vector3(-1f, -1f, 0.0f)),
-            new VertexDataPos(new Vector3(1f, -1f, 0.0f)),
-            new VertexDataPos(new Vector3(1f, 1f, 0.0f)),
-            new VertexDataPos(new Vector3(-1f, 1f, 0.0f)));
+        public static Quad<VertexDataPos> DefaultQuad
+        {
+            get
+            {
+                var result = new Quad<VertexDataPos>();
+                result.SetPosition(VertexDataPos2.DefaultQuad);
+                return result;
+            }
+        }
 
         public VertexDataPos(Vector3 position)
         {
@@ -38,6 +42,14 @@ namespace Aximo.Render
         public static void Add(this IList<VertexDataPos> list, Vector3 position)
         {
             list.Add(new VertexDataPos(position));
+        }
+
+        public static void SetPosition(this ref Quad<VertexDataPos> quad, Quad<VertexDataPos2> source)
+        {
+            quad.Vertex0.Position.Xy = source.Vertex0.Position;
+            quad.Vertex1.Position.Xy = source.Vertex1.Position;
+            quad.Vertex2.Position.Xy = source.Vertex2.Position;
+            quad.Vertex3.Position.Xy = source.Vertex3.Position;
         }
     }
 }
