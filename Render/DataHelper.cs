@@ -19,9 +19,9 @@ namespace Aximo.Render
         public static VertexDataPosNormalUV[] GetCube()
         {
             var lines = new List<Vector3>();
-            lines.Add(new Vector3(0, 0, 1));
-            lines.Add(new Vector3(1, 0, 0));
-            lines.Add(new Vector3(0, 1, 0));
+            lines.Add(Vector3.UnitX);
+            lines.Add(Vector3.UnitY);
+            lines.Add(Vector3.UnitZ);
 
             var directions = new List<Vector3>();
             foreach (var line in lines)
@@ -45,7 +45,7 @@ namespace Aximo.Render
                 else if (direction == Vector3.UnitY)
                     r = new Rotor3(0, 1, 0, 0);
                 else
-                    r = new Rotor3(-Vector3.UnitY, direction * 2);
+                    r = new Rotor3(-Vector3.UnitY, direction);
 
                 Rotate(quad, r);
                 Scale(quad, new Vector3(0.5f));
