@@ -86,6 +86,16 @@ namespace Aximo.Render
             list.AddRange(GetCube(new Vector3(0.2f, 0.2f, 0.6f), new Vector3(DX, DY, DZ)));
             list.AddRange(GetCube(new Vector3(0.6f, 0.2f, 0.2f), new Vector3(EX, EY, EZ)));
             //list.AddRange(GetCube());
+
+
+            //for (var i = 0; i < list.Count; i++)
+            //{
+            //    if (list[i].Position != DebugCube_[i].Position)
+            //    {
+            //        var s = "";
+            //    }
+            //}
+
             return list.ToArray();
         }
 
@@ -172,135 +182,134 @@ namespace Aximo.Render
 
         public static VertexDataPosNormalUV[] DebugCube => GetDebugCube();
 
-        public static readonly float[] DebugCube_ =
+        public static readonly VertexDataPosNormalUV[] DebugCube_ =
         {
              // Position          Normal
-            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f, // Bottom face
-             0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-             0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(0.0f, 0.0f)), // Bottom face
+            new VertexDataPosNormalUV(new Vector3( 0.5f,  0.5f, -0.5f), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.5f, -0.5f), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f,  0.5f, -0.5f), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f,  0.5f, -0.5f), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(0.0f, 0.0f)),
 
-            -0.6f, -0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, // Top face
-             0.6f, -0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-             0.6f,  0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-             0.6f,  0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-            -0.6f,  0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
-            -0.6f, -0.6f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.6f, -0.6f,  0.5f), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(0.0f, 1.0f)), // Top face
+            new VertexDataPosNormalUV(new Vector3( 0.6f, -0.6f,  0.5f), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.6f,  0.6f,  0.5f), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.6f,  0.6f,  0.5f), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.6f,  0.6f,  0.5f), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.6f, -0.6f,  0.5f), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(0.0f, 1.0f)),
 
-            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f, // Left face
-            -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.5f,  0.5f,  0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)), // Left face
+            new VertexDataPosNormalUV(new Vector3(-0.5f,  0.5f, -0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f,  0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f,  0.5f,  0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)),
 
-             0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f, // Right face
-             0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-             0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-             0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.5f, -0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)), // Right face
+            new VertexDataPosNormalUV(new Vector3( 0.5f,  0.5f, -0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f,  0.5f,  0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f,  0.5f,  0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.5f,  0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.5f, -0.5f), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)),
 
-            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f, // Front face
-             0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-             0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-             0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(0.0f, 1.0f)), // Front face
+            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.5f, -0.5f), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.5f,  0.5f), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f, -0.5f,  0.5f), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f,  0.5f), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(0.0f, 1.0f)),
 
-             0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f, // Back face
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-             0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+            new VertexDataPosNormalUV(new Vector3( 0.5f,  0.5f, -0.5f), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(1.0f, 1.0f)), // Back face
+            new VertexDataPosNormalUV(new Vector3(-0.5f,  0.5f, -0.5f), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f,  0.5f,  0.5f), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f,  0.5f,  0.5f), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.5f,  0.5f,  0.5f), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.5f,  0.5f, -0.5f), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(0.0f, 1.0f)),
 
-//--
-            -0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f, // Bottom face
-             0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-             0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-            -0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-             0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-            -0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX, -0.1f+DY, -0.3f+DZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(0.0f, 0.0f)), // Bottom face
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX,  0.1f+DY, -0.3f+DZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX, -0.1f+DY, -0.3f+DZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX,  0.1f+DY, -0.3f+DZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX,  0.1f+DY, -0.3f+DZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX, -0.1f+DY, -0.3f+DZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(0.0f, 0.0f)),
 
-            -0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, // Top face
-             0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-             0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-             0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-            -0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
-            -0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX, -0.1f+DY,  0.3f+DZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(0.0f, 1.0f)), // Top face
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX, -0.1f+DY,  0.3f+DZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX,  0.1f+DY,  0.3f+DZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX,  0.1f+DY,  0.3f+DZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX,  0.1f+DY,  0.3f+DZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX, -0.1f+DY,  0.3f+DZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(0.0f, 1.0f)),
 
-            -0.1f+DX,  0.1f+DY,  0.3f+DZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f, // Left face
-            -0.1f+DX,  0.1f+DY, -0.3f+DZ, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-            -0.1f+DX, -0.1f+DY, -0.3f+DZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.1f+DX, -0.1f+DY, -0.3f+DZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.1f+DX, -0.1f+DY,  0.3f+DZ, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-            -0.1f+DX,  0.1f+DY,  0.3f+DZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX,  0.1f+DY,  0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)), // Left face
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX,  0.1f+DY, -0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX, -0.1f+DY, -0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX, -0.1f+DY, -0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX, -0.1f+DY,  0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX,  0.1f+DY,  0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)),
 
-             0.1f+DX, -0.1f+DY, -0.3f+DZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f, // Right face
-             0.1f+DX,  0.1f+DY, -0.3f+DZ,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-             0.1f+DX,  0.1f+DY,  0.3f+DZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-             0.1f+DX,  0.1f+DY,  0.3f+DZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-             0.1f+DX, -0.1f+DY,  0.3f+DZ,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-             0.1f+DX, -0.1f+DY, -0.3f+DZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX, -0.1f+DY, -0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)), // Right face
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX,  0.1f+DY, -0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX,  0.1f+DY,  0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX,  0.1f+DY,  0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX, -0.1f+DY,  0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX, -0.1f+DY, -0.3f+DZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)),
 
-            -0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f, // Front face
-             0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-             0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-             0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-            -0.1f+DX, -0.1f+DY,  0.3f+DZ,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-            -0.1f+DX, -0.1f+DY, -0.3f+DZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX, -0.1f+DY, -0.3f+DZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(0.0f, 1.0f)), // Front face
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX, -0.1f+DY, -0.3f+DZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX, -0.1f+DY,  0.3f+DZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX, -0.1f+DY,  0.3f+DZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX, -0.1f+DY,  0.3f+DZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX, -0.1f+DY, -0.3f+DZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(0.0f, 1.0f)),
 
-             0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f, // Back face
-            -0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-             0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-             0.1f+DX,  0.1f+DY,  0.3f+DZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.1f+DX,  0.1f+DY, -0.3f+DZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-//--
-            -0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f, // Bottom face
-             0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-             0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-            -0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-             0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-            -0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX,  0.1f+DY, -0.3f+DZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(1.0f, 1.0f)), // Back face
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX,  0.1f+DY, -0.3f+DZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX,  0.1f+DY,  0.3f+DZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX,  0.1f+DY,  0.3f+DZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.1f+DX,  0.1f+DY,  0.3f+DZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.1f+DX,  0.1f+DY, -0.3f+DZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(0.0f, 1.0f)),
 
-            -0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, // Top face
-             0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-             0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-             0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-            -0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
-            -0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX, -0.1f+EY, -0.1f+EZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(0.0f, 0.0f)), // Bottom face
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX,  0.1f+EY, -0.1f+EZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX, -0.1f+EY, -0.1f+EZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX,  0.1f+EY, -0.1f+EZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX,  0.1f+EY, -0.1f+EZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX, -0.1f+EY, -0.1f+EZ), new Vector3(0.0f,  0.0f, -1.0f), new Vector2(0.0f, 0.0f)),
 
-            -0.3f+EX,  0.1f+EY,  0.1f+EZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f, // Left face
-            -0.3f+EX,  0.1f+EY, -0.1f+EZ, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-            -0.3f+EX, -0.1f+EY, -0.1f+EZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.3f+EX, -0.1f+EY, -0.1f+EZ, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.3f+EX, -0.1f+EY,  0.1f+EZ, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-            -0.3f+EX,  0.1f+EY,  0.1f+EZ, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX, -0.1f+EY,  0.1f+EZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(0.0f, 1.0f)), // Top face
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX, -0.1f+EY,  0.1f+EZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX,  0.1f+EY,  0.1f+EZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX,  0.1f+EY,  0.1f+EZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX,  0.1f+EY,  0.1f+EZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX, -0.1f+EY,  0.1f+EZ), new Vector3(0.0f,  0.0f,  1.0f), new Vector2(0.0f, 1.0f)),
 
-             0.3f+EX, -0.1f+EY, -0.1f+EZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f, // Right face
-             0.3f+EX,  0.1f+EY, -0.1f+EZ,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-             0.3f+EX,  0.1f+EY,  0.1f+EZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-             0.3f+EX,  0.1f+EY,  0.1f+EZ,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-             0.3f+EX, -0.1f+EY,  0.1f+EZ,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-             0.3f+EX, -0.1f+EY, -0.1f+EZ,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX,  0.1f+EY,  0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)), // Left face
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX,  0.1f+EY, -0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX, -0.1f+EY, -0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX, -0.1f+EY, -0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX, -0.1f+EY,  0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX,  0.1f+EY,  0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)),
 
-            -0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f, // Front face
-             0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-             0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-             0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-            -0.3f+EX, -0.1f+EY,  0.1f+EZ,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-            -0.3f+EX, -0.1f+EY, -0.1f+EZ,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX, -0.1f+EY, -0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)), // Right face
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX,  0.1f+EY, -0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX,  0.1f+EY,  0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX,  0.1f+EY,  0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX, -0.1f+EY,  0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX, -0.1f+EY, -0.1f+EZ), new Vector3(1.0f,  0.0f,  0.0f), new Vector2(0.0f, 1.0f)),
 
-             0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f, // Back face
-            -0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-             0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-             0.3f+EX,  0.1f+EY,  0.1f+EZ,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.3f+EX,  0.1f+EY, -0.1f+EZ,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX, -0.1f+EY, -0.1f+EZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(0.0f, 1.0f)), // Front face
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX, -0.1f+EY, -0.1f+EZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(1.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX, -0.1f+EY,  0.1f+EZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX, -0.1f+EY,  0.1f+EZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX, -0.1f+EY,  0.1f+EZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX, -0.1f+EY, -0.1f+EZ), new Vector3(0.0f, -1.0f,  0.0f), new Vector2(0.0f, 1.0f)),
+
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX,  0.1f+EY, -0.1f+EZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(1.0f, 1.0f)), // Back face
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX,  0.1f+EY, -0.1f+EZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(0.0f, 1.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX,  0.1f+EY,  0.1f+EZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX,  0.1f+EY,  0.1f+EZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(0.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3( 0.3f+EX,  0.1f+EY,  0.1f+EZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(1.0f, 0.0f)),
+            new VertexDataPosNormalUV(new Vector3(-0.3f+EX,  0.1f+EY, -0.1f+EZ), new Vector3(0.0f,  1.0f,  0.0f), new Vector2(0.0f, 1.0f)),
         };
 
         // Here we now have added the normals of the vertices
