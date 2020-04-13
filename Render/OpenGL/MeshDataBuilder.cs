@@ -22,8 +22,8 @@ namespace Aximo.Render
 
         public static MeshData Quad()
         {
-            return new MeshData<float>(typeof(VertexDataPos2UV), BufferData.Create(DataHelper.Quad));
-            //return new MeshData<VertexDataPos2UV>(BufferData.Create(DataHelper.Quad));
+            //return new MeshData<float>(typeof(VertexDataPos2UV), BufferData.Create(DataHelper.Quad));
+            return new MeshData<VertexDataPos2UV>(BufferData.Create(DataHelper.QuadInvertedUV_));
         }
 
         public static MeshData Sphere(int divisions)

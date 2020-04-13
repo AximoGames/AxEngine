@@ -152,6 +152,7 @@ namespace Aximo.Render
         public static VertexDataPosNormalUV[] DefaultDebugCube => GetDebugCube();
 
         public static readonly VertexDataPos2UV[] Quad_ = VertexDataPos2UV.DefaultQuad.ToPolygonVertices();
+        public static readonly VertexDataPos2UV[] QuadInvertedUV_ = VertexDataPos2UV.DefaultQuadInvertedUV.ToPolygonVertices();
 
         // Here we now have added the normals of the vertices
         // Remember to define the layouts to the VAO's

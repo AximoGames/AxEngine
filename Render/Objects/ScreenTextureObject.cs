@@ -18,7 +18,7 @@ namespace Aximo.Render
         public Quaternion Rotate { get; set; }
         public Vector3 Position { get; set; }
 
-        private float[] _vertices = DataHelper.Quad;
+        private VertexDataPos2UV[] _vertices = DataHelper.QuadInvertedUV_;
 
         private VertexArrayObject vao;
 
@@ -30,11 +30,8 @@ namespace Aximo.Render
 
             _shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag");
 
-            var layout = new VertexLayoutBinded();
-            layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 2);
-            layout.AddAttribute<float>(_shader.GetAttribLocation("aTexCoords"), 2);
-
-            vao = new VertexArrayObject(layout);
+            var layout = VertexLayoutDefinition.CreateDefinitionFromVertexStruct<VertexDataPos2UV>();
+            vao = new VertexArrayObject(layout.BindToShader(_shader));
             vao.SetData(BufferData.Create(_vertices));
         }
 

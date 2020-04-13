@@ -15,7 +15,7 @@ namespace Aximo.Render
         private Texture GAlbedoSpec;
 
         private Shader _DefLightShader;
-        private float[] _vertices = DataHelper.Quad;
+        private VertexDataPos2UV[] _vertices = DataHelper.QuadInvertedUV_;
 
         private VertexArrayObject vao;
         private VertexBufferObject vbo;
@@ -76,11 +76,8 @@ namespace Aximo.Render
             vbo.Create();
             vbo.Bind();
 
-            var layout = new VertexLayoutBinded();
-            layout.AddAttribute<float>(_DefLightShader.GetAttribLocation("aPos"), 2);
-            layout.AddAttribute<float>(_DefLightShader.GetAttribLocation("aTexCoords"), 2);
-
-            vao = new VertexArrayObject(layout, vbo);
+            var layout = VertexLayoutDefinition.CreateDefinitionFromVertexStruct<VertexDataPos2UV>();
+            vao = new VertexArrayObject(layout.BindToShader(_DefLightShader), vbo);
             vao.Create();
 
             vao.SetData(BufferData.Create(_vertices));
