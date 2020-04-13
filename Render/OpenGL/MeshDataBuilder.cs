@@ -23,7 +23,7 @@ namespace Aximo.Render
         public static MeshData Quad()
         {
             //return new MeshData<float>(typeof(VertexDataPos2UV), BufferData.Create(DataHelper.Quad));
-            return new MeshData<VertexDataPos2UV>(BufferData.Create(DataHelper.QuadInvertedUV_));
+            return new MeshData<VertexDataPos2UV>(BufferData.Create(DataHelper.QuadInvertedUV));
         }
 
         public static MeshData Sphere(int divisions)
@@ -34,7 +34,7 @@ namespace Aximo.Render
 
         public static MeshData CrossLine()
         {
-            return new MeshData<float>(typeof(VertexDataPosColor), BufferData.Create(DataHelper.Cross), null, AxPrimitiveType.Lines);
+            return new MeshData<VertexDataPosColor>(BufferData.Create(DataHelper.Cross), null, AxPrimitiveType.Lines);
         }
 
         public static MeshData Grid(int size, bool center)

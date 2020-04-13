@@ -15,6 +15,9 @@ namespace Aximo.Render
         public Vector3 Normal;
         public Vector2 UV;
 
+        /// <summary>
+        /// Returns a Quad, grounded to XY, facing Z-Up
+        /// </summary>
         public static Quad<VertexDataPosNormalUV> DefaultQuad
         {
             get
@@ -27,11 +30,6 @@ namespace Aximo.Render
             }
         }
 
-        //public static readonly Polygon<VertexDataPosNormalUV> DefaultPolygon = new Polygon<VertexDataPosNormalUV>(
-        //    new VertexDataPosNormalUV(new Vector3(-1f, -1f, 0.0f), Vector3.UnitZ, new Vector2(0.0f, 1.0f)),
-        //    new VertexDataPosNormalUV(new Vector3(1f, -1f, 0.0f), Vector3.UnitZ, new Vector2(1.0f, 1.0f)),
-        //    new VertexDataPosNormalUV(new Vector3(1f, 1f, 0.0f), Vector3.UnitZ, new Vector2(1.0f, 0.0f)));
-
         public VertexDataPosNormalUV(Vector3 position, Vector3 normal, Vector2 uv)
         {
             Position = position;
@@ -42,7 +40,6 @@ namespace Aximo.Render
         Vector3 IVertexPosition3.Position { get => Position; set => Position = value; }
         Vector3 IVertexNormal.Normal { get => Normal; set => Normal = value; }
         Vector2 IVertexUV.UV { get => UV; set => UV = value; }
-
     }
 
     public static partial class EngineExtensions
@@ -83,9 +80,9 @@ namespace Aximo.Render
             if (typeof(IVertexPosition3).IsAssignableFrom(typeof(TSource)))
             {
                 quad.Vertex0.Position = ((IVertexPosition3)source[0]).Position;
-                quad.Vertex0.Position = ((IVertexPosition3)source[1]).Position;
-                quad.Vertex0.Position = ((IVertexPosition3)source[2]).Position;
-                quad.Vertex0.Position = ((IVertexPosition3)source[3]).Position;
+                quad.Vertex1.Position = ((IVertexPosition3)source[1]).Position;
+                quad.Vertex2.Position = ((IVertexPosition3)source[2]).Position;
+                quad.Vertex3.Position = ((IVertexPosition3)source[3]).Position;
             }
             else if (typeof(IVertexPosition2).IsAssignableFrom(typeof(TSource)))
             {

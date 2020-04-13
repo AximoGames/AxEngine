@@ -21,7 +21,7 @@ namespace Aximo.Render
 
         private Texture txt;
 
-        private float[] _vertices = DataHelper.SkyBox;
+        private VertexDataPos[] _vertices = DataHelper.SkyBox;
 
         public override void Init()
         {
@@ -31,10 +31,7 @@ namespace Aximo.Render
             //txt = Texture.LoadCubeMap("Textures/desert-skybox/#.tga");
             txt = Texture.LoadCubeMap("Textures/water-skybox/#.jpg");
 
-            var layout = new VertexLayoutBinded();
-            layout.AddAttribute<float>(_shader.GetAttribLocation("aPos"), 3);
-
-            vao = new VertexArrayObject(layout);
+            vao = new VertexArrayObject(VertexLayoutDefinition.CreateDefinitionFromVertexStruct<VertexDataPos>().BindToShader(_shader));
             vao.SetData(BufferData.Create(_vertices));
         }
 

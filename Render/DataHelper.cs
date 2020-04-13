@@ -8,10 +8,6 @@ using System.Runtime.InteropServices;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 
-#pragma warning disable SA1003 // Symbols should be spaced correctly
-#pragma warning disable SA1137 // Elements should have the same indentation
-#pragma warning disable SA1008 // Opening parenthesis should be spaced correctly
-
 namespace Aximo.Render
 {
     internal static class DataHelper
@@ -38,7 +34,7 @@ namespace Aximo.Render
             var vertices = new List<VertexDataPosNormalUV>();
             foreach (var direction in directions)
             {
-                var quad = GetQuad();
+                var quad = VertexDataPosNormalUV.DefaultQuad.ToPolygonVertices();
 
                 Translate(quad, new Vector3(0, 0, 1f));
 
@@ -131,43 +127,12 @@ namespace Aximo.Render
                 vertices[i].Position += value;
         }
 
-        /// <summary>
-        /// Returns a Quad, grounded to XY, facing Z-Up
-        /// </summary>
-        private static VertexDataPosNormalUV[] GetQuad()
-        {
-            return new VertexDataPosNormalUV[]
-            {
-                new VertexDataPosNormalUV(new Vector3(-1f, -1f,  0.0f),  Vector3.UnitZ,  new Vector2(0.0f, 1.0f)), // Top face
-                new VertexDataPosNormalUV(new Vector3( 1f, -1f,  0.0f),  Vector3.UnitZ,  new Vector2(1.0f, 1.0f)),
-                new VertexDataPosNormalUV(new Vector3( 1f,  1f,  0.0f),  Vector3.UnitZ,  new Vector2(1.0f, 0.0f)),
-                new VertexDataPosNormalUV(new Vector3( 1f,  1f,  0.0f),  Vector3.UnitZ,  new Vector2(1.0f, 0.0f)),
-                new VertexDataPosNormalUV(new Vector3(-1f,  1f,  0.0f),  Vector3.UnitZ,  new Vector2(0.0f, 0.0f)),
-                new VertexDataPosNormalUV(new Vector3(-1f, -1f,  0.0f),  Vector3.UnitZ,  new Vector2(0.0f, 1.0f)),
-            };
-        }
-
         public static VertexDataPosNormalUV[] DefaultCube => GetCube();
 
         public static VertexDataPosNormalUV[] DefaultDebugCube => GetDebugCube();
 
-        public static readonly VertexDataPos2UV[] Quad_ = VertexDataPos2UV.DefaultQuad.ToPolygonVertices();
-        public static readonly VertexDataPos2UV[] QuadInvertedUV_ = VertexDataPos2UV.DefaultQuadInvertedUV.ToPolygonVertices();
-
-        // Here we now have added the normals of the vertices
-        // Remember to define the layouts to the VAO's
-        public static readonly float[] Quad =
-        {
-            // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-            // positions   // texCoords
-            -1.0f,  1.0f,  0.0f, 1.0f,
-            -1.0f, -1.0f,  0.0f, 0.0f,
-             1.0f, -1.0f,  1.0f, 0.0f,
-
-            -1.0f,  1.0f,  0.0f, 1.0f,
-             1.0f, -1.0f,  1.0f, 0.0f,
-             1.0f,  1.0f,  1.0f, 1.0f,
-        };
+        public static readonly VertexDataPos2UV[] Quad = VertexDataPos2UV.DefaultQuad.ToPolygonVertices();
+        public static readonly VertexDataPos2UV[] QuadInvertedUV = VertexDataPos2UV.DefaultQuadInvertedUV.ToPolygonVertices();
 
         public static void GetData<T>(BufferData2D<T> target, Action<IntPtr> getPixels)
         {
@@ -187,82 +152,39 @@ namespace Aximo.Render
             GetData(target, getPixels);
         }
 
-        public static Matrix4 CoordinateSystemMatrix = new Matrix4(
-            new Vector4(1, 0, 0, 0),
-            new Vector4(0, 0, 1, 0),
-            new Vector4(0, -1, 0, 0),
-            new Vector4(0, 0, 0, 1));
-
-        public static Matrix3 CoordinateSystemMatrix3 = new Matrix3(
-            new Vector3(1, 0, 0),
-            new Vector3(0, 0, 1),
-            new Vector3(0, -1, 0));
-
-        //private const float LineGrayTone = 0.65f;
-        public static readonly float[] Cross =
+        public static readonly VertexDataPosColor[] Cross = new VertexDataPosColor[]
         {
-             // Position          Color
-             -1f, 0f, 0.0f,  0.5f, 0f, 0f,  1.0f, // Line X
-             1.0f,  0.0f, 0.0f,  1f, 0, 0,  1.0f,
+             new VertexDataPosColor(new Vector3(-1f, 0f, 0.0f), new Vector4(0.5f, 0f, 0f,  1.0f)), // Line X
+             new VertexDataPosColor(new Vector3(1.0f,  0.0f, 0.0f),  new Vector4(1f, 0, 0,  1.0f)),
 
-             0f, -1f, 0.0f,  0f, 0.5f, 0f,  1.0f, // Line Y
-             0.0f,  1.0f, 0.0f,  0f, 1f, 0f,  1.0f,
+             new VertexDataPosColor(new Vector3(0f, -1f, 0.0f), new Vector4(0f, 0.5f, 0f,  1.0f)), // Line Y
+             new VertexDataPosColor(new Vector3(0.0f,  1.0f, 0.0f), new Vector4(0f, 1f, 0f,  1.0f)),
 
-             0f, 0f, -1.0f,  0f, 0f, 0.5f,  1.0f, // Line Z
-             0.0f,  0.0f, 1.0f,  0f, 0f, 1f,  1.0f,
+             new VertexDataPosColor(new Vector3(0f, 0f, -1.0f), new Vector4(0f, 0f, 0.5f,  1.0f)), // Line Z
+             new VertexDataPosColor(new Vector3(0.0f,  0.0f, 1.0f), new Vector4(0f, 0f, 1f,  1.0f)),
         };
 
-        public static readonly float[] Line =
+        public static VertexDataPos[] SkyBox
         {
-             // Position          Color
-             -1.0f,  0.0f, 0.0f,  0.6f, 0.05f, 0.6f, 1.0f, // X-Aligned line
-              1.0f,  0.0f, 0.0f,  1.0f, 0, 0f, 1.0f, 1.0f,
-        };
+            get
+            {
+                var array = GetCube().Select(x => new VertexDataPos(x.Position)).ToArray();
+                InvertPolygonClockwise(array);
+                return array;
+            }
+        }
 
-        public static readonly float[] SkyBox =
+        public static void InvertPolygonClockwise<T>(T[] items)
+            where T : IVertex
         {
-            // positions
-            -1.0f, -1.0f,  1.0f, // Left
-            -1.0f, -1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f,  1.0f,
-            -1.0f, -1.0f,  1.0f,
-
-            1.0f, -1.0f, -1.0f, // Right
-            1.0f, -1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-
-            -1.0f, -1.0f,  1.0f, // Top
-            -1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f, -1.0f,  1.0f,
-            -1.0f, -1.0f,  1.0f,
-
-            -1.0f,  1.0f, -1.0f, // Bottom
-            -1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-
-            -1.0f,  1.0f, -1.0f, // Front
-            1.0f,  1.0f, -1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f, -1.0f,
-
-            -1.0f, -1.0f, -1.0f, // Back
-            -1.0f, -1.0f,  1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f,  1.0f,
-            1.0f, -1.0f,  1.0f,
-        };
+            for (var p = 0; p < items.Length / 3; p++)
+            {
+                var idx1 = (p * 3) + 0;
+                var idx2 = (p * 3) + 2;
+                var tmp = items[idx1];
+                items[idx1] = items[idx2];
+                items[idx2] = tmp;
+            }
+        }
     }
 }
