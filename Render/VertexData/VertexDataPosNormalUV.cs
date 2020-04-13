@@ -158,15 +158,24 @@ namespace Aximo.Render
 
         public Polygon<T>[] ToPolygons()
         {
+
+            // Vertex order:
+            // -------------
+            // 3  2       3        3  2
+            //       -->        +
+            // 0  1       0  1        1
+            // -------    -----    -----
+            // 0,1,2,3 -> 0,1,3    2,3,1
+
             var p1 = new Polygon<T>();
             p1.Vertex0 = Vertex0;
             p1.Vertex1 = Vertex1;
-            p1.Vertex2 = Vertex2;
+            p1.Vertex2 = Vertex3;
 
             var p2 = new Polygon<T>();
             p1.Vertex0 = Vertex2;
             p1.Vertex1 = Vertex3;
-            p1.Vertex2 = Vertex0;
+            p1.Vertex2 = Vertex1;
 
             return new Polygon<T>[] { p1, p2 };
         }
@@ -178,7 +187,7 @@ namespace Aximo.Render
 
         public T[] ToPolygonVertices()
         {
-            return new T[] { Vertex0, Vertex1, Vertex2, Vertex2, Vertex3, Vertex0 };
+            return new T[] { Vertex0, Vertex1, Vertex3, Vertex2, Vertex3, Vertex1 };
         }
 
     }

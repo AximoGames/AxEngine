@@ -13,6 +13,12 @@ namespace Aximo.Render
     {
         public Vector3 Position;
 
+        // Vertex order:
+        //
+        // 3  2
+        //
+        // 0  1
+
         public static Quad<VertexDataPos> DefaultQuad => new Quad<VertexDataPos>(
             new VertexDataPos(new Vector3(-1f, -1f, 0.0f)),
             new VertexDataPos(new Vector3(1f, -1f, 0.0f)),
