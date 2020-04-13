@@ -16,7 +16,8 @@ namespace Aximo.Render
 
         public static MeshData DebugCube()
         {
-            return new MeshData<float>(typeof(VertexDataPosNormalUV), BufferData.Create(DataHelper.DebugCube));
+            //return new MeshData<float>(typeof(VertexDataPosNormalUV), BufferData.Create(DataHelper.DebugCube_));
+            return new MeshData<VertexDataPosNormalUV>(BufferData.Create(DataHelper.DebugCube));
         }
 
         public static MeshData Quad()

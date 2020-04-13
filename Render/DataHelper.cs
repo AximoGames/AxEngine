@@ -18,6 +18,11 @@ namespace Aximo.Render
     {
         public static VertexDataPosNormalUV[] GetCube()
         {
+            return GetCube(Vector3.One, Vector3.Zero);
+        }
+
+        public static VertexDataPosNormalUV[] GetCube(Vector3 size, Vector3 translate)
+        {
             var lines = new List<Vector3>();
             lines.Add(Vector3.UnitX);
             lines.Add(Vector3.UnitY);
@@ -35,7 +40,7 @@ namespace Aximo.Render
             {
                 var quad = GetQuad();
 
-                AddPositionZ(quad, 1f);
+                Translate(quad, new Vector3(0, 0, 1f));
 
                 Rotate(quad, new Rotor3(Vector3.UnitZ, -Vector3.UnitY));
 
@@ -48,7 +53,9 @@ namespace Aximo.Render
                     r = new Rotor3(-Vector3.UnitY, direction);
 
                 Rotate(quad, r);
-                Scale(quad, new Vector3(0.5f));
+                Scale(quad, new Vector3(0.5f) * size);
+                if (translate != Vector3.Zero)
+                    Translate(quad, translate);
 
                 RoundSmooth(quad);
 
@@ -57,6 +64,29 @@ namespace Aximo.Render
             }
 
             return vertices.ToArray();
+        }
+
+        public static VertexDataPosNormalUV[] GetDebugCube()
+        {
+            var list = new List<VertexDataPosNormalUV>();
+
+            const float DX = -0.5f;
+            const float DY = -0.5f;
+            const float DZ = 0.7f;
+
+            const float EX = 0.7f;
+            const float EY = -0.5f;
+            const float EZ = 0.5f;
+
+            var baseCube = GetCube();
+            for (var i = 24; i < 30; i++)
+                baseCube[i].Position = baseCube[i].Position * new Vector3(1.2f, 1.2f, 1f);
+
+            list.AddRange(baseCube);
+            list.AddRange(GetCube(new Vector3(0.2f, 0.2f, 0.6f), new Vector3(DX, DY, DZ)));
+            list.AddRange(GetCube(new Vector3(0.6f, 0.2f, 0.2f), new Vector3(EX, EY, EZ)));
+            //list.AddRange(GetCube());
+            return list.ToArray();
         }
 
         private static void Rotate(VertexDataPosNormalUV[] vertices, Quaternion q)
@@ -102,22 +132,16 @@ namespace Aximo.Render
             Round(vertices, 6);
         }
 
-        private static void AddPositionY(VertexDataPosNormalUV[] vertices, float value)
-        {
-            for (var i = 0; i < vertices.Length; i++)
-                vertices[i].Position.Y += value;
-        }
-
         private static void Scale(VertexDataPosNormalUV[] vertices, Vector3 scale)
         {
             for (var i = 0; i < vertices.Length; i++)
                 vertices[i].Position *= scale;
         }
 
-        private static void AddPositionZ(VertexDataPosNormalUV[] vertices, float value)
+        private static void Translate(VertexDataPosNormalUV[] vertices, Vector3 value)
         {
             for (var i = 0; i < vertices.Length; i++)
-                vertices[i].Position.Z += value;
+                vertices[i].Position += value;
         }
 
         /// <summary>
@@ -127,12 +151,12 @@ namespace Aximo.Render
         {
             return new VertexDataPosNormalUV[]
             {
-                new VertexDataPosNormalUV(new Vector3(-1f, -1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(0.0f, 1.0f)), // Top face
-                new VertexDataPosNormalUV(new Vector3( 1f, -1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(1.0f, 1.0f)),
-                new VertexDataPosNormalUV(new Vector3( 1f,  1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(1.0f, 0.0f)),
-                new VertexDataPosNormalUV(new Vector3( 1f,  1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(1.0f, 0.0f)),
-                new VertexDataPosNormalUV(new Vector3(-1f,  1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(0.0f, 0.0f)),
-                new VertexDataPosNormalUV(new Vector3(-1f, -1f,  0.0f),  new Vector3(0.0f,  0.0f,  1.0f),  new Vector2(0.0f, 1.0f)),
+                new VertexDataPosNormalUV(new Vector3(-1f, -1f,  0.0f),  Vector3.UnitZ,  new Vector2(0.0f, 1.0f)), // Top face
+                new VertexDataPosNormalUV(new Vector3( 1f, -1f,  0.0f),  Vector3.UnitZ,  new Vector2(1.0f, 1.0f)),
+                new VertexDataPosNormalUV(new Vector3( 1f,  1f,  0.0f),  Vector3.UnitZ,  new Vector2(1.0f, 0.0f)),
+                new VertexDataPosNormalUV(new Vector3( 1f,  1f,  0.0f),  Vector3.UnitZ,  new Vector2(1.0f, 0.0f)),
+                new VertexDataPosNormalUV(new Vector3(-1f,  1f,  0.0f),  Vector3.UnitZ,  new Vector2(0.0f, 0.0f)),
+                new VertexDataPosNormalUV(new Vector3(-1f, -1f,  0.0f),  Vector3.UnitZ,  new Vector2(0.0f, 1.0f)),
             };
         }
 
@@ -145,7 +169,10 @@ namespace Aximo.Render
         private const float EX = 0.7f;
         private const float EY = -0.5f;
         private const float EZ = 0.5f;
-        public static readonly float[] DebugCube =
+
+        public static VertexDataPosNormalUV[] DebugCube => GetDebugCube();
+
+        public static readonly float[] DebugCube_ =
         {
              // Position          Normal
             -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f, // Bottom face
