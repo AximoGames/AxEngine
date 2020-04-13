@@ -28,32 +28,32 @@ namespace OpenToolkit.Mathematics
         /// <summary>
         ///
         /// </summary>
-        public static readonly BiVector3d UnitYZ = new BiVector3d(1, 0, 0);
-
-        /// <summary>
-        ///
-        /// </summary>
-        public static readonly BiVector3d UnitZX = new BiVector3d(0, 1, 0);
-
-        /// <summary>
-        ///
-        /// </summary>
         public static readonly BiVector3d UnitXY = new BiVector3d(0, 0, 1);
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static readonly BiVector3d UnitXZ = new BiVector3d(0, 1, 0);
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static readonly BiVector3d UnitYZ = new BiVector3d(1, 0, 0);
 
         /// <summary>
         /// The not-X basis.
         /// </summary>
-        public float NotX;
+        public float b12;
 
         /// <summary>
         /// The not-Y basis.
         /// </summary>
-        public float NotY;
+        public float b02;
 
         /// <summary>
         /// The not-Z basis.
         /// </summary>
-        public float NotZ;
+        public float b01;
 
         /// <summary>
         ///
@@ -61,9 +61,9 @@ namespace OpenToolkit.Mathematics
         /// <param name="v"></param>
         public BiVector3d(Vector3 v)
         {
-            NotX = v.X;
-            NotY = v.Y;
-            NotZ = v.Z;
+            b01 = v.Z;
+            b02 = v.Y;
+            b12 = v.X;
         }
 
         /// <summary>
@@ -72,17 +72,17 @@ namespace OpenToolkit.Mathematics
         /// <param name="nx"></param>
         /// <param name="ny"></param>
         /// <param name="nz"></param>
-        public BiVector3d(float nx, float ny, float nz)
+        public BiVector3d(float b01, float b02, float b12)
         {
-            NotX = nx;
-            NotY = ny;
-            NotZ = nz;
+            this.b01 = b01;
+            this.b02 = b02;
+            this.b12 = b12;
         }
 
         /// <summary>
         /// Gets the square magnitude (length) of this bivector.
         /// </summary>
-        public float MagnitudeSquared => (NotX * NotX) + (NotY * NotY) + (NotZ * NotZ);
+        public float MagnitudeSquared => (b01 * b01) + (b02 * b02) + (b12 * b12);
 
         /// <summary>
         /// Gets the magnitude (length) of this bivector.
@@ -98,7 +98,7 @@ namespace OpenToolkit.Mathematics
         /// <remarks>Returns a AntiScalar3D which is a one component vector (i.e a float) that flips sign when reflected.</remarks>
         public static float Wedge(BiVector3d bv, Vector3 v)
         {
-            return (bv.NotX * v.X) + (bv.NotY * v.Y) + (bv.NotZ * v.Z);
+            return (bv.b12 * v.X) + (bv.b02 * v.Y) + (bv.b01 * v.Z);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace OpenToolkit.Mathematics
         /// <remarks>Returns a scalar which is a one component vector (i.e a float) that retains sign on reflection.</remarks>
         public static float AntiWedge(in Vector3 v, in BiVector3d bv)
         {
-            return (v.X * bv.NotX) + (v.Y * bv.NotY) + (v.Z * bv.NotZ);
+            return (v.X * bv.b12) + (v.Y * bv.b02) + (v.Z * bv.b01);
         }
 
         /// <summary>
@@ -127,9 +127,9 @@ namespace OpenToolkit.Mathematics
         public static void Normalize(in BiVector3d bv, out BiVector3d result)
         {
             float mag = bv.Magnitude;
-            result.NotX = bv.NotX / mag;
-            result.NotY = bv.NotY / mag;
-            result.NotZ = bv.NotZ / mag;
+            result.b01 = bv.b01 / mag;
+            result.b02 = bv.b02 / mag;
+            result.b12 = bv.b12 / mag;
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace OpenToolkit.Mathematics
         /// <inheritdoc/>
         public bool Equals(BiVector3d other)
         {
-            return NotX == other.NotX && NotY == other.NotY && NotZ == other.NotZ;
+            return b01 == other.b01 && b02 == other.b02 && b12 == other.b12;
         }
 
         /// <summary>

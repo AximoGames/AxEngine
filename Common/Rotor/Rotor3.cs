@@ -24,12 +24,15 @@ namespace OpenToolkit.Mathematics
     /// </summary>
     public struct Rotor3 : IEquatable<Rotor3>
     {
+
+        public static readonly Rotor3 Identity = new Rotor3(1, 0, 0, 0);
+
         // FIXME: Better name!
         public float A;
 
-        public float YZ;
-        public float ZX;
-        public float XY;
+        public float b12;
+        public float b02;
+        public float b01;
 
         /// <summary>
         ///
@@ -38,12 +41,12 @@ namespace OpenToolkit.Mathematics
         /// <param name="yz"></param>
         /// <param name="zx"></param>
         /// <param name="xy"></param>
-        public Rotor3(float a, float yz, float zx, float xy)
+        public Rotor3(float a, float xy, float xz, float yz)
         {
             A = a;
-            YZ = yz;
-            ZX = zx;
-            XY = xy;
+            b01 = xy;
+            b02 = xz;
+            b12 = yz;
         }
 
         /// <summary>
@@ -54,9 +57,9 @@ namespace OpenToolkit.Mathematics
         public Rotor3(float a, in BiVector3d bv)
         {
             A = a;
-            YZ = bv.NotX;
-            ZX = bv.NotY;
-            XY = bv.NotZ;
+            b01 = bv.b01;
+            b02 = bv.b02;
+            b12 = bv.b12;
         }
 
         /// <summary>
@@ -66,11 +69,17 @@ namespace OpenToolkit.Mathematics
         /// <param name="to"></param>
         public Rotor3(Vector3 from, Vector3 to)
         {
+            //// Too expensive?
+            //from.Normalize();
+            //to.Normalize();
+
             A = 1 + Vector3.Dot(to, from);
             BiVector3d bivec = VectorHelper.Wedge(to, from);
-            YZ = bivec.NotX;
-            ZX = bivec.NotY;
-            XY = bivec.NotZ;
+            b01 = bivec.b01;
+            b02 = bivec.b02;
+            b12 = bivec.b12;
+
+            Normalize(this, out this);
         }
 
         /// <summary>
@@ -81,9 +90,9 @@ namespace OpenToolkit.Mathematics
         /// <summary>
         ///
         /// </summary>
-        public float LengthSquared => (A * A) + (YZ * YZ) + (ZX * ZX) + (XY * XY);
+        public float LengthSquared => (A * A) + (b01 * b01) + (b02 * b02) + (b12 * b12);
 
-        public BiVector3d BiVector => new BiVector3d(YZ, ZX, XY);
+        public BiVector3d BiVector => new BiVector3d(b12, b02, b01);
 
         /// <summary>
         ///
@@ -99,10 +108,10 @@ namespace OpenToolkit.Mathematics
 
         public static void Multiply(in Rotor3 a, in Rotor3 b, out Rotor3 res)
         {
-            res.A = (a.A * b.A) - (a.YZ * b.YZ) - (a.ZX * b.ZX) - (a.XY * b.XY);
-            res.YZ = (a.YZ * b.A) + (a.A * b.YZ) + (a.XY * b.ZX) - (a.ZX * b.XY);
-            res.ZX = (a.ZX * b.A) + (a.A * b.ZX) - (a.XY * b.YZ) + (a.YZ * b.XY);
-            res.XY = (a.XY * b.A) + (a.A * b.XY) + (a.ZX * b.YZ) - (a.YZ * b.ZX);
+            res.A = (a.A * b.A) - (a.b12 * b.b12) - (a.b02 * b.b02) - (a.b01 * b.b01);
+            res.b12 = (a.b12 * b.A) + (a.A * b.b12) + (a.b01 * b.b02) - (a.b02 * b.b01);
+            res.b02 = (a.b02 * b.A) + (a.A * b.b02) - (a.b01 * b.b12) + (a.b12 * b.b01);
+            res.b01 = (a.b01 * b.A) + (a.A * b.b01) + (a.b02 * b.b12) - (a.b12 * b.b02);
         }
 
         /// <summary>
@@ -120,21 +129,24 @@ namespace OpenToolkit.Mathematics
         /// <summary>
         ///
         /// </summary>
+        /// <param name="p"></param>
+        /// <param name="x"></param>
         /// <param name="r"></param>
-        /// <param name="v"></param>
-        /// <param name="res"></param>
-        public static void Rotate(in Rotor3 r, in Vector3 v, out Vector3 res)
+        public static void Rotate(in Rotor3 p, in Vector3 x, out Vector3 r)
         {
-            Vector3 q;
-            q.X = (r.A * v.X) + (v.Y * r.YZ) + (v.Z * r.ZX);
-            q.Y = (r.A * v.Y) - (v.X * r.YZ) + (v.Z * r.XY);
-            q.Z = (r.A * v.Z) - (v.X * r.YZ) - (v.Y * r.XY);
+            x.Normalize();
 
-            float xyz = (v.X * r.XY) + (v.Y * r.ZX) + (v.Z * r.YZ);
+            Vector3 q = Vector3.Zero;
+            q[0] = p.A * x[0] + x[1] * p.b01 + x[2] * p.b02;
+            q[1] = p.A * x[1] - x[0] * p.b01 + x[2] * p.b12;
+            q[2] = p.A * x[2] - x[0] * p.b02 - x[1] * p.b12;
 
-            res.X = (r.A * q.X) + (q.Y * r.YZ) + (q.Z * r.ZX) - (xyz * r.XY);
-            res.Y = (r.A * q.Y) - (q.X * r.YZ) + (xyz * r.ZX) + (v.Z * r.XY);
-            res.Z = (r.A * q.Z) - (xyz * r.YZ) - (q.X * r.ZX) - (v.Y * r.XY);
+            float q012 = -x[0] * p.b12 + x[1] * p.b02 - x[2] * p.b01; // trivector
+
+            r = Vector3.Zero;
+            r[0] = p.A * q[0] + q[1] * p.b01 + q[2] * p.b02 - q012 * p.b12;
+            r[1] = p.A * q[1] - q[0] * p.b01 + q012 * p.b02 + q[2] * p.b12;
+            r[2] = p.A * q[2] - q012 * p.b01 - q[0] * p.b02 - q[1] * p.b12;
         }
 
         /// <summary>
@@ -155,7 +167,7 @@ namespace OpenToolkit.Mathematics
         /// <param name="c"></param>
         public static void Conjugate(in Rotor3 r, out Rotor3 c)
         {
-            c = new Rotor3(r.A, -r.YZ, -r.ZX, -r.XY);
+            c = new Rotor3(r.A, -r.b01, -r.b02, -r.b12);
         }
 
         /// <summary>
@@ -178,9 +190,9 @@ namespace OpenToolkit.Mathematics
         {
             float l = rot.Length;
             res.A = rot.A / l;
-            res.YZ = rot.YZ / l;
-            res.ZX = rot.ZX / l;
-            res.XY = rot.XY / l;
+            res.b01 = rot.b01 / l;
+            res.b02 = rot.b02 / l;
+            res.b12 = rot.b12 / l;
         }
 
         public static Matrix3 ToMatrix3(in Rotor3 rot)
@@ -218,7 +230,7 @@ namespace OpenToolkit.Mathematics
         /// <param name="res"></param>
         public static void Geo(in Vector3 a, in Vector3 b, out Rotor3 res)
         {
-            res = new Rotor3(Vector3.Dot(a, b), (BiVector3d)Vector3.Cross(a, b));
+            res = new Rotor3(Vector3.Dot(a, b), VectorHelper.Wedge(a, b));
         }
 
         /// <summary>

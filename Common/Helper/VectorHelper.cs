@@ -27,9 +27,9 @@ namespace Aximo
         /// </summary>
         public static void Wedge(in Vector3 v1, in Vector3 v2, out BiVector3d bv)
         {
-            bv.NotX = (v1.Y * v2.Z) - (v1.Z * v2.Y);
-            bv.NotY = (v1.Z * v2.X) - (v1.X * v2.Z);
-            bv.NotZ = (v1.X * v2.Y) - (v1.Y * v2.X);
+            bv.b01 = (v1.X * v2.Y) - (v1.Y * v2.X);
+            bv.b02 = (v1.X * v2.Z) - (v1.Z * v2.X);
+            bv.b12 = (v1.Y * v2.Z) - (v1.Z * v2.Y);
         }
 
         public static void Wedge(in Vector4 p, in Vector4 q, out BiVector4d bv)

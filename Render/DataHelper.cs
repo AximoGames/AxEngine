@@ -37,23 +37,23 @@ namespace Aximo.Render
 
                 AddPositionZ(quad, 1f);
 
-                Rotate(quad, new Quaternion(1, 0, 0, 1).Normalized());
-                //Rotate(quad, new Rotor3(Vector3.UnitZ, -Vector3.UnitY));
+                Rotate(quad, new Rotor3(Vector3.UnitZ, -Vector3.UnitY));
 
-                Quaternion q;
+                Rotor3 r;
                 if (direction == -Vector3.UnitY)
-                    q = Quaternion.Identity;
+                    r = Rotor3.Identity;
                 else if (direction == Vector3.UnitY)
-                    q = new Quaternion(0, 0, -1, 0);
+                    r = new Rotor3(0, 1, 0, 0);
                 else
-                    q = Quaternion.FromEulerAngles(direction * MathF.PI / 2);
+                    r = new Rotor3(-Vector3.UnitY, direction * 2);
 
-                Rotate(quad, q);
+                Rotate(quad, r);
                 Scale(quad, new Vector3(0.5f));
 
                 RoundSmooth(quad);
 
                 vertices.AddRange(quad);
+                //break;
             }
 
             return vertices.ToArray();
@@ -75,8 +75,9 @@ namespace Aximo.Render
             for (var i = 0; i < vertices.Length; i++)
             {
                 //var r = new Rotor3(Vector3.UnitZ, -Vector3.UnitY);
+                ////r.YZ = -1;
                 //var pos = Vector3.UnitZ;
-                //var newPos = Rotor3.Rotate(q, pos);
+                //var newPos = Rotor3.Rotate(r, pos);
 
                 var v = vertices[i];
                 v.Normal = Rotor3.Rotate(q, v.Normal);
