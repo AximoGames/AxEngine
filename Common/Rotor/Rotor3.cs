@@ -16,6 +16,8 @@ using Aximo;
 #pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
 #pragma warning disable SA1616 // Element return value documentation should have text
 #pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
+#pragma warning disable SA1307 // Accessible fields should begin with upper-case letter
+#pragma warning disable SA1407 // Arithmetic expressions should declare precedence
 
 namespace OpenToolkit.Mathematics
 {
@@ -24,7 +26,6 @@ namespace OpenToolkit.Mathematics
     /// </summary>
     public struct Rotor3 : IEquatable<Rotor3>
     {
-
         public static readonly Rotor3 Identity = new Rotor3(1, 0, 0, 0);
 
         // FIXME: Better name!

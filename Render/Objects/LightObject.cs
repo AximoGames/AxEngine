@@ -58,7 +58,7 @@ namespace Aximo.Render
         private Shader _shader;
         private VertexArrayObject vao;
 
-        private VertexDataPosNormalUV[] _vertices = DataHelper.Cube;
+        private VertexDataPosNormalUV[] _vertices = DataHelper.DefaultCube;
 
         public override void Init()
         {

@@ -16,6 +16,7 @@ using System.Text;
 #pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
 #pragma warning disable SA1616 // Element return value documentation should have text
 #pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
+#pragma warning disable SA1307 // Accessible fields should begin with upper-case letter
 
 namespace OpenToolkit.Mathematics
 {
