@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Render
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct VertexDataPosUV
+    public struct VertexDataPosUV : IVertexPosition3, IVertexUV
     {
         public Vector3 Position;
         public Vector2 UV;
@@ -19,6 +19,9 @@ namespace Aximo.Render
             Position = position;
             UV = uv;
         }
+
+        Vector3 IVertexPosition3.Position { get => Position; set => Position = value; }
+        Vector2 IVertexUV.UV { get => UV; set => UV = value; }
     }
 
     public static partial class EngineExtensions
