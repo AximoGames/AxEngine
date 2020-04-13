@@ -14,6 +14,17 @@ namespace Aximo.Render
         public Vector2 Position;
         public Vector2 UV;
 
+        public static Quad<VertexDataPos2UV> DefaultQuad
+        {
+            get
+            {
+                var result = new Quad<VertexDataPos2UV>();
+                result.SetPosition(VertexDataPos2.DefaultQuad);
+                result.MapUV();
+                return result;
+            }
+        }
+
         public VertexDataPos2UV(Vector2 position, Vector2 uv)
         {
             Position = position;
@@ -30,5 +41,42 @@ namespace Aximo.Render
         {
             list.Add(new VertexDataPos2UV(position, uv));
         }
+
+        public static void MapUV(this ref Quad<VertexDataPos2UV> quad, Vector2 fromMin, Vector2 fromMax, Vector2 toMin, Vector2 toMax)
+        {
+            quad.Vertex0.UV = AxMath.Map(quad.Vertex0.Position, fromMin, fromMax, toMin, toMax);
+            quad.Vertex1.UV = AxMath.Map(quad.Vertex1.Position, fromMin, fromMax, toMin, toMax);
+            quad.Vertex2.UV = AxMath.Map(quad.Vertex2.Position, fromMin, fromMax, toMin, toMax);
+            quad.Vertex3.UV = AxMath.Map(quad.Vertex3.Position, fromMin, fromMax, toMin, toMax);
+        }
+
+        public static void MapUV(this ref Quad<VertexDataPos2UV> quad, Vector2 fromMin, Vector2 fromMax)
+        {
+            MapUV(ref quad, fromMin, fromMax, new Vector2(0, 1), new Vector2(1, 0));
+        }
+
+        public static void MapUV(this ref Quad<VertexDataPos2UV> quad)
+        {
+            MapUV(ref quad, new Vector2(-1, -1), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0));
+        }
+
+        public static void SetPosition<TSource>(this ref Quad<VertexDataPos2UV> quad, Quad<TSource> source)
+        {
+            if (typeof(TSource).IsSubclassOf(typeof(IVertexPosition2)))
+            {
+                quad.Vertex0.Position = ((IVertexPosition2)source[0]).Position;
+                quad.Vertex0.Position = ((IVertexPosition2)source[1]).Position;
+                quad.Vertex0.Position = ((IVertexPosition2)source[2]).Position;
+                quad.Vertex0.Position = ((IVertexPosition2)source[3]).Position;
+            }
+            else if (typeof(TSource).IsSubclassOf(typeof(IVertexPosition3)))
+            {
+                quad.Vertex0.Position = ((IVertexPosition3)source[0]).Position.Xy;
+                quad.Vertex0.Position = ((IVertexPosition3)source[1]).Position.Xy;
+                quad.Vertex0.Position = ((IVertexPosition3)source[2]).Position.Xy;
+                quad.Vertex0.Position = ((IVertexPosition3)source[3]).Position.Xy;
+            }
+        }
+
     }
 }

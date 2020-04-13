@@ -42,6 +42,7 @@ namespace Aximo.Render
         Vector3 IVertexPosition3.Position { get => Position; set => Position = value; }
         Vector3 IVertexNormal.Normal { get => Normal; set => Normal = value; }
         Vector2 IVertexUV.UV { get => UV; set => UV = value; }
+
     }
 
     public static partial class EngineExtensions
@@ -77,13 +78,22 @@ namespace Aximo.Render
             MapUV(ref quad, new Vector2(-1, -1), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0));
         }
 
-        public static void SetPosition(this ref Quad<VertexDataPosNormalUV> quad, Quad<VertexDataPos> source)
+        public static void SetPosition<TSource>(this ref Quad<VertexDataPosNormalUV> quad, Quad<TSource> source)
         {
-            quad.Vertex0.Position = source.Vertex0.Position;
-            quad.Vertex1.Position = source.Vertex1.Position;
-            quad.Vertex2.Position = source.Vertex2.Position;
-            quad.Vertex3.Position = source.Vertex3.Position;
+            if (typeof(TSource).IsSubclassOf(typeof(IVertexPosition3)))
+            {
+                quad.Vertex0.Position = ((IVertexPosition3)source[0]).Position;
+                quad.Vertex0.Position = ((IVertexPosition3)source[1]).Position;
+                quad.Vertex0.Position = ((IVertexPosition3)source[2]).Position;
+                quad.Vertex0.Position = ((IVertexPosition3)source[3]).Position;
+            }
+            else
+            {
+                quad.Vertex0.Position.Xy = ((IVertexPosition2)source[0]).Position;
+                quad.Vertex1.Position.Xy = ((IVertexPosition2)source[1]).Position;
+                quad.Vertex2.Position.Xy = ((IVertexPosition2)source[2]).Position;
+                quad.Vertex3.Position.Xy = ((IVertexPosition2)source[3]).Position;
+            }
         }
-
     }
 }
