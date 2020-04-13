@@ -31,9 +31,9 @@ namespace Aximo.Engine
 
         public Vector2i ScreenSize => Window.Size;
 
-        private RenderApplicationConfig config;
+        private RenderApplicationConfig Config;
 
-        public bool IsMultiThreaded => config.IsMultiThreaded;
+        public bool IsMultiThreaded => Config.IsMultiThreaded;
 
         private float[] MouseSpeed = new float[3];
         private Vector2 MouseDelta;
@@ -43,9 +43,9 @@ namespace Aximo.Engine
 
         protected KeyboardState KeyboardState => Window.KeyboardState;
 
-        public RenderApplication(RenderApplicationConfig startup)
+        public RenderApplication(RenderApplicationConfig config)
         {
-            config = startup;
+            Config = config;
         }
 
         public WindowContext WindowContext => WindowContext.Current;
@@ -75,7 +75,7 @@ namespace Aximo.Engine
 
         public virtual void Init()
         {
-            WindowContext.Init(config);
+            WindowContext.Init(Config);
             RegisterWindowEvents();
 
             Renderer = new Renderer();
