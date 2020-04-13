@@ -136,15 +136,7 @@ namespace Aximo.Render
         /// </summary>
         private static VertexDataPosNormalUV[] GetQuad()
         {
-            return new VertexDataPosNormalUV[]
-            {
-                new VertexDataPosNormalUV(new Vector3(-1f, -1f,  0.0f),  Vector3.UnitZ,  new Vector2(0.0f, 1.0f)), // Top face
-                new VertexDataPosNormalUV(new Vector3( 1f, -1f,  0.0f),  Vector3.UnitZ,  new Vector2(1.0f, 1.0f)),
-                new VertexDataPosNormalUV(new Vector3( 1f,  1f,  0.0f),  Vector3.UnitZ,  new Vector2(1.0f, 0.0f)),
-                new VertexDataPosNormalUV(new Vector3( 1f,  1f,  0.0f),  Vector3.UnitZ,  new Vector2(1.0f, 0.0f)),
-                new VertexDataPosNormalUV(new Vector3(-1f,  1f,  0.0f),  Vector3.UnitZ,  new Vector2(0.0f, 0.0f)),
-                new VertexDataPosNormalUV(new Vector3(-1f, -1f,  0.0f),  Vector3.UnitZ,  new Vector2(0.0f, 1.0f)),
-            };
+            return VertexDataPosNormalUV.DefaultQuad.ToPolygonVertices();
         }
 
         public static VertexDataPosNormalUV[] DefaultCube => GetCube();
