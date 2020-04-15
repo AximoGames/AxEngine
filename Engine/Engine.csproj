@@ -22,7 +22,4 @@
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.0.0-pre5" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Experiment\" />
-  </ItemGroup>
 </Project>
