@@ -42,7 +42,7 @@ namespace Aximo.Engine
 
         protected override void OnFocusedChanged(FocusedChangedEventArgs e)
         {
-            if (IsFocused)
+            if (e.IsFocused)
             {
                 RenderFrequency = Config.RenderFrequency;
                 UpdateFrequency = Config.UpdateFrequency;

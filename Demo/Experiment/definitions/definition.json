@@ -1,0 +1,113 @@
+{
+    "$schema": "./schema.json",
+    "entities": [
+        {
+            "name": "building",
+            "rules": [
+                {
+                    "entity": "room"
+                },
+                {
+                    "entity": "buildingRoof"
+                },
+                {
+                    "entity": "foundation"
+                },
+                {
+                    "entity": "floor"
+                },
+                {
+                    "entity": "wall"
+                },
+                {
+                    "entity": "toilet",
+                    "shouldMin": 1
+                }
+            ]
+        },
+        {
+            "name": "room",
+            "rules": [
+                {
+                    "entity": "entrance"
+                },
+                {
+                    "entity": "roof"
+                },
+                {
+                    "entity": "foundation"
+                }
+            ]
+        },
+        {
+            "name": "door"
+        },
+        {
+            "name": "entrance"
+        },
+        {
+            "name": "roomEntrance"
+        },
+        {
+            "name": "buildingEntrance"
+        },
+        {
+            "name": "corridor"
+        },
+        {
+            "name": "floor",
+            "nameDE": "Etage"
+        },
+        {
+            "name": "floorConnector",
+            "nameDE": "Etagenverbindung",
+            "examples": [
+                "Stairs",
+                "Ramp"
+            ]
+        },
+        {
+            "name": "roof",
+            "nameDE": "Dach"
+        },
+        {
+            "name": "roomRoof",
+            "nameDE": "Raumdecke"
+        },
+        {
+            "name": "builidngRoof",
+            "nameDE": "Gebäudedach"
+        },
+        {
+            "name": "toilet"
+        },
+        {
+            "name": "foundation",
+            "nameDE": "Fundament",
+            "examples": [
+                "Foundation of building"
+            ]
+        },
+        {
+            "name": "wall"
+        },
+        {
+            "name": "opening",
+            "nameDE": "Öffnung",
+            "description": "Opening of a wall, room or a volume",
+            "examples": [
+                "Room with missing wall",
+                "A door",
+                "Hole in a volume"
+            ]
+        },
+        {
+            "name": "doorOpening",
+            "nameDE": "Türöffnung"
+        },
+        {
+            "name": "windowOpening",
+            "nameDE": "Fensteröffnung"
+        }
+    ]
+}

@@ -381,9 +381,11 @@ namespace Aximo.Engine
                 Camera cam = pos as Camera;
                 bool simpleMove = cam == null;
 
-                var stepSize = (float)(0.0025f * e.Time);
+                var stepSize = (float)(7.5f * e.Time);
                 if (kbState[Key.ControlLeft])
                     stepSize *= 0.1f;
+
+                Console.WriteLine(stepSize + "           " + e.Time);
 
                 if (kbState[Key.W])
                 {
@@ -466,9 +468,9 @@ namespace Aximo.Engine
                 MouseSpeed[1] *= reduceFactor;
                 MouseSpeed[2] *= reduceFactor;
 
-                MouseSpeed[0] = -(MouseDelta.X / 4000f * (float)e.Time);
-                MouseSpeed[1] = -(MouseDelta.Y / 4000f) * (float)e.Time;
-                MouseSpeed[2] = -(UpDownDelta / 4000f) * (float)e.Time;
+                MouseSpeed[0] = -(MouseDelta.X / 1.5f * (float)e.Time);
+                MouseSpeed[1] = -(MouseDelta.Y / 1.5f) * (float)e.Time;
+                MouseSpeed[2] = -(UpDownDelta / 1.5f) * (float)e.Time;
                 MouseDelta = new Vector2();
                 UpDownDelta = 0;
 
