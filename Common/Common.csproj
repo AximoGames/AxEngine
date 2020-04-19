@@ -9,6 +9,6 @@
   </PropertyGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
-    <PackageReference Include="OpenTK" Version="4.0.0-pre5" />
+    <PackageReference Include="OpenTK" Version="4.0.0-pre8" />
   </ItemGroup>
 </Project>
