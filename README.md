@@ -4,7 +4,19 @@ To clone this repository, you need git LFS, otherwise you need to download the A
 
 Don't forget the `--recursive` option:
 ```
-git clone --recursive git@github.com:AximoGames/AxEngine.git
+git clone --recursive https://github.com/AximoGames/AxEngine.git
+```
+
+Build from command line:
+
+```
+cd Experiments
+dotnet build
+```
+
+Run:
+```
+dotnet run -p Demo
 ```
 
 ```Keymapping:
