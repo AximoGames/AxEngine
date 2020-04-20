@@ -26,7 +26,7 @@ namespace Aximo.AxDemo
                 IsMultiThreaded = false,
             };
 
-            new GameStartup<RenderApplicationDemo, GtkUI>(config).Start();
+            new GameStartup<DemoApplication, GtkUI>(config).Start();
         }
     }
 }

@@ -17,7 +17,12 @@ uniform SMaterial material;
 in vec3 Normal; //The normal of the fragment is calculated in the vertex shader.
 in vec3 NormalTransposed;
 in vec3 FragPos; //The fragment position.
+#ifdef USE_VERTEX_UV
 in vec2 TexCoords;
+#endif
+#ifdef USE_VERTEX_COLOR
+in vec4 Color;
+#endif
 
 uniform sampler2DArray DirectionalShadowMap;
 uniform samplerCubeArray PointShadowMap;
@@ -32,14 +37,23 @@ void main()
 {
 	vec3 viewDir = normalize(ViewPos - FragPos);
     vec3 matDiffuse;
-
 #ifndef OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
+
+#ifdef USE_VERTEX_UV
     matDiffuse = texture(material.DiffuseMap, TexCoords).rgb * material.DiffuseColor;
+#endif
+#ifdef USE_VERTEX_COLOR
+    matDiffuse = Color.rgb;
+#endif
+
 #else
 #include OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
 #endif
 
-    float matSpecular = texture(material.SpecularMap, TexCoords).r * material.SpecularStrength;
+    float matSpecular = 0.0;
+#ifdef USE_VERTEX_UV
+    matSpecular = texture(material.SpecularMap, TexCoords).r * material.SpecularStrength;
+#endif
     float matAmbient = material.Ambient;
     float matShininess = material.Shininess;
 

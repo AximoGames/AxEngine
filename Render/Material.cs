@@ -35,6 +35,8 @@ namespace Aximo.Render
         public Texture DiffuseMap;
         public Texture SpecularMap;
 
+        public bool UseVertexColor;
+
         public IRenderPipeline RenderPipeline;
 
         public static Material GetDefault()

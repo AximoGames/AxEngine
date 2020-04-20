@@ -105,6 +105,7 @@ namespace Aximo.Engine
         public float Shininess { get; set; } = 1.0f;
         public float SpecularStrength { get; set; }
         public bool CastShadow { get; set; }
+        public bool UseVertexColor { get; set; }
 
         private Dictionary<string, Parameter> Parameters = new Dictionary<string, Parameter>();
         private Dictionary<string, object> Defines = new Dictionary<string, object>();
@@ -209,6 +210,11 @@ namespace Aximo.Engine
                 if (DefGeometryShader == null)
                     DefGeometryShader = new GameShader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
 
+                if (DiffuseTexture != null || SpecularTexture != null)
+                    Defines.Add("USE_VERTEX_UV", "1");
+                if (UseVertexColor)
+                    Defines.Add("USE_VERTEX_COLOR", "1");
+
                 InternalMaterial.Shader = new Shader(Shader.VertexShaderPath, Shader.FragmentShaderPath, Shader.GeometryShaderPath, true, Defines);
                 InternalMaterial.DefGeometryShader = new Shader(DefGeometryShader.VertexShaderPath, DefGeometryShader.FragmentShaderPath, DefGeometryShader.GeometryShaderPath, true, Defines);
 
@@ -241,6 +247,7 @@ namespace Aximo.Engine
 
             mat.Ambient = Ambient;
             mat.Shininess = Shininess;
+            mat.UseVertexColor = UseVertexColor;
 
             switch (PipelineType)
             {

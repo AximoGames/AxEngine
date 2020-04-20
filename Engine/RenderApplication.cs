@@ -385,8 +385,6 @@ namespace Aximo.Engine
                 if (kbState[Key.ControlLeft])
                     stepSize *= 0.1f;
 
-                Console.WriteLine(stepSize + "           " + e.Time);
-
                 if (kbState[Key.W])
                 {
                     if (simpleMove)

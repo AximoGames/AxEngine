@@ -18,7 +18,7 @@ namespace Aximo.AxTests
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<TestBase>();
 
-        protected RenderApplicationTests App;
+        protected TestsApplication App;
 
         protected GameContext GameContext => App.GameContext;
 
@@ -31,7 +31,7 @@ namespace Aximo.AxTests
             Log.Verbose("Waiting for {Name}", nameof(AppWaiter));
             AppWaiter.WaitOne();
             Log.Verbose("Waiting {Name} done", nameof(AppWaiter));
-            App = new RenderApplicationTests();
+            App = new TestsApplication();
             App.Run();
             Console.WriteLine("Ready for tests");
         }

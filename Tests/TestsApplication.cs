@@ -19,11 +19,11 @@ using Xunit;
 
 namespace Aximo.AxTests
 {
-    public class RenderApplicationTests : RenderApplication
+    public class TestsApplication : RenderApplication
     {
-        protected static RenderApplicationTests CurrentTestApp;
+        protected static TestsApplication CurrentTestApp;
 
-        public RenderApplicationTests() : base(new RenderApplicationConfig
+        public TestsApplication() : base(new RenderApplicationConfig
         {
             WindowTitle = "AxTests",
             WindowSize = new Vector2i(160, 120),

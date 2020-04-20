@@ -10,9 +10,9 @@ using SixLabors.ImageSharp;
 
 namespace Aximo.AxDemo
 {
-    public class RenderApplicationDemo : RenderApplication
+    public class DemoApplication : RenderApplication
     {
-        public RenderApplicationDemo(RenderApplicationConfig startup) : base(startup)
+        public DemoApplication(RenderApplicationConfig startup) : base(startup)
         {
         }
 
