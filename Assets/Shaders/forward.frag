@@ -36,14 +36,14 @@ layout(std140) uniform LightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };
 void main()
 {
 	vec3 viewDir = normalize(ViewPos - FragPos);
-    vec3 matDiffuse;
+    vec3 matDiffuse = material.DiffuseColor;
 #ifndef OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
 
 #ifdef USE_VERTEX_UV
     matDiffuse = texture(material.DiffuseMap, TexCoords).rgb * material.DiffuseColor;
 #endif
 #ifdef USE_VERTEX_COLOR
-    matDiffuse = Color.rgb;
+    matDiffuse = Color.rgb * material.DiffuseColor;
 #endif
 
 #else

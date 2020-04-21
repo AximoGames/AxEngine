@@ -33,14 +33,14 @@ void main()
     // also store the per-fragment normals into the gbuffer
     gNormal = normalize(Normal);
     // and the diffuse per-fragment color
-    vec3 matDiffuse=vec3(1);
+    vec3 matDiffuse = material.DiffuseColor;
 #ifndef OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
 
 #ifdef USE_VERTEX_UV
     matDiffuse = texture(material.DiffuseMap, TexCoords).rgb * material.DiffuseColor;
 #endif
 #ifdef USE_VERTEX_COLOR
-    matDiffuse = Color.rgb;
+    matDiffuse = Color.rgb * material.DiffuseColor;
 #endif
 
 #else
