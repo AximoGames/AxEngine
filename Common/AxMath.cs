@@ -9,6 +9,17 @@ namespace Aximo
 {
     public static class AxMath
     {
+
+        /// <summary>
+        /// Degrees-to-radians conversion constant
+        /// </summary>
+        public const float Deg2Rad = MathF.PI * 2F / 360F;
+
+        /// <summary>
+        /// Radians-to-degrees conversion constant
+        /// </summary>
+        public const float Rad2Deg = 1F / Deg2Rad;
+
         /// <summary
         /// Compares two floating point values if they are similar.
         /// <summary>
