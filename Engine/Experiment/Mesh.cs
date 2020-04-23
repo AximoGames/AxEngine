@@ -4,6 +4,7 @@ using System.Text;
 using OpenToolkit.Mathematics;
 using System.Linq;
 using Aximo.Render;
+using System.Collections;
 
 namespace Aximo.Engine.Mesh2
 {
@@ -37,7 +38,7 @@ namespace Aximo.Engine.Mesh2
             }
         }
 
-        public abstract int VertexCount { get; }
+        public abstract int Count { get; }
 
         public abstract void AddRange(MeshComponent src, int start, int count);
 
@@ -85,13 +86,17 @@ namespace Aximo.Engine.Mesh2
         public override MeshComponent CloneEmpty() => new MeshUVComponent();
     }
 
-    public class MeshComponent<T> : MeshComponent
+    public class MeshComponent<T> : MeshComponent, IDynamicArray<T>
     {
         public IList<T> Values { get; private set; } = new List<T>();
 
-        public T this[int index] => Values[index];
+        public T this[int index]
+        {
+            get => Values[index];
+            set => Values[index] = value;
+        }
 
-        public override int VertexCount => Values.Count;
+        public override int Count => Values.Count;
 
         public MeshComponent(MeshComponentType componentType)
         {
@@ -117,6 +122,12 @@ namespace Aximo.Engine.Mesh2
 
         public override MeshComponent CloneEmpty() => new MeshComponent<T>(Type);
 
+        public void SetLength(int length)
+        {
+            var sizeDiff = length - Values.Count;
+            for (var i = 0; i < sizeDiff; i++)
+                Values.Add(default(T));
+        }
     }
 
     public enum MeshFaceType
@@ -175,9 +186,11 @@ namespace Aximo.Engine.Mesh2
     {
         public IList<MeshComponent> Components { get; private set; } = new List<MeshComponent>();
 
-        public void AddComponent(MeshComponentType componentType)
+        public MeshComponent AddComponent(MeshComponentType componentType)
         {
-            Components.Add(MeshComponent.Create(componentType));
+            var comp = MeshComponent.Create(componentType);
+            Components.Add(comp);
+            return comp;
         }
 
         public void AddComponent(MeshComponent component)
@@ -233,7 +246,7 @@ namespace Aximo.Engine.Mesh2
             return mesh;
         }
 
-        public int VertexCount => Components == null ? 0 : Components[0].VertexCount;
+        public int VertexCount => Components == null ? 0 : Components[0].Count;
 
         public Mesh ToPolygons()
         {
@@ -314,6 +327,197 @@ namespace Aximo.Engine.Mesh2
             throw new NotSupportedException();
         }
 
+        public void Visit<T>(Action<T> callback)
+            where T : IVertex
+        {
+            var enu = new VertexEnumerator<T>(this);
+            while (enu.MoveNext())
+                callback(enu.Current);
+        }
+
+        public void Visit<T>(Action<T, int> callback)
+            where T : IVertex
+        {
+            var enu = new VertexEnumerator<T>(this);
+            while (enu.MoveNext())
+                callback(enu.Current, enu.Visitor.Index);
+        }
+
+        public IList<T> View<T>()
+            where T : IVertex
+        {
+            return new VertexList<T>();
+        }
+
+        private class VertexList<T> : IList<T>
+            where T : IVertex
+        {
+
+            private IDynamicArray<T> InnerList;
+
+            public T this[int index]
+            {
+                get => InnerList[index];
+                set => InnerList[index] = value;
+            }
+
+            public int Count => InnerList.Count;
+
+            public bool IsReadOnly => false;
+
+            public void Add(T item)
+            {
+                InnerList.SetValueWithExpand(InnerList.Count, item);
+            }
+
+            public void Clear()
+            {
+                InnerList.Clear();
+            }
+
+            public bool Contains(T item)
+            {
+                return InnerList.Contains(item);
+            }
+
+            public void CopyTo(T[] array, int arrayIndex)
+            {
+                throw new NotImplementedException();
+            }
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                throw new NotImplementedException();
+            }
+
+            public int IndexOf(T item)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Insert(int index, T item)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool Remove(T item)
+            {
+                return InnerList.Remove(item);
+            }
+
+            public void RemoveAt(int index)
+            {
+                InnerList.RemoveAt(index);
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private class VertexEnumerator<T> : IEnumerator<T>
+            where T : IVertex
+        {
+
+            public VertexEnumerator(Mesh mesh)
+            {
+                Mesh = mesh;
+                Visitor = VertexVisitor<T>.CreateVisitor();
+            }
+
+            private Mesh Mesh;
+
+            internal VertexVisitor<T> Visitor;
+
+            public T Current => (T)Visitor.Value;
+
+            object IEnumerator.Current => Visitor.Value;
+
+            public void Dispose()
+            {
+                Visitor?.Dispose();
+                Visitor = null;
+            }
+
+            public bool MoveNext()
+            {
+                if (Visitor.Index >= Mesh.VertexCount - 1)
+                    return false;
+
+                Visitor.Index++;
+                return true;
+            }
+
+            public void Reset()
+            {
+                Visitor.Index = -1;
+            }
+        }
+
+        private abstract class VertexVisitor<T> : IDisposable, IVertex
+            where T : IVertex
+        {
+            public static VertexVisitor<T> CreateVisitor()
+            {
+                var type = typeof(T);
+
+                if (type == typeof(IVertexPosition3))
+                    return (VertexVisitor<T>)(object)new VertexPosition3Visitor();
+
+                throw new NotSupportedException(type.Name);
+            }
+
+            protected Mesh Mesh;
+            public int Index;
+            public IVertex Value
+            {
+                get => this;
+                set => Set(value);
+            }
+
+            public IVertex this[int index]
+            {
+                get
+                {
+                    Index = index;
+                    return this;
+                }
+                set
+                {
+                    Index = index;
+                    Set(value);
+                }
+            }
+
+            protected virtual void Set(IVertex vertex)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Dispose()
+            {
+            }
+        }
+
+        private class VertexPosition3Visitor : VertexVisitor<IVertexPosition3>, IVertexPosition3
+        {
+            private IDynamicArray<Vector3> PositionComponent;
+
+            public Vector3 Position
+            {
+                get => PositionComponent.GetValueWithExpand(Index);
+                set => PositionComponent.SetValueWithExpand(Index, value);
+            }
+
+            protected override void Set(IVertex vertex)
+            {
+                if (vertex is IVertexPosition3 position)
+                    Position = position.Position;
+            }
+
+        }
+
     }
 
     public static class FaceExtensions
@@ -322,6 +526,57 @@ namespace Aximo.Engine.Mesh2
         {
             return faces.SelectMany(face => face.Indicies);
         }
+    }
+
+    public interface IArray<T>
+    {
+        T this[int index] { get; set; }
+        int Count { get; }
+    }
+
+    public interface IDynamicArray<T> : IArray<T>
+    {
+        void SetLength(int length);
+    }
+
+    internal static class DynamicArrayExtensions
+    {
+        static internal void SetValueWithExpand<T>(this IDynamicArray<T> array, int index, T value)
+        {
+            array.SetLength(index + 1);
+            array[index] = value;
+        }
+
+        static internal T GetValueWithExpand<T>(this IDynamicArray<T> array, int index)
+        {
+            array.SetLength(index + 1);
+            return array[index];
+        }
+
+        internal static void Clear<T>(this IDynamicArray<T> array)
+        {
+            array.SetLength(0);
+        }
+
+        internal static bool Contains<T>(this IDynamicArray<T> array, T value)
+        {
+            var length = array.Count;
+            for (var i = 0; i < length; i++)
+                if (array[i].Equals(value))
+                    return true;
+            return false;
+        }
+
+        internal static bool Remove<T>(this IDynamicArray<T> array, T value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static void RemoveAt<T>(this IDynamicArray<T> array, int index)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
 }
