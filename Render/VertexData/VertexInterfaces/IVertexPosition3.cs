@@ -9,4 +9,5 @@ namespace Aximo.Render
     {
         Vector3 Position { get; set; }
     }
+
 }

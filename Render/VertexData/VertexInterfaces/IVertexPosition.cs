@@ -3,7 +3,9 @@
 
 namespace Aximo.Render
 {
-    public interface IVertexPosition : IVertex
+    public interface IVertexPosition<TVector> : IVertex
+        where TVector : unmanaged
     {
+        TVector Position { get; }
     }
 }

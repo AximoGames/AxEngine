@@ -355,6 +355,9 @@ namespace Aximo.Engine.Mesh2
 
             private IDynamicArray<T> InnerList;
 
+            internal VertexVisitor<T> Visitor;
+
+
             public T this[int index]
             {
                 get => InnerList[index];
@@ -500,7 +503,7 @@ namespace Aximo.Engine.Mesh2
             }
         }
 
-        private class VertexPosition3Visitor : VertexVisitor<IVertexPosition3>, IVertexPosition3
+        private class VertexPosition3Visitor : VertexVisitor<IVertexPosition3>, IVertexPosition3, IVertexColor
         {
             private IDynamicArray<Vector3> PositionComponent;
 
@@ -509,6 +512,7 @@ namespace Aximo.Engine.Mesh2
                 get => PositionComponent.GetValueWithExpand(Index);
                 set => PositionComponent.SetValueWithExpand(Index, value);
             }
+            public Vector4 Color { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
             protected override void Set(IVertex vertex)
             {

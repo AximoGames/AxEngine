@@ -42,6 +42,30 @@ namespace Aximo.Render
         Vector2 IVertexUV.UV { get => UV; set => UV = value; }
     }
 
+    public static class Operations
+    {
+        public static void CopyPosition<TSource, TDestination>(in TSource source, ref TDestination destination)
+            where TSource : IVertexPosition3
+            where TDestination : IVertexPosition3
+        {
+            destination.Position = source.Position;
+        }
+        private static void Test()
+        {
+            var source = new VertexDataPosNormalUV();
+            var dest = new VertexDataPosNormalUV();
+
+            var source2 = new VertexDataPosNormalColor();
+            var dest2 = new VertexDataPosNormalColor();
+
+            Operations.CopyPosition(dest, ref source);
+            Operations.CopyPosition(dest2, ref source2);
+            Operations.CopyPosition(dest, ref source2);
+            Operations.CopyPosition(dest2, ref source);
+        }
+
+    }
+
     public static partial class EngineExtensions
     {
         public static void Add(this IList<VertexDataPosNormalUV> list, Vector3 position, Vector3 normal, Vector2 uv)
