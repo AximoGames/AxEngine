@@ -140,10 +140,22 @@ namespace Aximo.Engine.Mesh2
         Ngon = 5,
     }
 
+    public unsafe struct Triangle
+    {
+        private fixed int[3] blah;
+        public Span<int> Points => new Span<byte>(Unsafe.AsPointer(ref blah[0], 3));
+    }
+
     public struct MeshFace
     {
         public MeshFace(params int[] indicies)
         {
+            var triangeles = MemoryMarshal.Cast<int, Triangle>(indicies.AsSpan());
+
+            int n = 14;
+            int i = 3;
+            var ngon = indicies.AsSpan().Slice(i * n, n);
+
             if (indicies.Length > 0)
                 Indicies = indicies.ToArray();
             else
