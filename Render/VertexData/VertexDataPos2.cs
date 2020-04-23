@@ -30,7 +30,7 @@ namespace Aximo.Render
             Position = position;
         }
 
-        Vector2 IVertexPosition2.Position { get => Position; set => Position = value; }
+        Vector2 IVertexPosition<Vector2>.Position { get => Position; set => Position = value; }
     }
 
     public static partial class EngineExtensions

@@ -32,7 +32,7 @@ namespace Aximo.Render
             Color = color;
         }
 
-        Vector3 IVertexPosition3.Position { get => Position; set => Position = value; }
+        Vector3 IVertexPosition<Vector3>.Position { get => Position; set => Position = value; }
         Vector4 IVertexColor.Color { get => Color; set => Color = value; }
     }
 

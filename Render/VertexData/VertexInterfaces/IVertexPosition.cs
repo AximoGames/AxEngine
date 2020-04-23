@@ -6,6 +6,6 @@ namespace Aximo.Render
     public interface IVertexPosition<TVector> : IVertex
         where TVector : unmanaged
     {
-        TVector Position { get; }
+        TVector Position { get; set; }
     }
 }

@@ -5,6 +5,8 @@ using OpenToolkit.Mathematics;
 using System.Linq;
 using Aximo.Render;
 using System.Collections;
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace Aximo.Engine.Mesh2
 {
@@ -140,17 +142,19 @@ namespace Aximo.Engine.Mesh2
         Ngon = 5,
     }
 
-    public unsafe struct Triangle
-    {
-        private fixed int[3] blah;
-        public Span<int> Points => new Span<byte>(Unsafe.AsPointer(ref blah[0], 3));
-    }
+    // public unsafe struct Triangle
+    // {
+    //     private fixed int blah[3];
+    //     public Span<int> Points => new Span<byte>(Unsafe.AsPointer(ref blah[0], 3));
+    // }
 
     public struct MeshFace
     {
+
+
         public MeshFace(params int[] indicies)
         {
-            var triangeles = MemoryMarshal.Cast<int, Triangle>(indicies.AsSpan());
+            //var triangeles = MemoryMarshal.Cast<int, Triangle>(indicies.AsSpan());
 
             int n = 14;
             int i = 3;
@@ -358,17 +362,19 @@ namespace Aximo.Engine.Mesh2
         public IList<T> View<T>()
             where T : IVertex
         {
-            return new VertexList<T>();
+            return new VertexList<T>(VertexVisitor<T>.CreateVisitor(this));
         }
 
         private class VertexList<T> : IList<T>
             where T : IVertex
         {
 
+            public VertexList(IDynamicArray<T> innerList)
+            {
+                InnerList = innerList;
+            }
+
             private IDynamicArray<T> InnerList;
-
-            internal VertexVisitor<T> Visitor;
-
 
             public T this[int index]
             {
@@ -438,7 +444,7 @@ namespace Aximo.Engine.Mesh2
             public VertexEnumerator(Mesh mesh)
             {
                 Mesh = mesh;
-                Visitor = VertexVisitor<T>.CreateVisitor();
+                Visitor = VertexVisitor<T>.CreateVisitor(mesh);
             }
 
             private Mesh Mesh;
@@ -470,17 +476,22 @@ namespace Aximo.Engine.Mesh2
             }
         }
 
-        private abstract class VertexVisitor<T> : IDisposable, IVertex
+        private abstract class VertexVisitor<T> : IDisposable, IVertex, IDynamicArray<T>
             where T : IVertex
         {
-            public static VertexVisitor<T> CreateVisitor()
+            public static VertexVisitor<T> CreateVisitor(Mesh mesh)
             {
                 var type = typeof(T);
 
                 if (type == typeof(IVertexPosition3))
-                    return (VertexVisitor<T>)(object)new VertexPosition3Visitor();
+                    return (VertexVisitor<T>)(object)new VertexPosition3Visitor(mesh);
 
                 throw new NotSupportedException(type.Name);
+            }
+
+            internal VertexVisitor(Mesh mesh)
+            {
+                Mesh = mesh;
             }
 
             protected Mesh Mesh;
@@ -490,6 +501,10 @@ namespace Aximo.Engine.Mesh2
                 get => this;
                 set => Set(value);
             }
+
+            public int Count => throw new NotImplementedException();
+
+            T IArray<T>.this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
             public IVertex this[int index]
             {
@@ -513,11 +528,20 @@ namespace Aximo.Engine.Mesh2
             public void Dispose()
             {
             }
+
+            public void SetLength(int length)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private class VertexPosition3Visitor : VertexVisitor<IVertexPosition3>, IVertexPosition3, IVertexColor
         {
             private IDynamicArray<Vector3> PositionComponent;
+
+            public VertexPosition3Visitor(Mesh mesh) : base(mesh)
+            {
+            }
 
             public Vector3 Position
             {

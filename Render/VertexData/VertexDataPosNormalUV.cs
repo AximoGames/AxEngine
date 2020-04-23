@@ -37,7 +37,7 @@ namespace Aximo.Render
             UV = uv;
         }
 
-        Vector3 IVertexPosition3.Position { get => Position; set => Position = value; }
+        Vector3 IVertexPosition<Vector3>.Position { get => Position; set => Position = value; }
         Vector3 IVertexNormal.Normal { get => Normal; set => Normal = value; }
         Vector2 IVertexUV.UV { get => UV; set => UV = value; }
     }
@@ -55,8 +55,8 @@ namespace Aximo.Render
             var source = new VertexDataPosNormalUV();
             var dest = new VertexDataPosNormalUV();
 
-            var source2 = new VertexDataPosNormalColor();
-            var dest2 = new VertexDataPosNormalColor();
+            IVertexPosition3 source2 = new VertexDataPosNormalColor();
+            IVertexPosition3 dest2 = new VertexDataPosNormalColor();
 
             Operations.CopyPosition(dest, ref source);
             Operations.CopyPosition(dest2, ref source2);

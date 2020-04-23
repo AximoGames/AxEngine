@@ -43,7 +43,7 @@ namespace Aximo.Render
             UV = uv;
         }
 
-        Vector2 IVertexPosition2.Position { get => Position; set => Position = value; }
+        Vector2 IVertexPosition<Vector2>.Position { get => Position; set => Position = value; }
         Vector2 IVertexUV.UV { get => UV; set => UV = value; }
     }
 

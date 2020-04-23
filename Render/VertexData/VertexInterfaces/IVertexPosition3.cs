@@ -5,9 +5,8 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-    public interface IVertexPosition3 : IVertexPosition
+    public interface IVertexPosition3 : IVertexPosition<Vector3>
     {
-        Vector3 Position { get; set; }
     }
 
 }
