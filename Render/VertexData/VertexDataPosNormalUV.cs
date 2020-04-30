@@ -9,7 +9,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Render
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct VertexDataPosNormalUV : IVertex, IVertexPosition3, IVertexNormal, IVertexUV
+    public struct VertexDataPosNormalUV : IVertexPosNormalUV
     {
         public Vector3 Position;
         public Vector3 Normal;
