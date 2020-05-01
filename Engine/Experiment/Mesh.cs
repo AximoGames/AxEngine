@@ -306,7 +306,7 @@ namespace Aximo.Engine.Mesh2
 
             private MeshFace<T> GetFace(InternalMeshFace face)
             {
-                return new MeshFace<T>(VertexView, face);
+                return new MeshFace<T>(VertexView, Mesh.Indicies, face);
             }
 
             private MeshFace<T> GetFace(int faceIndex)
@@ -356,13 +356,47 @@ namespace Aximo.Engine.Mesh2
 
             public IEnumerator<MeshFace<T>> GetEnumerator()
             {
-                throw new NotImplementedException();
+                return new FaceEnumerator(this);
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                throw new NotImplementedException();
+                return new FaceEnumerator(this);
             }
+
+            private class FaceEnumerator : IEnumerator<MeshFace<T>>
+            {
+
+                private FaceList<T> Faces;
+                private int Index = -1;
+                public FaceEnumerator(FaceList<T> faces)
+                {
+                    Faces = faces;
+                }
+
+                public MeshFace<T> Current => Faces[Index];
+
+                object IEnumerator.Current => Current;
+
+                public void Dispose()
+                {
+                }
+
+                public bool MoveNext()
+                {
+                    if (Index >= Faces.Count - 1)
+                        return false;
+
+                    Index++;
+                    return true;
+                }
+
+                public void Reset()
+                {
+                    Index = -1;
+                }
+            }
+
         }
 
         private class VertexEnumerator<T> : IEnumerator<T>

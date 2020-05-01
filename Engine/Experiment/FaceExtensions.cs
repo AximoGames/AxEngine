@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
+using Aximo.Render;
 
 namespace Aximo.Engine.Mesh2
 {
     public static class FaceExtensions
     {
-        public static IEnumerable<int> ToIndiciesList(this IList<MeshFace> faces)
+        public static IEnumerable<int> ToIndiciesList<T>(this IList<MeshFace<T>> faces)
+            where T : IVertex
         {
-            return faces.SelectMany(face => face.Indicies);
+            // TODO: Improve performance
+            return faces.SelectMany(face => face.GetIndicies());
         }
     }
 
