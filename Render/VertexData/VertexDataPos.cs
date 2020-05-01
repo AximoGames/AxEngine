@@ -35,6 +35,21 @@ namespace Aximo.Render
         }
 
         Vector3 IVertexPosition<Vector3>.Position { get => Position; set => Position = value; }
+
+        public void SetPosition(IVertexPosition3 source)
+        {
+            Position = source.Position;
+        }
+        public void SetPosition(Vector3 source)
+        {
+
+            Position = source;
+        }
+
+        public VertexDataPos Clone() => new VertexDataPos(Position);
+        IVertexPosition3 IVertexPosition3.Clone() => Clone();
+        IVertexPosition<Vector3> IVertexPosition<Vector3>.Clone() => Clone();
+        IVertex IVertex.Clone() => Clone();
     }
 
     public static partial class EngineExtensions

@@ -203,6 +203,27 @@ namespace Aximo
             return new VertexList<T>(VertexVisitor<T>.CreateVisitor(this));
         }
 
+        public T[] GetVertexArray<T>()
+        {
+            if (typeof(T) == typeof(VertexDataPosNormalUV))
+                return View<IVertexPosNormalUV>().ToArray<T>();
+            if (typeof(T) == typeof(VertexDataPosNormalColor))
+                return View<IVertexPosNormalColor>().ToArray<T>();
+
+            throw new NotSupportedException(typeof(T).Name);
+        }
+
+        public int[] GetIndiciesArray()
+        {
+            return Indicies.ToArray();
+        }
+
+        public T[] GetIndiciesArray<T>()
+            where T : unmanaged
+        {
+            return GetIndiciesArray().Cast<T>().ToArray();
+        }
+
         public class VertexList<T> : IList<T>
             where T : IVertex
         {
@@ -278,6 +299,39 @@ namespace Aximo
             {
                 throw new NotImplementedException();
             }
+
+            public T[] ToArray()
+            {
+                var array = new T[Count];
+                for (var i = 0; i < Count; i++)
+                    array[i] = (T)this[i].Clone();
+                return array;
+            }
+
+            public TDestination[] ToArray<TDestination>()
+            {
+                if (typeof(TDestination) == typeof(T))
+                    return (TDestination[])(object)ToArray();
+
+                if (typeof(TDestination) == typeof(VertexDataPosNormalUV))
+                {
+                    var array = new VertexDataPosNormalUV[Count];
+                    for (var i = 0; i < Count; i++)
+                        array[i].Set((IVertexPosNormalUV)this[i]);
+                    return (TDestination[])(object)array;
+                }
+
+                if (typeof(TDestination) == typeof(VertexDataPosNormalColor))
+                {
+                    var array = new VertexDataPosNormalColor[Count];
+                    for (var i = 0; i < Count; i++)
+                        array[i].Set((IVertexPosNormalColor)this[i]);
+                    return (TDestination[])(object)array;
+                }
+
+                throw new NotSupportedException(typeof(TDestination).Name);
+            }
+
         }
 
         private class FaceList<T> : IList<MeshFace<T>>
@@ -496,6 +550,7 @@ namespace Aximo
 
             public abstract void SetLength(int length);
 
+            public abstract IVertex Clone();
         }
 
         private class VertexPosition3Visitor : VertexVisitor<IVertexPosition3>, IVertexPosition3
@@ -528,6 +583,20 @@ namespace Aximo
                     Position = position.Position;
             }
 
+            public void SetPosition(IVertexPosition3 source)
+            {
+                Position = source.Position;
+            }
+
+            public void SetPosition(Vector3 source)
+            {
+                Position = source;
+            }
+
+            public override IVertex Clone() => new VertexDataPos(Position);
+
+            IVertexPosition3 IVertexPosition3.Clone() => new VertexDataPos(Position);
+            IVertexPosition<Vector3> IVertexPosition<Vector3>.Clone() => new VertexDataPos(Position);
         }
 
         private class VertexPosNormalUVVisitor : VertexVisitor<IVertexPosNormalUV>, IVertexPosNormalUV
@@ -611,6 +680,54 @@ namespace Aximo
                     UV = uv.UV;
             }
 
+            public void Set(IVertexPosNormalUV source)
+            {
+                Position = source.Position;
+                Normal = source.Normal;
+                UV = source.UV;
+            }
+
+            public void Set(VertexDataPosNormalUV source)
+            {
+                Position = source.Position;
+                Normal = source.Normal;
+                UV = source.UV;
+            }
+
+            public void SetPosition(IVertexPosition3 source)
+            {
+                Position = source.Position;
+            }
+
+            public void SetPosition(Vector3 source)
+            {
+                Position = source;
+            }
+
+            public override IVertex Clone()
+            {
+                return new VertexDataPosNormalUV(Position, Normal, UV);
+            }
+
+            VertexDataPosNormalUV IVertexPosNormalUV.Clone()
+            {
+                return new VertexDataPosNormalUV(Position, Normal, UV);
+            }
+
+            IVertexPosition3 IVertexPosition3.Clone()
+            {
+                return new VertexDataPosNormalUV(Position, Normal, UV);
+            }
+
+            IVertexPosition<Vector3> IVertexPosition<Vector3>.Clone()
+            {
+                return new VertexDataPosNormalUV(Position, Normal, UV);
+            }
+
+            IVertexNormal IVertexNormal.Clone()
+            {
+                return new VertexDataPosNormalUV(Position, Normal, UV);
+            }
         }
 
     }

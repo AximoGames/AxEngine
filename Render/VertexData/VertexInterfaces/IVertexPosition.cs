@@ -7,5 +7,6 @@ namespace Aximo.Render
         where TVector : unmanaged
     {
         TVector Position { get; set; }
+        new IVertexPosition<TVector> Clone();
     }
 }

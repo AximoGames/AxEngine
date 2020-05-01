@@ -8,5 +8,6 @@ namespace Aximo.Render
     public interface IVertexNormal : IVertex
     {
         Vector3 Normal { get; set; }
+        new IVertexNormal Clone();
     }
 }

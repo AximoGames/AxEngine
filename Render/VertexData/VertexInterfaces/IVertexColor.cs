@@ -8,5 +8,7 @@ namespace Aximo.Render
     public interface IVertexColor : IVertex
     {
         Vector4 Color { get; set; }
+
+        new IVertexColor Clone();
     }
 }

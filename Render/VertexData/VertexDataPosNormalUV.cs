@@ -40,6 +40,54 @@ namespace Aximo.Render
         Vector3 IVertexPosition<Vector3>.Position { get => Position; set => Position = value; }
         Vector3 IVertexNormal.Normal { get => Normal; set => Normal = value; }
         Vector2 IVertexUV.UV { get => UV; set => UV = value; }
+
+        public void Set(IVertexPosNormalUV source)
+        {
+            Position = source.Position;
+            Normal = source.Normal;
+            UV = source.UV;
+        }
+        public void Set(VertexDataPosNormalUV source)
+        {
+            Position = source.Position;
+            Normal = source.Normal;
+            UV = source.UV;
+        }
+
+        public void SetPosition(IVertexPosition3 source)
+        {
+            Position = source.Position;
+        }
+        public void SetPosition(Vector3 source)
+        {
+
+            Position = source;
+        }
+
+        public VertexDataPosNormalUV Clone()
+        {
+            return new VertexDataPosNormalUV(Position, Normal, UV);
+        }
+
+        IVertexPosition3 IVertexPosition3.Clone()
+        {
+            return Clone();
+        }
+
+        IVertexPosition<Vector3> IVertexPosition<Vector3>.Clone()
+        {
+            return Clone();
+        }
+
+        IVertexNormal IVertexNormal.Clone()
+        {
+            return Clone();
+        }
+
+        IVertex IVertex.Clone()
+        {
+            return Clone();
+        }
     }
 
     public static class Operations

@@ -9,7 +9,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Render
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct VertexDataPos2UV : IVertex, IVertexPosition2, IVertexUV
+    public struct VertexDataPos2UV : IVertexPos2UV
     {
         public Vector2 Position;
         public Vector2 UV;
@@ -45,6 +45,23 @@ namespace Aximo.Render
 
         Vector2 IVertexPosition<Vector2>.Position { get => Position; set => Position = value; }
         Vector2 IVertexUV.UV { get => UV; set => UV = value; }
+
+        public void Set(IVertexPos2UV source)
+        {
+            Position = source.Position;
+            UV = source.UV;
+        }
+
+        public void Set(VertexDataPos2UV source)
+        {
+            Position = source.Position;
+            UV = source.UV;
+        }
+
+        public VertexDataPos2UV Clone() => new VertexDataPos2UV(Position, UV);
+        IVertexPosition2 IVertexPosition2.Clone() => Clone();
+        IVertexPosition<Vector2> IVertexPosition<Vector2>.Clone() => Clone();
+        IVertex IVertex.Clone() => Clone();
     }
 
     public static partial class EngineExtensions

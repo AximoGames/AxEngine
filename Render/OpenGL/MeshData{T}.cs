@@ -49,9 +49,23 @@ namespace Aximo.Render
         public void SetData(BufferData1D<T> data, BufferData1D<ushort> indicies = null)
         {
             _Data = data;
-            Indicies = indicies;
             VertexCount = data == null ? 0 : data.Length;
+
+            Indicies = indicies;
             IndiciesCount = indicies == null ? 0 : indicies.Length;
+        }
+
+        public void SetData(Mesh3 mesh)
+        {
+            _Data = new BufferData1D<T>(mesh.GetVertexArray<T>());
+            VertexCount = _Data.Length;
+
+            var indiciesArray = mesh.GetIndiciesArray<ushort>();
+            if (indiciesArray.Length > 0)
+            {
+                Indicies = new BufferData1D<ushort>(indiciesArray);
+                IndiciesCount = Indicies.Length;
+            }
         }
     }
 }

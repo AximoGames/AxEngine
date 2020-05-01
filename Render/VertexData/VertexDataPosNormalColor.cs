@@ -9,7 +9,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Render
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct VertexDataPosNormalColor : IVertex, IVertexPosition3, IVertexNormal, IVertexColor
+    public struct VertexDataPosNormalColor : IVertexPosNormalColor
     {
         public Vector3 Position;
         public Vector3 Normal;
@@ -39,6 +39,60 @@ namespace Aximo.Render
         Vector3 IVertexPosition<Vector3>.Position { get => Position; set => Position = value; }
         Vector3 IVertexNormal.Normal { get => Normal; set => Normal = value; }
         Vector4 IVertexColor.Color { get => Color; set => Color = value; }
+
+        public void SetPosition(IVertexPosition3 source)
+        {
+            Position = source.Position;
+        }
+        public void SetPosition(Vector3 source)
+        {
+
+            Position = source;
+        }
+
+        public void Set(IVertexPosNormalColor source)
+        {
+            Position = source.Position;
+            Normal = source.Normal;
+            Color = source.Color;
+        }
+
+        public void Set(VertexDataPosNormalColor source)
+        {
+            Position = source.Position;
+            Normal = source.Normal;
+            Color = source.Color;
+        }
+
+        public VertexDataPosNormalColor Clone()
+        {
+            return new VertexDataPosNormalColor(Position, Normal, Color);
+        }
+
+        IVertexPosition3 IVertexPosition3.Clone()
+        {
+            return Clone();
+        }
+
+        IVertexPosition<Vector3> IVertexPosition<Vector3>.Clone()
+        {
+            return Clone();
+        }
+
+        IVertexNormal IVertexNormal.Clone()
+        {
+            return Clone();
+        }
+
+        IVertexColor IVertexColor.Clone()
+        {
+            return Clone();
+        }
+
+        IVertex IVertex.Clone()
+        {
+            return Clone();
+        }
     }
 
     public static partial class EngineExtensions

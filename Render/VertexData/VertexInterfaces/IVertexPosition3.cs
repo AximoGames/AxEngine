@@ -7,6 +7,9 @@ namespace Aximo.Render
 {
     public interface IVertexPosition3 : IVertexPosition<Vector3>
     {
+        void SetPosition(IVertexPosition3 source);
+        void SetPosition(Vector3 source);
+        new IVertexPosition3 Clone();
     }
 
 }

@@ -5,12 +5,12 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-    public interface IVertexPosNormalUV : IVertexPosition3, IVertexNormal, IVertexUV
+    public interface IVertexPos2UV : IVertexPosition2, IVertexUV
     {
-        void Set(IVertexPosNormalUV source);
-        void Set(VertexDataPosNormalUV source);
+        void Set(IVertexPos2UV source);
+        void Set(VertexDataPos2UV source);
 
-        new VertexDataPosNormalUV Clone();
+        new VertexDataPos2UV Clone();
     }
 
 }
