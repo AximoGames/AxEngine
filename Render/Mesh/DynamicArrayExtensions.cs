@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Aximo.Engine.Mesh2
+namespace Aximo
 {
     internal static class DynamicArrayExtensions
     {

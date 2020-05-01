@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Aximo.Engine;
-using Aximo.Engine.Mesh2;
 using Aximo.Render;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
@@ -17,9 +16,9 @@ namespace Aximo.AxTests
     public class MeshTests
     {
 
-        private Engine.Mesh2.Mesh CreateEmptyMesh()
+        private Mesh3 CreateEmptyMesh()
         {
-            var tmp = new Engine.Mesh2.Mesh();
+            var tmp = new Mesh3();
 
             var compPosition = new MeshPositionComponent();
             var compNormal = new MeshNormalComponent();
@@ -32,7 +31,7 @@ namespace Aximo.AxTests
             return tmp;
         }
 
-        private Engine.Mesh2.Mesh CreateMesh()
+        private Mesh3 CreateMesh()
         {
             var data = (BufferData1D<VertexDataPosNormalUV>)MeshDataBuilder.Cube().Data;
             var span = data.Span;
@@ -67,8 +66,6 @@ namespace Aximo.AxTests
         {
             var tmp = CreateMesh();
 
-            //tmp.Visit<IVertexPosNormalUV>((m, i) => m.Position = Vector3.UnitZ);
-
             var view = tmp.View<IVertexPosition3>();
             var view2 = tmp.View<IVertexPosNormalUV>();
 
@@ -76,11 +73,6 @@ namespace Aximo.AxTests
             view[0].Position = p;
             Assert.Equal(p, view[0].Position);
             Assert.Equal(p, view2[0].Position);
-
-            // tmp.AddFace(new int[] { 0, 1, 2, 3 });
-            // var faces = tmp.FaceView<IVertexPosNormalUV>();
-            // var f = faces[0];
-            // f[0].Position = new Vector3();
         }
 
         [Fact]

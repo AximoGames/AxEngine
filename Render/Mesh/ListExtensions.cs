@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Aximo.Render;
 
-namespace Aximo.Engine
+namespace Aximo
 {
     // public class TestClass
     // {

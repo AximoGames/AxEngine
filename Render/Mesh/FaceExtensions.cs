@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Aximo.Render;
 
-namespace Aximo.Engine.Mesh2
+namespace Aximo
 {
     public static class FaceExtensions
     {

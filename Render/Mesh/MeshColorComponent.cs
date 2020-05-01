@@ -1,6 +1,6 @@
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Engine.Mesh2
+namespace Aximo
 {
     public class MeshColorComponent : MeshComponent<Vector4>
     {

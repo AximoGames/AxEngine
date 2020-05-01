@@ -1,4 +1,4 @@
-namespace Aximo.Engine.Mesh2
+namespace Aximo
 {
     public enum MeshFaceType
     {

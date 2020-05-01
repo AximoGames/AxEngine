@@ -8,10 +8,10 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-namespace Aximo.Engine.Mesh2
+namespace Aximo
 {
 
-    public class Mesh
+    public class Mesh3
     {
         public IList<MeshComponent> Components { get; private set; } = new List<MeshComponent>();
 
@@ -84,9 +84,9 @@ namespace Aximo.Engine.Mesh2
                 Indicies.Add(indicies[i]);
         }
 
-        public Mesh CloneEmpty()
+        public Mesh3 CloneEmpty()
         {
-            var mesh = new Mesh();
+            var mesh = new Mesh3();
             foreach (var c in Components)
                 AddComponent(c.CloneEmpty());
             return mesh;
@@ -96,7 +96,7 @@ namespace Aximo.Engine.Mesh2
 
         public int FaceCount => InternalMeshFaces.Count;
 
-        public Mesh ToPolygons()
+        public Mesh3 ToPolygons()
         {
             var newMesh = CloneEmpty();
             foreach (var face in InternalMeshFaces)
@@ -133,13 +133,13 @@ namespace Aximo.Engine.Mesh2
             return new FaceList<T>(this);
         }
 
-        public int AddVertex(Mesh src, int index)
+        public int AddVertex(Mesh3 src, int index)
         {
             AddVertices(src, index, 1);
             return VertexCount - 1;
         }
 
-        public void AddVertices(Mesh src, int start, int count)
+        public void AddVertices(Mesh3 src, int start, int count)
         {
             foreach (var c in Components)
             {
@@ -284,8 +284,8 @@ namespace Aximo.Engine.Mesh2
             where T : IVertex
         {
 
-            private Mesh Mesh;
-            public FaceList(Mesh mesh)
+            private Mesh3 Mesh;
+            public FaceList(Mesh3 mesh)
             {
                 Mesh = mesh;
                 VertexView = Mesh.View<T>();
@@ -403,13 +403,13 @@ namespace Aximo.Engine.Mesh2
             where T : IVertex
         {
 
-            public VertexEnumerator(Mesh mesh)
+            public VertexEnumerator(Mesh3 mesh)
             {
                 Mesh = mesh;
                 Visitor = VertexVisitor<T>.CreateVisitor(mesh);
             }
 
-            private Mesh Mesh;
+            private Mesh3 Mesh;
 
             internal VertexVisitor<T> Visitor;
 
@@ -441,7 +441,7 @@ namespace Aximo.Engine.Mesh2
         private abstract class VertexVisitor<T> : IDisposable, IVertex, IDynamicArray<T>
             where T : IVertex
         {
-            public static VertexVisitor<T> CreateVisitor(Mesh mesh)
+            public static VertexVisitor<T> CreateVisitor(Mesh3 mesh)
             {
                 var type = typeof(T);
 
@@ -454,12 +454,12 @@ namespace Aximo.Engine.Mesh2
                 throw new NotSupportedException(type.Name);
             }
 
-            internal VertexVisitor(Mesh mesh)
+            internal VertexVisitor(Mesh3 mesh)
             {
                 Mesh = mesh;
             }
 
-            protected Mesh Mesh;
+            protected Mesh3 Mesh;
             public int Index;
             public IVertex Value
             {
@@ -502,7 +502,7 @@ namespace Aximo.Engine.Mesh2
         {
             private IDynamicArray<Vector3> PositionComponent;
 
-            public VertexPosition3Visitor(Mesh mesh) : base(mesh)
+            public VertexPosition3Visitor(Mesh3 mesh) : base(mesh)
             {
                 PositionComponent = mesh.GetComponent<MeshPositionComponent>();
             }
@@ -536,7 +536,7 @@ namespace Aximo.Engine.Mesh2
             private IDynamicArray<Vector3> NormalComponent;
             private IDynamicArray<Vector2> UVComponent;
 
-            public VertexPosNormalUVVisitor(Mesh mesh) : base(mesh)
+            public VertexPosNormalUVVisitor(Mesh3 mesh) : base(mesh)
             {
                 PositionComponent = mesh.GetComponent<MeshPositionComponent>();
                 NormalComponent = mesh.GetComponent<MeshNormalComponent>();

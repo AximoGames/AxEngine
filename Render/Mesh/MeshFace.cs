@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Aximo.Render;
 
-namespace Aximo.Engine.Mesh2
+namespace Aximo
 {
     public struct MeshFace<T>
         where T : IVertex

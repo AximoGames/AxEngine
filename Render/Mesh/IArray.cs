@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Aximo.Engine.Mesh2
+namespace Aximo
 {
     public interface IArray<T>
     {

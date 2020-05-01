@@ -1,6 +1,6 @@
 using System;
 
-namespace Aximo.Engine.Mesh2
+namespace Aximo
 {
     public interface IDynamicArray<T> : IArray<T>
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Engine.Mesh2
+namespace Aximo
 {
     public class MeshComponent<T> : MeshComponent, IDynamicArray<T>
         where T : unmanaged
