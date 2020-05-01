@@ -94,6 +94,8 @@ namespace Aximo.Engine.Mesh2
 
         public int VertexCount => Components == null ? 0 : Components[0].Count;
 
+        public int FaceCount => InternalMeshFaces.Count;
+
         public Mesh ToPolygons()
         {
             var newMesh = CloneEmpty();

@@ -35,22 +35,21 @@ namespace Aximo.Engine
                 list.Add(itm);
         }
 
-        public static void AddRange<IVertexPosNormalUV>(this IList<IVertexPosNormalUV> list, ICollection<VertexDataPosNormalUV> items)
+        public static void AddRange(this IList<IVertexPosNormalUV> list, ICollection<VertexDataPosNormalUV> items)
         {
-            if (list is List<IVertexPosNormalUV> l)
+            if (list is List<IVertexPosNormalUV> _list)
             {
-                l.AddRange(items);
+                _list.AddRange(items);
                 return;
             }
 
-            IVertexPosition3 v = new VertexDataPosNormalUV();
-            IVertexPosNormalUV v2 = new VertexDataPosNormalUV();
+            foreach (var itm in items)
+                list.Add((IVertexPosNormalUV)itm);
+        }
 
-
-            // foreach (var itm in items)
-            // {
-            //     list.Add((IVertexPosNormalUV)itm);
-            // }
+        public static void AddRange(this IList<IVertexPosNormalUV> list, params VertexDataPosNormalUV[] items)
+        {
+            AddRange(list, (ICollection<VertexDataPosNormalUV>)items);
         }
     }
 

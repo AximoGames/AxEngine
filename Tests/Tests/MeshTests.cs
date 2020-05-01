@@ -92,13 +92,50 @@ namespace Aximo.AxTests
             IVertexPosNormalUV v2 = new VertexDataPosNormalUV();
 
             var view = tmp.View<IVertexPosNormalUV>();
-            view.AddRange(new VertexDataPosNormalUV[] {
+            view.AddRange(
                 new VertexDataPosNormalUV
                 {
                     Position = new Vector3(11, 12, 13),
                     Normal = Vector3.UnitZ,
                     UV = new Vector2(0, 1)
-                } });
+                }, new VertexDataPosNormalUV
+                {
+                    Position = new Vector3(21, 22, 23),
+                    Normal = Vector3.UnitZ,
+                    UV = new Vector2(0, 1)
+                }, new VertexDataPosNormalUV
+                {
+                    Position = new Vector3(31, 32, 33),
+                    Normal = Vector3.UnitZ,
+                    UV = new Vector2(0, 1)
+                }, new VertexDataPosNormalUV
+                {
+                    Position = new Vector3(41, 42, 43),
+                    Normal = Vector3.UnitZ,
+                    UV = new Vector2(0, 1)
+                }, new VertexDataPosNormalUV
+                {
+                    Position = new Vector3(51, 52, 53),
+                    Normal = Vector3.UnitZ,
+                    UV = new Vector2(0, 1)
+                }, new VertexDataPosNormalUV
+                {
+                    Position = new Vector3(61, 62, 73),
+                    Normal = Vector3.UnitZ,
+                    UV = new Vector2(0, 1)
+                });
+
+            tmp.AddFace(3, 4, 5);
+            tmp.AddFace(3, 0, 1);
+
+            var vertices = tmp.View<IVertexPosNormalUV>();
+            var faces = tmp.FaceView<IVertexPosNormalUV>();
+
+            var face = faces[0];
+            var vv = face[0];
+
+            Assert.Equal(2, faces.Count);
+            Assert.Equal(vertices[3].Position, faces[0][0].Position);
         }
     }
 
