@@ -217,6 +217,8 @@ namespace Aximo.Engine
                     RenderFrameNumber++;
 
                 RenderCounter.Tick();
+                if (RenderCounter.Elapsed.TotalMilliseconds > 30 && RenderFrameNumber > 2)
+                    Log.Warn("SLOW Render: " + RenderCounter.Elapsed.ToString());
 
                 RenderTasks.ProcessTasks();
                 BeforeRenderFrame();
@@ -333,6 +335,9 @@ namespace Aximo.Engine
                 UpdateFrameNumber++;
 
             UpdateCounter.Tick();
+            if (UpdateCounter.Elapsed.TotalMilliseconds > 30 && UpdateFrameNumber > 2)
+                Log.Warn("SLOW Update: " + UpdateCounter.Elapsed.ToString());
+
             GameContext.UpdateTime();
 
             BeforeUpdateFrame();

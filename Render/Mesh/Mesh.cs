@@ -194,7 +194,7 @@ namespace Aximo
             };
 
             // TODO: Improve. Track every matrialID.
-            MaterialCount = Math.Max(MaterialCount, materialId + 1);
+            MaterialIds.Add(materialId);
 
             InternalMeshFaces.Add(face);
             for (var i = 0; i < indicies.Length; i++)
@@ -266,6 +266,14 @@ namespace Aximo
             var faceCount = VertexCount / n;
             for (var i = 0; i < faceCount; i++)
                 AddFaceFromVerticesPosition(i * n, type);
+        }
+
+        public void SetMaterial(int faceIndex, int materialId)
+        {
+            var face = InternalMeshFaces[faceIndex];
+            face.MaterialId = materialId;
+            InternalMeshFaces[faceIndex] = face;
+            MaterialIds.Add(materialId);
         }
 
         public Mesh CloneEmpty()
@@ -520,7 +528,9 @@ namespace Aximo
             }
         }
 
-        public int MaterialCount { get; private set; } = 1;
+        public int MaterialCount => MaterialIds.Count;
+
+        public HashSet<int> MaterialIds { get; private set; } = new HashSet<int>(new int[] { 0 });
 
         public class VertexList<T> : IList<T>
             where T : IVertex

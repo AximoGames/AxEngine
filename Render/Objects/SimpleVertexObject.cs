@@ -91,12 +91,13 @@ namespace Aximo.Render
             if (Mesh.Materials.All(m => m.RenderPipeline == null))
                 UsePipeline(PrimaryRenderPipeline);
 
-            foreach (var m in Mesh.Materials)
+            foreach (var materialId in Mesh.MaterialIds)
             {
+                var m = Mesh.GetMaterial(materialId);
                 UsePipeline(m.RenderPipeline);
                 m.CreateShaders();
 
-                var data = Mesh.GetMeshData(m);
+                var data = Mesh.GetMeshData(materialId);
                 var vao = new VertexArrayObject(data.BindLayoutToShader(m.Shader));
                 vao.SetData(data);
                 vaoList.Add(new VertexArrayObjectMaterial
