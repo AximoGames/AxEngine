@@ -110,5 +110,4 @@ namespace Aximo
             return new VertexDataPos2UV(Position, UV);
         }
     }
-
 }

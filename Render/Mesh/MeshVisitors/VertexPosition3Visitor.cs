@@ -52,5 +52,4 @@ namespace Aximo
         IVertexPosition3 IVertexPosition3.Clone() => new VertexDataPos(Position);
         IVertexPosition<Vector3> IVertexPosition<Vector3>.Clone() => new VertexDataPos(Position);
     }
-
 }

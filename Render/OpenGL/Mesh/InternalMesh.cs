@@ -69,6 +69,5 @@ namespace Aximo.Render
 
             return Materials[materialId];
         }
-
     }
 }

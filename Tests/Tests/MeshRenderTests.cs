@@ -43,6 +43,5 @@ namespace Aximo.AxTests
 
             RenderAndCompare(nameof(Box));
         }
-
     }
 }

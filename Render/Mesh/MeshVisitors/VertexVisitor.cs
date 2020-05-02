@@ -76,5 +76,4 @@ namespace Aximo
 
         public abstract IVertex Clone();
     }
-
 }

@@ -142,5 +142,4 @@ namespace Aximo
             return new VertexDataPosNormalColor(Position, Normal, Color);
         }
     }
-
 }

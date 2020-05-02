@@ -115,5 +115,4 @@ namespace Aximo
             return new VertexDataPosColor(Position, Color);
         }
     }
-
 }

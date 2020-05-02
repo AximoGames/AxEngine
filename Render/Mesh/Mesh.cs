@@ -26,6 +26,14 @@ namespace Aximo
             return comp;
         }
 
+        public T AddComponent<T>()
+            where T : MeshComponent, new()
+        {
+            var comp = new T();
+            AddComponent(comp);
+            return comp;
+        }
+
         public void AddComponent(MeshComponent component)
         {
             Components.Add(component);
@@ -95,6 +103,60 @@ namespace Aximo
             }
 
             return mesh;
+        }
+
+        public Mesh Clone()
+        {
+            var newMesh = CloneEmpty();
+            newMesh.PrimitiveType = PrimitiveType;
+            var newFace = new List<int>();
+            foreach (var comp in Components)
+            {
+                var destComp = newMesh.GetComponent(comp.Type);
+                destComp.AddRange(comp, 0, comp.Count);
+            }
+            newMesh.Indicies.AddRange(Indicies);
+            newMesh.InternalMeshFaces.AddRange(InternalMeshFaces);
+            foreach (var matId in MaterialIds)
+                newMesh.MaterialIds.Add(matId);
+            return newMesh;
+        }
+
+        public void Expand()
+        {
+            ReplaceInternal(Expanded());
+        }
+
+        private void ReplaceInternal(Mesh src)
+        {
+            Components = src.Components;
+            InternalMeshFaces = src.InternalMeshFaces;
+            Indicies = src.Indicies;
+            MaterialIds = src.MaterialIds;
+            PrimitiveType = src.PrimitiveType;
+        }
+
+        public Mesh Expanded()
+        {
+            if (Indicies.Count == 0)
+                return Clone();
+
+            var newMesh = CloneEmpty();
+            newMesh.PrimitiveType = PrimitiveType;
+            var newFace = new List<int>();
+            foreach (var face in InternalMeshFaces)
+            {
+                for (var i = 0; i < face.Count; i++)
+                {
+                    newFace.Add(newMesh.AddVertex(this, Indicies[face[i]]));
+                }
+                newMesh.AddFace(newFace);
+                newFace.Clear();
+            }
+            foreach (var matId in MaterialIds)
+                newMesh.MaterialIds.Add(matId);
+
+            return newMesh;
         }
 
         public T GetComponent<T>()
@@ -264,12 +326,33 @@ namespace Aximo
             }
         }
 
-        public void CreateFaces()
+        public void CreateFacesFromIndicies()
         {
-            CreateFaces(PrimitiveType);
+            CreateFacesFromIndicies(PrimitiveType);
         }
 
-        public void CreateFaces(MeshFaceType type)
+        public void CreateFacesFromIndicies(MeshFaceType type)
+        {
+            InternalMeshFaces.Clear();
+            var n = (int)type;
+            var faceCount = Indicies.Count / n;
+            for (var i = 0; i < faceCount; i++)
+                InternalMeshFaces.Add(new InternalMeshFace()
+                {
+                    StartIndex = i * n,
+                    Count = n,
+                    MaterialId = 0,
+                });
+
+            MaterialIds.Add(0);
+        }
+
+        public void CreateFacesAndIndicies()
+        {
+            CreateFacesAndIndicies(PrimitiveType);
+        }
+
+        public void CreateFacesAndIndicies(MeshFaceType type)
         {
             Indicies.Clear();
             InternalMeshFaces.Clear();
@@ -302,6 +385,21 @@ namespace Aximo
             MaterialIds.Add(newMaterialid);
         }
 
+        public void SetNormals(IEnumerable<Vector3> normals)
+        {
+            var comp = GetComponent<MeshNormalComponent>();
+            if (comp == null)
+                comp = AddComponent<MeshNormalComponent>();
+
+            comp.Clear();
+            comp.AddRange(normals);
+        }
+
+        public void RecalculateNormals(float angle)
+        {
+            NormalSolver.RecalculateNormals(this, angle);
+        }
+
         public void AddMesh(Mesh mesh)
         {
             AddMeshInternal(mesh, -1);
@@ -320,7 +418,7 @@ namespace Aximo
         internal void AddMeshInternal(Mesh mesh, int filterMaterialId = -1, int newMaterialId = -1)
         {
             if (mesh.FaceCount == 0)
-                mesh.CreateFaces();
+                mesh.CreateFacesAndIndicies();
 
             var newFace = new List<int>();
             foreach (var face in mesh.InternalMeshFaces)
@@ -374,7 +472,7 @@ namespace Aximo
             newMesh.PrimitiveType = faceType;
 
             if (FaceCount == 0)
-                CreateFaces();
+                CreateFacesAndIndicies();
 
             var newFace = new List<int>();
             foreach (var face in InternalMeshFaces)
@@ -538,6 +636,18 @@ namespace Aximo
         public int[] GetIndiciesArray()
         {
             return Indicies.ToArray();
+        }
+
+        public int[] GetIndiciesArray(int materialId)
+        {
+            var indicies = new List<int>();
+            foreach (var face in InternalMeshFaces)
+            {
+                if (face.MaterialId == materialId)
+                    for (var i = 0; i < face.Count; i++)
+                        indicies.Add(Indicies[face[i]]);
+            }
+            return indicies.ToArray();
         }
 
         public T[] GetIndiciesArray<T>()

@@ -137,5 +137,4 @@ namespace Aximo
             return new VertexDataPosNormalUV(Position, Normal, UV);
         }
     }
-
 }

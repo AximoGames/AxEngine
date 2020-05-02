@@ -60,6 +60,8 @@ namespace Aximo
             AddRange(values.Cast<IVertex>());
         }
 
+        public void Clear() => Values.Clear();
+
         public override MeshComponent CloneEmpty() => new MeshComponent<T>(Type);
 
         public void SetLength(int length)
