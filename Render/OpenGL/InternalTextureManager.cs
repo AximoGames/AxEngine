@@ -49,7 +49,7 @@ namespace Aximo.Render
 
         public static void DumpInfo(bool listItems)
         {
-            Log.Info("Allocated Textures: {TextureCount}", InternalTextureManager.ReferencedCount());
+            Log.Info("Allocated Textures: {TextureCount}", ReferencedCount());
             if (listItems)
             {
                 lock (References)

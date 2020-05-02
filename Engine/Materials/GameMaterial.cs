@@ -167,7 +167,7 @@ namespace Aximo.Engine
             Parameter param;
             if (Parameters.TryGetValue(parameter.Name, out param))
             {
-                if (object.Equals(parameter.Value, param.Value))
+                if (Equals(parameter.Value, param.Value))
                     return;
 
                 if (parameter.Type == param.Type)

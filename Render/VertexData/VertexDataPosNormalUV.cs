@@ -106,10 +106,10 @@ namespace Aximo.Render
             IVertexPosition3 source2 = new VertexDataPosNormalColor();
             IVertexPosition3 dest2 = new VertexDataPosNormalColor();
 
-            Operations.CopyPosition(dest, ref source);
-            Operations.CopyPosition(dest2, ref source2);
-            Operations.CopyPosition(dest, ref source2);
-            Operations.CopyPosition(dest2, ref source);
+            CopyPosition(dest, ref source);
+            CopyPosition(dest2, ref source2);
+            CopyPosition(dest, ref source2);
+            CopyPosition(dest2, ref source);
         }
 
     }

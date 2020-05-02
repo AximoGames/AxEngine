@@ -15,7 +15,7 @@ namespace Aximo.Render
             get
             {
                 if (_Default == null)
-                    _Default = FrameBuffer.CreateFromHandle(0, RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
+                    _Default = CreateFromHandle(0, RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
                 return _Default;
             }
         }

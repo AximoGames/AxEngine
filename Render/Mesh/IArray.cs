@@ -15,7 +15,6 @@ namespace Aximo
 
     internal class ArrayEnumerator<T> : IEnumerator<T>
     {
-
         private IArray<T> Array;
         public ArrayEnumerator(IArray<T> array)
         {

@@ -9,7 +9,6 @@ namespace Aximo
 {
     public static class AxMath
     {
-
         /// <summary>
         /// Degrees-to-radians conversion constant
         /// </summary>

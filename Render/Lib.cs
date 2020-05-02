@@ -51,14 +51,14 @@ namespace Aximo.Render
         {
             if (data.TryGetValue(name, out object currentValue))
             {
-                if (object.Equals(value, defaultValue))
+                if (Equals(value, defaultValue))
                 {
                     data.Remove(name);
                     return true;
                 }
                 else
                 {
-                    if (object.Equals(currentValue, value))
+                    if (Equals(currentValue, value))
                         return false;
 
                     data[name] = value;
@@ -67,7 +67,7 @@ namespace Aximo.Render
             }
             else
             {
-                if (object.Equals(value, defaultValue))
+                if (Equals(value, defaultValue))
                     return false;
 
                 data.Add(name, value);

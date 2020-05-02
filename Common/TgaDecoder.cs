@@ -13,7 +13,7 @@ namespace Aximo
 {
     internal static class TgaDecoder
     {
-        protected class TgaData
+        private class TgaData
         {
             private const int TgaHeaderSize = 18;
             private int idFieldLength;

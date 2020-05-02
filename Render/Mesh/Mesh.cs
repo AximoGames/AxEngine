@@ -2,14 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenToolkit.Mathematics;
-using System.Linq;
-using Aximo.Render;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Text;
+using OpenToolkit.Mathematics;
+using Aximo.Render;
 
 namespace Aximo
 {
@@ -507,7 +507,6 @@ namespace Aximo
 
                 throw new NotSupportedException(typeof(TDestination).Name);
             }
-
         }
 
         private class FaceList<T> : IList<MeshFace<T>>
@@ -595,7 +594,6 @@ namespace Aximo
 
             private class FaceEnumerator : IEnumerator<MeshFace<T>>
             {
-
                 private FaceList<T> Faces;
                 private int Index = -1;
                 public FaceEnumerator(FaceList<T> faces)
@@ -1124,5 +1122,4 @@ namespace Aximo
         }
 
     }
-
 }
