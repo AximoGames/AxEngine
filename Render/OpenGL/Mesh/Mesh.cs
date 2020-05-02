@@ -3,20 +3,21 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aximo.Render
 {
     public abstract class Mesh
     {
         public Mesh() { }
-        public Mesh(MeshData meshData)
+        public Mesh(Mesh3 meshData)
         {
-            MeshData = meshData;
+            SetMesh(meshData);
         }
 
-        public Mesh(MeshData meshData, Material material)
+        public Mesh(Mesh3 meshData, Material material)
         {
-            MeshData = meshData;
+            SetMesh(meshData);
             if (material == null)
                 throw new InvalidOperationException();
 
@@ -43,8 +44,15 @@ namespace Aximo.Render
             }
         }
 
+        public void SetMesh(Mesh3 mesh)
+        {
+            MeshData = mesh;
+            MeshData2 = mesh.GetMeshData();
+        }
+
         public List<Material> Materials = new List<Material>();
-        public MeshData MeshData { get; private set; }
+        public Mesh3 MeshData { get; private set; }
+        internal MeshData MeshData2 { get; private set; }
 
         public int VertexCount => MeshData?.VertexCount ?? 0;
     }

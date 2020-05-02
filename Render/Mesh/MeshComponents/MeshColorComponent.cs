@@ -7,20 +7,19 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo
 {
-    public class MeshNormalComponent : MeshComponent<Vector3>
+    public class MeshColorComponent : MeshComponent<Vector4>
     {
-        public MeshNormalComponent()
-            : base(MeshComponentType.Normal)
+        public MeshColorComponent()
+            : base(MeshComponentType.Color)
         {
         }
 
-        public override MeshComponent CloneEmpty() => new MeshNormalComponent();
-
+        public override MeshComponent CloneEmpty() => new MeshColorComponent();
         public override void AddRange(IEnumerable<IVertex> values)
         {
             foreach (var v in values)
-                if (v is IVertexNormal p)
-                    Add(p.Normal);
+                if (v is IVertexColor p)
+                    Add(p.Color);
         }
     }
 }

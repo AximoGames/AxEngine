@@ -125,12 +125,6 @@ namespace Aximo.Render
             PrimitiveType = GetPrimitiveType(data.PrimitiveType);
         }
 
-        // internal void SetData(Mesh3 data)
-        // {
-        //     SetData(data.Data, data.Indicies);
-        //     PrimitiveType = GetPrimitiveType(data.PrimitiveType);
-        // }
-
         private PrimitiveType GetPrimitiveType(AxPrimitiveType primitiveType)
         {
             switch (primitiveType)

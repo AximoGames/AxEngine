@@ -20,21 +20,21 @@ namespace Aximo.Engine
         {
         }
 
-        public StaticMeshComponent(MeshData mesh)
+        public StaticMeshComponent(Mesh3 mesh)
         {
             SetMesh(mesh);
         }
 
-        public StaticMeshComponent(MeshData mesh, GameMaterial material)
+        public StaticMeshComponent(Mesh3 mesh, GameMaterial material)
         {
             SetMesh(mesh);
             Material = material;
         }
 
-        public MeshData Mesh { get; private set; }
+        public Mesh3 Mesh { get; private set; }
         private StaticMesh InternalMesh;
 
-        public void SetMesh(MeshData mesh)
+        public void SetMesh(Mesh3 mesh)
         {
             Mesh = mesh;
             UpdateMesh();

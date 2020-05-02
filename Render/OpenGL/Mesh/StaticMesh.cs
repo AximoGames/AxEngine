@@ -9,7 +9,7 @@ namespace Aximo.Render
     public class StaticMesh : Mesh
     {
         public StaticMesh() : base() { }
-        public StaticMesh(MeshData meshData) : base(meshData) { }
-        public StaticMesh(MeshData meshData, Material material) : base(meshData, material) { }
+        public StaticMesh(Mesh3 meshData) : base(meshData) { }
+        public StaticMesh(Mesh3 meshData, Material material) : base(meshData, material) { }
     }
 }

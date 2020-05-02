@@ -10,7 +10,7 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
-    internal static class DataHelper
+    public static class DataHelper
     {
         public static VertexDataPosNormalUV[] GetCube()
         {

@@ -16,7 +16,7 @@ namespace Aximo.Render.Objects.Util.IcoSphere
     public class IcoSphereMesh
     {
         public VertexDataPosNormalUV[] Vertices;
-        public ushort[] Indicies;
+        public int[] Indicies;
 
         private MeshGeometry3D geom;
 
@@ -53,7 +53,7 @@ namespace Aximo.Render.Objects.Util.IcoSphere
             var positions = geom.Positions.ToArray();
 
             var vertexSoup = new VertexSoup<VertexDataPosNormalUV>();
-            var indexList = new List<ushort>();
+            var indexList = new List<int>();
 
             // we have to process each face in the IcoSphere, so we can
             // properly "wrap" the texture-coordinates that fall across the left/right border

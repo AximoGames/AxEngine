@@ -33,8 +33,7 @@ namespace Aximo.AxTests
 
         private Mesh3 CreateMesh()
         {
-            var data = (BufferData1D<VertexDataPosNormalUV>)MeshDataBuilder.Cube().Data;
-            var span = data.Span;
+            var span = DataHelper.DefaultCube;
 
             var tmp = CreateEmptyMesh();
             var vv = tmp.View<IVertexPosNormalUV>();
@@ -48,8 +47,7 @@ namespace Aximo.AxTests
         [Fact]
         public void Test1()
         {
-            var data = (BufferData1D<VertexDataPosNormalUV>)MeshDataBuilder.Cube().Data;
-            var span = data.Span;
+            var span = DataHelper.DefaultCube;
 
             var tmp = CreateEmptyMesh();
             var vv = tmp.View<IVertexPosNormalUV>();

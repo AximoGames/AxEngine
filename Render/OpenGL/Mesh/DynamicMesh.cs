@@ -9,7 +9,7 @@ namespace Aximo.Render
     public class DynamicMesh : Mesh
     {
         public DynamicMesh() : base() { }
-        public DynamicMesh(MeshData meshData) : base(meshData) { }
-        public DynamicMesh(MeshData meshData, Material material) : base(meshData, material) { }
+        public DynamicMesh(Mesh3 meshData) : base(meshData) { }
+        public DynamicMesh(Mesh3 meshData, Material material) : base(meshData, material) { }
     }
 }

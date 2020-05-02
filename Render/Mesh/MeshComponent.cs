@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System;
+using System.Linq;
+using Aximo.Render;
 using OpenToolkit.Mathematics;
 
 namespace Aximo
@@ -8,7 +9,8 @@ namespace Aximo
     public class MeshComponent<T> : MeshComponent, IDynamicArray<T>
         where T : unmanaged
     {
-        public IList<T> Values { get; private set; } = new List<T>();
+        public List<T> _Values = new List<T>();
+        public IList<T> Values => _Values;
 
         public T this[int index]
         {
@@ -37,7 +39,23 @@ namespace Aximo
         public void AddRange(MeshComponent<T> src, int start, int count)
         {
             for (var i = start; i < count; i++)
-                Values.Add(src.Values[i]);
+                _Values.Add(src.Values[i]);
+        }
+
+        public void AddRange(IEnumerable<T> values)
+        {
+            _Values.AddRange(values);
+        }
+
+        public virtual void AddRange(IEnumerable<IVertex> values)
+        {
+            throw new NotSupportedException(values.GetType().Name);
+        }
+
+        public void AddRange<TVertex>(IEnumerable<TVertex> values)
+            where TVertex : IVertex
+        {
+            AddRange(values.Cast<IVertex>());
         }
 
         public override MeshComponent CloneEmpty() => new MeshComponent<T>(Type);

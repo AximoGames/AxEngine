@@ -13,6 +13,8 @@ namespace Aximo
 
     public class Mesh3
     {
+        public AxPrimitiveType PrimitiveType = AxPrimitiveType.Triangles;
+
         public IList<MeshComponent> Components { get; private set; } = new List<MeshComponent>();
 
         public MeshComponent AddComponent(MeshComponentType componentType)
@@ -25,6 +27,51 @@ namespace Aximo
         public void AddComponent(MeshComponent component)
         {
             Components.Add(component);
+        }
+
+        public void AddComponents<T>()
+            where T : IVertex
+        {
+            var type = typeof(T);
+            if (typeof(IVertexPosition3).IsAssignableFrom(type))
+            {
+                AddComponent(new MeshPositionComponent());
+            }
+            if (typeof(IVertexPosition2).IsAssignableFrom(type))
+            {
+                AddComponent(new MeshPosition2Component());
+            }
+            if (typeof(IVertexNormal).IsAssignableFrom(type))
+            {
+                AddComponent(new MeshNormalComponent());
+            }
+            if (typeof(IVertexUV).IsAssignableFrom(type))
+            {
+                AddComponent(new MeshUVComponent());
+            }
+            if (typeof(IVertexColor).IsAssignableFrom(type))
+            {
+                AddComponent(new MeshColorComponent());
+            }
+        }
+
+        // public static void CreateFromVertices<VertexDataPosNormalColor>()
+        // {
+        // }
+
+        // public static void CreateFromVertices(VertexDataPos2UV[] vertices)
+        // {
+        // }
+
+        public static Mesh3 CreateFromVertices<T>(T[] vertices, int[] indicies = null, AxPrimitiveType primitiveType = AxPrimitiveType.Triangles)
+            where T : IVertex
+        {
+            var mesh = new Mesh3();
+            mesh.PrimitiveType = primitiveType;
+            mesh.AddComponents<T>();
+            mesh.AddVertices(vertices);
+            // TODO: Set indicies
+            return mesh;
         }
 
         public T GetComponent<T>()
@@ -51,6 +98,47 @@ namespace Aximo
                 if (comp.Type == componentType)
                     return comp;
             return null;
+        }
+
+        public bool HasComponent<T>()
+            where T : MeshComponent
+        {
+            return GetComponent<T>() != null;
+        }
+
+        public bool HasComponent(MeshComponentType componentType)
+        {
+            return GetComponent(componentType) != null;
+        }
+
+        public bool HasComponents<T1, T2>()
+            where T1 : MeshComponent
+            where T2 : MeshComponent
+        {
+            return HasComponent<T1>() && HasComponent<T2>();
+        }
+
+        public bool HasComponents<T1, T2, T3>()
+            where T1 : MeshComponent
+            where T2 : MeshComponent
+            where T3 : MeshComponent
+        {
+            return HasComponent<T1>() && HasComponent<T2>() && HasComponent<T3>();
+        }
+
+        public bool IsComponents<T1, T2>()
+            where T1 : MeshComponent
+            where T2 : MeshComponent
+        {
+            return Components.Count == 2 && HasComponents<T1, T1>();
+        }
+
+        public bool IsComponents<T1, T2, T3>()
+            where T1 : MeshComponent
+            where T2 : MeshComponent
+            where T3 : MeshComponent
+        {
+            return Components.Count == 3 && HasComponents<T1, T1, T3>();
         }
 
         internal IList<InternalMeshFace> InternalMeshFaces = new List<InternalMeshFace>();
@@ -151,6 +239,28 @@ namespace Aximo
             }
         }
 
+        public void AddVertices<T>(ICollection<T> values)
+            where T : IVertex
+        {
+            var type = typeof(T);
+            if (type.IsInterface)
+            {
+                View<T>().AddRange(values);
+                return;
+            }
+
+            if (typeof(IVertexPosition3).IsAssignableFrom(type))
+                GetComponent<MeshPositionComponent>()?.AddRange(values);
+            if (typeof(IVertexPosition2).IsAssignableFrom(type))
+                GetComponent<MeshPosition2Component>()?.AddRange(values);
+            if (typeof(IVertexNormal).IsAssignableFrom(type))
+                GetComponent<MeshNormalComponent>()?.AddRange(values);
+            if (typeof(IVertexUV).IsAssignableFrom(type))
+                GetComponent<MeshUVComponent>()?.AddRange(values);
+            if (typeof(IVertexColor).IsAssignableFrom(type))
+                GetComponent<MeshColorComponent>()?.AddRange(values);
+        }
+
         public MeshData<T> ToMeshData<T>()
             where T : struct, IVertex
         {
@@ -209,6 +319,8 @@ namespace Aximo
                 return View<IVertexPosNormalUV>().ToArray<T>();
             if (typeof(T) == typeof(VertexDataPosNormalColor))
                 return View<IVertexPosNormalColor>().ToArray<T>();
+            if (typeof(T) == typeof(VertexDataPos2UV))
+                return View<IVertexPos2UV>().ToArray<T>();
 
             throw new NotSupportedException(typeof(T).Name);
         }
@@ -222,6 +334,43 @@ namespace Aximo
             where T : unmanaged
         {
             return GetIndiciesArray().Cast<T>().ToArray();
+        }
+
+        public BufferData1D<T> GetIndiciesBuffer<T>()
+            where T : unmanaged
+        {
+            if (Indicies.Count == 0)
+                return null;
+            return new BufferData1D<T>(GetIndiciesArray<T>());
+        }
+
+        public bool IsCompatible<T>()
+        where T : IVertex
+        {
+            if (typeof(T) == typeof(IVertexPosNormalUV))
+                return IsComponents<MeshPositionComponent, MeshNormalComponent, MeshUVComponent>();
+            if (typeof(T) == typeof(IVertexPosNormalColor))
+                return IsComponents<MeshPositionComponent, MeshNormalComponent, MeshColorComponent>();
+            if (typeof(T) == typeof(IVertexPosColor))
+                return IsComponents<MeshPositionComponent, MeshColorComponent>();
+            if (typeof(T) == typeof(IVertexPos2UV))
+                return IsComponents<MeshPosition2Component, MeshUVComponent>();
+
+            return false;
+        }
+
+        public MeshData GetMeshData()
+        {
+            if (IsCompatible<IVertexPosNormalUV>())
+                return new MeshData<VertexDataPosNormalUV>(View<IVertexPosNormalUV>().ToBuffer<VertexDataPosNormalUV>(), GetIndiciesBuffer<ushort>(), PrimitiveType);
+            if (IsCompatible<IVertexPosNormalColor>())
+                return new MeshData<VertexDataPosNormalColor>(View<IVertexPosNormalColor>().ToBuffer<VertexDataPosNormalColor>(), GetIndiciesBuffer<ushort>(), PrimitiveType);
+            if (IsCompatible<IVertexPosColor>())
+                return new MeshData<VertexDataPosColor>(View<IVertexPosColor>().ToBuffer<VertexDataPosColor>(), GetIndiciesBuffer<ushort>(), PrimitiveType);
+            if (IsCompatible<IVertexPos2UV>())
+                return new MeshData<VertexDataPos2UV>(View<IVertexPos2UV>().ToBuffer<VertexDataPos2UV>(), GetIndiciesBuffer<ushort>(), PrimitiveType);
+
+            throw new NotSupportedException();
         }
 
         public class VertexList<T> : IList<T>
@@ -308,6 +457,16 @@ namespace Aximo
                 return array;
             }
 
+            public BufferData1D<T> ToBuffer()
+            {
+                return new BufferData1D<T>(ToArray());
+            }
+
+            public BufferData1D<TDestination> ToBuffer<TDestination>()
+            {
+                return new BufferData1D<TDestination>(ToArray<TDestination>());
+            }
+
             public TDestination[] ToArray<TDestination>()
             {
                 if (typeof(TDestination) == typeof(T))
@@ -326,6 +485,22 @@ namespace Aximo
                     var array = new VertexDataPosNormalColor[Count];
                     for (var i = 0; i < Count; i++)
                         array[i].Set((IVertexPosNormalColor)this[i]);
+                    return (TDestination[])(object)array;
+                }
+
+                if (typeof(TDestination) == typeof(VertexDataPosColor))
+                {
+                    var array = new VertexDataPosColor[Count];
+                    for (var i = 0; i < Count; i++)
+                        array[i].Set((IVertexPosColor)this[i]);
+                    return (TDestination[])(object)array;
+                }
+
+                if (typeof(TDestination) == typeof(VertexDataPos2UV))
+                {
+                    var array = new VertexDataPos2UV[Count];
+                    for (var i = 0; i < Count; i++)
+                        array[i].Set((IVertexPos2UV)this[i]);
                     return (TDestination[])(object)array;
                 }
 
@@ -504,6 +679,12 @@ namespace Aximo
 
                 if (type == typeof(IVertexPosNormalUV))
                     return (VertexVisitor<T>)(object)new VertexPosNormalUVVisitor(mesh);
+
+                if (type == typeof(IVertexPosColor))
+                    return (VertexVisitor<T>)(object)new VertexPosColorVisitor(mesh);
+
+                if (type == typeof(IVertexPos2UV))
+                    return (VertexVisitor<T>)(object)new VertexPos2UVVisitor(mesh);
 
                 throw new NotSupportedException(type.Name);
             }
@@ -727,6 +908,219 @@ namespace Aximo
             IVertexNormal IVertexNormal.Clone()
             {
                 return new VertexDataPosNormalUV(Position, Normal, UV);
+            }
+        }
+
+        private class VertexPosColorVisitor : VertexVisitor<IVertexPosColor>, IVertexPosColor
+        {
+            private IDynamicArray<Vector3> PositionComponent;
+            private IDynamicArray<Vector4> ColorComponent;
+
+            public VertexPosColorVisitor(Mesh3 mesh) : base(mesh)
+            {
+                PositionComponent = mesh.GetComponent<MeshPositionComponent>();
+                ColorComponent = mesh.GetComponent<MeshColorComponent>();
+            }
+
+            public Vector3 Position
+            {
+                get
+                {
+                    EnsureSize();
+                    return PositionComponent[Index];
+                }
+
+                set
+                {
+                    EnsureSize();
+                    PositionComponent[Index] = value;
+                }
+            }
+
+            public Vector4 Color
+            {
+                get
+                {
+                    EnsureSize();
+                    return ColorComponent[Index];
+                }
+
+                set
+                {
+                    EnsureSize();
+                    ColorComponent[Index] = value;
+                }
+            }
+
+            public override void SetLength(int length)
+            {
+                PositionComponent.SetLength(length);
+                ColorComponent.SetLength(length);
+            }
+
+            private void EnsureSize()
+            {
+                SetLength(Index + 1);
+            }
+
+            protected override void Set(IVertex vertex)
+            {
+                EnsureSize();
+                if (vertex is IVertexPosition3 position)
+                    Position = position.Position;
+                if (vertex is IVertexColor color)
+                    Color = color.Color;
+            }
+
+            public void Set(IVertexPosColor source)
+            {
+                Position = source.Position;
+                Color = source.Color;
+            }
+
+            public void Set(VertexDataPosColor source)
+            {
+                Position = source.Position;
+                Color = source.Color;
+            }
+
+            public void SetPosition(IVertexPosition3 source)
+            {
+                Position = source.Position;
+            }
+
+            public void SetPosition(Vector3 source)
+            {
+                Position = source;
+            }
+
+            public override IVertex Clone()
+            {
+                return new VertexDataPosColor(Position, Color);
+            }
+
+            VertexDataPosColor IVertexPosColor.Clone()
+            {
+                return new VertexDataPosColor(Position, Color);
+            }
+
+            IVertexPosition3 IVertexPosition3.Clone()
+            {
+                return new VertexDataPosColor(Position, Color);
+            }
+
+            IVertexPosition<Vector3> IVertexPosition<Vector3>.Clone()
+            {
+                return new VertexDataPosColor(Position, Color);
+            }
+
+            IVertexColor IVertexColor.Clone()
+            {
+                return new VertexDataPosColor(Position, Color);
+            }
+        }
+
+        private class VertexPos2UVVisitor : VertexVisitor<IVertexPos2UV>, IVertexPos2UV
+        {
+            private IDynamicArray<Vector2> PositionComponent;
+            private IDynamicArray<Vector2> UVComponent;
+
+            public VertexPos2UVVisitor(Mesh3 mesh) : base(mesh)
+            {
+                PositionComponent = mesh.GetComponent<MeshPosition2Component>();
+                UVComponent = mesh.GetComponent<MeshUVComponent>();
+            }
+
+            public Vector2 Position
+            {
+                get
+                {
+                    EnsureSize();
+                    return PositionComponent[Index];
+                }
+
+                set
+                {
+                    EnsureSize();
+                    PositionComponent[Index] = value;
+                }
+            }
+
+            public Vector2 UV
+            {
+                get
+                {
+                    EnsureSize();
+                    return UVComponent[Index];
+                }
+
+                set
+                {
+                    EnsureSize();
+                    UVComponent[Index] = value;
+                }
+            }
+
+            public override void SetLength(int length)
+            {
+                PositionComponent.SetLength(length);
+                UVComponent.SetLength(length);
+            }
+
+            private void EnsureSize()
+            {
+                SetLength(Index + 1);
+            }
+
+            protected override void Set(IVertex vertex)
+            {
+                EnsureSize();
+                if (vertex is IVertexPosition2 position)
+                    Position = position.Position;
+                if (vertex is IVertexUV color)
+                    UV = color.UV;
+            }
+
+            public void Set(IVertexPos2UV source)
+            {
+                Position = source.Position;
+                UV = source.UV;
+            }
+
+            public void Set(VertexDataPos2UV source)
+            {
+                Position = source.Position;
+                UV = source.UV;
+            }
+
+            public void SetPosition(IVertexPosition2 source)
+            {
+                Position = source.Position;
+            }
+
+            public void SetPosition(Vector2 source)
+            {
+                Position = source;
+            }
+
+            public override IVertex Clone()
+            {
+                return new VertexDataPos2UV(Position, UV);
+            }
+
+            IVertexPosition2 IVertexPosition2.Clone()
+            {
+                return new VertexDataPos2UV(Position, UV);
+            }
+
+            IVertexPosition<Vector2> IVertexPosition<Vector2>.Clone()
+            {
+                return new VertexDataPos2UV(Position, UV);
+            }
+
+            VertexDataPos2UV IVertexPos2UV.Clone()
+            {
+                return new VertexDataPos2UV(Position, UV);
             }
         }
 
