@@ -56,7 +56,7 @@ namespace Aximo.Render
 
         public bool Debug;
 
-        private Mesh Mesh;
+        private InternalMesh Mesh;
 
         private List<VertexArrayObjectMaterial> vaoList = new List<VertexArrayObjectMaterial>();
 
@@ -106,7 +106,7 @@ namespace Aximo.Render
             }
         }
 
-        public void SetVertices(Mesh mesh)
+        public void SetVertices(InternalMesh mesh)
         {
             Mesh = mesh;
         }

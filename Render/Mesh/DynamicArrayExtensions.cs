@@ -1,3 +1,6 @@
+// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Linq;
 
@@ -5,13 +8,13 @@ namespace Aximo
 {
     internal static class DynamicArrayExtensions
     {
-        static internal void SetValueWithExpand<T>(this IDynamicArray<T> array, int index, T value)
+        internal static void SetValueWithExpand<T>(this IDynamicArray<T> array, int index, T value)
         {
             array.SetLength(index + 1);
             array[index] = value;
         }
 
-        static internal T GetValueWithExpand<T>(this IDynamicArray<T> array, int index)
+        internal static T GetValueWithExpand<T>(this IDynamicArray<T> array, int index)
         {
             array.SetLength(index + 1);
             return array[index];
@@ -40,7 +43,5 @@ namespace Aximo
         {
             throw new NotImplementedException();
         }
-
     }
-
 }

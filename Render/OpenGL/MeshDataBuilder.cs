@@ -9,33 +9,33 @@ namespace Aximo.Render
 {
     public static class MeshDataBuilder
     {
-        public static Mesh3 Cube()
+        public static Mesh Cube()
         {
-            return Mesh3.CreateFromVertices(DataHelper.DefaultCube);
+            return Mesh.CreateFromVertices(DataHelper.DefaultCube);
         }
 
-        public static Mesh3 DebugCube()
+        public static Mesh DebugCube()
         {
-            return Mesh3.CreateFromVertices(DataHelper.DefaultDebugCube);
+            return Mesh.CreateFromVertices(DataHelper.DefaultDebugCube);
         }
 
-        public static Mesh3 Quad()
+        public static Mesh Quad()
         {
-            return Mesh3.CreateFromVertices(DataHelper.QuadInvertedUV);
+            return Mesh.CreateFromVertices(DataHelper.QuadInvertedUV);
         }
 
-        public static Mesh3 Sphere(int divisions)
+        public static Mesh Sphere(int divisions)
         {
             var ico = new Objects.Util.IcoSphere.IcoSphereMesh(2);
-            return Mesh3.CreateFromVertices(ico.Vertices, ico.Indicies);
+            return Mesh.CreateFromVertices(ico.Vertices, ico.Indicies);
         }
 
-        public static Mesh3 CrossLine()
+        public static Mesh CrossLine()
         {
-            return Mesh3.CreateFromVertices(DataHelper.Cross, null, AxPrimitiveType.Lines);
+            return Mesh.CreateFromVertices(DataHelper.Cross, null, AxPrimitiveType.Lines);
         }
 
-        public static Mesh3 Grid(int size, bool center)
+        public static Mesh Grid(int size, bool center)
         {
             var vertices = new List<VertexDataPosColor>();
 
@@ -69,17 +69,17 @@ namespace Aximo.Render
                 vertices.Add(new Vector3(i, endPos, 0), color);
             }
 
-            return Mesh3.CreateFromVertices(vertices.ToArray(), null, AxPrimitiveType.Lines);
+            return Mesh.CreateFromVertices(vertices.ToArray(), null, AxPrimitiveType.Lines);
         }
 
-        public static Mesh3 Line(Vector3 start, Vector3 end, Vector4 colorStart, Vector4 colorEnd)
+        public static Mesh Line(Vector3 start, Vector3 end, Vector4 colorStart, Vector4 colorEnd)
         {
             var vertices = new List<VertexDataPosColor>();
 
             vertices.Add(start, colorStart);
             vertices.Add(end, colorEnd);
 
-            return Mesh3.CreateFromVertices(vertices.ToArray(), null, AxPrimitiveType.Lines);
+            return Mesh.CreateFromVertices(vertices.ToArray(), null, AxPrimitiveType.Lines);
         }
     }
 }

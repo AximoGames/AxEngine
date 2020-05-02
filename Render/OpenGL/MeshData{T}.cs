@@ -55,7 +55,7 @@ namespace Aximo.Render
             IndiciesCount = indicies == null ? 0 : indicies.Length;
         }
 
-        public void SetData(Mesh3 mesh)
+        public void SetData(Mesh mesh)
         {
             _Data = new BufferData1D<T>(mesh.GetVertexArray<T>());
             VertexCount = _Data.Length;

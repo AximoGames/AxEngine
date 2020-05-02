@@ -6,10 +6,10 @@ using System.Collections.Generic;
 
 namespace Aximo.Render
 {
-    public class DynamicMesh : Mesh
+    public class DynamicInternalMesh : InternalMesh
     {
-        public DynamicMesh() : base() { }
-        public DynamicMesh(Mesh3 meshData) : base(meshData) { }
-        public DynamicMesh(Mesh3 meshData, Material material) : base(meshData, material) { }
+        public DynamicInternalMesh() : base() { }
+        public DynamicInternalMesh(Mesh meshData) : base(meshData) { }
+        public DynamicInternalMesh(Mesh meshData, Material material) : base(meshData, material) { }
     }
 }

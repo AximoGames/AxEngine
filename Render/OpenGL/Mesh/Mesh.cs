@@ -7,15 +7,15 @@ using System.Linq;
 
 namespace Aximo.Render
 {
-    public abstract class Mesh
+    public abstract class InternalMesh
     {
-        public Mesh() { }
-        public Mesh(Mesh3 meshData)
+        public InternalMesh() { }
+        public InternalMesh(Mesh meshData)
         {
             SetMesh(meshData);
         }
 
-        public Mesh(Mesh3 meshData, Material material)
+        public InternalMesh(Mesh meshData, Material material)
         {
             SetMesh(meshData);
             if (material == null)
@@ -44,14 +44,14 @@ namespace Aximo.Render
             }
         }
 
-        public void SetMesh(Mesh3 mesh)
+        public void SetMesh(Mesh mesh)
         {
             MeshData = mesh;
             MeshData2 = mesh.GetMeshData();
         }
 
         public List<Material> Materials = new List<Material>();
-        public Mesh3 MeshData { get; private set; }
+        public Mesh MeshData { get; private set; }
         internal MeshData MeshData2 { get; private set; }
 
         public int VertexCount => MeshData?.VertexCount ?? 0;

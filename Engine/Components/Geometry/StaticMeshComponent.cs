@@ -20,21 +20,21 @@ namespace Aximo.Engine
         {
         }
 
-        public StaticMeshComponent(Mesh3 mesh)
+        public StaticMeshComponent(Mesh mesh)
         {
             SetMesh(mesh);
         }
 
-        public StaticMeshComponent(Mesh3 mesh, GameMaterial material)
+        public StaticMeshComponent(Mesh mesh, GameMaterial material)
         {
             SetMesh(mesh);
             Material = material;
         }
 
-        public Mesh3 Mesh { get; private set; }
-        private StaticMesh InternalMesh;
+        public Mesh Mesh { get; private set; }
+        private StaticInternalMesh InternalMesh;
 
-        public void SetMesh(Mesh3 mesh)
+        public void SetMesh(Mesh mesh)
         {
             Mesh = mesh;
             UpdateMesh();
@@ -87,7 +87,7 @@ namespace Aximo.Engine
             {
                 if (InternalMesh == null)
                 {
-                    InternalMesh = new StaticMesh(Mesh);
+                    InternalMesh = new StaticInternalMesh(Mesh);
                     obj.Name = Name;
                 }
                 InternalMesh.Materials.Clear();

@@ -16,9 +16,9 @@ namespace Aximo.AxTests
     public class MeshTests
     {
 
-        private Mesh3 CreateEmptyMesh()
+        private Mesh CreateEmptyMesh()
         {
-            var tmp = new Mesh3();
+            var tmp = new Mesh();
 
             var compPosition = new MeshPositionComponent();
             var compNormal = new MeshNormalComponent();
@@ -31,7 +31,7 @@ namespace Aximo.AxTests
             return tmp;
         }
 
-        private Mesh3 CreateMesh()
+        private Mesh CreateMesh()
         {
             var span = DataHelper.DefaultCube;
 
@@ -130,5 +130,4 @@ namespace Aximo.AxTests
             Assert.Equal(faces[1][0].Position, faces[0][0].Position);
         }
     }
-
 }
