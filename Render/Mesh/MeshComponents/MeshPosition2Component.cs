@@ -15,7 +15,7 @@ namespace Aximo
         {
         }
 
-        public override MeshComponent CloneEmpty() => new MeshPositionComponent();
+        public override MeshComponent CloneEmpty() => new MeshPosition2Component();
 
         public MeshPosition2Component(ICollection<IVertexPosition2> values)
             : this()

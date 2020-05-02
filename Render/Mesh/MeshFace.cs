@@ -49,5 +49,7 @@ namespace Aximo
         public int GetIndex(int index) => Indicies[InternalFace[index]];
 
         public T this[int index] => VertexView[GetIndex(index)];
+
+        public int MaterialId => InternalFace.MaterialId;
     }
 }

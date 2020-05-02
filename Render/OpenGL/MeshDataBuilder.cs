@@ -32,7 +32,7 @@ namespace Aximo.Render
 
         public static Mesh CrossLine()
         {
-            return Mesh.CreateFromVertices(DataHelper.Cross, null, AxPrimitiveType.Lines);
+            return Mesh.CreateFromVertices(DataHelper.Cross, null, MeshFaceType.Line);
         }
 
         public static Mesh Grid(int size, bool center)
@@ -69,7 +69,7 @@ namespace Aximo.Render
                 vertices.Add(new Vector3(i, endPos, 0), color);
             }
 
-            return Mesh.CreateFromVertices(vertices.ToArray(), null, AxPrimitiveType.Lines);
+            return Mesh.CreateFromVertices(vertices.ToArray(), null, MeshFaceType.Line);
         }
 
         public static Mesh Line(Vector3 start, Vector3 end, Vector4 colorStart, Vector4 colorEnd)
@@ -79,7 +79,7 @@ namespace Aximo.Render
             vertices.Add(start, colorStart);
             vertices.Add(end, colorEnd);
 
-            return Mesh.CreateFromVertices(vertices.ToArray(), null, AxPrimitiveType.Lines);
+            return Mesh.CreateFromVertices(vertices.ToArray(), null, MeshFaceType.Line);
         }
     }
 }

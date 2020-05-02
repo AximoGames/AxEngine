@@ -15,7 +15,7 @@ namespace Aximo
 {
     public class Mesh
     {
-        public AxPrimitiveType PrimitiveType = AxPrimitiveType.Triangles;
+        public MeshFaceType PrimitiveType = MeshFaceType.Triangle;
 
         public IList<MeshComponent> Components { get; private set; } = new List<MeshComponent>();
 
@@ -65,7 +65,7 @@ namespace Aximo
         // {
         // }
 
-        public static Mesh CreateFromVertices<T>(T[] vertices, int[] indicies = null, AxPrimitiveType primitiveType = AxPrimitiveType.Triangles)
+        public static Mesh CreateFromVertices<T>(T[] vertices, int[] indicies = null, MeshFaceType primitiveType = MeshFaceType.Triangle)
             where T : IVertex
         {
             var mesh = new Mesh();
@@ -184,11 +184,95 @@ namespace Aximo
                 Indicies.Add(indicies[i]);
         }
 
+        public void AddFaceAndMaterial(int materialId, params int[] indicies)
+        {
+            var face = new InternalMeshFace()
+            {
+                StartIndex = Indicies.Count,
+                Count = indicies.Length,
+                MaterialId = materialId,
+            };
+
+            // TODO: Improve. Track every matrialID.
+            MaterialCount = Math.Max(MaterialCount, materialId + 1);
+
+            InternalMeshFaces.Add(face);
+            for (var i = 0; i < indicies.Length; i++)
+                Indicies.Add(indicies[i]);
+        }
+
+        public void AddFaceFromVerticesTail()
+        {
+            AddFaceFromVerticesTail(PrimitiveType);
+        }
+
+        public void AddFaceFromVerticesTail(MeshFaceType faceType)
+        {
+            switch (faceType)
+            {
+                case MeshFaceType.Point:
+                    AddFaceFromVerticesPosition(VertexCount - 1, faceType);
+                    break;
+                case MeshFaceType.Line:
+                    AddFaceFromVerticesPosition(VertexCount - 2, faceType);
+                    break;
+                case MeshFaceType.Triangle:
+                    AddFaceFromVerticesPosition(VertexCount - 3, faceType);
+                    break;
+                case MeshFaceType.Quad:
+                    AddFaceFromVerticesPosition(VertexCount - 4, faceType);
+                    break;
+                default:
+                    throw new NotSupportedException(PrimitiveType.ToString());
+            }
+        }
+
+        public void AddFaceFromVerticesPosition(int vertexStartIndex)
+        {
+            AddFaceFromVerticesPosition(vertexStartIndex, PrimitiveType);
+        }
+
+        public void AddFaceFromVerticesPosition(int vertexStartIndex, MeshFaceType faceType)
+        {
+            switch (faceType)
+            {
+                case MeshFaceType.Point:
+                    AddFace(vertexStartIndex);
+                    break;
+                case MeshFaceType.Line:
+                    AddFace(vertexStartIndex, vertexStartIndex + 1);
+                    break;
+                case MeshFaceType.Triangle:
+                    AddFace(vertexStartIndex, vertexStartIndex + 1, vertexStartIndex + 2);
+                    break;
+                case MeshFaceType.Quad:
+                    AddFace(vertexStartIndex, vertexStartIndex + 1, vertexStartIndex + 2, vertexStartIndex + 3);
+                    break;
+                default:
+                    throw new NotSupportedException(PrimitiveType.ToString());
+            }
+        }
+
+        public void CreateFaces()
+        {
+            CreateFaces(PrimitiveType);
+        }
+
+        public void CreateFaces(MeshFaceType type)
+        {
+            Indicies.Clear();
+            InternalMeshFaces.Clear();
+            var n = (int)type;
+            var faceCount = VertexCount / n;
+            for (var i = 0; i < faceCount; i++)
+                AddFaceFromVerticesPosition(i * n, type);
+        }
+
         public Mesh CloneEmpty()
         {
             var mesh = new Mesh();
             foreach (var c in Components)
-                AddComponent(c.CloneEmpty());
+                mesh.AddComponent(c.CloneEmpty());
             return mesh;
         }
 
@@ -196,33 +280,64 @@ namespace Aximo
 
         public int FaceCount => InternalMeshFaces.Count;
 
-        public Mesh ToPolygons()
+        public Mesh ToPrimitive()
+        {
+            return ToPrimitive(PrimitiveType, 0);
+        }
+
+        public Mesh ToPrimitive(MeshFaceType faceType, int materialId)
         {
             var newMesh = CloneEmpty();
+            newMesh.PrimitiveType = faceType;
+
+            if (FaceCount == 0)
+                CreateFaces();
+
+            var newFace = new List<int>();
             foreach (var face in InternalMeshFaces)
             {
-                var newFace = new List<int>();
-                if (face.IsTriangle)
+                if (face.MaterialId != materialId)
+                    continue;
+
+                if (face.IsPoint && faceType == MeshFaceType.Point)
                 {
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[0]]));
-                    newFace.Add(newMesh.AddVertex(this, Indicies[face[1]]));
-                    newFace.Add(newMesh.AddVertex(this, Indicies[face[2]]));
+                    newMesh.AddFace(newFace);
+                    newFace.Clear();
                 }
-                else if (face.IsQuad)
+                else if (face.IsLine && faceType == MeshFaceType.Line)
+                {
+                    newFace.Add(newMesh.AddVertex(this, Indicies[face[0]]));
+                    newFace.Add(newMesh.AddVertex(this, Indicies[face[1]]));
+                    newMesh.AddFace(newFace);
+                    newFace.Clear();
+                }
+                else if (face.IsTriangle && faceType == MeshFaceType.Triangle)
                 {
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[0]]));
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[1]]));
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[2]]));
+                    newMesh.AddFace(newFace);
+                    newFace.Clear();
+                }
+                else if (face.IsQuad && (faceType == MeshFaceType.Triangle))
+                {
+                    newFace.Add(newMesh.AddVertex(this, Indicies[face[0]]));
+                    newFace.Add(newMesh.AddVertex(this, Indicies[face[1]]));
+                    newFace.Add(newMesh.AddVertex(this, Indicies[face[2]]));
+                    newMesh.AddFace(newFace);
+                    newFace.Clear();
 
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[2]]));
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[3]]));
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[1]]));
+                    newMesh.AddFace(newFace);
+                    newFace.Clear();
                 }
                 else
                 {
-                    throw new NotSupportedException();
+                    throw new NotSupportedException(face.Type.ToString());
                 }
-                newMesh.AddFace(newFace);
             }
             return newMesh;
         }
@@ -276,7 +391,7 @@ namespace Aximo
         public MeshData<T> ToMeshData<T>()
             where T : struct, IVertex
         {
-            var polyMesh = ToPolygons();
+            var polyMesh = ToPrimitive();
             var data = new T[polyMesh.VertexCount];
             for (var i = 0; i < polyMesh.VertexCount; i++)
                 data[i] = polyMesh.ToMeshData<T>(i);
@@ -371,19 +486,41 @@ namespace Aximo
             return false;
         }
 
-        public MeshData GetMeshData()
+        public MeshData GetMeshData(int materialId)
+        {
+            //return ToPolygons().GetMeshData();
+            return ToPrimitive(PrimitiveType, materialId).GetMeshData();
+            //return GetMeshData();
+        }
+
+        private MeshData GetMeshData()
         {
             if (IsCompatible<IVertexPosNormalUV>())
-                return new MeshData<VertexDataPosNormalUV>(View<IVertexPosNormalUV>().ToBuffer<VertexDataPosNormalUV>(), GetIndiciesBuffer<ushort>(), PrimitiveType);
+                return new MeshData<VertexDataPosNormalUV>(View<IVertexPosNormalUV>().ToBuffer<VertexDataPosNormalUV>(), GetIndiciesBuffer<ushort>(), GetPrimitiveType());
             if (IsCompatible<IVertexPosNormalColor>())
-                return new MeshData<VertexDataPosNormalColor>(View<IVertexPosNormalColor>().ToBuffer<VertexDataPosNormalColor>(), GetIndiciesBuffer<ushort>(), PrimitiveType);
+                return new MeshData<VertexDataPosNormalColor>(View<IVertexPosNormalColor>().ToBuffer<VertexDataPosNormalColor>(), GetIndiciesBuffer<ushort>(), GetPrimitiveType());
             if (IsCompatible<IVertexPosColor>())
-                return new MeshData<VertexDataPosColor>(View<IVertexPosColor>().ToBuffer<VertexDataPosColor>(), GetIndiciesBuffer<ushort>(), PrimitiveType);
+                return new MeshData<VertexDataPosColor>(View<IVertexPosColor>().ToBuffer<VertexDataPosColor>(), GetIndiciesBuffer<ushort>(), GetPrimitiveType());
             if (IsCompatible<IVertexPos2UV>())
-                return new MeshData<VertexDataPos2UV>(View<IVertexPos2UV>().ToBuffer<VertexDataPos2UV>(), GetIndiciesBuffer<ushort>(), PrimitiveType);
+                return new MeshData<VertexDataPos2UV>(View<IVertexPos2UV>().ToBuffer<VertexDataPos2UV>(), GetIndiciesBuffer<ushort>(), GetPrimitiveType());
 
             throw new NotSupportedException();
         }
+
+        private AxPrimitiveType GetPrimitiveType()
+        {
+            switch (PrimitiveType)
+            {
+                case MeshFaceType.Line:
+                    return AxPrimitiveType.Lines;
+                case MeshFaceType.Triangle:
+                    return AxPrimitiveType.Triangles;
+                default:
+                    throw new NotSupportedException(PrimitiveType.ToString());
+            }
+        }
+
+        public int MaterialCount { get; private set; } = 1;
 
         public class VertexList<T> : IList<T>
             where T : IVertex
@@ -1130,4 +1267,5 @@ namespace Aximo
             }
         }
     }
+
 }

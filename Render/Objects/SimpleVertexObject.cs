@@ -96,8 +96,9 @@ namespace Aximo.Render
                 UsePipeline(m.RenderPipeline);
                 m.CreateShaders();
 
-                var vao = new VertexArrayObject(Mesh.MeshData2.BindLayoutToShader(m.Shader));
-                vao.SetData(Mesh.MeshData2);
+                var data = Mesh.GetMeshData(m);
+                var vao = new VertexArrayObject(data.BindLayoutToShader(m.Shader));
+                vao.SetData(data);
                 vaoList.Add(new VertexArrayObjectMaterial
                 {
                     Vao = vao,

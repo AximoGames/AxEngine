@@ -40,7 +40,7 @@ namespace Aximo
 
         public void AddRange(MeshComponent<T> src, int start, int count)
         {
-            for (var i = start; i < count; i++)
+            for (var i = start; i < start + count; i++)
                 _Values.Add(src.Values[i]);
         }
 

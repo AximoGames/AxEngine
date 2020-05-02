@@ -46,14 +46,20 @@ namespace Aximo.Render
 
         public void SetMesh(Mesh mesh)
         {
-            MeshData = mesh;
-            MeshData2 = mesh.GetMeshData();
+            Mesh = mesh;
+            for (var i = 0; i < mesh.MaterialCount; i++)
+                MeshData.Add(mesh.GetMeshData(i));
         }
 
         public List<Material> Materials = new List<Material>();
-        public Mesh MeshData { get; private set; }
-        internal MeshData MeshData2 { get; private set; }
+        public Mesh Mesh { get; private set; }
+        private List<MeshData> MeshData { get; } = new List<MeshData>();
 
-        public int VertexCount => MeshData?.VertexCount ?? 0;
+        internal MeshData GetMeshData(Material material)
+        {
+            return MeshData[0];
+        }
+
+        public int VertexCount => Mesh?.VertexCount ?? 0;
     }
 }

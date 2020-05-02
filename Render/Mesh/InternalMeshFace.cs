@@ -15,6 +15,7 @@ namespace Aximo
     {
         public int StartIndex;
         public int Count;
+        public int MaterialId;
 
         public int this[int faceVertexIndex]
         {
