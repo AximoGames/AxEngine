@@ -72,7 +72,17 @@ namespace Aximo
             mesh.PrimitiveType = primitiveType;
             mesh.AddComponents<T>();
             mesh.AddVertices(vertices);
-            // TODO: Set indicies
+
+            if (indicies != null)
+            {
+                var faceCount = indicies.Length / 3;
+                for (var faceIndex = 0; faceIndex < faceCount; faceIndex++)
+                {
+                    var i = faceIndex * 3;
+                    mesh.AddFace(indicies[i + 0], indicies[i + 1], indicies[i + 2]);
+                }
+            }
+
             return mesh;
         }
 
@@ -335,7 +345,7 @@ namespace Aximo
         public T[] GetIndiciesArray<T>()
             where T : unmanaged
         {
-            return GetIndiciesArray().Cast<T>().ToArray();
+            return GetIndiciesArray().Select(v => (T)Convert.ChangeType(v, typeof(T))).ToArray();
         }
 
         public BufferData1D<T> GetIndiciesBuffer<T>()
