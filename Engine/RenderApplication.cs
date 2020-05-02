@@ -217,7 +217,7 @@ namespace Aximo.Engine
                     RenderFrameNumber++;
 
                 RenderCounter.Tick();
-                if (RenderCounter.Elapsed.TotalMilliseconds > 30 && RenderFrameNumber > 2)
+                if (RenderCounter.Elapsed.TotalMilliseconds > 30 && RenderFrameNumber > 2 && IsFocused)
                     Log.Warn("SLOW Render: " + RenderCounter.Elapsed.ToString());
 
                 RenderTasks.ProcessTasks();
@@ -335,7 +335,7 @@ namespace Aximo.Engine
                 UpdateFrameNumber++;
 
             UpdateCounter.Tick();
-            if (UpdateCounter.Elapsed.TotalMilliseconds > 30 && UpdateFrameNumber > 2)
+            if (UpdateCounter.Elapsed.TotalMilliseconds > 30 && UpdateFrameNumber > 2 && IsFocused)
                 Log.Warn("SLOW Update: " + UpdateCounter.Elapsed.ToString());
 
             GameContext.UpdateTime();

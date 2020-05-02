@@ -23,7 +23,7 @@ namespace Aximo.AxDemo
                 //VSync = VSyncMode.Off,
                 // UseGtkUI = true,
                 UseConsole = true,
-                IsMultiThreaded = false,
+                IsMultiThreaded = true,
             };
 
             new GameStartup<DemoApplication, GtkUI>(config).Start();

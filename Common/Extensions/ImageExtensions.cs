@@ -113,7 +113,8 @@ namespace Aximo
             var size = source.GetCurrentSize();
             //source.Fill(graphicsOptions, Color.Transparent, new RectangleF(0, 0, size.Width, size.Height));
             //graphicsOptions.AlphaCompositionMode = PixelAlphaCompositionMode.Clear;
-            source.Fill(graphicsOptions, color, new RectangleF(0, 0, size.Width, size.Height));
+            //source.Fill(graphicsOptions, color, new RectangleF(0, 0, size.Width, size.Height));
+            source.Fill(graphicsOptions, Brushes.Solid(color));
         }
 
         public static IImageProcessingContext DrawButton(this IImageProcessingContext processingContext, float borderTickness, Color borderColor, float cornerRadius)
