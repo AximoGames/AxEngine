@@ -1,6 +1,9 @@
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Aximo.Render;
 
 namespace Aximo
@@ -8,7 +11,6 @@ namespace Aximo
     public struct MeshFace<T>
         where T : IVertex
     {
-
         // Global List
         private IList<T> VertexView;
         private IList<int> Indicies;
@@ -48,5 +50,4 @@ namespace Aximo
 
         public T this[int index] => VertexView[GetIndex(index)];
     }
-
 }

@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 
+#pragma warning disable CA1819 // Properties should not return arrays
+
 namespace Aximo.Render
 {
     public static class DataHelper

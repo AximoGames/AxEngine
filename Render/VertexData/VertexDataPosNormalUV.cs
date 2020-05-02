@@ -60,7 +60,6 @@ namespace Aximo.Render
         }
         public void SetPosition(Vector3 source)
         {
-
             Position = source;
         }
 
@@ -90,29 +89,28 @@ namespace Aximo.Render
         }
     }
 
-    public static class Operations
-    {
-        public static void CopyPosition<TSource, TDestination>(in TSource source, ref TDestination destination)
-            where TSource : IVertexPosition3
-            where TDestination : IVertexPosition3
-        {
-            destination.Position = source.Position;
-        }
-        private static void Test()
-        {
-            var source = new VertexDataPosNormalUV();
-            var dest = new VertexDataPosNormalUV();
+    //public static class Operations
+    //{
+    //    public static void CopyPosition<TSource, TDestination>(in TSource source, ref TDestination destination)
+    //        where TSource : IVertexPosition3
+    //        where TDestination : IVertexPosition3
+    //    {
+    //        destination.Position = source.Position;
+    //    }
+    //    private static void Test()
+    //    {
+    //        var source = new VertexDataPosNormalUV();
+    //        var dest = new VertexDataPosNormalUV();
 
-            IVertexPosition3 source2 = new VertexDataPosNormalColor();
-            IVertexPosition3 dest2 = new VertexDataPosNormalColor();
+    //        IVertexPosition3 source2 = new VertexDataPosNormalColor();
+    //        IVertexPosition3 dest2 = new VertexDataPosNormalColor();
 
-            CopyPosition(dest, ref source);
-            CopyPosition(dest2, ref source2);
-            CopyPosition(dest, ref source2);
-            CopyPosition(dest2, ref source);
-        }
-
-    }
+    //        CopyPosition(dest, ref source);
+    //        CopyPosition(dest2, ref source2);
+    //        CopyPosition(dest, ref source2);
+    //        CopyPosition(dest2, ref source);
+    //    }
+    //}
 
     public static partial class EngineExtensions
     {

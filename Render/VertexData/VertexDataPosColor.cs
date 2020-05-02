@@ -53,7 +53,6 @@ namespace Aximo.Render
         }
         public void SetPosition(Vector3 source)
         {
-
             Position = source;
         }
 

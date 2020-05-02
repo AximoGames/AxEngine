@@ -11,5 +11,4 @@ namespace Aximo.Render
         void Set(VertexDataPosColor source);
         new VertexDataPosColor Clone();
     }
-
 }

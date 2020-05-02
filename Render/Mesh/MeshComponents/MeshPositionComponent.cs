@@ -1,7 +1,10 @@
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System.Collections.Generic;
-using OpenToolkit.Mathematics;
-using Aximo.Render;
 using System.Linq;
+using Aximo.Render;
+using OpenToolkit.Mathematics;
 
 namespace Aximo
 {
@@ -31,7 +34,5 @@ namespace Aximo
                 if (v is IVertexPosition3 p)
                     Add(p.Position);
         }
-
     }
-
 }

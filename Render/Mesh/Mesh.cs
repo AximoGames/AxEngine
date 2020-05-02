@@ -5,11 +5,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
-using OpenToolkit.Mathematics;
 using Aximo.Render;
+using OpenToolkit.Mathematics;
 
 namespace Aximo
 {
@@ -145,9 +145,9 @@ namespace Aximo
 
         internal IList<InternalMeshFace> InternalMeshFaces = new List<InternalMeshFace>();
 
-        /// <remarks>
-        /// Fixed Face Types (Poly, quad, ...)
-        /// </remarks>
+        /// <summary>
+        /// Mixed Face Types (Poly, quad, ...)
+        /// </summary>
         internal IList<int> Indicies = new List<int>();
 
         public void AddFace(params int[] indicies)
@@ -623,7 +623,6 @@ namespace Aximo
                     Index = -1;
                 }
             }
-
         }
 
         private class VertexEnumerator<T> : IEnumerator<T>
@@ -1120,6 +1119,5 @@ namespace Aximo
                 return new VertexDataPos2UV(Position, UV);
             }
         }
-
     }
 }

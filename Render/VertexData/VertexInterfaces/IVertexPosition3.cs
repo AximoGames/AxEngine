@@ -11,5 +11,4 @@ namespace Aximo.Render
         void SetPosition(Vector3 source);
         new IVertexPosition3 Clone();
     }
-
 }

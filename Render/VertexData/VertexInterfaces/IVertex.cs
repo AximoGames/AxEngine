@@ -5,8 +5,6 @@ namespace Aximo.Render
 {
     public interface IVertex
     {
-
         IVertex Clone();
-
     }
 }

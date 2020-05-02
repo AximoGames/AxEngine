@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using OpenToolkit.Mathematics;
-using Aximo.Render;
 using System.Linq;
+using Aximo.Render;
+using OpenToolkit.Mathematics;
 
 namespace Aximo
 {
@@ -29,7 +29,5 @@ namespace Aximo
                 if (v is IVertexPosition2 p)
                     Add(p.Position);
         }
-
     }
-
 }

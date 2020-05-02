@@ -349,6 +349,7 @@ namespace Aximo.Render
                 //GL.DeleteTextures(1, ref h);
                 //Handle = 0;
             }
+            base.Dispose(disposing);
         }
 
         public override void Init()

@@ -12,5 +12,4 @@ namespace Aximo.Render
 
         new VertexDataPosNormalUV Clone();
     }
-
 }

@@ -12,10 +12,8 @@ using Xunit;
 
 namespace Aximo.AxTests
 {
-
     public class MeshTests
     {
-
         private Mesh CreateEmptyMesh()
         {
             var tmp = new Mesh();
