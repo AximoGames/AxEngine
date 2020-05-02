@@ -37,7 +37,7 @@ namespace Aximo
             var type = typeof(T);
             if (typeof(IVertexPosition3).IsAssignableFrom(type))
             {
-                AddComponent(new MeshPositionComponent());
+                AddComponent(new MeshPosition3Component());
             }
             if (typeof(IVertexPosition2).IsAssignableFrom(type))
             {
@@ -64,6 +64,17 @@ namespace Aximo
         // public static void CreateFromVertices(VertexDataPos2UV[] vertices)
         // {
         // }
+
+        public static Mesh CreateSphere(int divisions = 2)
+        {
+            var ico = new Render.Objects.Util.IcoSphere.IcoSphereMesh(divisions);
+            return CreateFromVertices(ico.Vertices, ico.Indicies);
+        }
+
+        public static Mesh CreateCube()
+        {
+            return CreateFromVertices(DataHelper.DefaultCube);
+        }
 
         public static Mesh CreateFromVertices<T>(T[] vertices, int[] indicies = null, MeshFaceType primitiveType = MeshFaceType.Triangle)
             where T : IVertex
@@ -276,12 +287,76 @@ namespace Aximo
             MaterialIds.Add(materialId);
         }
 
+        public void ReplaceMaterial(int oldMaterialId, int newMaterialid)
+        {
+            for (var i = 0; i < InternalMeshFaces.Count; i++)
+            {
+                var face = InternalMeshFaces[i];
+                if (face.MaterialId == oldMaterialId)
+                {
+                    face.MaterialId = newMaterialid;
+                    InternalMeshFaces[i] = face;
+                }
+            }
+            MaterialIds.Remove(oldMaterialId);
+            MaterialIds.Add(newMaterialid);
+        }
+
+        public void AddMesh(Mesh mesh)
+        {
+            AddMeshInternal(mesh, -1);
+        }
+
+        public void AddMesh(Mesh mesh, int filterMaterialId)
+        {
+            AddMeshInternal(mesh, filterMaterialId);
+        }
+
+        public void AddMesh(Mesh mesh, int filterMaterialId, int newMaterialId)
+        {
+            AddMeshInternal(mesh, filterMaterialId, newMaterialId);
+        }
+
+        internal void AddMeshInternal(Mesh mesh, int filterMaterialId = -1, int newMaterialId = -1)
+        {
+            if (mesh.FaceCount == 0)
+                mesh.CreateFaces();
+
+            var newFace = new List<int>();
+            foreach (var face in mesh.InternalMeshFaces)
+            {
+                if (filterMaterialId > -1 && face.MaterialId != filterMaterialId)
+                    continue;
+
+                for (var i = 0; i < face.Count; i++)
+                {
+                    newFace.Add(AddVertex(mesh, mesh.Indicies[face[i]]));
+                }
+                AddFace(newFace);
+                newFace.Clear();
+            }
+        }
+
         public Mesh CloneEmpty()
         {
             var mesh = new Mesh();
             foreach (var c in Components)
                 mesh.AddComponent(c.CloneEmpty());
             return mesh;
+        }
+
+        public void Translate(Vector3 direction)
+        {
+            var comp = GetComponent<MeshPosition3Component>();
+            for (var i = 0; i < comp.Count; i++)
+                comp[i] += direction;
+        }
+
+        public void Translate(Vector2 direction)
+        {
+            var comp = GetComponent<MeshPosition2Component>();
+            for (var i = 0; i < comp.Count; i++)
+                comp[i] += direction;
         }
 
         public int VertexCount => Components == null ? 0 : Components[0].Count;
@@ -385,7 +460,7 @@ namespace Aximo
             }
 
             if (typeof(IVertexPosition3).IsAssignableFrom(type))
-                GetComponent<MeshPositionComponent>()?.AddRange(values);
+                GetComponent<MeshPosition3Component>()?.AddRange(values);
             if (typeof(IVertexPosition2).IsAssignableFrom(type))
                 GetComponent<MeshPosition2Component>()?.AddRange(values);
             if (typeof(IVertexNormal).IsAssignableFrom(type))
@@ -416,7 +491,7 @@ namespace Aximo
 
             foreach (var c in Components)
             {
-                if (c is MeshPositionComponent c1)
+                if (c is MeshPosition3Component c1)
                     pos = c1.Values[index];
             }
 
@@ -483,11 +558,11 @@ namespace Aximo
         where T : IVertex
         {
             if (typeof(T) == typeof(IVertexPosNormalUV))
-                return IsComponents<MeshPositionComponent, MeshNormalComponent, MeshUVComponent>();
+                return IsComponents<MeshPosition3Component, MeshNormalComponent, MeshUVComponent>();
             if (typeof(T) == typeof(IVertexPosNormalColor))
-                return IsComponents<MeshPositionComponent, MeshNormalComponent, MeshColorComponent>();
+                return IsComponents<MeshPosition3Component, MeshNormalComponent, MeshColorComponent>();
             if (typeof(T) == typeof(IVertexPosColor))
-                return IsComponents<MeshPositionComponent, MeshColorComponent>();
+                return IsComponents<MeshPosition3Component, MeshColorComponent>();
             if (typeof(T) == typeof(IVertexPos2UV))
                 return IsComponents<MeshPosition2Component, MeshUVComponent>();
 
@@ -893,7 +968,7 @@ namespace Aximo
 
             public VertexPosition3Visitor(Mesh mesh) : base(mesh)
             {
-                PositionComponent = mesh.GetComponent<MeshPositionComponent>();
+                PositionComponent = mesh.GetComponent<MeshPosition3Component>();
             }
 
             public override void SetLength(int length)
@@ -941,7 +1016,7 @@ namespace Aximo
 
             public VertexPosNormalUVVisitor(Mesh mesh) : base(mesh)
             {
-                PositionComponent = mesh.GetComponent<MeshPositionComponent>();
+                PositionComponent = mesh.GetComponent<MeshPosition3Component>();
                 NormalComponent = mesh.GetComponent<MeshNormalComponent>();
                 UVComponent = mesh.GetComponent<MeshUVComponent>();
             }
@@ -1071,7 +1146,7 @@ namespace Aximo
 
             public VertexPosColorVisitor(Mesh mesh) : base(mesh)
             {
-                PositionComponent = mesh.GetComponent<MeshPositionComponent>();
+                PositionComponent = mesh.GetComponent<MeshPosition3Component>();
                 ColorComponent = mesh.GetComponent<MeshColorComponent>();
             }
 

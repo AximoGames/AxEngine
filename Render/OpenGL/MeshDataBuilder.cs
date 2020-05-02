@@ -24,12 +24,6 @@ namespace Aximo.Render
             return Mesh.CreateFromVertices(DataHelper.QuadInvertedUV);
         }
 
-        public static Mesh Sphere(int divisions)
-        {
-            var ico = new Objects.Util.IcoSphere.IcoSphereMesh(2);
-            return Mesh.CreateFromVertices(ico.Vertices, ico.Indicies);
-        }
-
         public static Mesh CrossLine()
         {
             return Mesh.CreateFromVertices(DataHelper.Cross, null, MeshFaceType.Line);

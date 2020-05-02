@@ -8,16 +8,16 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo
 {
-    public class MeshPositionComponent : MeshComponent<Vector3>
+    public class MeshPosition3Component : MeshComponent<Vector3>
     {
-        public MeshPositionComponent()
+        public MeshPosition3Component()
             : base(MeshComponentType.Position)
         {
         }
 
-        public override MeshComponent CloneEmpty() => new MeshPositionComponent();
+        public override MeshComponent CloneEmpty() => new MeshPosition3Component();
 
-        public MeshPositionComponent(ICollection<IVertexPosition3> values)
+        public MeshPosition3Component(ICollection<IVertexPosition3> values)
             : this()
         {
             AddRange(values.Select(v => v.Position));

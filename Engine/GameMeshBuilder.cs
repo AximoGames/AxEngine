@@ -19,7 +19,7 @@ namespace Aximo.Engine
 
         public static StaticMeshComponent Sphere(int divisions)
         {
-            return new StaticMeshComponent(MeshDataBuilder.Sphere(divisions), GameMaterial.Default);
+            return new StaticMeshComponent(Mesh.CreateSphere(divisions), GameMaterial.Default);
         }
     }
 }

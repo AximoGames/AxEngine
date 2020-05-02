@@ -18,7 +18,7 @@ namespace Aximo.AxTests
         {
             var tmp = new Mesh();
 
-            var compPosition = new MeshPositionComponent();
+            var compPosition = new MeshPosition3Component();
             var compNormal = new MeshNormalComponent();
             var compUV = new MeshUVComponent();
 
