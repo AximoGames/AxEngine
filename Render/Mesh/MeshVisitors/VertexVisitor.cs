@@ -20,6 +20,9 @@ namespace Aximo
             if (type == typeof(IVertexPosNormalUV))
                 return (VertexVisitor<T>)(object)new VertexPosNormalUVVisitor(mesh);
 
+            if (type == typeof(IVertexPosNormalColor))
+                return (VertexVisitor<T>)(object)new VertexPosNormalColorVisitor(mesh);
+
             if (type == typeof(IVertexPosColor))
                 return (VertexVisitor<T>)(object)new VertexPosColorVisitor(mesh);
 
