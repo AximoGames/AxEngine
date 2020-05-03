@@ -188,6 +188,7 @@ namespace Aximo.Engine
         {
             TimeWatcher = new Stopwatch();
             TimeWatcher.Start();
+            EngineAssets.Init();
         }
 
         private Stopwatch TimeWatcher;

@@ -192,3 +192,4 @@ packages/
 
 mono_crash*
 *.trace
+.cache/

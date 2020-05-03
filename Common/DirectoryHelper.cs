@@ -7,6 +7,9 @@ using System.IO;
 
 namespace Aximo
 {
+
+    public delegate bool GenerateFileDelegate(string subPath, string cachePath);
+
     public static class DirectoryHelper
     {
         private static string _BinDir;
@@ -55,6 +58,31 @@ namespace Aximo
             }
         }
 
+        private static string _AssemblyName;
+        public static string AssemblyName
+        {
+            get
+            {
+                if (_AssemblyName == null)
+                    _AssemblyName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
+                return _AssemblyName;
+            }
+        }
+
+        private static string _AppCacheDir;
+        public static string AppCacheDir
+        {
+            get
+            {
+                if (_AppCacheDir == null)
+                {
+                    _AppCacheDir = Path.Combine(EngineRootDir, ".cache", AssemblyName);
+                    Directory.CreateDirectory(_AppCacheDir);
+                }
+                return _AppCacheDir;
+            }
+        }
+
         private static string _EngineRootDir;
         public static string EngineRootDir
         {
@@ -82,7 +110,7 @@ namespace Aximo
             get
             {
                 if (_SearchDirectories == null)
-                    _SearchDirectories = new List<string> { AppSourceDir, AppRootDir, EngineRootDir };
+                    _SearchDirectories = new List<string> { AppCacheDir, AppSourceDir, AppRootDir, EngineRootDir };
                 return _SearchDirectories;
             }
         }
@@ -97,7 +125,36 @@ namespace Aximo
                 if (Directory.Exists(path))
                     return new DirectoryInfo(path).FullName;
             }
+            if (RequestFile(subPath))
+                return GetAssetsPath(subPath);
+
             return "";
         }
+
+        private static Dictionary<string, GenerateFileDelegate> FileGenerators = new Dictionary<string, GenerateFileDelegate>();
+
+        public static void AddFileGenerator(string subPath, GenerateFileDelegate generator)
+        {
+            lock (FileGenerators)
+                FileGenerators.Add(subPath, generator);
+        }
+
+        private static bool RequestFile(string subPath)
+        {
+            GenerateFileDelegate gen;
+            lock (FileGenerators)
+                FileGenerators.TryGetValue(subPath, out gen);
+            if (gen != null)
+            {
+                var cachePath = Path.Combine(AppCacheDir, "Assets", subPath);
+                var parent = Path.GetDirectoryName(cachePath);
+                Directory.CreateDirectory(parent);
+                if (gen(subPath, cachePath))
+                    return File.Exists(cachePath) || Directory.Exists(cachePath);
+            }
+
+            return false;
+        }
+
     }
 }

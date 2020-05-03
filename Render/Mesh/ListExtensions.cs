@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using System.Linq;
 using Aximo.Render;
 
 namespace Aximo
@@ -70,6 +71,11 @@ namespace Aximo
                 startIndex++;
                 endIndex--;
             }
+        }
+
+        public static T[] Copy<T>(this T[] array)
+        {
+            return array.ToArray();
         }
     }
 }

@@ -37,6 +37,11 @@ namespace Aximo
             return points.Append(points[0]).ToArray();
         }
 
+        public static Vector3[] ToVector3(this Vector2[] points)
+        {
+            return points.Select(p => new Vector3(p)).ToArray();
+        }
+
         public static bool Approximately(this in Vector2 value, in Vector2 other)
         {
             return AxMath.Approximately(value.X, other.X) && AxMath.Approximately(value.Y, other.Y);

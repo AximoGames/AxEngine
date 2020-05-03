@@ -105,13 +105,24 @@ namespace Aximo
             return CreateFromVertices(VertexDataPos2UV.DefaultQuad.ToVertices(), null, MeshFaceType.Quad);
         }
 
-        public static Mesh CreateCylinder()
+        public static Mesh CreateCylinder(float diameterBottom = 1f, float diameterTop = 1f, float height = 1.0f, int slices = 8)
         {
-            var path = PathBuilder.Circle().ClosePath();
-            var mesh = CreateQuadStride(path);
-            var m2 = CreateSurface(path, Vector2.Zero);
-            m2.Translate(new Vector3(0, 0, 0.5f));
-            mesh.AddMesh(m2);
+            var path = PathBuilder.Circle(slices).ClosePath().ToVector3();
+
+            var topPath = path.Copy();
+            var topPos = new Vector3(0, 0, height / 2f);
+            topPath.Scale(diameterTop);
+            topPath.Translate(topPos);
+            var topSurface = CreateSurface(topPath, topPos);
+
+            var bottomPath = path.Copy();
+            var bottomPos = new Vector3(0, 0, -height / 2f);
+            bottomPath.Scale(diameterBottom);
+            bottomPath.Translate(bottomPos);
+            var bottomSurface = CreateSurface(bottomPath, bottomPos);
+
+            var mesh = CreateQuadStride(topPath, bottomPath);
+            mesh.AddMesh(topSurface);
             return mesh;
         }
 
@@ -122,6 +133,25 @@ namespace Aximo
             {
                 var quad = VertexDataPosNormalUV.WallQuad;
                 quad.SetLeftRightPosition(line);
+                vertices.AddRange(quad.ToVertices());
+            }
+            return CreateFromVertices(vertices.ToArray(), null, MeshFaceType.Quad);
+        }
+
+        public static Mesh CreateQuadStride(IEnumerable<Vector3> topPath, IEnumerable<Vector3> bottomPath)
+        {
+            var vertices = new List<VertexDataPosNormalUV>();
+            var topArray = topPath.ToLines().ToArray();
+            var bottomArray = bottomPath.ToLines().ToArray();
+
+            if (topArray.Length != bottomArray.Length)
+                throw new NotSupportedException();
+
+            for (var i = 0; i < topArray.Length; i++)
+            {
+                var quad = VertexDataPosNormalUV.WallQuad;
+                quad.SetTopPosition(topArray[i]);
+                quad.SetBottomPosition(bottomArray[i]);
                 vertices.AddRange(quad.ToVertices());
             }
             return CreateFromVertices(vertices.ToArray(), null, MeshFaceType.Quad);
@@ -142,6 +172,25 @@ namespace Aximo
                 vertices.Add(new VertexDataPosNormalUV(new Vector3(center), Vector3.UnitZ, -new Vector2(0, 0) + uvOffset));
                 vertices.Add(new VertexDataPosNormalUV(new Vector3(line.A), Vector3.UnitZ, -line.A * uvFactor + uvOffset));
                 vertices.Add(new VertexDataPosNormalUV(new Vector3(line.B), Vector3.UnitZ, -line.B * uvFactor + uvOffset));
+            }
+            return CreateFromVertices(vertices.ToArray(), null, MeshFaceType.Triangle);
+        }
+
+        public static Mesh CreateSurface(IEnumerable<Vector3> path)
+        {
+            return CreateSurface(path, path.First());
+        }
+
+        public static Mesh CreateSurface(IEnumerable<Vector3> path, Vector3 center)
+        {
+            var uvOffset = new Vector2(0.5f);
+            var uvFactor = new Vector2(-1f, 1);
+            var vertices = new List<VertexDataPosNormalUV>();
+            foreach (var line in path.ToLines())
+            {
+                vertices.Add(new VertexDataPosNormalUV(new Vector3(center), Vector3.UnitZ, -new Vector2(0, 0) + uvOffset));
+                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.A), Vector3.UnitZ, -line.A.Xy * uvFactor + uvOffset));
+                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.B), Vector3.UnitZ, -line.B.Xy * uvFactor + uvOffset));
             }
             return CreateFromVertices(vertices.ToArray(), null, MeshFaceType.Triangle);
         }

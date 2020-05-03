@@ -195,6 +195,18 @@ namespace Aximo.Render
             SetRightPosition(ref quad, line.B);
         }
 
+        public static void SetTopPosition(this ref Quad<VertexDataPosNormalUV> quad, Line3 line)
+        {
+            quad.Vertex3.Position = line.A;
+            quad.Vertex2.Position = line.B;
+        }
+
+        public static void SetBottomPosition(this ref Quad<VertexDataPosNormalUV> quad, Line3 line)
+        {
+            quad.Vertex0.Position = line.A;
+            quad.Vertex1.Position = line.B;
+        }
+
         public static void Rotate(this ref Quad<VertexDataPosNormalUV> quad, Rotor3 q)
         {
             for (var i = 0; i < quad.Count; i++)
