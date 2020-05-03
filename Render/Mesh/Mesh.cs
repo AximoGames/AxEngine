@@ -105,15 +105,40 @@ namespace Aximo
             return CreateFromVertices(VertexDataPos2UV.DefaultQuad.ToVertices(), null, MeshFaceType.Quad);
         }
 
-        // public static Mesh CreateQuadStride(IEnumerable<Vector2> path)
-        // {
-        //     var default = VertexDataPosNormalUV.WallQuad;
-        //     foreach (var line in path.ToLines())
-        //     {
-        //         var quad = VertexDataPosNormalUV.DefaultQuad;
-        //         quad.Vertex0.Position.Xy = line.A;
-        //     }
-        // }
+        public static Mesh CreateCylinder()
+        {
+            var path = PathBuilder.Circle().ClosePath();
+            var mesh = CreateQuadStride(path);
+            var m2 = CreateSurface(path, Vector2.Zero);
+            return m2;
+        }
+
+        public static Mesh CreateQuadStride(IEnumerable<Vector2> path)
+        {
+            var vertices = new List<VertexDataPosNormalUV>();
+            foreach (var line in path.ToLines())
+            {
+                var quad = VertexDataPosNormalUV.WallQuad;
+                quad.SetLeftRightPosition(line);
+                vertices.AddRange(quad.ToVertices());
+            }
+            return CreateFromVertices(vertices.ToArray(), null, MeshFaceType.Quad);
+        }
+
+        public static Mesh CreateSurface(IEnumerable<Vector2> path)
+        {
+            return CreateSurface(path, path.First());
+        }
+
+        public static Mesh CreateSurface(IEnumerable<Vector2> path, Vector2 center)
+        {
+            var vertices = new List<VertexDataPosNormalUV>();
+            foreach (var line in path.ToLines())
+            {
+
+            }
+            return CreateFromVertices(vertices.ToArray(), null, MeshFaceType.Triangle);
+        }
 
         public static Mesh CreateFromVertices<T>(T[] vertices, int[] indicies = null, MeshFaceType primitiveType = MeshFaceType.Triangle)
             where T : IVertex

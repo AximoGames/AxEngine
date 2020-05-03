@@ -156,7 +156,7 @@ namespace Aximo.Render
 
         public static void MapUV(this ref Quad<VertexDataPosNormalUV> quad)
         {
-            MapUV(ref quad, new Vector2(-1, -1), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0));
+            MapUV(ref quad, quad.BottomLeft.Position.Xy, quad.TopRight.Position.Xy, new Vector2(0, 1), new Vector2(1, 0));
         }
 
         public static void SetPosition<TSource>(this ref Quad<VertexDataPosNormalUV> quad, Quad<TSource> source)
@@ -175,6 +175,51 @@ namespace Aximo.Render
                 quad.Vertex2.Position.Xy = ((IVertexPosition2)source[2]).Position;
                 quad.Vertex3.Position.Xy = ((IVertexPosition2)source[3]).Position;
             }
+        }
+
+        public static void SetLeftPosition(this ref Quad<VertexDataPosNormalUV> quad, Vector2 pos)
+        {
+            quad.Vertex0.Position.Xy = pos;
+            quad.Vertex3.Position.Xy = pos;
+        }
+
+        public static void SetRightPosition(this ref Quad<VertexDataPosNormalUV> quad, Vector2 pos)
+        {
+            quad.Vertex1.Position.Xy = pos;
+            quad.Vertex2.Position.Xy = pos;
+        }
+
+        public static void SetLeftRightPosition(this ref Quad<VertexDataPosNormalUV> quad, Line2 line)
+        {
+            SetLeftPosition(ref quad, line.A);
+            SetRightPosition(ref quad, line.B);
+        }
+
+        public static void Rotate(this ref Quad<VertexDataPosNormalUV> quad, Rotor3 q)
+        {
+            for (var i = 0; i < quad.Count; i++)
+            {
+                var v = quad[i];
+                v.Position = Rotor3.Rotate(q, v.Position);
+                v.Normal = Rotor3.Rotate(q, v.Normal);
+                quad[i] = v;
+            }
+        }
+
+        public static void Round(this ref Quad<VertexDataPosNormalUV> quad, int digits)
+        {
+            for (var i = 0; i < quad.Count; i++)
+            {
+                var v = quad[i];
+                v.Normal = v.Normal.Round(digits);
+                v.Position = v.Position.Round(digits);
+                quad[i] = v;
+            }
+        }
+
+        public static void RoundSmooth(this ref Quad<VertexDataPosNormalUV> quad)
+        {
+            Round(ref quad, 6);
         }
     }
 }

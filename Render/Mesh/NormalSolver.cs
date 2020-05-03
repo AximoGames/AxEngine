@@ -82,7 +82,6 @@ namespace Aximo
             {
                 for (var i = 0; i < vertList.Count; ++i)
                 {
-
                     var sum = new Vector3();
                     var lhsEntry = vertList[i];
 

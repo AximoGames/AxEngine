@@ -77,5 +77,30 @@ namespace Aximo.Render
             quad.Vertex2.Position.Xy = source.Vertex2.Position;
             quad.Vertex3.Position.Xy = source.Vertex3.Position;
         }
+
+        public static void Rotate(this ref Quad<VertexDataPos> quad, Rotor3 q)
+        {
+            for (var i = 0; i < quad.Count; i++)
+            {
+                var v = quad[i];
+                v.Position = Rotor3.Rotate(q, v.Position);
+                quad[i] = v;
+            }
+        }
+
+        public static void Round(this ref Quad<VertexDataPos> quad, int digits)
+        {
+            for (var i = 0; i < quad.Count; i++)
+            {
+                var v = quad[i];
+                v.Position = v.Position.Round(digits);
+                quad[i] = v;
+            }
+        }
+
+        public static void RoundSmooth(this ref Quad<VertexDataPos> quad)
+        {
+            Round(ref quad, 6);
+        }
     }
 }

@@ -37,6 +37,19 @@ namespace Aximo.Render
             }
         }
 
+        public static Quad<VertexDataPos2UV> NDCQuadInvertedUV
+        {
+            get
+            {
+                var result = new Quad<VertexDataPos2UV>();
+                result.SetPosition(VertexDataPos2.DefaultQuad);
+                result.Scale(2f);
+                result.MapUV();
+                result.MapInvertUV();
+                return result;
+            }
+        }
+
         public VertexDataPos2UV(Vector2 position, Vector2 uv)
         {
             Position = position;
@@ -86,7 +99,7 @@ namespace Aximo.Render
 
         public static void MapUV(this ref Quad<VertexDataPos2UV> quad)
         {
-            MapUV(ref quad, new Vector2(-1, -1), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0));
+            MapUV(ref quad, quad.BottomLeft.Position, quad.TopRight.Position, new Vector2(0, 1), new Vector2(1, 0));
         }
 
         public static void MapInvertUV(this ref Quad<VertexDataPos2UV> quad)
@@ -95,6 +108,27 @@ namespace Aximo.Render
             quad.Vertex1.UV.Y = 1 - quad.Vertex1.UV.Y;
             quad.Vertex2.UV.Y = 1 - quad.Vertex2.UV.Y;
             quad.Vertex3.UV.Y = 1 - quad.Vertex3.UV.Y;
+        }
+
+        public static void Scale(this ref Quad<VertexDataPos2UV> quad, Vector2 scale)
+        {
+            quad.Vertex0.Position *= scale;
+            quad.Vertex1.Position *= scale;
+            quad.Vertex2.Position *= scale;
+            quad.Vertex3.Position *= scale;
+        }
+
+        public static void Scale(this ref Quad<VertexDataPos2UV> quad, float scale)
+        {
+            Scale(ref quad, new Vector2(scale));
+        }
+
+        public static void Translate(this ref Quad<VertexDataPos2UV> quad, Vector2 value)
+        {
+            quad.Vertex0.Position += value;
+            quad.Vertex1.Position += value;
+            quad.Vertex2.Position += value;
+            quad.Vertex3.Position += value;
         }
 
         public static void SetPosition<TSource>(this ref Quad<VertexDataPos2UV> quad, Quad<TSource> source)

@@ -38,7 +38,7 @@ namespace Aximo.Render
             {
                 var quad = VertexDataPosNormalUV.DefaultQuad.ToPolygonVertices();
 
-                Translate(quad, new Vector3(0, 0, 1f));
+                Translate(quad, new Vector3(0, 0, 0.5f));
 
                 Rotate(quad, new Rotor3(Vector3.UnitZ, -Vector3.UnitY));
 
@@ -51,7 +51,7 @@ namespace Aximo.Render
                     r = new Rotor3(-Vector3.UnitY, direction);
 
                 Rotate(quad, r);
-                Scale(quad, new Vector3(0.5f) * size);
+                Scale(quad, size);
                 if (translate != Vector3.Zero)
                     Translate(quad, translate);
 
@@ -135,6 +135,7 @@ namespace Aximo.Render
 
         public static readonly VertexDataPos2UV[] Quad = VertexDataPos2UV.DefaultQuad.ToPolygonVertices();
         public static readonly VertexDataPos2UV[] QuadInvertedUV = VertexDataPos2UV.DefaultQuadInvertedUV.ToPolygonVertices();
+        public static readonly VertexDataPos2UV[] NDCQuadInvertedUV = VertexDataPos2UV.NDCQuadInvertedUV.ToPolygonVertices();
 
         public static void GetData<T>(BufferData2D<T> target, Action<IntPtr> getPixels)
         {

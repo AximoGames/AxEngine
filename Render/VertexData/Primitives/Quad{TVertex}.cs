@@ -118,61 +118,29 @@ namespace Aximo.Render
         {
             return new TVertex[] { Vertex0, Vertex1, Vertex3, Vertex2, Vertex3, Vertex1 };
         }
-    }
 
-    public static class QuadExtensions
-    {
-        public static void Rotate(this ref Quad<VertexDataPos> quad, Rotor3 q)
+        public TVertex BottomLeft
         {
-            for (var i = 0; i < quad.Count; i++)
-            {
-                var v = quad[i];
-                v.Position = Rotor3.Rotate(q, v.Position);
-                quad[i] = v;
-            }
+            get => Vertex0;
+            set => Vertex0 = value;
         }
 
-        public static void Rotate(this ref Quad<VertexDataPosNormalUV> quad, Rotor3 q)
+        public TVertex BottomRight
         {
-            for (var i = 0; i < quad.Count; i++)
-            {
-                var v = quad[i];
-                v.Position = Rotor3.Rotate(q, v.Position);
-                v.Normal = Rotor3.Rotate(q, v.Normal);
-                quad[i] = v;
-            }
+            get => Vertex1;
+            set => Vertex1 = value;
         }
 
-        public static void Round(this ref Quad<VertexDataPos> quad, int digits)
+        public TVertex TopLeft
         {
-            for (var i = 0; i < quad.Count; i++)
-            {
-                var v = quad[i];
-                v.Position = v.Position.Round(digits);
-                quad[i] = v;
-            }
+            get => Vertex3;
+            set => Vertex3 = value;
         }
 
-        public static void RoundSmooth(this ref Quad<VertexDataPos> quad)
+        public TVertex TopRight
         {
-            Round(ref quad, 6);
-        }
-
-        public static void Round(this ref Quad<VertexDataPosNormalUV> quad, int digits)
-        {
-            for (var i = 0; i < quad.Count; i++)
-            {
-                var v = quad[i];
-                v.Normal = v.Normal.Round(digits);
-                v.Position = v.Position.Round(digits);
-                quad[i] = v;
-            }
-        }
-
-        public static void RoundSmooth(this ref Quad<VertexDataPosNormalUV> quad)
-        {
-            Round(ref quad, 6);
+            get => Vertex2;
+            set => Vertex2 = value;
         }
     }
-
 }

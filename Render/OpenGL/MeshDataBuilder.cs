@@ -19,9 +19,9 @@ namespace Aximo.Render
             return Mesh.CreateFromVertices(DataHelper.DefaultDebugCube);
         }
 
-        public static Mesh Quad()
+        public static Mesh NDCQuadInvertedUV()
         {
-            return Mesh.CreateFromVertices(DataHelper.QuadInvertedUV);
+            return Mesh.CreateFromVertices(DataHelper.NDCQuadInvertedUV);
         }
 
         public static Mesh CrossLine()

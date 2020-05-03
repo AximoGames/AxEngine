@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
@@ -19,11 +20,8 @@ namespace Aximo.Render
         //
         // 0  1
 
-        public static Quad<VertexDataPos2> DefaultQuad => new Quad<VertexDataPos2>(
-            new VertexDataPos2(new Vector2(-1f, -1f)),
-            new VertexDataPos2(new Vector2(1f, -1f)),
-            new VertexDataPos2(new Vector2(1f, 1f)),
-            new VertexDataPos2(new Vector2(-1f, 1f)));
+        public static Quad<VertexDataPos2> DefaultQuad
+            => new Quad<VertexDataPos2>(PathBuilder.Quad().Select(v => new VertexDataPos2(v)).ToArray());
 
         public VertexDataPos2(Vector2 position)
         {

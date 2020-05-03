@@ -15,7 +15,7 @@ namespace Aximo.Render
         private Texture GAlbedoSpec;
 
         private Shader _DefLightShader;
-        private VertexDataPos2UV[] _vertices = DataHelper.QuadInvertedUV;
+        private VertexDataPos2UV[] _vertices = DataHelper.NDCQuadInvertedUV;
 
         private VertexArrayObject vao;
         private VertexBufferObject vbo;

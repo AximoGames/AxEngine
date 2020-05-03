@@ -17,11 +17,11 @@ namespace Aximo.Engine
 {
     public class ScreenTextureComponent : StaticMeshComponent
     {
-        public ScreenTextureComponent() : base(MeshDataBuilder.Quad(), MaterialManager.CreateScreenMaterial())
+        public ScreenTextureComponent() : base(MeshDataBuilder.NDCQuadInvertedUV(), MaterialManager.CreateScreenMaterial())
         {
         }
 
-        public ScreenTextureComponent(string texturePath) : base(MeshDataBuilder.Quad(), MaterialManager.CreateScreenMaterial(texturePath))
+        public ScreenTextureComponent(string texturePath) : base(MeshDataBuilder.NDCQuadInvertedUV(), MaterialManager.CreateScreenMaterial(texturePath))
         {
         }
 

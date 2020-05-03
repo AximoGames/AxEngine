@@ -18,7 +18,7 @@ namespace Aximo.Render
         public Quaternion Rotate { get; set; }
         public Vector3 Position { get; set; }
 
-        private VertexDataPos2UV[] _vertices = DataHelper.QuadInvertedUV;
+        private VertexDataPos2UV[] _vertices = DataHelper.NDCQuadInvertedUV;
 
         private VertexArrayObject vao;
 
