@@ -105,13 +105,16 @@ namespace Aximo
             return CreateFromVertices(VertexDataPos2UV.DefaultQuad.ToVertices(), null, MeshFaceType.Quad);
         }
 
-        public static Mesh CreateCylinder(float diameterBottom = 1f, float diameterTop = 1f, float height = 1.0f, int slices = 8)
+        public static Mesh CreateCylinder(float diameterBottom = 1f, float? diameterTop = null, float height = 1.0f, int slices = 8)
         {
+            if (diameterTop == null)
+                diameterTop = diameterBottom;
+
             var path = PathBuilder.Circle(slices).ClosePath().ToVector3();
 
             var topPath = path.Copy();
             var topPos = new Vector3(0, 0, height / 2f);
-            topPath.Scale(diameterTop);
+            topPath.Scale((float)diameterTop);
             topPath.Translate(topPos);
             var topSurface = CreateSurface(topPath, topPos);
 
@@ -549,7 +552,10 @@ namespace Aximo
                 {
                     newFace.Add(AddVertex(mesh, mesh.Indicies[face[i]]));
                 }
-                AddFace(newFace);
+                if (newMaterialId == -1)
+                    AddFace(newFace);
+                else
+                    AddFaceAndMaterial(newMaterialId, newFace.ToArray());
                 newFace.Clear();
             }
         }
@@ -560,6 +566,47 @@ namespace Aximo
             foreach (var c in Components)
                 mesh.AddComponent(c.CloneEmpty());
             return mesh;
+        }
+
+        public void Scale(float scaleX, float scaleY)
+        {
+            Scale(new Vector2(scaleX, scaleY));
+        }
+
+        public void Scale(float scaleX, float scaleY, float scaleZ)
+        {
+            Scale(new Vector3(scaleX, scaleY, scaleZ));
+        }
+
+        public void Scale(float scale)
+        {
+            if (HasComponent<MeshPosition3Component>())
+                Scale(new Vector3(scale));
+            else
+                Scale(new Vector2(scale));
+        }
+
+        public void Scale(Vector2 scale)
+        {
+            var comp2 = GetComponent<MeshPosition2Component>();
+            if (comp2 != null)
+            {
+                for (var i = 0; i < comp2.Count; i++)
+                    comp2[i] *= scale;
+            }
+            else
+            {
+                var comp3 = GetComponent<MeshPosition3Component>();
+                for (var i = 0; i < comp3.Count; i++)
+                    comp3[i] *= new Vector3(scale.X, scale.Y, 1f);
+            }
+        }
+
+        public void Scale(Vector3 scale)
+        {
+            var comp = GetComponent<MeshPosition3Component>();
+            for (var i = 0; i < comp.Count; i++)
+                comp[i] *= scale;
         }
 
         public void Translate(Vector3 direction)
