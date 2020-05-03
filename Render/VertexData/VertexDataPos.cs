@@ -29,6 +29,18 @@ namespace Aximo.Render
             }
         }
 
+        public static Quad<VertexDataPos> WallQuad
+        {
+            get
+            {
+                var result = new Quad<VertexDataPos>();
+                result.SetPosition(VertexDataPos2.DefaultQuad);
+                result.Rotate(new Rotor3(Vector3.UnitZ, -Vector3.UnitY));
+                result.RoundSmooth();
+                return result;
+            }
+        }
+
         public VertexDataPos(Vector3 position)
         {
             Position = position;

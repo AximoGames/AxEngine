@@ -30,6 +30,20 @@ namespace Aximo.Render
             }
         }
 
+        /// <summary>
+        /// Returns a Wall Quad, Plane to XZ, facing to -Y
+        /// </summary>
+        public static Quad<VertexDataPosNormalUV> WallQuad
+        {
+            get
+            {
+                var result = DefaultQuad;
+                result.Rotate(new Rotor3(Vector3.UnitZ, -Vector3.UnitY));
+                result.RoundSmooth();
+                return result;
+            }
+        }
+
         public VertexDataPosNormalUV(Vector3 position, Vector3 normal, Vector2 uv)
         {
             Position = position;

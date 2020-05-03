@@ -13,11 +13,17 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo
 {
-    public class Mesh
+    public partial class Mesh
     {
-        public MeshFaceType PrimitiveType = MeshFaceType.Triangle;
+        internal IList<InternalMeshFace> InternalMeshFaces = new List<InternalMeshFace>();
 
+        /// <summary>
+        /// Mixed Face Types (Poly, quad, ...)
+        /// </summary>
+        internal IList<int> Indicies = new List<int>();
+        public MeshFaceType PrimitiveType = MeshFaceType.Triangle;
         public IList<MeshComponent> Components { get; private set; } = new List<MeshComponent>();
+        public HashSet<int> MaterialIds { get; private set; } = new HashSet<int>(new int[] { 0 });
 
         public MeshComponent AddComponent(MeshComponentType componentType)
         {
@@ -83,6 +89,31 @@ namespace Aximo
         {
             return CreateFromVertices(DataHelper.DefaultCube);
         }
+
+        public static Mesh CreateWallQuad()
+        {
+            return CreateFromVertices(VertexDataPosNormalUV.WallQuad.ToVertices(), null, MeshFaceType.Quad);
+        }
+
+        public static Mesh CreateQuad3()
+        {
+            return CreateFromVertices(VertexDataPosNormalUV.DefaultQuad.ToVertices(), null, MeshFaceType.Quad);
+        }
+
+        public static Mesh CreateQuad2()
+        {
+            return CreateFromVertices(VertexDataPos2UV.DefaultQuad.ToVertices(), null, MeshFaceType.Quad);
+        }
+
+        // public static Mesh CreateQuadStride(IEnumerable<Vector2> path)
+        // {
+        //     var default = VertexDataPosNormalUV.WallQuad;
+        //     foreach (var line in path.ToLines())
+        //     {
+        //         var quad = VertexDataPosNormalUV.DefaultQuad;
+        //         quad.Vertex0.Position.Xy = line.A;
+        //     }
+        // }
 
         public static Mesh CreateFromVertices<T>(T[] vertices, int[] indicies = null, MeshFaceType primitiveType = MeshFaceType.Triangle)
             where T : IVertex
@@ -225,13 +256,6 @@ namespace Aximo
         {
             return Components.Count == 3 && HasComponents<T1, T1, T3>();
         }
-
-        internal IList<InternalMeshFace> InternalMeshFaces = new List<InternalMeshFace>();
-
-        /// <summary>
-        /// Mixed Face Types (Poly, quad, ...)
-        /// </summary>
-        internal IList<int> Indicies = new List<int>();
 
         public void AddFace(params int[] indicies)
         {
@@ -466,10 +490,10 @@ namespace Aximo
             return ToPrimitive(PrimitiveType, 0);
         }
 
-        public Mesh ToPrimitive(MeshFaceType faceType, int materialId)
+        public Mesh ToPrimitive(MeshFaceType targetFaceType, int materialId = -1)
         {
             var newMesh = CloneEmpty();
-            newMesh.PrimitiveType = faceType;
+            newMesh.PrimitiveType = targetFaceType;
 
             if (FaceCount == 0)
                 CreateFacesAndIndicies();
@@ -477,35 +501,35 @@ namespace Aximo
             var newFace = new List<int>();
             foreach (var face in InternalMeshFaces)
             {
-                if (face.MaterialId != materialId)
+                if (materialId != -1 && face.MaterialId != materialId)
                     continue;
 
-                if (face.IsPoint && faceType == MeshFaceType.Point)
+                if (face.IsPoint && targetFaceType == MeshFaceType.Point)
                 {
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[0]]));
                     newMesh.AddFace(newFace);
                     newFace.Clear();
                 }
-                else if (face.IsLine && faceType == MeshFaceType.Line)
-                {
-                    newFace.Add(newMesh.AddVertex(this, Indicies[face[0]]));
-                    newFace.Add(newMesh.AddVertex(this, Indicies[face[1]]));
-                    newMesh.AddFace(newFace);
-                    newFace.Clear();
-                }
-                else if (face.IsTriangle && faceType == MeshFaceType.Triangle)
+                else if (face.IsLine && targetFaceType == MeshFaceType.Line)
                 {
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[0]]));
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[1]]));
-                    newFace.Add(newMesh.AddVertex(this, Indicies[face[2]]));
                     newMesh.AddFace(newFace);
                     newFace.Clear();
                 }
-                else if (face.IsQuad && (faceType == MeshFaceType.Triangle))
+                else if (face.IsTriangle && targetFaceType == MeshFaceType.Triangle)
                 {
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[0]]));
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[1]]));
                     newFace.Add(newMesh.AddVertex(this, Indicies[face[2]]));
+                    newMesh.AddFace(newFace);
+                    newFace.Clear();
+                }
+                else if (face.IsQuad && (targetFaceType == MeshFaceType.Triangle))
+                {
+                    newFace.Add(newMesh.AddVertex(this, Indicies[face[0]]));
+                    newFace.Add(newMesh.AddVertex(this, Indicies[face[1]]));
+                    newFace.Add(newMesh.AddVertex(this, Indicies[face[3]]));
                     newMesh.AddFace(newFace);
                     newFace.Clear();
 
@@ -526,7 +550,7 @@ namespace Aximo
         public IList<MeshFace<T>> FaceView<T>()
             where T : IVertex
         {
-            return new FaceList<T>(this);
+            return new MeshFaceList<T>(this);
         }
 
         public int AddVertex(Mesh src, int index)
@@ -602,7 +626,7 @@ namespace Aximo
         public void Visit<T>(Action<T> callback)
             where T : IVertex
         {
-            var enu = new VertexEnumerator<T>(this);
+            var enu = new MeshVertexEnumerator<T>(this);
             while (enu.MoveNext())
                 callback(enu.Current);
         }
@@ -610,15 +634,15 @@ namespace Aximo
         public void Visit<T>(Action<T, int> callback)
             where T : IVertex
         {
-            var enu = new VertexEnumerator<T>(this);
+            var enu = new MeshVertexEnumerator<T>(this);
             while (enu.MoveNext())
                 callback(enu.Current, enu.Visitor.Index);
         }
 
-        public VertexList<T> View<T>()
+        public MeshVertexList<T> View<T>()
             where T : IVertex
         {
-            return new VertexList<T>(VertexVisitor<T>.CreateVisitor(this));
+            return new MeshVertexList<T>(VertexVisitor<T>.CreateVisitor(this));
         }
 
         public T[] GetVertexArray<T>()
@@ -714,295 +738,5 @@ namespace Aximo
         }
 
         public int MaterialCount => MaterialIds.Count;
-
-        public HashSet<int> MaterialIds { get; private set; } = new HashSet<int>(new int[] { 0 });
-
-        public class VertexList<T> : IList<T>
-            where T : IVertex
-        {
-            // public void AddRange(params T[] items)
-            // {
-
-            // }
-
-            public VertexList(IDynamicArray<T> innerList)
-            {
-                InnerList = innerList;
-            }
-
-            private IDynamicArray<T> InnerList;
-
-            public T this[int index]
-            {
-                get => InnerList[index];
-                set => InnerList[index] = value;
-            }
-
-            public int Count => InnerList.Count;
-
-            public bool IsReadOnly => false;
-
-            public void Add(T item)
-            {
-                InnerList.SetValueWithExpand(InnerList.Count, item);
-            }
-
-            public void Clear()
-            {
-                InnerList.Clear();
-            }
-
-            public bool Contains(T item)
-            {
-                return InnerList.Contains(item);
-            }
-
-            public void CopyTo(T[] array, int arrayIndex)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IEnumerator<T> GetEnumerator()
-            {
-                return new ArrayEnumerator<T>(InnerList);
-            }
-
-            public int IndexOf(T item)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Insert(int index, T item)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool Remove(T item)
-            {
-                return InnerList.Remove(item);
-            }
-
-            public void RemoveAt(int index)
-            {
-                InnerList.RemoveAt(index);
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                throw new NotImplementedException();
-            }
-
-            public T[] ToArray()
-            {
-                var array = new T[Count];
-                for (var i = 0; i < Count; i++)
-                    array[i] = (T)this[i].Clone();
-                return array;
-            }
-
-            public BufferData1D<T> ToBuffer()
-            {
-                return new BufferData1D<T>(ToArray());
-            }
-
-            public BufferData1D<TDestination> ToBuffer<TDestination>()
-            {
-                return new BufferData1D<TDestination>(ToArray<TDestination>());
-            }
-
-            public TDestination[] ToArray<TDestination>()
-            {
-                if (typeof(TDestination) == typeof(T))
-                    return (TDestination[])(object)ToArray();
-
-                if (typeof(TDestination) == typeof(VertexDataPosNormalUV))
-                {
-                    var array = new VertexDataPosNormalUV[Count];
-                    for (var i = 0; i < Count; i++)
-                        array[i].Set((IVertexPosNormalUV)this[i]);
-                    return (TDestination[])(object)array;
-                }
-
-                if (typeof(TDestination) == typeof(VertexDataPosNormalColor))
-                {
-                    var array = new VertexDataPosNormalColor[Count];
-                    for (var i = 0; i < Count; i++)
-                        array[i].Set((IVertexPosNormalColor)this[i]);
-                    return (TDestination[])(object)array;
-                }
-
-                if (typeof(TDestination) == typeof(VertexDataPosColor))
-                {
-                    var array = new VertexDataPosColor[Count];
-                    for (var i = 0; i < Count; i++)
-                        array[i].Set((IVertexPosColor)this[i]);
-                    return (TDestination[])(object)array;
-                }
-
-                if (typeof(TDestination) == typeof(VertexDataPos2UV))
-                {
-                    var array = new VertexDataPos2UV[Count];
-                    for (var i = 0; i < Count; i++)
-                        array[i].Set((IVertexPos2UV)this[i]);
-                    return (TDestination[])(object)array;
-                }
-
-                throw new NotSupportedException(typeof(TDestination).Name);
-            }
-        }
-
-        private class FaceList<T> : IList<MeshFace<T>>
-            where T : IVertex
-        {
-            private Mesh Mesh;
-            public FaceList(Mesh mesh)
-            {
-                Mesh = mesh;
-                VertexView = Mesh.View<T>();
-            }
-
-            private IList<T> VertexView;
-            private IList<InternalMeshFace> Faces => Mesh.InternalMeshFaces;
-
-            public int Count => Faces.Count;
-
-            public bool IsReadOnly => false;
-
-            public MeshFace<T> this[int index]
-            {
-                get => GetFace(index);
-                set => throw new NotImplementedException();
-            }
-
-            private MeshFace<T> GetFace(InternalMeshFace face)
-            {
-                return new MeshFace<T>(VertexView, Mesh.Indicies, face);
-            }
-
-            private MeshFace<T> GetFace(int faceIndex)
-            {
-                return GetFace(Faces[faceIndex]);
-            }
-
-            public int IndexOf(MeshFace<T> item)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Insert(int index, MeshFace<T> item)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void RemoveAt(int index)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Add(MeshFace<T> item)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Clear()
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool Contains(MeshFace<T> item)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void CopyTo(MeshFace<T>[] array, int arrayIndex)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool Remove(MeshFace<T> item)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IEnumerator<MeshFace<T>> GetEnumerator()
-            {
-                return new FaceEnumerator(this);
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return new FaceEnumerator(this);
-            }
-
-            private class FaceEnumerator : IEnumerator<MeshFace<T>>
-            {
-                private FaceList<T> Faces;
-                private int Index = -1;
-                public FaceEnumerator(FaceList<T> faces)
-                {
-                    Faces = faces;
-                }
-
-                public MeshFace<T> Current => Faces[Index];
-
-                object IEnumerator.Current => Current;
-
-                public void Dispose()
-                {
-                }
-
-                public bool MoveNext()
-                {
-                    if (Index >= Faces.Count - 1)
-                        return false;
-
-                    Index++;
-                    return true;
-                }
-
-                public void Reset()
-                {
-                    Index = -1;
-                }
-            }
-        }
-
-        private class VertexEnumerator<T> : IEnumerator<T>
-            where T : IVertex
-        {
-            public VertexEnumerator(Mesh mesh)
-            {
-                Mesh = mesh;
-                Visitor = VertexVisitor<T>.CreateVisitor(mesh);
-            }
-
-            private Mesh Mesh;
-
-            internal VertexVisitor<T> Visitor;
-
-            public T Current => (T)Visitor.Value;
-
-            object IEnumerator.Current => Visitor.Value;
-
-            public void Dispose()
-            {
-                Visitor?.Dispose();
-                Visitor = null;
-            }
-
-            public bool MoveNext()
-            {
-                if (Visitor.Index >= Mesh.VertexCount - 1)
-                    return false;
-
-                Visitor.Index++;
-                return true;
-            }
-
-            public void Reset()
-            {
-                Visitor.Index = -1;
-            }
-        }
     }
 }
