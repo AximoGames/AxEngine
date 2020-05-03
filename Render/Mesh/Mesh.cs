@@ -110,7 +110,9 @@ namespace Aximo
             var path = PathBuilder.Circle().ClosePath();
             var mesh = CreateQuadStride(path);
             var m2 = CreateSurface(path, Vector2.Zero);
-            return m2;
+            m2.Translate(new Vector3(0, 0, 0.5f));
+            mesh.AddMesh(m2);
+            return mesh;
         }
 
         public static Mesh CreateQuadStride(IEnumerable<Vector2> path)
@@ -132,10 +134,14 @@ namespace Aximo
 
         public static Mesh CreateSurface(IEnumerable<Vector2> path, Vector2 center)
         {
+            var uvOffset = new Vector2(0.5f);
+            var uvFactor = new Vector2(-1f, 1);
             var vertices = new List<VertexDataPosNormalUV>();
             foreach (var line in path.ToLines())
             {
-
+                vertices.Add(new VertexDataPosNormalUV(new Vector3(center), Vector3.UnitZ, -new Vector2(0, 0) + uvOffset));
+                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.A), Vector3.UnitZ, -line.A * uvFactor + uvOffset));
+                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.B), Vector3.UnitZ, -line.B * uvFactor + uvOffset));
             }
             return CreateFromVertices(vertices.ToArray(), null, MeshFaceType.Triangle);
         }
@@ -478,6 +484,9 @@ namespace Aximo
 
         internal void AddMeshInternal(Mesh mesh, int filterMaterialId = -1, int newMaterialId = -1)
         {
+            if (FaceCount == 0)
+                CreateFacesAndIndicies();
+
             if (mesh.FaceCount == 0)
                 mesh.CreateFacesAndIndicies();
 
@@ -775,5 +784,10 @@ namespace Aximo
         }
 
         public int MaterialCount => MaterialIds.Count;
+
+        public override string ToString()
+        {
+            return $"Vertices={VertexCount} Indicies={Indicies.Count} Faces={FaceCount} Type={PrimitiveType} Materials={MaterialCount}";
+        }
     }
 }
