@@ -52,6 +52,7 @@ namespace Aximo.Engine
                 RenderFrequency = Config.IdleRenderFrequency;
                 UpdateFrequency = Config.IdleUpdateFrequency;
             }
+            base.OnFocusedChanged(e);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

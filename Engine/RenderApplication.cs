@@ -132,12 +132,14 @@ namespace Aximo.Engine
             Window.MouseWheel += (e) => OnMouseWheelInternal(e);
             Window.Unload += () => OnUnloadInternal();
             Window.Resize += (e) => OnScreenResizeInternal(e);
+            Window.FocusedChanged += (e) => OnFocusedChangedInternal(e);
             Window.Closing += (e) => OnClosingInternal(e);
             Window.Closed += OnClosed;
         }
 
         private void UnregisterWindowEvents()
         {
+            // TODO: Unregister is not correct, because of seperate delegate instance
             WindowContext.RenderFrame -= (e) => OnRenderFrameInternal(e);
             WindowContext.UpdateFrame -= (e) => OnUpdateFrameInternal(e);
             Window.MouseMove -= (e) => OnMouseMoveInternal(e);
@@ -147,6 +149,7 @@ namespace Aximo.Engine
             Window.MouseWheel -= (e) => OnMouseWheelInternal(e);
             Window.Unload -= () => OnUnloadInternal();
             Window.Resize -= (e) => OnScreenResizeInternal(e);
+            Window.FocusedChanged -= (e) => OnFocusedChangedInternal(e);
             Window.Closing -= (e) => OnClosingInternal(e);
             Window.Closed -= OnClosed;
         }
@@ -168,14 +171,7 @@ namespace Aximo.Engine
             ShaderWatcher.EnableRaisingEvents = true;
         }
 
-        public bool IsFocused
-        {
-            get
-            {
-                return true;
-                // return window.IsFocused; // Bug since new OpenTK version
-            }
-        }
+        public bool IsFocused => Window.IsFocused;
 
         protected virtual void OnRenderFrame(FrameEventArgs e) { }
 
@@ -607,6 +603,15 @@ namespace Aximo.Engine
         {
             // GL.Viewport(0, 0, RenderContext.ScreenSize.X, RenderContext.ScreenSize.Y);
             // Camera.AspectRatio = RenderContext.ScreenSize.X / (float)RenderContext.ScreenSize.Y;
+        }
+
+        private void OnFocusedChanged(FocusedChangedEventArgs e)
+        {
+        }
+
+        private void OnFocusedChangedInternal(FocusedChangedEventArgs e)
+        {
+            OnFocusedChanged(e);
         }
 
         protected virtual void OnUnload() { }
