@@ -658,6 +658,8 @@ namespace Aximo.Engine
 
                 Thread.Sleep(200);
 
+                DirectoryHelper.ResetFileGenerator();
+
                 RenderContext.Free();
                 RenderContext = null;
 

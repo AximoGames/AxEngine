@@ -132,6 +132,10 @@ namespace Aximo
         }
 
         private static Dictionary<string, GenerateFileDelegate> FileGenerators = new Dictionary<string, GenerateFileDelegate>();
+        public static void ResetFileGenerator()
+        {
+            FileGenerators.Clear();
+        }
 
         public static void AddFileGenerator(string subPath, GenerateFileDelegate generator)
         {
