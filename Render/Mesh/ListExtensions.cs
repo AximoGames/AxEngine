@@ -54,5 +54,22 @@ namespace Aximo
         {
             AddRange(list, (ICollection<VertexDataPosNormalUV>)items);
         }
+
+        public static void Reverse<T>(this IList<T> list, int startIndex, int count)
+        {
+            ReverseInternal(list, startIndex, startIndex + count - 1);
+        }
+
+        private static void ReverseInternal<T>(this IList<T> list, int startIndex, int endIndex)
+        {
+            while (startIndex < endIndex)
+            {
+                var temp = list[startIndex];
+                list[startIndex] = list[endIndex];
+                list[endIndex] = temp;
+                startIndex++;
+                endIndex--;
+            }
+        }
     }
 }

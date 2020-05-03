@@ -161,6 +161,18 @@ namespace Aximo
             return mesh;
         }
 
+        public void ReverseWindingOrder()
+        {
+            for (var i = 0; i < InternalMeshFaces.Count; i++)
+                ReverseWindingOrder(i);
+        }
+
+        public void ReverseWindingOrder(int faceIndex)
+        {
+            var face = InternalMeshFaces[faceIndex];
+            Indicies.Reverse(face.StartIndex, face.Count);
+        }
+
         public Mesh Clone()
         {
             var newMesh = CloneEmpty();
