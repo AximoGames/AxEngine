@@ -14,10 +14,9 @@ namespace Aximo.Generators.AlchemyCircle
 
         public CiaccoRandom()
         {
-
         }
 
-        public void setSeed(int seed)
+        public void SetSeed(int seed)
         {
             // seed can only be positive and seed range is [0 -> 9999998] seed=9999999 schould give the same as seed=0
             superSeed = Math.Abs(seed) % 9999999 + 1;

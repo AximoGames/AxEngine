@@ -565,6 +565,7 @@ namespace Aximo
             var mesh = new Mesh();
             foreach (var c in Components)
                 mesh.AddComponent(c.CloneEmpty());
+            mesh.PrimitiveType = PrimitiveType;
             return mesh;
         }
 
@@ -847,9 +848,11 @@ namespace Aximo
 
         public MeshData GetMeshData(int materialId)
         {
-            //return ToPolygons().GetMeshData();
-            return ToPrimitive(PrimitiveType, materialId).GetMeshData();
-            //return GetMeshData();
+            var mesh = CloneEmpty();
+            mesh.AddMesh(this, materialId);
+            if (mesh.PrimitiveType >= MeshFaceType.Quad)
+                mesh = mesh.ToPrimitive(MeshFaceType.Triangle);
+            return mesh.GetMeshData();
         }
 
         private MeshData GetMeshData()

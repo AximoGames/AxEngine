@@ -8,371 +8,28 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
 using OpenToolkit.Mathematics;
+using SixLabors.ImageSharp.Drawing.Processing;
 
 namespace Aximo.Generators.AlchemyCircle
 {
-
     public static class TextureDraw
     {
-
         public static void SetPixel(this Image image, int x, int y, Color color)
         {
             var img = (Image<Rgba32>)image;
             img[x, y] = color.ToPixel<Rgba32>();
         }
 
-        public static void drawLine(Image tex, int x0, int y0, int x1, int y1, Color col, int thickness)
+        public static void DrawLine(Image tex, int x0, int y0, int x1, int y1, Color col, int thickness)
         {
-            int dx, dy, incr1, incr2, d, x, y, xend, yend, xdirflag, ydirflag;
-            int wid;
-            int w, wstart;
-
-            dx = Math.Abs(x1 - x0);
-            dy = Math.Abs(y1 - y0);
-
-            if (dx == 0)
+            tex.Mutate(ctx =>
             {
-                gdImageVLine(tex, x0, y0, y1, col, thickness);
-                return;
-            }
-            else if (dy == 0)
-            {
-                gdImageHLine(tex, y0, x0, x1, col, thickness);
-                return;
-            }
-
-            if (dy <= dx)
-            {
-                double ac = MathF.Cos(MathF.Atan2(dy, dx));
-                if (ac != 0)
-                {
-                    wid = (int)(thickness / ac);
-                }
-                else
-                {
-                    wid = 1;
-                }
-                if (wid == 0)
-                {
-                    wid = 1;
-                }
-                d = 2 * dy - dx;
-                incr1 = 2 * dy;
-                incr2 = 2 * (dy - dx);
-                if (x0 > x1)
-                {
-                    x = x1;
-                    y = y1;
-                    ydirflag = (-1);
-                    xend = x0;
-                }
-                else
-                {
-                    x = x0;
-                    y = y0;
-                    ydirflag = 1;
-                    xend = x1;
-                }
-
-                /* Set up line thickness */
-                wstart = y - wid / 2;
-                for (w = wstart; w < wstart + wid; w++)
-                    tex.SetPixel(x, w, col);
-
-                if (((y1 - y0) * ydirflag) > 0)
-                {
-                    while (x < xend)
-                    {
-                        x++;
-                        if (d < 0)
-                        {
-                            d += incr1;
-                        }
-                        else
-                        {
-                            y++;
-                            d += incr2;
-                        }
-                        wstart = y - wid / 2;
-                        for (w = wstart; w < wstart + wid; w++)
-                            tex.SetPixel(x, w, col);
-                    }
-                }
-                else
-                {
-                    while (x < xend)
-                    {
-                        x++;
-                        if (d < 0)
-                        {
-                            d += incr1;
-                        }
-                        else
-                        {
-                            y--;
-                            d += incr2;
-                        }
-                        wstart = y - wid / 2;
-                        for (w = wstart; w < wstart + wid; w++)
-                            tex.SetPixel(x, w, col);
-                    }
-                }
-            }
-            else
-            {
-                double ass = MathF.Sin(MathF.Atan2(dy, dx));
-                if (ass != 0)
-                {
-                    wid = (int)(thickness / ass);
-                }
-                else
-                {
-                    wid = 1;
-                }
-                if (wid == 0)
-                    wid = 1;
-
-                d = 2 * dx - dy;
-                incr1 = 2 * dx;
-                incr2 = 2 * (dx - dy);
-                if (y0 > y1)
-                {
-                    y = y1;
-                    x = x1;
-                    yend = y0;
-                    xdirflag = (-1);
-                }
-                else
-                {
-                    y = y0;
-                    x = x0;
-                    yend = y1;
-                    xdirflag = 1;
-                }
-
-                /* Set up line thickness */
-                wstart = x - wid / 2;
-                for (w = wstart; w < wstart + wid; w++)
-                    tex.SetPixel(w, y, col);
-
-                if (((x1 - x0) * xdirflag) > 0)
-                {
-                    while (y < yend)
-                    {
-                        y++;
-                        if (d < 0)
-                        {
-                            d += incr1;
-                        }
-                        else
-                        {
-                            x++;
-                            d += incr2;
-                        }
-                        wstart = x - wid / 2;
-                        for (w = wstart; w < wstart + wid; w++)
-                            tex.SetPixel(w, y, col);
-                    }
-                }
-                else
-                {
-                    while (y < yend)
-                    {
-                        y++;
-                        if (d < 0)
-                        {
-                            d += incr1;
-                        }
-                        else
-                        {
-                            x--;
-                            d += incr2;
-                        }
-                        wstart = x - wid / 2;
-                        for (w = wstart; w < wstart + wid; w++)
-                            tex.SetPixel(w, y, col);
-                    }
-                }
-            }
-
+                var options = new ShapeGraphicsOptions();
+                ctx.DrawLines(options, col, thickness, new PointF(x0, y0), new PointF(x1, y1));
+            });
         }
 
-
-
-
-        static void gdImageHLine(Image tex, int y, int x1, int x2, Color col, int thickness)
-        {
-            if (thickness > 1)
-            {
-                int thickhalf = thickness >> 1;
-                _gdImageFilledHRectangle(tex, x1, y - thickhalf, x2, y + thickness - thickhalf - 1, col);
-            }
-            else
-            {
-                if (x2 < x1)
-                {
-                    int t = x2;
-                    x2 = x1;
-                    x1 = t;
-                }
-
-                for (; x1 <= x2; x1++)
-                {
-                    tex.SetPixel(x1, y, col);
-                }
-            }
-            return;
-        }
-
-        static void gdImageVLine(Image tex, int x, int y1, int y2, Color col, int thickness)
-        {
-            if (thickness > 1)
-            {
-                int thickhalf = thickness >> 1;
-                _gdImageFilledVRectangle(tex, x - thickhalf, y1, x + thickness - thickhalf - 1, y2, col);
-            }
-            else
-            {
-                if (y2 < y1)
-                {
-                    int t = y1;
-                    y1 = y2;
-                    y2 = t;
-                }
-
-                for (; y1 <= y2; y1++)
-                {
-                    tex.SetPixel(x, y1, col);
-                }
-            }
-            return;
-        }
-
-
-        static void _gdImageFilledHRectangle(Image tex, int x1, int y1, int x2, int y2, Color col)
-        {
-            int x, y;
-
-            if (x1 == x2 && y1 == y2)
-            {
-                tex.SetPixel(x1, y1, col);
-                return;
-            }
-
-            if (x1 > x2)
-            {
-                x = x1;
-                x1 = x2;
-                x2 = x;
-            }
-
-            if (y1 > y2)
-            {
-                y = y1;
-                y1 = y2;
-                y2 = y;
-            }
-
-            if (x1 < 0)
-            {
-                x1 = 0;
-            }
-
-            if (x2 >= tex.Width)
-            {
-                x2 = tex.Width - 1;
-            }
-
-            if (y1 < 0)
-            {
-                y1 = 0;
-            }
-
-            if (y2 >= tex.Height)
-            {
-                y2 = tex.Height - 1;
-            }
-
-            for (x = x1; (x <= x2); x++)
-            {
-                for (y = y1; (y <= y2); y++)
-                {
-                    tex.SetPixel(x, y, col);
-                }
-            }
-        }
-
-        static void _gdImageFilledVRectangle(Image tex, int x1, int y1, int x2, int y2, Color col)
-        {
-            int x, y;
-
-            if (x1 == x2 && y1 == y2)
-            {
-                tex.SetPixel(x1, y1, col);
-                return;
-            }
-
-            if (x1 > x2)
-            {
-                x = x1;
-                x1 = x2;
-                x2 = x;
-            }
-
-            if (y1 > y2)
-            {
-                y = y1;
-                y1 = y2;
-                y2 = y;
-            }
-
-            if (x1 < 0)
-            {
-                x1 = 0;
-            }
-
-            if (x2 >= tex.Width)
-            {
-                x2 = tex.Width - 1;
-            }
-
-            if (y1 < 0)
-            {
-                y1 = 0;
-            }
-
-            if (y2 >= tex.Height)
-            {
-                y2 = tex.Height - 1;
-            }
-
-            for (y = y1; (y <= y2); y++)
-            {
-                for (x = x1; (x <= x2); x++)
-                {
-                    tex.SetPixel(x, y, col);
-                }
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        public static void drawCircle(Image tex, int cx, int cy, int r, Color col, int thickness)
+        public static void DrawCircle(Image tex, int cx, int cy, int r, Color col, int thickness)
         {
             //int y = r;
             //float d = 1 / 4 - r;
@@ -407,7 +64,7 @@ namespace Aximo.Generators.AlchemyCircle
                 r++;
             }
         }
-        public static void drawFilledCircle(Image tex, int cx, int cy, int r, Color col, Color bgcol, int thickness)
+        public static void DrawFilledCircle(Image tex, int cx, int cy, int r, Color col, Color bgcol, int thickness)
         {
             for (int x = -r; x < r; x++)
             {
@@ -417,12 +74,12 @@ namespace Aximo.Generators.AlchemyCircle
                     tex.SetPixel(x + cx, y + cy, bgcol);
             }
 
-            drawCircle(tex, cx, cy, r, col, thickness);
+            DrawCircle(tex, cx, cy, r, col, thickness);
         }
 
 
 
-        private static Vector2[] getPoints(int sides, float rot, float radius, float size)
+        private static Vector2[] GetPoints(int sides, float rot, float radius, float size)
         {
             Vector2[] values = new Vector2[sides];
             float angdiff = AxMath.Deg2Rad * (360 / (sides));
@@ -437,32 +94,29 @@ namespace Aximo.Generators.AlchemyCircle
             return values;
         }
 
-        public static void drawPolygon(Image tex, int n, int r, int rot, int size, Color col, int thickness)
+        public static void DrawPolygon(Image tex, int n, int r, int rot, int size, Color col, int thickness)
         {
             if (n <= 0)
             {
                 return;
             }
 
-            Vector2[] p = getPoints(n, rot, r, size);
+            Vector2[] p = GetPoints(n, rot, r, size);
 
             int i = 0;
 
-            drawLine(tex, (int)p[i].X, (int)p[i].Y, (int)p[n - 1].X, (int)p[n - 1].Y, col, thickness);
+            DrawLine(tex, (int)p[i].X, (int)p[i].Y, (int)p[n - 1].X, (int)p[n - 1].Y, col, thickness);
 
             for (i = 1; (i < n); i++)
             {
-                drawLine(tex, (int)p[i - 1].X, (int)p[i - 1].Y, (int)p[i].X, (int)p[i].Y, col, thickness);
+                DrawLine(tex, (int)p[i - 1].X, (int)p[i - 1].Y, (int)p[i].X, (int)p[i].Y, col, thickness);
             }
-
         }
 
-
-
-        public static void drawFilledPolygon(Image tex, int n, int r, int rot, int size, Color color, Color backgroundColor, int thickness)
+        public static void DrawFilledPolygon(Image tex, int n, int r, int rot, int size, Color color, Color backgroundColor, int thickness)
         {
 
-            Vector2[] p = getPoints(n, rot, r, size);
+            Vector2[] p = GetPoints(n, rot, r, size);
 
             int i;
             int j;
@@ -507,7 +161,7 @@ namespace Aximo.Generators.AlchemyCircle
                         x2 = (int)p[i].X;
                     }
                 }
-                drawLine(tex, x1, miny, x2, miny, backgroundColor, thickness);
+                DrawLine(tex, x1, miny, x2, miny, backgroundColor, thickness);
                 return;
             }
             pmaxy = maxy;
@@ -588,13 +242,12 @@ namespace Aximo.Generators.AlchemyCircle
                 for (i = 0; (i < (ints - 1)); i += 2)
                 {
                     // 2.0.29: back to gdImageLine to prevent segfaults when performing a pattern fill
-                    drawLine(tex, polyInts[i], y, polyInts[i + 1], y, backgroundColor, thickness);
+                    DrawLine(tex, polyInts[i], y, polyInts[i + 1], y, backgroundColor, thickness);
                 }
             }
 
             // draw border
-            drawPolygon(tex, n, r, rot, size, color, thickness);
-
+            DrawPolygon(tex, n, r, rot, size, color, thickness);
         }
     }
 }
