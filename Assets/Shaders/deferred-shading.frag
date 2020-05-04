@@ -48,7 +48,7 @@ void main()
     vec3 normal = texture(gNormal, TexCoords).rgb;
     Normal = normal;
 
-    vec3 matDiffuse = texture(gAlbedoSpec, TexCoords).rgb;
+    vec4 matDiffuse = vec4(texture(gAlbedoSpec, TexCoords).rgb, 1.0);
     float matSpecular = texture(gAlbedoSpec, TexCoords).a;
     float matAmbient = texture(gMaterial, TexCoords).r;
     float matShininess = texture(gMaterial, TexCoords).g;

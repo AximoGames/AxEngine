@@ -23,7 +23,7 @@ namespace Aximo.Engine
                 {
                     _DefaultMaterial = new GameMaterial
                     {
-                        Color = new Vector3(0.5f, 0.5f, 0.5f),
+                        Color = new Vector4(0.5f, 0.5f, 0.5f, 1),
                         Ambient = 0.3f,
                         Shininess = 32.0f,
                         SpecularStrength = 0.5f,

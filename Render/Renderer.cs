@@ -201,7 +201,7 @@ namespace Aximo.Render
             public Vector3 Position;
 
             [FieldOffset(16)]
-            public Vector3 Color;
+            public Vector4 Color;
 
             [FieldOffset(32)]
             public Matrix4 LightSpaceMatrix;

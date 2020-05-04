@@ -33,21 +33,21 @@ void main()
     // also store the per-fragment normals into the gbuffer
     gNormal = normalize(Normal);
     // and the diffuse per-fragment color
-    vec3 matDiffuse = material.DiffuseColor;
+    vec4 matDiffuse = material.DiffuseColor;
 #ifndef OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
 
 #ifdef USE_VERTEX_UV
-    matDiffuse = texture(material.DiffuseMap, TexCoords).rgb * material.DiffuseColor;
+    matDiffuse = texture(material.DiffuseMap, TexCoords) * material.DiffuseColor;
 #endif
 #ifdef USE_VERTEX_COLOR
-    matDiffuse = Color.rgb * material.DiffuseColor;
+    matDiffuse = Color * material.DiffuseColor;
 #endif
 
 #else
 #include OVERRIDE_GET_MATERIAL_DIFFUSE_FILE
 #endif
 
-    gAlbedoSpec.rgb = matDiffuse;
+    gAlbedoSpec.rgb = matDiffuse.rgb;
 #ifdef USE_VERTEX_UV
     // store specular intensity in gAlbedoSpec's alpha component
     gAlbedoSpec.a = texture(material.SpecularMap, TexCoords).r * material.SpecularStrength;

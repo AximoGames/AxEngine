@@ -100,7 +100,7 @@ namespace Aximo.Engine
             MaterialId = Interlocked.Increment(ref LastMaterialId);
         }
 
-        public Vector3 Color { get; set; }
+        public Vector4 Color { get; set; }
         public float Ambient { get; set; }
         public float Shininess { get; set; } = 1.0f;
         public float SpecularStrength { get; set; }
@@ -230,7 +230,7 @@ namespace Aximo.Engine
             else
             {
                 mat.DiffuseMap = DiffuseTexture.InternalTexture;
-                mat.DiffuseColor = Vector3.One;
+                mat.DiffuseColor = Vector4.One;
             }
 
             if (SpecularTexture == null)

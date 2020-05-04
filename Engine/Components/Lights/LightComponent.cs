@@ -33,8 +33,8 @@ namespace Aximo.Engine
             set { if (_Quadric == value) return; _Quadric = value; LightAttributesChanged = true; }
         }
 
-        private Vector3 _Color = Vector3.One;
-        public Vector3 Color
+        private Vector4 _Color = Vector4.One;
+        public Vector4 Color
         {
             get => _Color;
             set { if (_Color == value) return; _Color = value; LightAttributesChanged = true; }

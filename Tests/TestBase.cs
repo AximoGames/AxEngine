@@ -244,7 +244,7 @@ namespace Aximo.AxTests
             };
         }
 
-        protected GameMaterial SolidColorMaterial(PipelineType pipelineType, Vector3 color)
+        protected GameMaterial SolidColorMaterial(PipelineType pipelineType, Vector4 color)
         {
             return new GameMaterial()
             {

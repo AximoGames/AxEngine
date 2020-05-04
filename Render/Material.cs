@@ -18,7 +18,7 @@ namespace Aximo.Render
 
     public class Material
     {
-        public Vector3 DiffuseColor { get; set; }
+        public Vector4 DiffuseColor { get; set; }
 
         public float SpecularStrength { get; set; }
         public float Shininess { get; set; }
@@ -43,7 +43,7 @@ namespace Aximo.Render
         {
             var mat = new Material()
             {
-                DiffuseColor = new Vector3(0.5f, 0.5f, 0.5f),
+                DiffuseColor = new Vector4(0.5f, 0.5f, 0.5f, 1),
                 Ambient = 0.3f,
                 Shininess = 32.0f,
                 SpecularStrength = 0.5f,
@@ -67,7 +67,7 @@ namespace Aximo.Render
         public void WriteToShader(string name, Shader shader)
         {
             var prefix = name += ".";
-            shader.SetVector3(prefix + "DiffuseColor", DiffuseColor);
+            shader.SetVector4(prefix + "DiffuseColor", DiffuseColor);
             shader.SetInt(prefix + "DiffuseMap", 0);
             shader.SetInt(prefix + "SpecularMap", 1);
             shader.SetFloat(prefix + "Ambient", Ambient);

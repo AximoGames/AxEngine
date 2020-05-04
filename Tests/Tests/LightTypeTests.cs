@@ -31,7 +31,7 @@ namespace Aximo.AxTests
                 {
                     SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
                     Ambient = test.Ambient,
-                    Color = new Vector3(0, 1, 0),
+                    Color = new Vector4(0, 1, 0, 1),
                     PipelineType = test.Pipeline,
                 };
                 if (test.DiffuseSource == "Texture")
