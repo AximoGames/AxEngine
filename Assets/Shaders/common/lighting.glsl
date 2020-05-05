@@ -3,9 +3,10 @@ lightResult.Diffuse = vec4(0);
 lightResult.Specular = vec4(0);
 lightResult.Shadow = 0;
 
+float originalAlpha = matDiffuse.a;
+
 // then calculate lighting as usual
 vec4 lighting  = matDiffuse * matAmbient; // hard-coded ambient component
-float originalAlpha = matDiffuse.a;
 
 for(int i = 0; i < LightCount; ++i)
 {
