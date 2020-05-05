@@ -134,6 +134,11 @@ namespace Aximo.Render
         Vector3 Position { get; set; }
     }
 
+    public interface IBounds
+    {
+        Box3 WorldBounds { get; set; }
+    }
+
     public interface IScaleRotate : IPosition
     {
         Vector3 Scale { get; set; }

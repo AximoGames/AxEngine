@@ -884,6 +884,34 @@ namespace Aximo
 
         public int MaterialCount => MaterialIds.Count;
 
+        public Box3 Bounds
+        {
+            get
+            {
+                var comp = GetComponent<MeshPosition3Component>();
+                if (comp != null)
+                    return comp.Bounds;
+
+                var comp2 = GetComponent<MeshPosition2Component>();
+                if (comp2 != null)
+                {
+                    var box = comp2.Bounds;
+                    return new Box3(new Vector3(box.Min), new Vector3(box.Max));
+                }
+
+                return default;
+            }
+        }
+
+        public void CalculateBounds()
+        {
+            var comp = GetComponent<MeshPosition3Component>();
+            if (comp != null)
+                comp.CalculateBounds();
+            else
+                GetComponent<MeshPosition2Component>()?.CalculateBounds();
+        }
+
         public override string ToString()
         {
             return $"Vertices={VertexCount} Indicies={Indicies.Count} Faces={FaceCount} Type={PrimitiveType} Materials={MaterialCount}";

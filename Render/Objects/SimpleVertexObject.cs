@@ -11,7 +11,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Render
 {
     public class SimpleVertexObject : PrimitiveObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
-        IForwardRenderable, IDeferredRenderable, IScreenRenderable
+        IForwardRenderable, IDeferredRenderable, IScreenRenderable, IBounds
     {
         public Camera Camera => Context.Camera;
         public Vector3 Position { get; set; }
@@ -342,5 +342,7 @@ namespace Aximo.Render
         }
 
         public List<ILightObject> Lights => Context.LightObjects;
+
+        public Box3 WorldBounds { get; set; }
     }
 }

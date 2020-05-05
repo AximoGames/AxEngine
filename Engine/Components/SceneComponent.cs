@@ -412,5 +412,22 @@ namespace Aximo.Engine
             if (list)
                 VisitChilds<GameObject>(a => a.DumpInfo(false));
         }
+
+        public virtual Box3 WorldBounds { get; protected set; }
+        public virtual Box3 LocalBounds { get; protected set; }
+
+        public void UpdateWorldBounds()
+        {
+            UpdateWorldBounds(LocalToWorld());
+        }
+
+        public void UpdateWorldBounds(Matrix4 localToWorld)
+        {
+            var box = LocalBounds;
+            var min = Vector3.TransformPosition(box.Min, localToWorld);
+            var max = Vector3.TransformPosition(box.Max, localToWorld);
+            WorldBounds = new Box3(min, max);
+        }
+
     }
 }

@@ -37,6 +37,7 @@ namespace Aximo.Engine
         public void SetMesh(Mesh mesh)
         {
             Mesh = mesh;
+            mesh.CalculateBounds();
             UpdateMesh();
         }
 
@@ -103,7 +104,9 @@ namespace Aximo.Engine
             if (TransformChanged)
             {
                 var trans = LocalToWorld();
+                UpdateWorldBounds(trans);
                 obj.PositionMatrix = trans;
+                obj.WorldBounds = WorldBounds;
                 TransformChanged = false;
             }
 
