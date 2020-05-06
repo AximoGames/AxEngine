@@ -26,6 +26,12 @@ namespace Aximo.Render
             if (x.UseTransparency != y.UseTransparency)
                 return x.UseTransparency.CompareTo(y.UseTransparency);
 
+            var reverse = 0;
+            if (x.UseTransparency) // no check for Y needed
+            {
+                reverse = 1;
+            }
+
             if (x.DrawPriority != y.DrawPriority)
                 return x.DrawPriority.CompareTo(y.DrawPriority);
 
@@ -41,7 +47,7 @@ namespace Aximo.Render
 
             var distanceX = Vector3.Distance(CameraPosition, boundsX.WorldBounds.Center);
             var distanceY = Vector3.Distance(CameraPosition, boundsY.WorldBounds.Center);
-            return distanceX.CompareTo(distanceY);
+            return distanceX.CompareTo(distanceY) * reverse;
         }
     }
 

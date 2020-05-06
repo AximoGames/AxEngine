@@ -110,6 +110,8 @@ namespace Aximo.Engine
 
                 CalculateSizes();
             }
+
+            Material.UseTransparency = true; // TODO: Set only where required
         }
 
         // Size+Border+Margin
