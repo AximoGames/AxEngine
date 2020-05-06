@@ -15,6 +15,10 @@ namespace Aximo.Engine
         internal IRenderableObject RenderableObject;
 
         public bool CastShadow { get; set; }
+
+        /// <summary>
+        /// Higher number means, more near to the front.
+        /// </summary>
         public int DrawPriority { get; set; }
 
         public virtual PrimitiveSceneProxy CreateProxy()

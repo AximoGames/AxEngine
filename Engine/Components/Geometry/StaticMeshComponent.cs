@@ -97,6 +97,8 @@ namespace Aximo.Engine
                     InternalMesh.Materials.Add(gameMat.InternalMaterial);
                 }
 
+                obj.UseTransparency = Materials.Any(m => m.UseTransparency);
+
                 obj.SetVertices(InternalMesh);
                 MeshChanged = false;
             }

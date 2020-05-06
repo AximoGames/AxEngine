@@ -23,6 +23,9 @@ namespace Aximo.Render
             // Draw Early: -1.
             // Draw Late: 1
 
+            if (x.UseTransparency != y.UseTransparency)
+                return x.UseTransparency.CompareTo(y.UseTransparency);
+
             if (x.DrawPriority != y.DrawPriority)
                 return x.DrawPriority.CompareTo(y.DrawPriority);
 
