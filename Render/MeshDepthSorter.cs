@@ -22,6 +22,10 @@ namespace Aximo.Render
         {
             // Draw Early: -1.
             // Draw Late: 1
+
+            if (x.DrawPriority != y.DrawPriority)
+                return x.DrawPriority.CompareTo(y.DrawPriority);
+
             var boundsX = x as IBounds;
             var boundsY = y as IBounds;
             var hasBoundsX = boundsX != null ? 1 : 0;
@@ -31,9 +35,6 @@ namespace Aximo.Render
 
             if (hasBoundsX == 0) // no check for Y needed
                 return 0;
-
-            if (x.DrawPriority != y.DrawPriority)
-                return x.DrawPriority.CompareTo(y.DrawPriority);
 
             var distanceX = Vector3.Distance(CameraPosition, boundsX.WorldBounds.Center);
             var distanceY = Vector3.Distance(CameraPosition, boundsY.WorldBounds.Center);

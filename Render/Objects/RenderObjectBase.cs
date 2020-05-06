@@ -13,6 +13,7 @@ namespace Aximo.Render
         public string Name { get; set; }
         public bool Enabled { get; set; } = true;
         public int DrawPriority { get; set; }
+        public bool UseTransparency { get; set; }
 
         public RenderObjectBase()
         {

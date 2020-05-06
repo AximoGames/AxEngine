@@ -111,6 +111,7 @@ namespace Aximo.Engine
         private Dictionary<string, object> Defines = new Dictionary<string, object>();
 
         public PipelineType PipelineType { get; set; }
+        public bool UseTransparency { get; set; }
 
         public void SetDefine(string name, string value)
         {

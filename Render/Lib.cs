@@ -18,6 +18,7 @@ namespace Aximo.Render
         bool Enabled { get; set; }
         bool Orphaned { get; set; }
         int DrawPriority { get; set; }
+        bool UseTransparency { get; set; }
         RenderContext Context { get; }
         void Init();
         void Free();
