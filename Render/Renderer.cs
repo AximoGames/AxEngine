@@ -18,6 +18,7 @@ namespace Aximo.Render
 
         public static Renderer Current;
         public Vector2i ScreenSize;
+        public FlushRenderBackend FlushRenderBackend;
 
         public RenderContext Context => RenderContext.Current;
 
@@ -180,6 +181,9 @@ namespace Aximo.Render
             //CheckForProgramError();
 
             ubo.Free();
+
+            if (FlushRenderBackend == FlushRenderBackend.End)
+                GL.Finish();
         }
 
         private void CheckForProgramError()

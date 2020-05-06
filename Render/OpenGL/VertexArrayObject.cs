@@ -87,6 +87,9 @@ namespace Aximo.Render
                 GL.DrawArrays(PrimitiveType, 0, VertexCount);
             else
                 GL.DrawElements(PrimitiveType, _ebo.Size, DrawElementsType.UnsignedShort, 0);
+
+            if (Renderer.Current.FlushRenderBackend == FlushRenderBackend.Draw)
+                GL.Finish();
         }
 
         private bool Initialized;

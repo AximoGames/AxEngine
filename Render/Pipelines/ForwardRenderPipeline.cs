@@ -56,7 +56,7 @@ namespace Aximo.Render
         public override IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
         {
             var objects = base.GetRenderObjects(context, camera).ToList();
-            //objects.Sort(new MeshSorter(camera));
+            objects.Sort(new MeshSorter(camera));
             return objects;
         }
 
@@ -88,7 +88,7 @@ namespace Aximo.Render
 
                 var distanceX = Vector3.Distance(CameraPosition, boundsX.WorldBounds.Center);
                 var distanceY = Vector3.Distance(CameraPosition, boundsY.WorldBounds.Center);
-                return distanceX.CompareTo(distanceY);
+                return -distanceX.CompareTo(distanceY);
             }
         }
 

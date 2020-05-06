@@ -78,7 +78,10 @@ namespace Aximo.Engine
             WindowContext.Init(Config);
             RegisterWindowEvents();
 
-            Renderer = new Renderer();
+            Renderer = new Renderer
+            {
+                FlushRenderBackend = Config.FlushRenderBackend,
+            };
             Renderer.Current = Renderer;
 
             RenderContext = new RenderContext()
