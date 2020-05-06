@@ -111,6 +111,7 @@ namespace Aximo.Engine
             }
 
             obj.Enabled = Visible;
+            obj.DrawPriority = DrawPriority;
 
             if (created)
                 RenderContext.Current.AddObject(RenderableObject);

@@ -2,6 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render
@@ -114,6 +116,11 @@ namespace Aximo.Render
             Pass = DeferredPass.Pass1;
             foreach (var obj in GetRenderObjects(context, camera))
                 Render(context, camera, obj);
+        }
+
+        public override IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
+        {
+            return SortFromFrontToBack(context, camera, base.GetRenderObjects(context, camera));
         }
 
         private void RenderPass2(RenderContext context, Camera camera)

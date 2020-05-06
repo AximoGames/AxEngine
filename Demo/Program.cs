@@ -18,12 +18,14 @@ namespace Aximo.AxDemo
                 WindowTitle = "AxEngineDemo",
                 WindowSize = new Vector2i(800, 600),
                 WindowBorder = WindowBorder.Resizable,
-                //RenderFrequency = 490,
-                //UpdateFrequency = 490,
-                //VSync = VSyncMode.Off,
+                IsMultiThreaded = true,
+                RenderFrequency = 0,
+                UpdateFrequency = 0,
+                IdleRenderFrequency = 0,
+                IdleUpdateFrequency = 0,
+                VSync = VSyncMode.Off,
                 // UseGtkUI = true,
                 UseConsole = true,
-                IsMultiThreaded = true,
             };
 
             new GameStartup<DemoApplication, GtkUI>(config).Start();

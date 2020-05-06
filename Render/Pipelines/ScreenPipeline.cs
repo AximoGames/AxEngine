@@ -19,7 +19,7 @@ namespace Aximo.Render
             GL.ClearColor(1.0f, 0.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            foreach (var obj in GetRenderObjects(context, camera).OrderBy(o => o.Order))
+            foreach (var obj in GetRenderObjects(context, camera).OrderBy(o => o.DrawPriority))
                 Render(context, camera, obj);
         }
     }

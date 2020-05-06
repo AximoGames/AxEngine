@@ -34,7 +34,7 @@ namespace Aximo.Engine
 
             if (OrderChanged)
             {
-                RenderableObject.Order = Order;
+                RenderableObject.DrawPriority = Order;
                 OrderChanged = false;
             }
         }

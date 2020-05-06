@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using OpenToolkit.Graphics.OpenGL4;
-using OpenToolkit.Mathematics;
 
 namespace Aximo.Render
 {
@@ -55,41 +54,7 @@ namespace Aximo.Render
 
         public override IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
         {
-            var objects = base.GetRenderObjects(context, camera).ToList();
-            objects.Sort(new MeshSorter(camera));
-            return objects;
-        }
-
-        private class MeshSorter : IComparer<IRenderableObject>
-        {
-            public Camera Camera;
-            private Vector3 CameraPosition;
-
-            public MeshSorter(Camera camera)
-            {
-                Camera = camera;
-                CameraPosition = camera.Position;
-            }
-
-            // returns: Draw-Order. 
-            public int Compare(IRenderableObject x, IRenderableObject y)
-            {
-                // Draw Early: -1.
-                // Draw Late: 1
-                var boundsX = x as IBounds;
-                var boundsY = y as IBounds;
-                var hasBoundsX = boundsX != null ? 1 : 0;
-                var hasBoundsY = boundsY != null ? 1 : 0;
-                if (hasBoundsX != hasBoundsY)
-                    return hasBoundsX.CompareTo(hasBoundsY);
-
-                if (hasBoundsX == 0) // no check for Y needed
-                    return 0;
-
-                var distanceX = Vector3.Distance(CameraPosition, boundsX.WorldBounds.Center);
-                var distanceY = Vector3.Distance(CameraPosition, boundsY.WorldBounds.Center);
-                return -distanceX.CompareTo(distanceY);
-            }
+            return SortFromFrontToBack(context, camera, base.GetRenderObjects(context, camera));
         }
 
         public override void OnScreenResize(ScreenResizeEventArgs e)
@@ -99,4 +64,5 @@ namespace Aximo.Render
             FrameBuffer.Resize(e.Size.X, e.Size.Y);
         }
     }
+
 }

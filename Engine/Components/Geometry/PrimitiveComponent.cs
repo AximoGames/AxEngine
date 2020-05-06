@@ -15,6 +15,7 @@ namespace Aximo.Engine
         internal IRenderableObject RenderableObject;
 
         public bool CastShadow { get; set; }
+        public int DrawPriority { get; set; }
 
         public virtual PrimitiveSceneProxy CreateProxy()
         {

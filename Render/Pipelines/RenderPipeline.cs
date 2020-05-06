@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aximo.Render
 {
@@ -29,6 +30,13 @@ namespace Aximo.Render
                 if (obj.Enabled)
                     if (obj.RenderPipelines.Contains(this))
                         yield return obj;
+        }
+
+        protected virtual IEnumerable<IRenderableObject> SortFromFrontToBack(RenderContext context, Camera camera, IEnumerable<IRenderableObject> objects)
+        {
+            var list = objects.ToList();
+            list.Sort(new MeshDepthSorter(camera));
+            return list;
         }
 
         public virtual void OnScreenResize(ScreenResizeEventArgs e)

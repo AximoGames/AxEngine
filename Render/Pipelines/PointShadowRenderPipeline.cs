@@ -28,6 +28,11 @@ namespace Aximo.Render
 
         public override IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
         {
+            return SortFromFrontToBack(context, camera, GetRenderObjectsInternal(context, camera));
+        }
+
+        private IEnumerable<IRenderableObject> GetRenderObjectsInternal(RenderContext context, Camera camera)
+        {
             foreach (var obj in base.GetRenderObjects(context, camera))
                 if (obj is IShadowObject m)
                     if (m.RenderShadow)
