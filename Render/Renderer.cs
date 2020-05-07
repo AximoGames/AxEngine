@@ -155,6 +155,7 @@ namespace Aximo.Render
                     lightData.LightSpaceMatrix = Matrix4.Transpose(light.LightCamera.ViewMatrix * light.LightCamera.ProjectionMatrix);
                     lightData.Linear = 0.1f;
                     lightData.Quadric = 0f;
+                    lightData.FarPlane = light.LightCamera.FarPlane;
                     lightDataList.Add(lightData);
                 }
                 ubo.SetData(BufferData.Create(lightDataList.ToArray()));
@@ -198,7 +199,7 @@ namespace Aximo.Render
         public static ErrorCode LastErrorCode => GL.GetError();
 
         [Serializable]
-        [StructLayout(LayoutKind.Explicit, Size = 112)]
+        [StructLayout(LayoutKind.Explicit, Size = 128)]
         private struct GlslLight
         {
             [FieldOffset(0)]
@@ -221,6 +222,8 @@ namespace Aximo.Render
 
             [FieldOffset(108)]
             public float Quadric;
+            [FieldOffset(112)]
+            public float FarPlane;
         }
     }
 }

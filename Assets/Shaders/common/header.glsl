@@ -13,6 +13,7 @@ struct SLight {
 	int DirectionalLight;
     float Linear;
     float Quadratic;
+    float FarPlane;
 };
 
 struct SMaterial {

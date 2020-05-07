@@ -25,7 +25,6 @@ uniform sampler2D gMaterial;
 
 uniform sampler2DArray DirectionalShadowMap;
 uniform samplerCubeArray PointShadowMap;
-uniform float FarPlane;
 
 uniform vec3 ViewPos;
 uniform int LightCount;

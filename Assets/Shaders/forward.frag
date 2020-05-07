@@ -26,7 +26,6 @@ in vec4 Color;
 
 uniform sampler2DArray DirectionalShadowMap;
 uniform samplerCubeArray PointShadowMap;
-uniform float FarPlane;
 
 uniform int LightCount;
 layout(std140) uniform LightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };
