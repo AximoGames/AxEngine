@@ -2,8 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Linq;
 using System.Threading;
 using Aximo.Engine;
+using Aximo.Render;
 using OpenToolkit;
 
 using Xunit;
@@ -14,14 +16,34 @@ namespace Aximo.AxTests
     {
         public static void Main(string[] args)
         {
-            var tester = new LightTypeTests();
-            tester.Box(new LightTypeTests.TestCase
+            // var tester = new ShadowTypeTests();
+            // tester.Box(new ShadowTypeTests.TestCase
+            // {
+            //     Pipeline = PipelineType.Deferred,
+            //     LightType = LightType.Directional,
+            //     ComparisonName = "Deferred",
+            // });
+            // tester.Dispose();
+
+            // var tester2 = new ShadowTypeTests();
+            // tester2.Box(new ShadowTypeTests.TestCase
+            // {
+            //     Pipeline = PipelineType.Deferred,
+            //     LightType = LightType.Point,
+            //     ComparisonName = "Deferred",
+            // });
+            // tester.Dispose();
+
+            foreach (var testCaseArgs in ShadowTypeTests.GetTestData().Reverse())
             {
-                Pipeline = PipelineType.Deferred,
-                DiffuseSource = "Color",
-                Ambient = 0.5f,
-            });
-            tester.Dispose();
+                var testCase = (ShadowTypeTests.TestCase)testCaseArgs[0];
+                if (testCase.CompareWith != null)
+                    continue;
+
+                using (var tester = new ShadowTypeTests())
+                    tester.Box(testCase);
+            }
+
             //Console.ReadLine();
             Environment.Exit(0);
         }
