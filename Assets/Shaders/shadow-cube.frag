@@ -6,14 +6,13 @@
 in vec4 FragPos;
 
 uniform SLight Light;
-uniform float FarPlane;
 
 void main()
 {
 	float lightDistance = length(FragPos.xyz - Light.Position);
 	
 	// map to [0;1] range by dividing by FarPlane
-	lightDistance = lightDistance / FarPlane;
+	lightDistance = lightDistance / Light.FarPlane;
 	
 	// write this as modified depth
 	gl_FragDepth = lightDistance;
