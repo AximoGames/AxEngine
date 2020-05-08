@@ -8,21 +8,19 @@ using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render
 {
+
     public class BindingPoint
     {
         private int _Number;
         public int Number => _Number;
 
-        private static HashSet<int> UsedNumbers = new HashSet<int>();
-        private static List<int> FreeNumbers;
-
+        private static SlotAllocator<int> Allocator;
         static BindingPoint()
         {
-            FreeNumbers = new List<int>();
+            var freeNumbers = new List<int>();
             for (var i = 1; i < 16; i++)
-            {
-                FreeNumbers.Add(i);
-            }
+                freeNumbers.Add(i);
+            Allocator = new SlotAllocator<int>(freeNumbers);
         }
 
         public static BindingPoint Default { get; private set; } = new BindingPoint(false) { _Number = 0 };
@@ -35,16 +33,13 @@ namespace Aximo.Render
         {
             if (alloc)
             {
-                _Number = FreeNumbers[FreeNumbers.Count - 1];
-                FreeNumbers.Remove(_Number);
-                UsedNumbers.Add(_Number);
+                _Number = Allocator.Alloc(); ;
             }
         }
 
         public void Free()
         {
-            UsedNumbers.Remove(_Number);
-            FreeNumbers.Add(_Number);
+            Allocator.Free(_Number);
             _Number = -1;
         }
     }

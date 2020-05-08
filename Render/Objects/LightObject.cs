@@ -91,6 +91,7 @@ namespace Aximo.Render
         {
             vao.Free();
             _shader.Free();
+            InternalLightManager.FreeShadowLayer(this);
         }
     }
 }
