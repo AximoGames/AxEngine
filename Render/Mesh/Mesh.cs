@@ -24,6 +24,7 @@ namespace Aximo
         public MeshFaceType PrimitiveType = MeshFaceType.Triangle;
         public IList<MeshComponent> Components { get; private set; } = new List<MeshComponent>();
         public HashSet<int> MaterialIds { get; private set; } = new HashSet<int>(new int[] { 0 });
+        public string Name { get; set; }
 
         public MeshComponent AddComponent(MeshComponentType componentType)
         {
@@ -542,6 +543,9 @@ namespace Aximo
             if (mesh.FaceCount == 0)
                 mesh.CreateFacesAndIndicies();
 
+            if (mesh.PrimitiveType > PrimitiveType)
+                PrimitiveType = mesh.PrimitiveType;
+
             var newFace = new List<int>();
             foreach (var face in mesh.InternalMeshFaces)
             {
@@ -549,13 +553,13 @@ namespace Aximo
                     continue;
 
                 for (var i = 0; i < face.Count; i++)
-                {
                     newFace.Add(AddVertex(mesh, mesh.Indicies[face[i]]));
-                }
+
                 if (newMaterialId == -1)
                     AddFace(newFace);
                 else
                     AddFaceAndMaterial(newMaterialId, newFace.ToArray());
+
                 newFace.Clear();
             }
         }
@@ -563,9 +567,12 @@ namespace Aximo
         public Mesh CloneEmpty()
         {
             var mesh = new Mesh();
+
             foreach (var c in Components)
                 mesh.AddComponent(c.CloneEmpty());
+
             mesh.PrimitiveType = PrimitiveType;
+            mesh.Name = Name;
             return mesh;
         }
 
@@ -848,10 +855,18 @@ namespace Aximo
 
         public MeshData GetMeshData(int materialId)
         {
+            if (Name == "Bomb")
+            {
+                var s = "";
+            }
+
+            // return ToPrimitive(PrimitiveType, materialId).GetMeshData();
             var mesh = CloneEmpty();
             mesh.AddMesh(this, materialId);
+
             if (mesh.PrimitiveType >= MeshFaceType.Quad)
                 mesh = mesh.ToPrimitive(MeshFaceType.Triangle);
+
             return mesh.GetMeshData();
         }
 

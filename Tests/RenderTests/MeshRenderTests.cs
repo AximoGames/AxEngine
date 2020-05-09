@@ -44,8 +44,6 @@ namespace Aximo.AxTests
             RenderAndCompare(nameof(Sphere));
         }
 
-        // TODO: Bug
-
         [Fact]
         public void Bomb()
         {
@@ -54,14 +52,6 @@ namespace Aximo.AxTests
                 Name = "StaticLight",
                 RelativeTranslation = new Vector3(-0.2f, -2.1f, 1.85f),
             }));
-
-            GameMaterial material = new GameMaterial
-            {
-                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
-                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
-                Ambient = 0.5f,
-                PipelineType = PipelineType.Deferred,
-            };
 
             var tmp = Mesh.CreateSphere();
 
