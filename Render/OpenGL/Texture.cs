@@ -98,7 +98,7 @@ namespace Aximo.Render
             txt.ObjectLabel = "CubeShadowMap";
             txt.AddRef();
             for (var i = 0; i < 6; i++)
-                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.DepthComponent, txt.Width, txt.Height, border, format, type, pixels);
+                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.DepthComponent16, txt.Width, txt.Height, border, format, type, pixels);
 
             txt.SetNearestFilter();
             txt.SetClampToEdgeWrap();
@@ -113,7 +113,7 @@ namespace Aximo.Render
             txt.Bind();
             txt.ObjectLabel = "ShadowMapArray";
             txt.AddRef();
-            GL.TexImage3D(TextureTarget.Texture2DArray, 0, PixelInternalFormat.DepthComponent, width, height, layers, border, format, type, pixels);
+            GL.TexImage3D(TextureTarget.Texture2DArray, 0, PixelInternalFormat.DepthComponent16, width, height, layers, border, format, type, pixels);
 
             txt.SetNearestFilter();
             txt.SetClampToBordreWrap();
@@ -128,7 +128,7 @@ namespace Aximo.Render
             txt.Bind();
             txt.ObjectLabel = "CubeShadowMapArray";
             txt.AddRef();
-            GL.TexImage3D(TextureTarget.TextureCubeMapArray, 0, PixelInternalFormat.DepthComponent, width, height, layers * 6, border, format, type, pixels);
+            GL.TexImage3D(TextureTarget.TextureCubeMapArray, 0, PixelInternalFormat.DepthComponent16, width, height, layers * 6, border, format, type, pixels);
 
             txt.SetNearestFilter();
             txt.SetClampToEdgeWrap();

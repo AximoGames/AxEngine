@@ -29,7 +29,10 @@ namespace Aximo.Render
 
             GBuffer = new FrameBuffer(width, height);
             GBuffer.ObjectLabel = nameof(GBuffer);
-            GBuffer.InitNormal();
+            //GBuffer.InitNormal();
+
+            // R11fG11fB10f --> rgba16f
+            // Warning: R11fG11fB10f has no sign bit!
 
             GPosition = new Texture(nameof(GPosition), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             GPosition.SetNearestFilter();
@@ -46,7 +49,7 @@ namespace Aximo.Render
             GBuffer.DestinationTextures.Add(GAlbedoSpec);
             GBuffer.BindTexture(GAlbedoSpec, FramebufferAttachment.ColorAttachment2);
 
-            GMaterial = new Texture(nameof(GMaterial), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            GMaterial = new Texture(nameof(GMaterial), TextureTarget.Texture2D, 0, PixelInternalFormat.R11fG11fB10f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             GMaterial.SetNearestFilter();
             GBuffer.DestinationTextures.Add(GMaterial);
             GBuffer.BindTexture(GMaterial, FramebufferAttachment.ColorAttachment3);
@@ -107,7 +110,6 @@ namespace Aximo.Render
             GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
             GBuffer.Bind();
             GL.Enable(EnableCap.DepthTest);
-            //GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
             // At least gPosition requires Color = 0, so the Positions is 0. Used to stencil the background.
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -126,14 +128,6 @@ namespace Aximo.Render
         private void RenderPass2(RenderContext context, Camera camera)
         {
             Pass = DeferredPass.Pass2;
-            // GL.ClearColor(0.1f, 0.3f, 0.3f, 1.0f);
-            // GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            // Needed?
-            // context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Use();
-            // foreach (var obj in GetRenderObjects(context, camera))
-            //     Render(context, camera, obj);
-
             ObjectManager.PushDebugGroup("OnRender LightShader", this);
 
             _DefLightShader.Bind();
