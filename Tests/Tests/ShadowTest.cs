@@ -17,9 +17,7 @@ namespace Aximo.AxTests
         {
         }
 
-        // TODO: Light Type switch after App.Dispose will result in missing shadow. Wrong Dispose?
-
-        [Theory(Skip = "bug")]
+        [Theory]
         [MemberData(nameof(GetTestData))]
         public void Box(TestCase test)
         {
