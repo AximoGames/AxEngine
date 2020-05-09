@@ -8,7 +8,7 @@ using System.IO;
 namespace Aximo
 {
 
-    public delegate bool GenerateFileDelegate(string subPath, string cachePath);
+    public delegate bool GenerateFileDelegate(string subPath, string cachePath, object options);
 
     public static class DirectoryHelper
     {
@@ -117,16 +117,23 @@ namespace Aximo
 
         public static string GetAssetsPath(string subPath)
         {
+            return GetAssetsPath(subPath, null);
+        }
+
+        public static string GetAssetsPath(string subPath, object options)
+        {
             foreach (var dir in SearchDirectories)
             {
                 var path = Path.Combine(dir, "Assets", subPath);
+                path = AddOptionsKey(path, options);
+
                 if (File.Exists(path))
                     return new FileInfo(path).FullName;
                 if (Directory.Exists(path))
                     return new DirectoryInfo(path).FullName;
             }
-            if (RequestFile(subPath))
-                return GetAssetsPath(subPath);
+            if (RequestFile(subPath, options))
+                return GetAssetsPath(subPath, options);
 
             return "";
         }
@@ -143,7 +150,22 @@ namespace Aximo
                 FileGenerators.Add(subPath, generator);
         }
 
-        private static bool RequestFile(string subPath)
+        private static string AddOptionsKey(string path, object options)
+        {
+            if (options == null)
+                return path;
+
+            var key = options.ToString();
+            if (string.IsNullOrEmpty(key))
+                return path;
+
+            var dir = Path.GetDirectoryName(path);
+            var file = Path.GetFileNameWithoutExtension(path);
+            var ext = Path.GetExtension(path);
+            return Path.Combine(dir, file + key + ext);
+        }
+
+        private static bool RequestFile(string subPath, object options)
         {
             GenerateFileDelegate gen;
             lock (FileGenerators)
@@ -151,9 +173,10 @@ namespace Aximo
             if (gen != null)
             {
                 var cachePath = Path.Combine(AppCacheDir, "Assets", subPath);
+                cachePath = AddOptionsKey(cachePath, options);
                 var parent = Path.GetDirectoryName(cachePath);
                 Directory.CreateDirectory(parent);
-                if (gen(subPath, cachePath))
+                if (gen(subPath, cachePath, options))
                     return File.Exists(cachePath) || Directory.Exists(cachePath);
             }
 

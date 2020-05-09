@@ -12,9 +12,17 @@ namespace Aximo.Engine
         public static void Init()
         {
             DirectoryHelper.AddFileGenerator("Textures/Engine/UVTest.png", CreateImage);
+            DirectoryHelper.AddFileGenerator("Textures/AlchemyCircle/.png", AlchemyCircle);
         }
 
-        private static bool CreateImage(string subPath, string cachePath)
+        private static bool AlchemyCircle(string subPath, string cachePath, object options)
+        {
+            var opt = (Generators.AlchemyCircle.AlchemyCircleOptions)options;
+            new Generators.AlchemyCircle.AlchemyCircle().Generate(opt.Seed, opt.BackgroundColor, opt.Color, opt.Size, opt.Thickness).Save(cachePath);
+            return true;
+        }
+
+        private static bool CreateImage(string subPath, string cachePath, object options)
         {
             var img = new Image<Rgb24>(512, 512);
             img.Mutate(ctx => ctx.Clear(Color.White));
@@ -42,12 +50,12 @@ namespace Aximo.Engine
 
                     var fontColor = black ? Color.White : Color.Black;
 
-                    var options = new TextGraphicsOptions
+                    var gfxOptions = new TextGraphicsOptions
                     {
                         VerticalAlignment = VerticalAlignment.Center,
                         HorizontalAlignment = HorizontalAlignment.Center,
                     };
-                    img.Mutate(ctx => ctx.DrawText(options, label, font, fontColor, new PointF(box.X + 32, box.Y + 32)));
+                    img.Mutate(ctx => ctx.DrawText(gfxOptions, label, font, fontColor, new PointF(box.X + 32, box.Y + 32)));
                 }
             }
             img.Save(cachePath);

@@ -16,6 +16,20 @@ using System;
 namespace Aximo.Generators.AlchemyCircle
 {
 
+    public class AlchemyCircleOptions
+    {
+        public int Seed;
+        public Color BackgroundColor = Color.Transparent;
+        public Color Color = Color.White;
+        public int Size;
+        public int Thickness = 4;
+
+        public override string ToString()
+        {
+            return $"Seed{Seed}Size{Size}Thickness{Thickness}Color{Color}BackgroundColor{BackgroundColor}";
+        }
+    }
+
     public class AlchemyCircle
     {
         public Image Generate(int id, Color backgroundColor, Color color, int size, int thickness = 4)
