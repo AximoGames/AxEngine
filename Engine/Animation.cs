@@ -13,6 +13,7 @@ namespace Aximo.Engine
         public bool Enabled;
         public TimeSpan Duration;
         protected DateTime StartTime;
+        public bool Repeat;
 
         public event AnimationFinishedDelegate AnimationFinished;
 
@@ -33,8 +34,11 @@ namespace Aximo.Engine
             var pos = Position;
             if (pos >= 1.0)
             {
-                Enabled = false;
+                if (!Repeat)
+                    Enabled = false;
                 AnimationFinished?.Invoke();
+                if (Repeat)
+                    StartTime = DateTime.UtcNow;
             }
         }
 
