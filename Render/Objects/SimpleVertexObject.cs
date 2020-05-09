@@ -223,6 +223,10 @@ namespace Aximo.Render
 
         public void OnRenderShadow()
         {
+            var lights = Lights.Where(l => l.LightType == LightType.Directional).ToList();
+            if (lights.Count == 0)
+                return;
+
             foreach (var mat in vaoList)
             {
                 if (!mat.Material.CastShadow)
@@ -233,7 +237,7 @@ namespace Aximo.Render
 
                 shadowShader.Bind();
 
-                foreach (var light in Lights)
+                foreach (var light in lights)
                 {
                     var shadowCamera = light.LightCamera;
 
@@ -256,6 +260,10 @@ namespace Aximo.Render
 
         public void OnRenderCubeShadow()
         {
+            var lights = Lights.Where(l => l.LightType == LightType.Point).ToList();
+            if (lights.Count == 0)
+                return;
+
             foreach (var mat in vaoList)
             {
                 if (!mat.Material.CastShadow)
