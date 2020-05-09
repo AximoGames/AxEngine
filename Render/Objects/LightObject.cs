@@ -8,6 +8,7 @@ namespace Aximo.Render
 {
     public class LightObject : RenderObject, IRenderableObject, IPosition, ILightObject
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<LightObject>();
         public Camera Camera => Context.Camera;
 
         public Vector3 Position { get; set; }

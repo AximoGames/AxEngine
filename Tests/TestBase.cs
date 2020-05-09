@@ -38,7 +38,7 @@ namespace Aximo.AxTests
 
         public void Dispose()
         {
-            Log.Verbose("Disposing {Name}", nameof(TestBase));
+            Log.Verbose("Disposing {Name}", GetType().Name);
 
             if (App == null)
                 return;

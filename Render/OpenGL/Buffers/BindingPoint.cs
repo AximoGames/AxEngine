@@ -20,7 +20,7 @@ namespace Aximo.Render
             var freeNumbers = new List<int>();
             for (var i = 1; i < 16; i++)
                 freeNumbers.Add(i);
-            Allocator = new SlotAllocator<int>(freeNumbers);
+            Allocator = new SlotAllocator<int>(freeNumbers, nameof(BindingPoint));
         }
 
         public static BindingPoint Default { get; private set; } = new BindingPoint(false) { _Number = 0 };

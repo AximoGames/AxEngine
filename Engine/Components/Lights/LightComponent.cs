@@ -15,6 +15,7 @@ namespace Aximo.Engine
 {
     public abstract class LightComponent : SceneComponent
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<LightComponent>();
         internal ILightObject LightObject;
 
         protected abstract LightType LightType { get; }
@@ -54,8 +55,8 @@ namespace Aximo.Engine
                 LightObject = new LightObject();
                 LightObject.LightType = LightType;
                 LightObject.Name = Name;
-                LightObject.ShadowTextureIndex = ShadowIdx++;
-                //InternalLightManager.RequestShadowLayer(LightObject);
+                //LightObject.ShadowTextureIndex = ShadowIdx++;
+                InternalLightManager.RequestShadowLayer(LightObject);
                 RenderContext.Current.AddObject(LightObject);
                 LightAttributesChanged = true;
             }
@@ -76,5 +77,22 @@ namespace Aximo.Engine
 
             base.SyncChanges();
         }
+
+        internal override void DoDeallocation()
+        {
+            if (!HasDeallocation)
+                return;
+
+            if (LightObject == null)
+                return;
+
+            Log.Verbose("Set LightObject.Orphaned");
+
+            LightObject.Orphaned = true;
+            LightObject = null;
+
+            base.DoDeallocation();
+        }
+
     }
 }

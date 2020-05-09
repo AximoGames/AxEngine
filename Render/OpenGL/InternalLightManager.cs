@@ -10,8 +10,8 @@ namespace Aximo.Render
     public static class InternalLightManager
     {
 
-        private static SlotAllocator<int> PointLayer = new SlotAllocator<int>(Enumerable.Range(0, 300));
-        private static SlotAllocator<int> DirectionalLayer = new SlotAllocator<int>(Enumerable.Range(0, 300));
+        private static SlotAllocator<int> PointLayer = new SlotAllocator<int>(Enumerable.Range(0, 1), nameof(PointLayer));
+        private static SlotAllocator<int> DirectionalLayer = new SlotAllocator<int>(Enumerable.Range(0, 1), nameof(DirectionalLayer));
 
         private static SlotAllocator<int> GetAllocator(ILightObject lightObject)
         {

@@ -73,6 +73,8 @@ namespace Aximo.Render
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
+                    Free();
+                    RenderContext.Current.RemoveObject(this);
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

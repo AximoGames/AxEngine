@@ -177,6 +177,9 @@ namespace Aximo.Render
         {
             LightBinding?.Free();
             LightBinding = null;
+
+            for (var i = AllObjects.Count - 1; i >= 0; i--)
+                AllObjects[i].Dispose();
         }
 
         public void DumpInfo(bool list)
