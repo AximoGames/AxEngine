@@ -28,13 +28,15 @@ namespace Aximo.Engine
         private Thread UpdateThread;
         private Thread RenderThread;
 
-        internal void CreateWindow()
+        internal unsafe void CreateWindow()
         {
             Window = new RenderWindow(Config)
             {
                 WindowBorder = Config.WindowBorder,
                 Location = new Vector2i((1920 / 2) + 10, 50),
             };
+            if (Config.IsMultiThreaded)
+                GLFW.MakeContextCurrent(null);
 
             Window.RenderFrame += OnRenderFrameInternal;
             Window.UpdateFrame += OnUpdateFrameInternal;
@@ -78,8 +80,7 @@ namespace Aximo.Engine
             {
                 Log.Verbose("Init OpenGL Bindings");
                 Log.Verbose("Grab Context");
-                if (Environment.OSVersion.Platform != PlatformID.Win32NT) // Crash on mswin!
-                    Window.MakeCurrent();
+                Window.MakeCurrent();
 
                 Log.Verbose("Load OpenGL Bindings");
                 GL.LoadBindings(new GLFWBindingsContext());
