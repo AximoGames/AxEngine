@@ -21,7 +21,7 @@ for(int i = 0; i < LightCount; ++i)
     vec4 specular = light.Color * spec * matSpecular;
     // attenuation
     float distance = length(light.Position - FragPos);
-    float attenuation = 1.0 / (1.0 + light.Linear * distance + light.Quadratic * distance * distance);
+    float attenuation = 1.0 / (1.0 + light.Linear * distance + light.Quadratic * (distance * distance));
 
     //attenuation = 1.0; // debug
 
