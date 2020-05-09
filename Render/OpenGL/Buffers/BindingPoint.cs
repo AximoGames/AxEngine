@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using OpenToolkit.Graphics.OpenGL4;
 
@@ -18,9 +19,7 @@ namespace Aximo.Render
         static BindingPoint()
         {
             var freeNumbers = new List<int>();
-            for (var i = 1; i < 16; i++)
-                freeNumbers.Add(i);
-            Allocator = new SlotAllocator<int>(freeNumbers, nameof(BindingPoint));
+            Allocator = new SlotAllocator<int>(Enumerable.Range(1, 15), nameof(BindingPoint));
         }
 
         public static BindingPoint Default { get; private set; } = new BindingPoint(false) { _Number = 0 };

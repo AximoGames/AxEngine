@@ -33,7 +33,7 @@ namespace Aximo.Render
         public T Alloc()
         {
             if (FreeNumbers.Count == 0)
-                throw new Exception("No free slots available");
+                throw new Exception($"{Name}: No free slots available. In use: {UsedNumbers.Count}");
 
             var num = FreeNumbers[FreeNumbers.Count - 1];
             FreeNumbers.Remove(num);
