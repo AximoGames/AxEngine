@@ -143,7 +143,9 @@ namespace Aximo.Render
             if (Renderer.Current.UseShadows)
             {
                 context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture4);
+                _DefLightShader.SetInt("DirectionalShadowMap", 4);
                 context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture5);
+                _DefLightShader.SetInt("PointShadowMap", 5);
             }
 
             _DefLightShader.SetVector3("ViewPos", camera.Position);
@@ -152,8 +154,6 @@ namespace Aximo.Render
             // TODO: Move to Pass1
             //_DefLightShader.SetMaterial("material", Material.Default);
 
-            _DefLightShader.SetInt("DirectionalShadowMap", 4);
-            _DefLightShader.SetInt("PointShadowMap", 5);
             _DefLightShader.BindBlock("LightsArray", context.LightBinding);
             _DefLightShader.SetInt("LightCount", context.LightObjects.Count);
 

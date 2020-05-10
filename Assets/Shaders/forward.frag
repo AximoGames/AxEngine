@@ -24,8 +24,10 @@ in vec2 TexCoords;
 in vec4 Color;
 #endif
 
+#ifdef USE_SHADOW
 uniform sampler2DArray DirectionalShadowMap;
 uniform samplerCubeArray PointShadowMap;
+#endif
 
 uniform int LightCount;
 layout(std140) uniform LightsArray { SLight lights[MAX_NUM_TOTAL_LIGHTS]; };

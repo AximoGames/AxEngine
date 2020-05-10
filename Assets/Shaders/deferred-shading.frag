@@ -23,8 +23,10 @@ uniform sampler2D gMaterial;
 //     float Quadratic;
 // };
 
+#ifdef USE_SHADOW
 uniform sampler2DArray DirectionalShadowMap;
 uniform samplerCubeArray PointShadowMap;
+#endif
 
 uniform vec3 ViewPos;
 uniform int LightCount;
