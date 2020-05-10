@@ -196,7 +196,9 @@ namespace Aximo.Render
 
                     defGeometryShader.SetMaterial("material", mat.Material);
 
-                    defGeometryShader.SetMatrix4("Model", GetModelMatrix());
+                    var model = GetModelMatrix();
+                    defGeometryShader.SetMatrix4("Model", model);
+                    //defGeometryShader.SetMatrix3("NormalMatrix", Matrix3.Transpose(Matrix3.Invert(new Matrix3(model))));
                     defGeometryShader.SetMatrix4("View", Camera.ViewMatrix);
                     defGeometryShader.SetMatrix4("Projection", Camera.ProjectionMatrix);
 

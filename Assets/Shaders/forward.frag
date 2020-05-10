@@ -1,5 +1,5 @@
 #version 330 core
-#extension GL_GOOGLE_include_directive : enable
+#extension GL_ARB_shading_language_include : enable
 #extension GL_ARB_texture_cube_map_array : enable
 
 #include "common/header.glsl"
