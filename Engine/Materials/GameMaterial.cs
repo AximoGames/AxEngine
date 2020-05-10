@@ -216,6 +216,8 @@ namespace Aximo.Engine
                     Defines.Add("USE_VERTEX_UV", "1");
                 if (UseVertexColor)
                     Defines.Add("USE_VERTEX_COLOR", "1");
+                if (ReceiveShadow && Renderer.Current.UseShadows)
+                    Defines.Add("USE_SHADOW", "1");
 
                 InternalMaterial.Shader = new Shader(Shader.VertexShaderPath, Shader.FragmentShaderPath, Shader.GeometryShaderPath, true, Defines);
                 InternalMaterial.DefGeometryShader = new Shader(DefGeometryShader.VertexShaderPath, DefGeometryShader.FragmentShaderPath, DefGeometryShader.GeometryShaderPath, true, Defines);
