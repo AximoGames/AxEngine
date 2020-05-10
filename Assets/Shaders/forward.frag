@@ -54,6 +54,8 @@ void main()
     float matSpecular = 0.0;
 #ifdef USE_VERTEX_UV
     matSpecular = texture(material.SpecularMap, TexCoords).r * material.SpecularStrength;
+#else
+    matSpecular = material.SpecularStrength;    
 #endif
     float matAmbient = material.Ambient;
     float matShininess = material.Shininess;

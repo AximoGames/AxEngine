@@ -31,8 +31,8 @@ namespace Aximo.AxTests
                 {
                     Color = new Vector4(0.5f, 0.5f, 0, 1),
                     Ambient = 0.3f,
-                    Shininess = 32.0f,
-                    SpecularStrength = 0.5f,
+                    Shininess = 64.0f,
+                    SpecularStrength = 0.3f,
                     PipelineType = test.Pipeline,
                     CastShadow = true,
                 };
@@ -41,8 +41,8 @@ namespace Aximo.AxTests
                 {
                     Color = new Vector4(0.5f, 0, 0.5f, 1),
                     Ambient = 0.3f,
-                    Shininess = 32.0f,
-                    SpecularStrength = 0.5f,
+                    Shininess = 64.0f,
+                    SpecularStrength = 0.3f,
                     PipelineType = test.Pipeline,
                     CastShadow = true,
                 };

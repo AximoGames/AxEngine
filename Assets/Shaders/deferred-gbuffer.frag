@@ -52,7 +52,7 @@ void main()
     // store specular intensity in gAlbedoSpec's alpha component
     gAlbedoSpec.a = texture(material.SpecularMap, TexCoords).r * material.SpecularStrength;
 #else
-    gAlbedoSpec.a = 0;
+    gAlbedoSpec.a = material.SpecularStrength;
 #endif
 
     // Extra material parameters
