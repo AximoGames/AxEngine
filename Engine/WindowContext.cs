@@ -35,7 +35,7 @@ namespace Aximo.Engine
                 WindowBorder = Config.WindowBorder,
                 Location = new Vector2i((1920 / 2) + 10, 50),
             };
-            if (Config.IsMultiThreaded)
+            if (Config.IsMultiThreaded && Environment.OSVersion.Platform == PlatformID.Win32NT)
                 GLFW.MakeContextCurrent(null);
 
             Window.RenderFrame += OnRenderFrameInternal;
