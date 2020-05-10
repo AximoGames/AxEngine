@@ -147,8 +147,7 @@ namespace Aximo.Engine
             if (Parent != null)
                 Parent.RemoveComponent(this);
 
-            foreach (var child in Components)
-                child.Deallocate();
+            Visit<ActorComponent>(c => c.Deallocate());
 
             base.Detach();
         }

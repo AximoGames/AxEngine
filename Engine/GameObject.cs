@@ -94,10 +94,9 @@ namespace Aximo.Engine
             if (disposing)
             {
                 DoDeallocation();
-                Consumers.Clear();
+                Consumers?.Clear();
                 // TODO: dispose managed state (managed objects)
             }
-            Consumers = null;
 
             // TODO: free unmanaged resources (unmanaged objects) and override finalizer
             // TODO: set large fields to null
