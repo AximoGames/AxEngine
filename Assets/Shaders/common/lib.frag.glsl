@@ -1,5 +1,7 @@
 #include "lib.frag.small.glsl"
 
+#ifdef USE_SHADOW
+
 // array of offset direction for sampling
 vec3 gridSamplingDisk[20] = vec3[]
 (
@@ -111,7 +113,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, SLight light)
 	// float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
 	// PCF
 	float shadow = 0.0;
-	vec2 texelSize = 1.0 / textureSize(DirectionalShadowMap, 0).xy;
+	vec2 texelSize = 1.0 / textureSize(DirectionalShadowMap, light.ShadowLayer).xy;
 	for(int x =- 1; x <= 1; ++ x)
 	{
 		for(int y =- 1; y <= 1; ++ y)
@@ -128,3 +130,5 @@ float ShadowCalculation(vec4 fragPosLightSpace, SLight light)
 
 	return shadow;
 }
+
+#endif

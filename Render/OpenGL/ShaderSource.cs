@@ -42,10 +42,10 @@ namespace Aximo.Render
                 foreach (var entry in sh.Compilation.Defines)
                 {
                     var defineLine = "#define " + entry.Key;
-                    if (entry.Value != null)
-                    {
-                        defineLine += " " + GetDefineLiteral(entry.Value);
-                    }
+                    var value = entry.Value;
+                    if (value == null)
+                        value = 1;
+                    defineLine += " " + GetDefineLiteral(value);
                     lines.Insert(1, defineLine);
                 }
                 loadedContent = string.Join(Environment.NewLine, lines);

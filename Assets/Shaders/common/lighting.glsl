@@ -25,19 +25,19 @@ for(int i = 0; i < LightCount; ++i)
 
     //attenuation = 1.0; // debug
 
+#ifdef USE_SHADOW
     float shadow;
     if(light.DirectionalLight == 1) {
         shadow = ShadowCalculation(vec4(FragPos, 1.0) * light.LightSpaceMatrix, light);
-        //shadow = 0;
     }
     else {
         shadow = ShadowCalculationCubeSoft(FragPos, light);
-        //shadow = 0;
     }
+    lightResult.Shadow += shadow * attenuation;
+#endif
 
     lightResult.Diffuse += diffuse * attenuation;
     lightResult.Specular += specular * attenuation;
-    lightResult.Shadow += shadow * attenuation;
 
     //shadow *= attenuation; // just a test
 }

@@ -19,6 +19,7 @@ namespace Aximo.Render
         public static Renderer Current;
         public Vector2i ScreenSize;
         public FlushRenderBackend FlushRenderBackend;
+        public bool UseShadows;
 
         public RenderContext Context => RenderContext.Current;
 
@@ -68,8 +69,11 @@ namespace Aximo.Render
 
         public void SetupPipelines()
         {
-            RenderContext.AddPipeline(new DirectionalShadowRenderPipeline());
-            RenderContext.AddPipeline(new PointShadowRenderPipeline());
+            if (UseShadows)
+            {
+                RenderContext.AddPipeline(new DirectionalShadowRenderPipeline());
+                RenderContext.AddPipeline(new PointShadowRenderPipeline());
+            }
             RenderContext.AddPipeline(new DeferredRenderPipeline());
             RenderContext.AddPipeline(new ForwardRenderPipeline());
             RenderContext.AddPipeline(new ScreenPipeline());

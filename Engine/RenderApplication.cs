@@ -81,6 +81,7 @@ namespace Aximo.Engine
             Renderer = new Renderer
             {
                 FlushRenderBackend = Config.FlushRenderBackend,
+                UseShadows = Config.UseShadows,
             };
             Renderer.Current = Renderer;
 

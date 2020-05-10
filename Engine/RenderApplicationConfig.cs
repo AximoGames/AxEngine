@@ -31,6 +31,7 @@ namespace Aximo.Engine
         public bool HideTitleBar { get; set; } = false;
         public bool UseConsole { get; set; } = false;
         public bool UseGtkUI { get; set; } = false;
+        public bool UseShadows { get; set; } = true;
         public FlushRenderBackend FlushRenderBackend { get; set; } = FlushRenderBackend.None;
 
         public RenderApplicationConfig()

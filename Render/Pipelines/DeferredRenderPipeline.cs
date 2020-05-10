@@ -71,7 +71,10 @@ namespace Aximo.Render
 
             GBuffer.Check();
 
-            _DefLightShader = new Shader("Shaders/deferred-shading.vert", "Shaders/deferred-shading.frag");
+            _DefLightShader = new Shader("Shaders/deferred-shading.vert", "Shaders/deferred-shading.frag", null, false);
+            if (Renderer.Current.UseShadows)
+                _DefLightShader.SetDefine("USE_SHADOW");
+            _DefLightShader.Compile();
             _DefLightShader.SetInt("gPosition", 0);
             _DefLightShader.SetInt("gNormal", 1);
             _DefLightShader.SetInt("gAlbedoSpec", 2);
@@ -137,8 +140,11 @@ namespace Aximo.Render
             GAlbedoSpec.Bind(TextureUnit.Texture2);
             GMaterial.Bind(TextureUnit.Texture3);
 
-            context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture4);
-            context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture5);
+            if (Renderer.Current.UseShadows)
+            {
+                context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture4);
+                context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture5);
+            }
 
             _DefLightShader.SetVector3("ViewPos", camera.Position);
             _DefLightShader.SetFloat("FarPlane", camera.FarPlane);

@@ -140,10 +140,13 @@ namespace Aximo.Render
 
                 shader.SetVector3("ViewPos", Camera.Position);
 
-                Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
-                shader.SetInt("DirectionalShadowMap", 2);
-                Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
-                shader.SetInt("PointShadowMap", 3);
+                if (Renderer.Current.UseShadows)
+                {
+                    Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
+                    shader.SetInt("DirectionalShadowMap", 2);
+                    Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
+                    shader.SetInt("PointShadowMap", 3);
+                }
 
                 shader.BindBlock("LightsArray", Context.LightBinding);
                 shader.SetInt("LightCount", Lights.Count);
@@ -250,7 +253,9 @@ namespace Aximo.Render
                     shadowShader.SetInt("ShadowLayer", light.ShadowTextureIndex);
 
                     //GL.CullFace(CullFaceMode.Front);
+                    //GL.Disable(EnableCap.CullFace);
                     mat.Vao.Draw();
+                    //GL.Enable(EnableCap.CullFace);
                     //GL.CullFace(CullFaceMode.Back);}
                 }
             }
@@ -305,7 +310,9 @@ namespace Aximo.Render
                     cubeShadowShader.SetFloat("Light.FarPlane", shadowCamera.FarPlane);
                     cubeShadowShader.SetInt("Light.ShadowLayer", light.ShadowTextureIndex);
 
+                    //GL.Disable(EnableCap.CullFace);
                     mat.Vao.Draw();
+                    //GL.Enable(EnableCap.CullFace);
                 }
             }
         }

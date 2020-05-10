@@ -105,6 +105,7 @@ namespace Aximo.Engine
         public float Shininess { get; set; } = 1.0f;
         public float SpecularStrength { get; set; }
         public bool CastShadow { get; set; }
+        public bool ReceiveShadow { get; set; } = true;
         public bool UseVertexColor { get; set; }
 
         private Dictionary<string, Parameter> Parameters = new Dictionary<string, Parameter>();
@@ -250,7 +251,12 @@ namespace Aximo.Engine
             mat.Shininess = Shininess;
             mat.UseVertexColor = UseVertexColor;
 
-            switch (PipelineType)
+            var pipelineType = PipelineType;
+            if (pipelineType == PipelineType.Default)
+                if (UseTransparency || !ReceiveShadow)
+                    pipelineType = PipelineType.Forward;
+
+            switch (pipelineType)
             {
                 case PipelineType.Default:
                     mat.RenderPipeline = RenderContext.Current.PrimaryRenderPipeline;
