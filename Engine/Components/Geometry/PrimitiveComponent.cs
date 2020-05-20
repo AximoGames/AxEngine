@@ -10,6 +10,10 @@ using Aximo.Render;
 
 namespace Aximo.Engine
 {
+
+    /// <summary>
+    /// Represents a drawable object.
+    /// </summary>
     public class PrimitiveComponent : SceneComponent
     {
         internal IRenderableObject RenderableObject;

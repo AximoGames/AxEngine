@@ -91,6 +91,12 @@ namespace Aximo.Engine
 
         protected virtual void Dispose(bool disposing)
         {
+            if (GameContext.IsUpdateThread)
+            {
+                Deallocate();
+                return;
+            }
+
             if (disposing)
             {
                 DoDeallocation();

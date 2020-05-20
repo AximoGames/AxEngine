@@ -12,6 +12,7 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
+    /// <inheritdoc/>
     public class StaticMeshComponent : MeshComponent
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<StaticMeshComponent>();
@@ -31,9 +32,16 @@ namespace Aximo.Engine
             Material = material;
         }
 
+        /// <summary>
+        /// Holds a the Mesh.
+        /// </summary>
         public Mesh Mesh { get; private set; }
         private StaticInternalMesh InternalMesh;
 
+        /// <summary>
+        /// Sets the Mesh.
+        /// </summary>
+        /// <param name="mesh">The mesh data.</param>
         public void SetMesh(Mesh mesh)
         {
             Mesh = mesh;

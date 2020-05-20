@@ -13,6 +13,9 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo
 {
+    /// <summary>
+    /// Represents a Mesh. Can contain vary Polygons.
+    /// </summary>
     public partial class Mesh
     {
         internal IList<InternalMeshFace> InternalMeshFaces = new List<InternalMeshFace>();

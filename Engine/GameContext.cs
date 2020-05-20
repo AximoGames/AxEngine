@@ -18,6 +18,9 @@ namespace Aximo.Engine
 
         public static GameContext Current { get; set; }
 
+        public static bool IsRenderThread => WindowContext.IsRenderThread;
+        public static bool IsUpdateThread => WindowContext.IsUpdateThread;
+
         public List<Animation> Animations = new List<Animation>();
 
         public void AddAnimation(Animation animation)

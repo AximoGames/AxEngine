@@ -45,6 +45,12 @@ namespace Aximo.Engine
         public event Action<FrameEventArgs> UpdateFrame;
         public event Action<FrameEventArgs> RenderFrame;
 
+        [ThreadStatic]
+        internal static bool IsRenderThread = false;
+
+        [ThreadStatic]
+        internal static bool IsUpdateThread = false;
+
         private static DebugProc _debugProcCallback;
         private static GCHandle _debugProcCallbackHandle;
         private static Serilog.ILogger OpenGlLog = Aximo.Log.ForContext("OpenGL");
@@ -172,6 +178,7 @@ namespace Aximo.Engine
         {
             if (Thread.CurrentThread.Name == null)
                 Thread.CurrentThread.Name = Config.IsMultiThreaded ? "Update Thread" : "Update+Render Thread";
+            IsUpdateThread = true;
 
             DebugHelper.LogThreadInfo(Thread.CurrentThread.Name);
             UpdateThread = Thread.CurrentThread;
@@ -198,6 +205,7 @@ namespace Aximo.Engine
                 {
                     RenderThread = currentThread;
                     RenderThread.Name = "Render Thread";
+                    IsRenderThread = true;
                 }
             }
         }
