@@ -3,4 +3,4 @@ $dir = Split-Path $scriptpath
 
 cd $dir
 
-docfx build docfx.json
+docfx
