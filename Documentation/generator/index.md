@@ -1,5 +1,5 @@
-Aximo Game Engines
-==================
+Aximo Game Engine
+=================
 
 **Aximo Engine** is a simple Game Engine written in C#.
 
