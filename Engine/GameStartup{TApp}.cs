@@ -2,20 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading;
-using Aximo.Engine;
 using Aximo.Engine.Components.Geometry;
 using Aximo.Engine.Windows;
 using Aximo.Render.OpenGL;
-using OpenToolkit.Windowing.GraphicsLibraryFramework;
 
 namespace Aximo.Engine
 {
-    public class GameStartup<TApp, TGtk> : IDisposable
+    public class GameStartup<TApp> : IDisposable
         where TApp : RenderApplication
-        where TGtk : GtkUI
     {
         private RenderApplicationConfig Config;
 
@@ -24,11 +20,13 @@ namespace Aximo.Engine
             Config = config;
         }
 
-        private static Serilog.ILogger Log = Aximo.Log.ForContext<GameStartup<TApp, TGtk>>();
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<GameStartup<TApp>>();
 
         private Thread th;
 
         private GtkUI ui;
+
+        private protected virtual GtkUI CreateGtkUI() => new GtkUI();
 
         public void Start()
         {
@@ -39,7 +37,7 @@ namespace Aximo.Engine
             if (Config.UseGtkUI)
             {
                 Log.Verbose("Init GtkUI");
-                ui = new GtkUI();
+                ui = CreateGtkUI();
                 ui.Start();
                 Log.Verbose("GtkUI initialized");
             }
