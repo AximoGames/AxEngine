@@ -10,7 +10,7 @@ using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using OpenToolkit.Windowing.Desktop;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Windows
 {
     public class RenderWindow : GameWindow
     {

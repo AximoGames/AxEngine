@@ -8,9 +8,8 @@ using System.Linq;
 using System.Threading;
 using Aximo.Render;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Components.Geometry
 {
-
     /// <summary>
     /// Represents a drawable object.
     /// </summary>

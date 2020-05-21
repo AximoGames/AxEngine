@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Aximo.Render
+namespace Aximo.Render.Objects
 {
     public abstract class RenderObjectBase : IRenderObject
     {

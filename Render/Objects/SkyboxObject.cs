@@ -1,11 +1,14 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Aximo.Render.OpenGL;
+using Aximo.Render.Pipelines;
+using Aximo.Render.VertexData;
 using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Render
+namespace Aximo.Render.Objects
 {
     // TODO: Use a Quad instead of a cube
     // https://stackoverflow.com/questions/30015940/why-dont-people-use-tetrahedrons-for-skyboxes/30038392#30038392

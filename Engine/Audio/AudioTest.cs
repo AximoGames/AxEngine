@@ -8,7 +8,7 @@
 // using OpenToolkit.Audio;
 // using OpenToolkit.Audio.OpenAL;
 
-// namespace Aximo.Engine
+// namespace Aximo.Engine.Audio
 // {
 //     internal class AudioTest
 //     {

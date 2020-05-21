@@ -9,7 +9,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
     public class GraphicsTexture : IDisposable
     {

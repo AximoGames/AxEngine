@@ -10,7 +10,7 @@ using System.Threading;
 using Aximo.Render;
 using OpenToolkit;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Components.Geometry
 {
     public class SphereComponent : StaticMeshComponent
     {

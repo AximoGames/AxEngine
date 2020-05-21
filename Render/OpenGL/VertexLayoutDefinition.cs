@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
     public class VertexLayoutDefinition
     {

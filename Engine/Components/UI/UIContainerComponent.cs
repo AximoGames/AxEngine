@@ -3,7 +3,7 @@
 
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Components.UI
 {
     public abstract class UIContainerComponent : UIComponent
     {

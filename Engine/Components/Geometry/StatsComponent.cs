@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Aximo.Engine.Components.UI;
 using Aximo.Render;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
@@ -17,7 +18,7 @@ using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Processing;
 using Color = SixLabors.ImageSharp.Color;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Components.Geometry
 {
     public class StatsComponent : UIComponent
     {

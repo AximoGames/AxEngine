@@ -9,6 +9,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using Aximo.Render;
+using Aximo.Render.OpenGL;
+using Aximo.Render.VertexData;
 using OpenToolkit.Mathematics;
 
 namespace Aximo
@@ -177,8 +179,8 @@ namespace Aximo
             foreach (var line in path.ToLines())
             {
                 vertices.Add(new VertexDataPosNormalUV(new Vector3(center), Vector3.UnitZ, -new Vector2(0, 0) + uvOffset));
-                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.A), Vector3.UnitZ, -line.A * uvFactor + uvOffset));
-                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.B), Vector3.UnitZ, -line.B * uvFactor + uvOffset));
+                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.A), Vector3.UnitZ, (-line.A * uvFactor) + uvOffset));
+                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.B), Vector3.UnitZ, (-line.B * uvFactor) + uvOffset));
             }
             return CreateFromVertices(vertices.ToArray(), null, MeshFaceType.Triangle);
         }
@@ -196,8 +198,8 @@ namespace Aximo
             foreach (var line in path.ToLines())
             {
                 vertices.Add(new VertexDataPosNormalUV(new Vector3(center), Vector3.UnitZ, -new Vector2(0, 0) + uvOffset));
-                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.A), Vector3.UnitZ, -line.A.Xy * uvFactor + uvOffset));
-                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.B), Vector3.UnitZ, -line.B.Xy * uvFactor + uvOffset));
+                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.A), Vector3.UnitZ, (-line.A.Xy * uvFactor) + uvOffset));
+                vertices.Add(new VertexDataPosNormalUV(new Vector3(line.B), Vector3.UnitZ, (-line.B.Xy * uvFactor) + uvOffset));
             }
             return CreateFromVertices(vertices.ToArray(), null, MeshFaceType.Triangle);
         }

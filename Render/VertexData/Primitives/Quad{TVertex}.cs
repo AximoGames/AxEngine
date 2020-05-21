@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Render
+namespace Aximo.Render.VertexData
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct Quad<TVertex> : IPrimitive<TVertex>

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Aximo.Engine.Components.Geometry;
 using Aximo.Render;
 using OpenToolkit;
 

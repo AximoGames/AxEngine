@@ -7,7 +7,6 @@ using System.IO;
 
 namespace Aximo
 {
-
     public delegate bool GenerateFileDelegate(string subPath, string cachePath, object options);
 
     public static class DirectoryHelper
@@ -182,6 +181,5 @@ namespace Aximo
 
             return false;
         }
-
     }
 }

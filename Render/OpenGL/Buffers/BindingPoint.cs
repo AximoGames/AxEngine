@@ -7,9 +7,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using OpenToolkit.Graphics.OpenGL4;
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
-
     public class BindingPoint
     {
         private int _Number;
@@ -32,7 +31,7 @@ namespace Aximo.Render
         {
             if (alloc)
             {
-                _Number = Allocator.Alloc(); ;
+                _Number = Allocator.Alloc();
             }
         }
 

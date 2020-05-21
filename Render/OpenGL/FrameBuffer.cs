@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using OpenToolkit.Graphics.OpenGL4;
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
     public class FrameBuffer : IObjectLabel
     {

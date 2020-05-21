@@ -8,10 +8,11 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using Aximo.Render;
+using Aximo.Render.OpenGL;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Components.Geometry
 {
     public class LineComponent : StaticMeshComponent
     {

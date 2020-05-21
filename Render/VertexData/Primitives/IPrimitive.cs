@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace Aximo.Render
+namespace Aximo.Render.VertexData
 {
     public interface IPrimitive
     {

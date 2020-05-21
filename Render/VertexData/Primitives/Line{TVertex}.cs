@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Aximo.Render
+namespace Aximo.Render.VertexData
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct Line<TVertex> : IPrimitive<TVertex>

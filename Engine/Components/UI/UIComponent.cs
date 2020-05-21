@@ -3,11 +3,13 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Aximo.Engine.Components.Geometry;
+using Aximo.Engine.Windows;
 using Aximo.Render;
 using OpenToolkit.Mathematics;
 using SixLabors.ImageSharp;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Components.UI
 {
     public abstract class UIComponent : GraphicsScreenTextureComponent
     {

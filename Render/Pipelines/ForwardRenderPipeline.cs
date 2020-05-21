@@ -1,12 +1,13 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Aximo.Render.OpenGL;
 using OpenToolkit.Graphics.OpenGL4;
 
-namespace Aximo.Render
+namespace Aximo.Render.Pipelines
 {
     public class ForwardRenderPipeline : RenderPipeline
     {
@@ -64,5 +65,4 @@ namespace Aximo.Render
             FrameBuffer.Resize(e.Size.X, e.Size.Y);
         }
     }
-
 }

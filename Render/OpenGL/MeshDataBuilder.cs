@@ -2,10 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using Aximo.Render.VertexData;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
     public static class MeshDataBuilder
     {

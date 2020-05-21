@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Aximo.Engine;
 using Aximo.Render;
+using Aximo.Render.VertexData;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 using Xunit;
 
 namespace Aximo.AxTests
 {
-    public class MeshTests
+    public class MeshOperationTests
     {
         private Mesh CreateEmptyMesh()
         {

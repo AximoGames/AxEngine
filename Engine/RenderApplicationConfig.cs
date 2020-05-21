@@ -8,6 +8,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Aximo.Render;
+using Aximo.Render.OpenGL;
 using OpenToolkit;
 using OpenToolkit.Input;
 using OpenToolkit.Mathematics;
@@ -46,5 +47,4 @@ namespace Aximo.Engine
             }
         }
     }
-
 }

@@ -4,8 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aximo.Render.OpenGL;
 
-namespace Aximo.Render
+namespace Aximo.Render.Pipelines
 {
     public abstract class RenderPipeline : IRenderPipeline
     {

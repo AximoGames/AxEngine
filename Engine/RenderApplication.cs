@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Aximo.Engine.Components.Geometry;
+using Aximo.Engine.Windows;
 using Aximo.Render;
 using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;

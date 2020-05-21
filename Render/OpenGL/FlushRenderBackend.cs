@@ -1,7 +1,7 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
     public enum FlushRenderBackend
     {
@@ -9,14 +9,15 @@ namespace Aximo.Render
         /// No flush.
         /// </summary>
         None,
+
         /// <summary>
         /// Flush after render pipeline
         /// </summary>
         End,
+
         /// <summary>
         /// Flush after every draw call
         /// </summary>
         Draw,
     }
-
 }

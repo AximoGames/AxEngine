@@ -6,6 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using Aximo.Engine;
+using Aximo.Engine.Components.Geometry;
+using Aximo.Engine.Windows;
+using Aximo.Render.OpenGL;
 using OpenToolkit.Windowing.GraphicsLibraryFramework;
 
 namespace Aximo.Engine
@@ -108,7 +111,7 @@ namespace Aximo.Engine
                     case "map list":
                         RenderApplication.Current.DispatchUpdater(() =>
                         {
-                            Render.InternalTextureManager.DumpInfo(true);
+                            InternalTextureManager.DumpInfo(true);
                         });
                         break;
                     default:

@@ -5,7 +5,7 @@ using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using OpenToolkit.Windowing.Common.Input;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Windows
 {
     public class MouseMoveArgs
     {

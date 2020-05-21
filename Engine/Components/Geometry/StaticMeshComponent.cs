@@ -8,9 +8,11 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using Aximo.Render;
+using Aximo.Render.Objects;
+using Aximo.Render.OpenGL;
 using OpenToolkit;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Components.Geometry
 {
     /// <inheritdoc/>
     public class StaticMeshComponent : MeshComponent

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using Aximo.Render.Objects;
 using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
@@ -13,7 +14,7 @@ using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using Image = SixLabors.ImageSharp.Image;
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
     public class Texture : RenderObjectBase, IObjectLabel, IDisposable
     {

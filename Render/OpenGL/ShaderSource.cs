@@ -12,7 +12,7 @@ using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
     public class ShaderSource
     {

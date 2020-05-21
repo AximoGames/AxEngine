@@ -3,7 +3,7 @@
 
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Render
+namespace Aximo.Render.VertexData
 {
     public interface IVertexPosition3 : IVertexPosition<Vector3>
     {

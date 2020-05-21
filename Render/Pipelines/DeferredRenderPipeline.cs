@@ -4,9 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aximo.Render.OpenGL;
+using Aximo.Render.VertexData;
 using OpenToolkit.Graphics.OpenGL4;
 
-namespace Aximo.Render
+namespace Aximo.Render.Pipelines
 {
     public class DeferredRenderPipeline : RenderPipeline
     {

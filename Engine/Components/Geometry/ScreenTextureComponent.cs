@@ -8,12 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using Aximo.Render;
+using Aximo.Render.OpenGL;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 
 #pragma warning disable CA1044 // Properties should not be write only
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Components.Geometry
 {
     public class ScreenTextureComponent : StaticMeshComponent
     {

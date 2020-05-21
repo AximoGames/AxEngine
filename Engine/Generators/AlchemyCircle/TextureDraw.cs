@@ -1,14 +1,14 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.PixelFormats;
-using System;
 using OpenToolkit.Mathematics;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace Aximo.Generators.AlchemyCircle
 {
@@ -56,9 +56,9 @@ namespace Aximo.Generators.AlchemyCircle
             {
                 for (double i = 0.0; i < 360.0; i += 0.5)
                 {
-                    double angle = i * System.Math.PI / 180;
-                    int x = (int)(cx + r * System.Math.Cos(angle));
-                    int y = (int)(cy + r * System.Math.Sin(angle));
+                    double angle = i * Math.PI / 180;
+                    int x = (int)(cx + (r * Math.Cos(angle)));
+                    int y = (int)(cy + (r * Math.Sin(angle)));
                     tex.SetPixel(x, y, col);
                 }
                 r++;
@@ -68,7 +68,7 @@ namespace Aximo.Generators.AlchemyCircle
         {
             for (int x = -r; x < r; x++)
             {
-                int height = (int)MathF.Sqrt(r * r - x * x);
+                int height = (int)MathF.Sqrt((r * r) - (x * x));
 
                 for (int y = -height; y < height; y++)
                     tex.SetPixel(x + cx, y + cy, bgcol);
@@ -77,18 +77,16 @@ namespace Aximo.Generators.AlchemyCircle
             DrawCircle(tex, cx, cy, r, col, thickness);
         }
 
-
-
         private static Vector2[] GetPoints(int sides, float rot, float radius, float size)
         {
             Vector2[] values = new Vector2[sides];
-            float angdiff = AxMath.Deg2Rad * (360 / (sides));
-            rot = AxMath.Deg2Rad * (rot);
+            float angdiff = AxMath.Deg2Rad * (360 / sides);
+            rot = AxMath.Deg2Rad * rot;
             for (int i = 0; i < sides; i++)
             {
                 // trova i punti sulla circonferenza
-                values[i].X = (size / 2) + radius * MathF.Cos(i * angdiff + rot); // X
-                values[i].Y = (size / 2) + radius * MathF.Sin((i) * angdiff + rot); // Y
+                values[i].X = (size / 2) + (radius * MathF.Cos((i * angdiff) + rot)); // X
+                values[i].Y = (size / 2) + (radius * MathF.Sin((i * angdiff) + rot)); // Y
             }
 
             return values;
@@ -107,7 +105,7 @@ namespace Aximo.Generators.AlchemyCircle
 
             DrawLine(tex, (int)p[i].X, (int)p[i].Y, (int)p[n - 1].X, (int)p[n - 1].Y, col, thickness);
 
-            for (i = 1; (i < n); i++)
+            for (i = 1; i < n; i++)
             {
                 DrawLine(tex, (int)p[i - 1].X, (int)p[i - 1].Y, (int)p[i].X, (int)p[i].Y, col, thickness);
             }
@@ -115,7 +113,6 @@ namespace Aximo.Generators.AlchemyCircle
 
         public static void DrawFilledPolygon(Image tex, int n, int r, int rot, int size, Color color, Color backgroundColor, int thickness)
         {
-
             Vector2[] p = GetPoints(n, rot, r, size);
 
             int i;
@@ -135,7 +132,7 @@ namespace Aximo.Generators.AlchemyCircle
 
             miny = (int)p[0].Y;
             maxy = (int)p[0].Y;
-            for (i = 1; (i < n); i++)
+            for (i = 1; i < n; i++)
             {
                 if (p[i].Y < miny)
                 {
@@ -150,7 +147,7 @@ namespace Aximo.Generators.AlchemyCircle
             if (n > 1 && miny == maxy)
             {
                 x1 = x2 = (int)p[0].X;
-                for (i = 1; (i < n); i++)
+                for (i = 1; i < n; i++)
                 {
                     if (p[i].X < x1)
                     {
@@ -176,11 +173,11 @@ namespace Aximo.Generators.AlchemyCircle
                 maxy = tex.Height - 1;
             }
             /* Fix in 1.3: count a vertex only once */
-            for (y = miny; (y <= maxy); y++)
+            for (y = miny; y <= maxy; y++)
             {
                 ints = 0;
                 int[] polyInts = new int[n];
-                for (i = 0; (i < n); i++)
+                for (i = 0; i < n; i++)
                 {
                     if (i == 0)
                     {
@@ -216,8 +213,8 @@ namespace Aximo.Generators.AlchemyCircle
 
                     if ((y >= y1) && (y < y2))
                     {
-                        polyInts[ints++] = (int)((float)((y - y1) * (x2 - x1)) /
-                                                      (float)(y2 - y1) + 0.5 + x1);
+                        polyInts[ints++] = (int)(((float)((y - y1) * (x2 - x1)) /
+                                                      (float)(y2 - y1)) + 0.5 + x1);
                     }
                     else if ((y == pmaxy) && (y == y2))
                     {
@@ -225,10 +222,9 @@ namespace Aximo.Generators.AlchemyCircle
                     }
                 }
 
-
                 // 2.0.26: polygons pretty much always have less than 100 points, and most of the time they have considerably less. For such trivial cases, insertion sort is a good choice. Also a good choice for future implementations that may wish to indirect through a table.
 
-                for (i = 1; (i < ints); i++)
+                for (i = 1; i < ints; i++)
                 {
                     index = polyInts[i];
                     j = i;
@@ -239,7 +235,7 @@ namespace Aximo.Generators.AlchemyCircle
                     }
                     polyInts[j] = index;
                 }
-                for (i = 0; (i < (ints - 1)); i += 2)
+                for (i = 0; i < (ints - 1); i += 2)
                 {
                     // 2.0.29: back to gdImageLine to prevent segfaults when performing a pattern fill
                     DrawLine(tex, polyInts[i], y, polyInts[i + 1], y, backgroundColor, thickness);

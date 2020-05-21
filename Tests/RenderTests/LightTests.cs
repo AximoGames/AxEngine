@@ -4,6 +4,8 @@
 using System;
 using System.Collections.Generic;
 using Aximo.Engine;
+using Aximo.Engine.Components.Geometry;
+using Aximo.Engine.Components.Lights;
 using Aximo.Render;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
@@ -37,7 +39,6 @@ namespace Aximo.AxTests
                     material.DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png");
                 else
                     material.Color = new Vector4(0, 1, 0, 1);
-
 
                 GameContext.AddActor(new Actor(new DebugCubeComponent()
                 {

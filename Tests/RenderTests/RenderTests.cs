@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using Aximo.Engine;
+using Aximo.Engine.Components.Geometry;
 using Aximo.Render;
 using OpenToolkit;
 using OpenToolkit.Mathematics;

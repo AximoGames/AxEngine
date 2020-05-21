@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using OpenToolkit;
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
     public enum AxPrimitiveType
     {

@@ -3,10 +3,11 @@
 
 using System;
 using System.Collections.Generic;
+using Aximo.Render.Pipelines;
 using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
 
-namespace Aximo.Render
+namespace Aximo.Render.Objects
 {
     public class ScreenshotObject : RenderObjectBase
     {

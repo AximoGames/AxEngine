@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
@@ -58,7 +58,6 @@ namespace Aximo
             Scale(list, new Vector2(value));
         }
 
-
         public static void Scale(this Vector2[] list, Vector2 value)
         {
             for (var i = 0; i < list.Length; i++)
@@ -75,13 +74,11 @@ namespace Aximo
             Scale(list, new Vector3(value));
         }
 
-
         public static void Scale(this Vector3[] list, Vector3 value)
         {
             for (var i = 0; i < list.Length; i++)
                 list[i] *= value;
         }
-
     }
 
     public struct Line2
@@ -107,5 +104,4 @@ namespace Aximo
             B = b;
         }
     }
-
 }

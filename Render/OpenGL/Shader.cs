@@ -12,7 +12,7 @@ using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
     // A simple class meant to help create shaders.
     public class Shader : IObjectLabel

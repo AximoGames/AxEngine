@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using Aximo.Render;
+using Aximo.Render.VertexData;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 

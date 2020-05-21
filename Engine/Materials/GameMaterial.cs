@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Aximo.Render;
+using Aximo.Render.OpenGL;
+using Aximo.Render.Pipelines;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 

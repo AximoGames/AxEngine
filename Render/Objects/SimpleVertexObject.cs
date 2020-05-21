@@ -4,11 +4,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aximo.Render.OpenGL;
+using Aximo.Render.Pipelines;
 using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Render
+namespace Aximo.Render.Objects
 {
     public class SimpleVertexObject : PrimitiveObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
         IForwardRenderable, IDeferredRenderable, IScreenRenderable, IBounds

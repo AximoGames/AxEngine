@@ -11,7 +11,7 @@ using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using OpenToolkit.Windowing.GraphicsLibraryFramework;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Windows
 {
     /// <summary>
     /// Holds the Window and OpenGL Context.

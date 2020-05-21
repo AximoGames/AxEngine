@@ -10,9 +10,9 @@ using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using OpenToolkit.Windowing.Desktop;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Windows
 {
-    public static class Win32Native
+    internal static class Win32Native
     {
         [DllImport("user32.dll")]
         private static extern IntPtr GetActiveWindow();

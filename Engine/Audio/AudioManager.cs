@@ -6,7 +6,7 @@ using System.Threading;
 //using System.Media;
 using NetCoreAudio;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Audio
 {
     public class AudioManager
     {

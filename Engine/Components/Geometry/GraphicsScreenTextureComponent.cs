@@ -15,7 +15,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Components.Geometry
 {
     public class GraphicsScreenTextureComponent : ScreenTextureComponent
     {

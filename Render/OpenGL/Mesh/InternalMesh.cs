@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
     public abstract class InternalMesh
     {

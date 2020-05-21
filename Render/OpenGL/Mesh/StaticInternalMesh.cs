@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Aximo.Render
+namespace Aximo.Render.OpenGL
 {
     public class StaticInternalMesh : InternalMesh
     {

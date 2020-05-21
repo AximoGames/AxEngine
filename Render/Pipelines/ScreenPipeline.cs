@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OpenToolkit.Graphics.OpenGL4;
 
-namespace Aximo.Render
+namespace Aximo.Render.Pipelines
 {
     public class ScreenPipeline : RenderPipeline
     {
@@ -28,6 +28,5 @@ namespace Aximo.Render
         {
             return SortFromFrontToBack(context, camera, base.GetRenderObjects(context, camera));
         }
-
     }
 }

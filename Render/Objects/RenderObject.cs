@@ -3,8 +3,9 @@
 
 using System.Collections.Generic;
 using System.Threading;
+using Aximo.Render.Pipelines;
 
-namespace Aximo.Render
+namespace Aximo.Render.Objects
 {
     public abstract class RenderObject : RenderObjectBase
     {

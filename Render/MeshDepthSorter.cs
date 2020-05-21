@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace Aximo.Render
             CameraPosition = camera.Position;
         }
 
-        // returns: Draw-Order. 
+        // returns: Draw-Order.
         public int Compare(IRenderableObject x, IRenderableObject y)
         {
             // Draw Early: -1.
@@ -50,5 +50,4 @@ namespace Aximo.Render
             return distanceX.CompareTo(distanceY) * reverse;
         }
     }
-
 }

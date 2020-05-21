@@ -1,4 +1,4 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // Reference: https://schemingdeveloper.com/2017/03/26/better-method-recalculate-normals-unity-part-2/
@@ -15,7 +15,7 @@ namespace Aximo
         ///     Recalculate the normals of a mesh based on an angle threshold. This takes
         ///     into account distinct vertices that have the same position.
         /// </summary>
-        /// <param name="mesh"></param>
+        /// <param name="mesh">The mesh.</param>
         /// <param name="angle">
         ///     The smoothing angle. Note that triangles that already share
         ///     the same vertex will be smooth regardless of the angle!

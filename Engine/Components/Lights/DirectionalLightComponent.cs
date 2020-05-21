@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using Aximo.Render;
 
-namespace Aximo.Engine
+namespace Aximo.Engine.Components.Lights
 {
     public class DirectionalLightComponent : LightComponent
     {

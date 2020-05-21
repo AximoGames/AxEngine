@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using Aximo.Engine.Windows;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 
@@ -427,6 +428,5 @@ namespace Aximo.Engine
             var max = Vector3.TransformPosition(box.Max, localToWorld);
             WorldBounds = new Box3(min, max);
         }
-
     }
 }
