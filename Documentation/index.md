@@ -19,6 +19,8 @@ Here's a small sample:
 ```c#
 using Aximo;
 using Aximo.Engine;
+using Aximo.Engine.Components.Geometry;
+using Aximo.Engine.Components.Lights;
 using OpenToolkit.Mathematics;
 
 public class MyApplication : RenderApplication
@@ -57,23 +59,20 @@ using Aximo.Engine;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 
-namespace Aximo.PlayGround1
+internal class Program
 {
-    internal class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var config = new RenderApplicationConfig
         {
-            var config = new RenderApplicationConfig
-            {
-                WindowTitle = "PlayGround1",
-                WindowSize = new Vector2i(800, 600),
-                VSync = VSyncMode.Off,
-                UseConsole = true,
-                IsMultiThreaded = true,
-            };
+            WindowTitle = "Sample",
+            WindowSize = new Vector2i(800, 600),
+            VSync = VSyncMode.Off,
+            UseConsole = true,
+            IsMultiThreaded = true,
+        };
 
-            new GameStartup<MyApplication, GtkUI>(config).Start();
-        }
+        new GameStartup<MyApplication>(config).Start();
     }
 }
 ```
