@@ -79,7 +79,7 @@ namespace Aximo.Engine
                     GameContext.Current.ObjectsForDeallocation.Add(this);
         }
 
-        protected bool HasDeallocation;
+        private protected bool HasDeallocation;
 
         // Only this object, no childs
         internal virtual void DoDeallocation()
