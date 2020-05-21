@@ -308,15 +308,15 @@ namespace Aximo.Engine
                 child.UpdateFrameInternal();
         }
 
-        protected internal bool TransformChanged;
-        protected internal void UpdateTransform()
+        private protected bool TransformChanged;
+        private protected void UpdateTransform()
         {
             Update();
             TransformChanged = true;
         }
 
-        protected internal bool ParentChanged;
-        protected internal void UpdateParent()
+        private protected bool ParentChanged;
+        private protected void UpdateParent()
         {
             Update();
             ParentChanged = true;

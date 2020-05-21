@@ -68,7 +68,7 @@ namespace Aximo.Engine
             HasChanges = false;
         }
 
-        protected internal void Update()
+        private protected void Update()
         {
             HasChanges = true;
         }

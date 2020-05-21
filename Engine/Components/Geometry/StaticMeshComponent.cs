@@ -51,8 +51,8 @@ namespace Aximo.Engine.Components.Geometry
             UpdateMesh();
         }
 
-        protected internal bool MeshChanged;
-        protected internal void UpdateMesh()
+        private protected bool MeshChanged;
+        private protected void UpdateMesh()
         {
             MeshChanged = true;
             Update();

@@ -9,7 +9,7 @@ namespace Aximo.Engine.Components.UI
     {
         public UIAnchors Padding;
 
-        protected internal override UIAnchors PaddingInternal => Padding;
+        internal override UIAnchors PaddingInternal => Padding;
 
         internal override void SetChildBounds()
         {

@@ -117,23 +117,23 @@ namespace Aximo.Engine.Components.UI
         }
 
         // Size+Border+Margin
-        protected internal Box2 AbsoluteOuterRect; // Absoute Rect of this control incl. Margin
+        internal Box2 AbsoluteOuterRect; // Absoute Rect of this control incl. Margin
 
         // Size+Border
-        protected internal Box2 RelatativeDrawRect;
-        protected internal Box2 AbsoluteDrawRect;
+        internal Box2 RelatativeDrawRect;
+        internal Box2 AbsoluteDrawRect;
 
         // Size
-        protected internal Box2 RelatativeClientRect;
-        protected internal Box2 AbsoluteClientRect;
+        internal Box2 RelatativeClientRect;
+        internal Box2 AbsoluteClientRect;
 
         // Size-Padding
-        protected internal Box2 RelatativePaddingRect;
-        protected internal Box2 AbsolutePaddingRect;
+        internal Box2 RelatativePaddingRect;
+        internal Box2 AbsolutePaddingRect;
 
         private Vector2 DrawSize => RelatativeDrawRect.Size;
 
-        protected internal virtual UIAnchors PaddingInternal => new UIAnchors();
+        internal virtual UIAnchors PaddingInternal => new UIAnchors();
 
         public UIAnchors Margin;
 
