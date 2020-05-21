@@ -7,9 +7,11 @@
             "**/**.csproj"
           ],
           "exclude": [
-            "**/Test.csproj"
+            "**/Tests.csproj",
+            "External/**",
+            "Demo/**"
           ],
-          "src": "../.."
+          "src": ".."
         }
       ],
       "dest": "api",
