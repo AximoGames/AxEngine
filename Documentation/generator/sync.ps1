@@ -1,7 +1,7 @@
 $scriptpath = $MyInvocation.MyCommand.Path
 $dir = Split-Path $scriptpath
 
-cd $dir
+Push-Location $dir
 
 $sourceRoot = "_site"
 $destinationRoot = "..\..\..\AximoGames-pages\docs\"
@@ -13,3 +13,5 @@ $sourceRoot = "..\..\..\AximoGames-pages\docs-base\*"
 $destinationRoot = "..\..\..\AximoGames-pages\docs\"
 
 Copy-Item -Path $sourceRoot -Recurse -Destination $destinationRoot -Container
+
+Pop-Location
