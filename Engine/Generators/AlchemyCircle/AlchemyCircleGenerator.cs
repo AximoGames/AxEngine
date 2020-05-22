@@ -13,7 +13,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Aximo.Generators.AlchemyCircle
 {
-    public class AlchemyCircle
+    public class AlchemyCircleGenerator
     {
         public Image Generate(int id, Color backgroundColor, Color color, int size, int thickness = 4)
         {

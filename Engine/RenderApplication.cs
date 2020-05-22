@@ -177,7 +177,7 @@ namespace Aximo.Engine
             ShaderWatcher.EnableRaisingEvents = true;
         }
 
-        public bool IsFocused => Window.IsFocused;
+        public bool IsFocused => WindowContext.IsFocused;
 
         protected virtual void OnRenderFrame(FrameEventArgs e) { }
 

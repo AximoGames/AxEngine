@@ -21,7 +21,7 @@ namespace Aximo.Render.OpenGL
                 case LightType.Directional:
                     return DirectionalLayer;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(lightObject.LightType));
+                    throw new ArgumentOutOfRangeException(nameof(lightObject), nameof(lightObject.LightType));
             }
         }
 

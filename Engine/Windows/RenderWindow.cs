@@ -65,6 +65,11 @@ namespace Aximo.Engine.Windows
             base.OnKeyDown(e);
         }
 
+        protected override void OnKeyUp(KeyboardKeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+        }
+
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);

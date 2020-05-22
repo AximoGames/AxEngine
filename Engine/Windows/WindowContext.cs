@@ -40,6 +40,7 @@ namespace Aximo.Engine.Windows
 
             Window.RenderFrame += OnRenderFrameInternal;
             Window.UpdateFrame += OnUpdateFrameInternal;
+            Window.FocusedChanged += OnFocusedChangedInternal;
         }
 
         public event Action<FrameEventArgs> UpdateFrame;
@@ -50,6 +51,8 @@ namespace Aximo.Engine.Windows
 
         [ThreadStatic]
         internal static bool IsUpdateThread = false;
+
+        public bool IsFocused { get; private set; }
 
         private static DebugProc _debugProcCallback;
         private static GCHandle _debugProcCallbackHandle;
@@ -113,6 +116,11 @@ namespace Aximo.Engine.Windows
 
             if (Enabled)
                 RenderFrame?.Invoke(e);
+        }
+
+        private void OnFocusedChangedInternal(FocusedChangedEventArgs e)
+        {
+            IsFocused = e.IsFocused;
         }
 
         private bool RenderReady = false;
@@ -187,6 +195,7 @@ namespace Aximo.Engine.Windows
 
             Log.Info("Create Window");
             CreateWindow();
+            IsFocused = true;
             Window.Run();
         }
 

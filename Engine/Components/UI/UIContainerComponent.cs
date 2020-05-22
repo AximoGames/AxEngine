@@ -14,9 +14,7 @@ namespace Aximo.Engine.Components.UI
         internal override void SetChildBounds()
         {
             foreach (var child in UIComponents)
-            {
                 child.AbsoluteOuterRect = AbsolutePaddingRect;
-            }
         }
     }
 }

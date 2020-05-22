@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using OpenToolkit.Mathematics;
 
+#pragma warning disable CA1066 // Type {0} should implement IEquatable<T> because it overrides Equals
+
 namespace Aximo
 {
     internal static class NormalSolver

@@ -21,7 +21,7 @@ namespace Aximo.Engine
         private static bool AlchemyCircle(string subPath, string cachePath, object options)
         {
             var opt = (Generators.AlchemyCircle.AlchemyCircleOptions)options;
-            new Generators.AlchemyCircle.AlchemyCircle().Generate(opt.Seed, opt.BackgroundColor, opt.Color, opt.Size, opt.Thickness).Save(cachePath);
+            new Generators.AlchemyCircle.AlchemyCircleGenerator().Generate(opt.Seed, opt.BackgroundColor, opt.Color, opt.Size, opt.Thickness).Save(cachePath);
             return true;
         }
 

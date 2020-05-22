@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Aximo.Render.OpenGL
@@ -48,19 +49,19 @@ namespace Aximo.Render.OpenGL
         {
             Mesh = mesh;
             for (var i = 0; i < mesh.MaterialCount; i++)
-                MeshData.Add(mesh.GetMeshData(i));
+                MeshDataList.Add(mesh.GetMeshData(i));
         }
 
         public List<Material> Materials = new List<Material>();
         public Mesh Mesh { get; private set; }
-        private List<MeshData> MeshData { get; } = new List<MeshData>();
+        private List<MeshData> MeshDataList { get; } = new List<MeshData>();
 
         internal MeshData GetMeshData(int materialId)
         {
-            return MeshData[materialId];
+            return MeshDataList[materialId];
         }
 
-        public int[] MaterialIds => Mesh.MaterialIds.ToArray();
+        public ReadOnlyCollection<int> MaterialIds => Array.AsReadOnly(Mesh.MaterialIds.ToArray());
 
         internal Material GetMaterial(int materialId)
         {
