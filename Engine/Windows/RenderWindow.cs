@@ -24,7 +24,15 @@ namespace Aximo.Engine.Windows
             Log.Verbose("Created window");
             Config = config;
             Title = Config.WindowTitle;
-            VSync = Config.VSync;
+
+            var vsync = Config.VSync;
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && IsMultiThreaded && Config.VSync == VSyncMode.Adaptive)
+            {
+                Log.Warn("BUG: OSVersion=mswin, IsMultiThreaded=true Config.VSync=VSyncMode.Adaptive: Force VSyncMode.On");
+                vsync = VSyncMode.On;
+            }
+
+            VSync = vsync;
 
             if (Config.HideTitleBar && Environment.OSVersion.Platform == PlatformID.Win32NT)
                 Win32Native.HideTitleBar();
