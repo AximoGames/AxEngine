@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using SixLabors.ImageSharp;
@@ -11,6 +12,7 @@ using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.Drawing;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Formats.Bmp;
+using SixLabors.ImageSharp.Memory;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
@@ -18,7 +20,12 @@ namespace Aximo
 {
     public static class ImageExtensions
     {
-#pragma warning disable CS0618 // Type or member is obsolete
+
+        public static Span<TPixel> GetPixelSpan<TPixel>(this Image<TPixel> source)
+            where TPixel : unmanaged, IPixel<TPixel>
+        {
+            return source.GetPixelMemoryGroup()[0].Span;
+        }
 
         public static unsafe void UseData(this Image<Rgba32> image, Action<IntPtr> ptrCallback)
         {
@@ -49,8 +56,6 @@ namespace Aximo
             ref var pixels = ref MemoryMarshal.GetReference(image.GetPixelSpan());
             ptrCallback((IntPtr)Unsafe.AsPointer(ref pixels));
         }
-
-#pragma warning restore CS0618 // Type or member is obsolete
 
         public static unsafe void UseData(this Image image, Action<IntPtr> ptrCallback)
         {
@@ -134,9 +139,12 @@ namespace Aximo
 
             ctx.Draw(borderColor, borderThickness * 2, corners);
 
-            var graphicOptions = new GraphicsOptions()
+            var graphicOptions = new ShapeGraphicsOptions()
             {
-                AlphaCompositionMode = PixelAlphaCompositionMode.DestOut, // enforces that any part of this shape that has color is punched out of the background
+                GraphicsOptions = new GraphicsOptions
+                {
+                    AlphaCompositionMode = PixelAlphaCompositionMode.DestOut, // enforces that any part of this shape that has color is punched out of the background
+                },
             };
             // mutating in here as we already have a cloned original
             // use any color (not Transparent), so the corners will be clipped

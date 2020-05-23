@@ -43,7 +43,10 @@ namespace Aximo.Engine.Components.UI
         {
             var options = new TextGraphicsOptions
             {
-                VerticalAlignment = VerticalAlignment.Center,
+                TextOptions = new TextOptions
+                {
+                    VerticalAlignment = VerticalAlignment.Center,
+                },
             };
 
             Image.Mutate(ctx => ctx.Clear(Color.Transparent));

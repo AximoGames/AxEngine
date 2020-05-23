@@ -71,8 +71,11 @@ namespace Aximo.Engine
 
                     var gfxOptions = new TextGraphicsOptions
                     {
-                        VerticalAlignment = VerticalAlignment.Center,
-                        HorizontalAlignment = HorizontalAlignment.Center,
+                        TextOptions = new TextOptions
+                        {
+                            VerticalAlignment = VerticalAlignment.Center,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                        },
                     };
                     img.Mutate(ctx => ctx.DrawText(gfxOptions, label, font, fontColor, new PointF(box.X + 32, box.Y + 32)));
                 }
