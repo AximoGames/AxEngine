@@ -18,9 +18,12 @@ using OpenToolkit.Windowing.Desktop;
 
 namespace Aximo.Engine
 {
+    /// <summary>
+    /// Initial configuration of <see cref="RenderApplication"/>
+    /// </summary>
     public class RenderApplicationConfig
     {
-        public Vector2i WindowSize { get; set; } = new Vector2i(600, 800);
+        public Vector2i WindowSize { get; set; } = new Vector2i(800, 600);
         public string WindowTitle { get; set; } = "AxEngine";
         public WindowBorder WindowBorder { get; set; } = WindowBorder.Fixed;
         public int UpdateFrequency { get; set; } = 60;
@@ -30,9 +33,14 @@ namespace Aximo.Engine
         public bool IsMultiThreaded { get; set; } = true;
         public VSyncMode VSync { get; set; } = VSyncMode.Adaptive;
         public bool HideTitleBar { get; set; } = false;
-        public bool UseConsole { get; set; } = false;
+        public bool UseConsole { get; set; } = true;
         public bool UseGtkUI { get; set; } = false;
         public bool UseShadows { get; set; } = true;
+
+        /// <summary>
+        /// Get or set when rendering backend should be flushed.
+        /// Usefull when measuring draw call times.
+        /// </summary>
         public FlushRenderBackend FlushRenderBackend { get; set; } = FlushRenderBackend.None;
 
         public RenderApplicationConfig()

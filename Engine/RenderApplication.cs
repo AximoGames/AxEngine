@@ -168,7 +168,7 @@ namespace Aximo.Engine
 
         private void StartFileListener()
         {
-            var shaderPath = Path.Combine(DirectoryHelper.EngineRootDir, "Assets", "Shaders");
+            var shaderPath = Path.Combine(AssetManager.EngineRootDir, "Assets", "Shaders");
             if (!File.Exists(shaderPath))
                 return;
 
@@ -183,6 +183,10 @@ namespace Aximo.Engine
 
         public bool IsFocused => WindowContext.IsFocused;
 
+        /// <summary>
+        /// Called from the Render thread before the render pipeline is invoked.
+        /// If <see cref="IsMultiThreaded"/> is enabled, do not access the window and to not write to an <see cref="GameObject"/>.
+        /// </summary>
         protected virtual void OnRenderFrame(FrameEventArgs e) { }
 
         public int UpdateFrameNumber { get; private set; } = 0;
@@ -323,6 +327,10 @@ namespace Aximo.Engine
             DispatchRender(() => RenderContext.OnScreenResize(eventArgs));
         }
 
+        /// <summary>
+        /// Called from the Update thread. Here you can update the world, for example positions, or execute game logic.
+        /// If <see cref="IsMultiThreaded"/> is enabled, do not access any of the <see cref="IRenderObject"/> or any other internal renderer related objects.
+        /// </summary>
         protected virtual void OnUpdateFrame(FrameEventArgs e) { }
 
         public bool DefaultKeyBindings = true;
@@ -668,7 +676,7 @@ namespace Aximo.Engine
 
                 Thread.Sleep(200);
 
-                DirectoryHelper.ResetFileGenerator();
+                AssetManager.ResetFileGenerator();
 
                 RenderContext.Free();
                 RenderContext = null;

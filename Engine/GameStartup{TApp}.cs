@@ -10,10 +10,15 @@ using Aximo.Render.OpenGL;
 
 namespace Aximo.Engine
 {
-    public class GameStartup<TApp> : IDisposable
+    /// <inheritdoc/>
+    public class GameStartup<TApp> : GameStartup
         where TApp : RenderApplication
     {
         private RenderApplicationConfig Config;
+
+        public GameStartup() : this(new RenderApplicationConfig())
+        {
+        }
 
         public GameStartup(RenderApplicationConfig config)
         {
@@ -119,10 +124,8 @@ namespace Aximo.Engine
             }
         }
 
-        #region IDisposable Support
         private bool disposedValue = false;
-
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
@@ -137,11 +140,5 @@ namespace Aximo.Engine
                 disposedValue = true;
             }
         }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-        #endregion
     }
 }

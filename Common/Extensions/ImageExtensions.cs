@@ -20,7 +20,6 @@ namespace Aximo
 {
     public static class ImageExtensions
     {
-
         public static Span<TPixel> GetPixelSpan<TPixel>(this Image<TPixel> source)
             where TPixel : unmanaged, IPixel<TPixel>
         {

@@ -267,9 +267,9 @@ namespace Aximo.AxTests
         // }
 
         private string TestClassName => GetType().Name;
-        private string TestOutputDir => Path.Combine(DirectoryHelper.GetAssetsPath("TestOutputs"), TestClassName);
+        private string TestOutputDir => Path.Combine(AssetManager.GetAssetsPath("TestOutputs"), TestClassName);
         private string OriginalDir => TestOutputDir;
-        private string DiffsDir => Path.Combine(DirectoryHelper.GetAssetsPath("TestOutputs"), "Diffs");
+        private string DiffsDir => Path.Combine(AssetManager.GetAssetsPath("TestOutputs"), "Diffs");
         public bool OverwriteOriginalImages;
 
         protected void RenderAndCompare(string testName)

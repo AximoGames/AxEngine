@@ -9,7 +9,10 @@ namespace Aximo
 {
     public delegate bool GenerateFileDelegate(string subPath, string cachePath, object options);
 
-    public static class DirectoryHelper
+    /// <summary>
+    /// Resolves file system paths.
+    /// </summary>
+    public static class AssetManager
     {
         private static string _BinDir;
         public static string BinDir

@@ -105,7 +105,7 @@ namespace Aximo.Render.OpenGL
             if (!string.IsNullOrEmpty(content))
                 return content;
 
-            var absPath = DirectoryHelper.GetAssetsPath(path);
+            var absPath = AssetManager.GetAssetsPath(path);
             if (string.IsNullOrEmpty(absPath))
                 throw new Exception("Could not load file: " + path);
 

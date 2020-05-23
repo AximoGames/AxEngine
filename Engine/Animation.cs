@@ -8,6 +8,10 @@ namespace Aximo.Engine
     public delegate float AnimationFunc(float position);
     public delegate void AnimationFinishedDelegate();
 
+    /// <summary>
+    /// Simple Animation caclulation over time.
+    /// An animatin is defined by its duration and animation function.
+    /// </summary>
     public class Animation
     {
         public bool Enabled;

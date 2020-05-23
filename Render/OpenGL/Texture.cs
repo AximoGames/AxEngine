@@ -323,7 +323,7 @@ namespace Aximo.Render.OpenGL
 
         private static Image LoadBitmap(string path)
         {
-            var imagePath = DirectoryHelper.GetAssetsPath(path);
+            var imagePath = AssetManager.GetAssetsPath(path);
             //Console.WriteLine(imagePath);
             return Image.Load(imagePath);
         }

@@ -131,13 +131,13 @@ namespace Aximo.Engine.Windows
         private void InitGlfw()
         {
             var glfwLibFileName = Environment.OSVersion.Platform == PlatformID.Win32NT ? "glfw3-x64.dll" : "libglfw.so.3.3";
-            var glfwLibFileDest = Path.Combine(DirectoryHelper.BinDir, glfwLibFileName);
+            var glfwLibFileDest = Path.Combine(AssetManager.BinDir, glfwLibFileName);
             if (!File.Exists(glfwLibFileDest))
             {
-                var glfwLibFileSrc = Path.Combine(DirectoryHelper.LibsDir, glfwLibFileName);
+                var glfwLibFileSrc = Path.Combine(AssetManager.LibsDir, glfwLibFileName);
                 Log.Verbose("glfwLibFileSrc: " + glfwLibFileSrc);
                 if (!File.Exists(glfwLibFileSrc))
-                    glfwLibFileSrc = Path.Combine(DirectoryHelper.NativeRuntimeDir, glfwLibFileName);
+                    glfwLibFileSrc = Path.Combine(AssetManager.NativeRuntimeDir, glfwLibFileName);
                 Log.Verbose("glfwLibFileSrc: " + glfwLibFileSrc);
 
                 File.Copy(glfwLibFileSrc, glfwLibFileDest);
@@ -147,10 +147,10 @@ namespace Aximo.Engine.Windows
             if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 // .so.x.x --> .so.x
-                var glfwLibFilePathMajor = Path.Combine(DirectoryHelper.BinDir, Path.GetFileNameWithoutExtension(glfwLibFileName));
+                var glfwLibFilePathMajor = Path.Combine(AssetManager.BinDir, Path.GetFileNameWithoutExtension(glfwLibFileName));
 
                 // .so.x --> .so
-                var glfwLibFilePathDefault = Path.Combine(DirectoryHelper.BinDir, Path.GetFileNameWithoutExtension(glfwLibFilePathMajor));
+                var glfwLibFilePathDefault = Path.Combine(AssetManager.BinDir, Path.GetFileNameWithoutExtension(glfwLibFilePathMajor));
 
                 if (!File.Exists(glfwLibFilePathMajor))
                     File.Copy(glfwLibFileDest, glfwLibFilePathMajor);

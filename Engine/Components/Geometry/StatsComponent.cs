@@ -20,6 +20,9 @@ using Color = SixLabors.ImageSharp.Color;
 
 namespace Aximo.Engine.Components.Geometry
 {
+    /// <summary>
+    /// Displays metrics, for example the Frames per Second and Updates per Second.
+    /// </summary>
     public class StatsComponent : UIComponent
     {
         private DateTime LastStatUpdate;

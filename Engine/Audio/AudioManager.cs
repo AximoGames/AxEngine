@@ -30,7 +30,7 @@ namespace Aximo.Engine.Audio
 
         private string GetPath(string path)
         {
-            return DirectoryHelper.GetAssetsPath(path);
+            return AssetManager.GetAssetsPath(path);
         }
 
         public void PlayAsync(string path)

@@ -113,6 +113,9 @@ namespace Aximo.Engine
         private Dictionary<string, Parameter> Parameters = new Dictionary<string, Parameter>();
         private Dictionary<string, object> Defines = new Dictionary<string, object>();
 
+        /// <summary>
+        /// Specifies what pipeline should be used for this material.
+        /// </summary>
         public PipelineType PipelineType { get; set; }
         public bool UseTransparency { get; set; }
 

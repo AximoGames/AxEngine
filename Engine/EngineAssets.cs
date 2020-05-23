@@ -16,9 +16,9 @@ namespace Aximo.Engine
     {
         public static void Init()
         {
-            DirectoryHelper.AddFileGenerator(EmbeddedRessource);
-            DirectoryHelper.AddFileGenerator("Textures/Engine/UVTest.png", CreateImage);
-            DirectoryHelper.AddFileGenerator("Textures/AlchemyCircle/.png", AlchemyCircle);
+            AssetManager.AddFileGenerator(EmbeddedRessource);
+            AssetManager.AddFileGenerator("Textures/Engine/UVTest.png", CreateImage);
+            AssetManager.AddFileGenerator("Textures/AlchemyCircle/.png", AlchemyCircle);
         }
 
         private static bool AlchemyCircle(string subPath, string cachePath, object options)

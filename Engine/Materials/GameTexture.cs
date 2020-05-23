@@ -54,7 +54,7 @@ namespace Aximo.Engine
         public static GameTexture CreateFromFile(string sourcePath)
         {
             Log.Info("Loading: {SourcePath}", sourcePath);
-            var imagePath = DirectoryHelper.GetAssetsPath(sourcePath);
+            var imagePath = AssetManager.GetAssetsPath(sourcePath);
             Image bitmap = Image.Load(imagePath);
 
             var txt = new GameTexture(bitmap.Width, bitmap.Height)

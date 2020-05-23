@@ -10,6 +10,8 @@ using Aximo.Render.OpenGL;
 
 namespace Aximo.Engine
 {
+    /// <inheritdoc/>
+    /// </summary>
     public class GameStartup<TApp, TGtk> : GameStartup<TApp>
         where TApp : RenderApplication
         where TGtk : GtkUI

@@ -13,6 +13,9 @@ using Aximo.Engine.Windows;
 
 namespace Aximo.Engine
 {
+    /// <summary>
+    /// An Actor represents a locical entity within the scene. Actors have a component hirarchy.
+    /// </summary>
     public class Actor : GameObject
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<GameContext>();
