@@ -11,6 +11,7 @@
   <PropertyGroup>
     <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
+  <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.csproj" />
     <ProjectReference Include="..\Render\Render.csproj" />

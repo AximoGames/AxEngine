@@ -44,6 +44,17 @@ namespace Aximo
             }
         }
 
+        private static string _NativeRuntimeDir;
+        public static string NativeRuntimeDir
+        {
+            get
+            {
+                if (_NativeRuntimeDir == null)
+                    _NativeRuntimeDir = new DirectoryInfo(Path.Combine(BinDir, "runtimes", Environment.OSVersion.Platform == PlatformID.Win32NT ? "win-x64" : "linux-x64", "native")).FullName;
+                return _NativeRuntimeDir;
+            }
+        }
+
         private static string _AppSourceDir;
         public static string AppSourceDir
         {

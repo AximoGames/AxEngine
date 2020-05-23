@@ -135,6 +135,11 @@ namespace Aximo.Engine.Windows
             if (!File.Exists(glfwLibFileDest))
             {
                 var glfwLibFileSrc = Path.Combine(DirectoryHelper.LibsDir, glfwLibFileName);
+                Log.Verbose("glfwLibFileSrc: " + glfwLibFileSrc);
+                if (!File.Exists(glfwLibFileSrc))
+                    glfwLibFileSrc = Path.Combine(DirectoryHelper.NativeRuntimeDir, glfwLibFileName);
+                Log.Verbose("glfwLibFileSrc: " + glfwLibFileSrc);
+
                 File.Copy(glfwLibFileSrc, glfwLibFileDest);
             }
 
