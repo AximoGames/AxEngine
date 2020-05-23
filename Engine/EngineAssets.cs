@@ -1,6 +1,8 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
+using System.IO;
 using System.Linq;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
@@ -14,6 +16,7 @@ namespace Aximo.Engine
     {
         public static void Init()
         {
+            DirectoryHelper.AddFileGenerator(EmbeddedRessource);
             DirectoryHelper.AddFileGenerator("Textures/Engine/UVTest.png", CreateImage);
             DirectoryHelper.AddFileGenerator("Textures/AlchemyCircle/.png", AlchemyCircle);
         }
@@ -22,6 +25,19 @@ namespace Aximo.Engine
         {
             var opt = (Generators.AlchemyCircle.AlchemyCircleOptions)options;
             new Generators.AlchemyCircle.AlchemyCircleGenerator().Generate(opt.Seed, opt.BackgroundColor, opt.Color, opt.Size, opt.Thickness).Save(cachePath);
+            return true;
+        }
+
+        private static bool EmbeddedRessource(string subPath, string cachePath, object options)
+        {
+            var asm = typeof(Render.Camera).Assembly;
+            var resName = asm.GetName().Name + "." + subPath.Replace("/", ".");
+            var names = asm.GetManifestResourceNames();
+            if (!names.Contains(resName))
+                return false;
+
+            File.WriteAllBytes(cachePath, asm.GetManifestResourceStream(resName).ReadToEnd());
+
             return true;
         }
 

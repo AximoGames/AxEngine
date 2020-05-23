@@ -26,5 +26,7 @@
       <PackagePath>content\Assets</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
+    <EmbeddedResource Include="../Assets/**/*.*">
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

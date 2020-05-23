@@ -142,6 +142,7 @@ namespace Aximo
                 if (Directory.Exists(path))
                     return new DirectoryInfo(path).FullName;
             }
+
             if (RequestFile(subPath, options))
                 return GetAssetsPath(subPath, options);
 
@@ -158,6 +159,12 @@ namespace Aximo
         {
             lock (FileGenerators)
                 FileGenerators.Add(subPath, generator);
+        }
+
+        public static void AddFileGenerator(GenerateFileDelegate generator)
+        {
+            lock (FileGenerators)
+                FileGenerators.Add("", generator);
         }
 
         private static string AddOptionsKey(string path, object options)
@@ -177,9 +184,20 @@ namespace Aximo
 
         private static bool RequestFile(string subPath, object options)
         {
+            // TODO: Respect Order
+
+            if (RequestFileWithLookup(subPath, subPath, options))
+                return true;
+
+            return RequestFileWithLookup("", subPath, options);
+        }
+
+        private static bool RequestFileWithLookup(string lookupPath, string subPath, object options)
+        {
             GenerateFileDelegate gen;
             lock (FileGenerators)
-                FileGenerators.TryGetValue(subPath, out gen);
+                FileGenerators.TryGetValue(lookupPath, out gen);
+
             if (gen != null)
             {
                 var cachePath = Path.Combine(AppCacheDir, "Assets", subPath);
