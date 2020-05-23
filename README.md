@@ -1,4 +1,4 @@
-[![CodeFactor](https://www.codefactor.io/repository/github/aximogames/axengine/badge/master)](https://www.codefactor.io/repository/github/aximogames/axengine/overview/master)
+![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Actions Status](https://github.com/abanu-org/abanu/workflows/Tests/badge.svg)](https://github.com/abanu-org/abanu/actions) [![CodeFactor](https://www.codefactor.io/repository/github/aximogames/axengine/badge/master)](https://www.codefactor.io/repository/github/aximogames/axengine/overview/master)
 
 Documentation: http://www.aximo.games
 
