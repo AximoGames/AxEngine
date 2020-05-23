@@ -21,12 +21,11 @@
     <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="../Assets/**/*.*">
+    <Content Include="../Assets/**/*.*" Exclude="../Assets/Textures/**/*.*">
       <Pack>true</Pack>
       <PackagePath>content\Assets</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
-    <EmbeddedResource Include="../Assets/**/*.*">
-    </EmbeddedResource>
+    <EmbeddedResource Include="../Assets/**/*.*" Exclude="../Assets/Textures/**/*.*" />
   </ItemGroup>
 </Project>
