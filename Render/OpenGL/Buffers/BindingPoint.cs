@@ -18,7 +18,7 @@ namespace Aximo.Render.OpenGL
         static BindingPoint()
         {
             var freeNumbers = new List<int>();
-            Allocator = new SlotAllocator<int>(Enumerable.Range(1, 15), nameof(BindingPoint));
+            Allocator = new SlotAllocator<int>(Enumerable.Range(1, 32), nameof(BindingPoint));
         }
 
         public static BindingPoint Default { get; private set; } = new BindingPoint(false) { _Number = 0 };
