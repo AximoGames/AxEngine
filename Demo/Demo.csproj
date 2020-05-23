@@ -8,6 +8,7 @@
     <StartupObject />
     <NoWarn>CS0162</NoWarn>
     <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>

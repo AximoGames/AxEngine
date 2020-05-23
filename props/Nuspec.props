@@ -1,0 +1,26 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Authors>Sebastian Loncar (Arakis)</Authors>
+        <PackageTags>3D Game Engine OpenGL Render Rendering Mesh OpenTK OpenToolkit Graphics</PackageTags>
+        <IncludeSource>true</IncludeSource>
+        <IncludeSymbols>true</IncludeSymbols>
+        <RepositoryUrl>https://github.com/AximoGames/AxEngine</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <IncludeBuildOutput>true</IncludeBuildOutput>
+        <PackageOutputPath>$(MSBuildProjectDirectory)\..\.cache\packages</PackageOutputPath>
+
+        <!-- custom property! -->
+        <CommonDescription>
+            Do not use reference this package directly. Use this meta package: https://www.nuget.org/packages/Aximo
+
+            Aximo Game Engine is a Open Source Game Engine written purly in C#.
+            Documentation: https://www.aximo.games
+            Source: https://github.com/AximoGames/AxEngine
+        </CommonDescription>
+        <DependencyDescription>
+            Do not use reference this package directly. Use this meta package: https://www.nuget.org/packages/Aximo
+
+            $(CommonDescription)
+        </DependencyDescription>
+    </PropertyGroup>
+</Project>

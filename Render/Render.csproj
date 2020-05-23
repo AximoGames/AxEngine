@@ -1,11 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>Aximo.Render</RootNamespace>
-    <AssemblyName>AxRender</AssemblyName>
+    <AssemblyName>Aximo.Render</AssemblyName>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <NoWarn>CS0162</NoWarn>
   	<CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <Import Project="..\props\AssemblyVersion.props" />
+  <Import Project="..\props\Nuspec.props" />
+  <PropertyGroup>
+      <PackageId>Aximo.Render</PackageId>
+      <Description>$(DependencyDescription)</Description>
   </PropertyGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
@@ -13,5 +19,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="../Assets/**/*.*">
+        <Pack>true</Pack>
+        <PackagePath>content\Assets</PackagePath>
+    </Content>
   </ItemGroup>
 </Project>

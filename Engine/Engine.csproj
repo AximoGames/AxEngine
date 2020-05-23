@@ -10,21 +10,12 @@
     <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-<PropertyGroup>
-    <Authors>Sebastian Loncar (Arakis)</Authors>
-    <PackageId>Aximo.AxEngine</PackageId>
-    <Version>1.0.2</Version>
-    <PackageTags>3D Game Engine OpenGL Render Rendering Mesh OpenTK OpenToolkit</PackageTags>
-    <Description>
-        Aximo Game Engine is a Open Source Game Engine written purly in C#.
-        Documentation: https://www.aximo.games
-        Source: https://github.com/AximoGames/AxEngine
-    </Description>
-    <IncludeSource>true</IncludeSource>
-    <IncludeSymbols>true</IncludeSymbols>
-    <RepositoryUrl>https://github.com/AximoGames/AxEngine</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-</PropertyGroup>    
+  <Import Project="..\props\AssemblyVersion.props" />
+  <Import Project="..\props\Nuspec.props" />
+  <PropertyGroup>
+      <PackageId>Aximo.Engine</PackageId>
+      <Description>$(DependencyDescription)</Description>
+  </PropertyGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
     <PackageReference Include="AdvancedDLSupport" Version="3.2.0" />
