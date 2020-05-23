@@ -1,6 +1,6 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/aximogames/axengine/badge/master)](https://www.codefactor.io/repository/github/aximogames/axengine/overview/master)
 
-Documentation: http://wwww.aximo.games
+Documentation: http://www.aximo.games
 
 Aximo Game Engine is written purly in C#.
 
