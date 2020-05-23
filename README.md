@@ -2,6 +2,24 @@
 
 Documentation: http://wwww.aximo.games
 
+Aximo Game Engine is written purly in C#.
+
+### Features
+
+* Platform independent (runs on Windows & Linux)
+* Multi-Threaded
+* Dynamic Mesh Creation and Manipulation
+* Several Geometry Components.
+* Phong-Lighning
+* Multiple Lights with Shadows (Directional- and Pointlights)
+* Deferred and forward shading (can be mixed)
+* UI Components (Buttons, Panels, Labels, Performance Statistics)
+* Custom Shaders / Materials
+* Asset Management (incl. dynamic generation on-the-fly)
+* Scene Management via Actors, Components and relative transformations.
+* Audio (only global).
+* Flexible Vertex data layout.
+
 ### Small sample
 
 ```shell
