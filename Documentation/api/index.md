@@ -9,6 +9,15 @@ using Aximo.Engine;
 using Aximo.Engine.Components.Geometry;
 using Aximo.Engine.Components.Lights;
 using OpenToolkit.Mathematics;
+using OpenToolkit.Windowing.Common;
+
+internal class Program
+{
+    public static void Main(string[] args)
+    {
+        GameStartup.Start<MyApplication>();
+    }
+}
 
 public class MyApplication : RenderApplication
 {
@@ -18,12 +27,14 @@ public class MyApplication : RenderApplication
 
     protected override void SetupScene()
     {
-        GameContext.AddActor(new Actor(new DirectionalLightComponent()
+        // it's not required, but we should have a least one light.
+        GameContext.AddActor(new Actor(new PointLightComponent()
         {
-            RelativeTranslation = new Vector3(2f, -1.5f, 3.25f),
             Name = "StaticLight",
+            RelativeTranslation = new Vector3(2f, -1.5f, 3.25f),
         }));
 
+        // add a cube
         GameContext.AddActor(new Actor(new CubeComponent()
         {
             Name = "Box1",
@@ -35,31 +46,6 @@ public class MyApplication : RenderApplication
                 Color = new Vector4(1, 0, 1, 1),
             },
         }));
-    }
-}
-```
-
-Now initialize the application:
-
-```c#
-using Aximo.Engine;
-using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-
-internal class Program
-{
-    public static void Main(string[] args)
-    {
-        var config = new RenderApplicationConfig
-        {
-            WindowTitle = "Sample",
-            WindowSize = new Vector2i(800, 600),
-            VSync = VSyncMode.Off,
-            UseConsole = true,
-            IsMultiThreaded = true,
-        };
-
-        new GameStartup<MyApplication>(config).Start();
     }
 }
 ```

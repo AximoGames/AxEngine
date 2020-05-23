@@ -41,7 +41,8 @@ Aximo Game Engine
 ### Features
 
 * Free Open Source
-* Platform independent, runs on Windows & Linux via OpenGL
+* Platform independent (runs on Windows & Linux)
+* Code first: everything is defined as code.
 * Multi-Threaded
 * Dynamic Mesh Creation and Manipulation
 * Several Geometry Components.
