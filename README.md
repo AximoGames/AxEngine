@@ -2,7 +2,17 @@
 
 Documentation: http://wwww.aximo.games
 
-Small sample:
+### Small sample
+
+```shell
+mkdir mkdir TestGame
+cd TestGame
+dotnet new console # create a new console application
+
+dotnet add package Aximo
+```
+
+Now place to code files, for example MyApplication.cs:
 
 ```c#
 using Aximo;
@@ -40,7 +50,7 @@ public class MyApplication : RenderApplication
 }
 ```
 
-Initialize the application:
+Initialize the application, for example in Program.cs:
 
 ```c#
 using Aximo.Engine;
@@ -65,9 +75,11 @@ internal class Program
 }
 ```
 
-### Build
+Run your application via `dotnet run`.
 
-To clone this repository, you need git LFS, otherwise you need to download the Assets folder manually.
+### Build the engine from source
+
+To clone this repository, (currently) you need git LFS, otherwise you need to download the Assets folder manually.
 
 Don't forget the `--recursive` option:
 ```
@@ -81,7 +93,7 @@ cd AxEngine
 dotnet build
 ```
 
-Run sample:
+Run the shipped sample:
 ```
 dotnet run -p Demo
 ```
