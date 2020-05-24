@@ -16,9 +16,9 @@ using Image = SixLabors.ImageSharp.Image;
 
 namespace Aximo.Render.OpenGL
 {
-    public class Texture : RenderObjectBase, IObjectLabel, IDisposable
+    public class RendererTexture : RenderObjectBase, IObjectLabel, IDisposable
     {
-        private static Serilog.ILogger Log = Aximo.Log.ForContext<Texture>();
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<RendererTexture>();
 
         public int Handle { get; private set; }
         private TextureTarget Target = TextureTarget.Texture2D;
@@ -49,7 +49,7 @@ namespace Aximo.Render.OpenGL
             Log.Verbose("Free Texture #{Handle} {ObjectLabel}", Handle, ObjectLabel);
         }
 
-        public Texture(string objectLabel, TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        public RendererTexture(string objectLabel, TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
         {
             Width = width;
             Height = height;
@@ -75,7 +75,7 @@ namespace Aximo.Render.OpenGL
             GL.TexImage2D(Target, Level, InternalFormat, Width, Height, Border, Format, Type, IntPtr.Zero);
         }
 
-        private Texture(int handle, TextureTarget target, int width, int height)
+        private RendererTexture(int handle, TextureTarget target, int width, int height)
         {
             Handle = handle;
             Target = target;
@@ -90,11 +90,11 @@ namespace Aximo.Render.OpenGL
             AllocData();
         }
 
-        public static Texture CreateCubeShadowMap(PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        public static RendererTexture CreateCubeShadowMap(PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
         {
             int handle;
             GL.GenTextures(1, out handle);
-            var txt = new Texture(handle, TextureTarget.TextureCubeMap, width, height);
+            var txt = new RendererTexture(handle, TextureTarget.TextureCubeMap, width, height);
             txt.Bind();
             txt.ObjectLabel = "CubeShadowMap";
             txt.AddRef();
@@ -106,11 +106,11 @@ namespace Aximo.Render.OpenGL
             return txt;
         }
 
-        public static Texture CreateArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        public static RendererTexture CreateArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels)
         {
             int handle;
             GL.GenTextures(1, out handle);
-            var txt = new Texture(handle, TextureTarget.Texture2DArray, width, height);
+            var txt = new RendererTexture(handle, TextureTarget.Texture2DArray, width, height);
             txt.Bind();
             txt.ObjectLabel = "ShadowMapArray";
             txt.AddRef();
@@ -121,11 +121,11 @@ namespace Aximo.Render.OpenGL
             return txt;
         }
 
-        public static Texture CreateCubeArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels)
+        public static RendererTexture CreateCubeArrayShadowMap(PixelInternalFormat internalformat, int width, int height, int layers, int border, PixelFormat format, PixelType type, IntPtr pixels)
         {
             int handle;
             GL.GenTextures(1, out handle);
-            var txt = new Texture(handle, TextureTarget.TextureCubeMapArray, width, height);
+            var txt = new RendererTexture(handle, TextureTarget.TextureCubeMapArray, width, height);
             txt.Bind();
             txt.ObjectLabel = "CubeShadowMapArray";
             txt.AddRef();
@@ -136,7 +136,7 @@ namespace Aximo.Render.OpenGL
             return txt;
         }
 
-        public static unsafe Texture LoadCubeMap(string path)
+        public static unsafe RendererTexture LoadCubeMap(string path)
         {
             //var faces = new string[] { "right", "left", "back", "front", "top", "bottom" };
             //var faces = new string[] { "left", "right", "top", "top", "top", "top" };
@@ -158,7 +158,7 @@ namespace Aximo.Render.OpenGL
 
             int handle;
             GL.GenTextures(1, out handle);
-            var txt = new Texture(handle, TextureTarget.TextureCubeMap, images[0].Width, images[0].Height);
+            var txt = new RendererTexture(handle, TextureTarget.TextureCubeMap, images[0].Width, images[0].Height);
             //txt.ObjectLabel = Path.GetFileName(path);
             txt.Bind();
             txt.ObjectLabel = name;
@@ -239,7 +239,7 @@ namespace Aximo.Render.OpenGL
             GL.TexParameter(Target, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
         }
 
-        public Texture(Vector3 color, string name)
+        public RendererTexture(Vector3 color, string name)
         {
             using (var bmp = new Image<Rgba32>(1, 1))
             {
@@ -249,7 +249,7 @@ namespace Aximo.Render.OpenGL
         }
 
         // Create texture from path.
-        public Texture(Image image, string name)
+        public RendererTexture(Image image, string name)
         {
             InitFromBitmap(image, name);
         }

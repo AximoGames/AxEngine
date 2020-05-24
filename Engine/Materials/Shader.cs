@@ -11,13 +11,13 @@ using OpenToolkit;
 
 namespace Aximo.Engine
 {
-    public class GameShader
+    public class Shader
     {
         public string VertexShaderPath;
         public string FragmentShaderPath;
         public string GeometryShaderPath;
 
-        public GameShader(string vertexShaderPath, string fragmentShaderPath, string geometryShaderPath = null)
+        public Shader(string vertexShaderPath, string fragmentShaderPath, string geometryShaderPath = null)
         {
             VertexShaderPath = vertexShaderPath;
             FragmentShaderPath = fragmentShaderPath;

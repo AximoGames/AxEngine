@@ -15,7 +15,7 @@ namespace Aximo.Engine
 {
     public class SceneComponent : ActorComponent
     {
-        private static Serilog.ILogger Log = Aximo.Log.ForContext<GameObject>();
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<SceneObject>();
 
         private IList<SceneComponent> _Components;
         public ICollection<SceneComponent> Components { get; private set; }
@@ -410,7 +410,7 @@ namespace Aximo.Engine
         {
             Log.ForContext("DumpInfo").Info(new string(' ', (Level + 1) * 2) + "{Type} #{Id} {Name}", GetType().Name, ObjectId, Name);
             if (list)
-                VisitChilds<GameObject>(a => a.DumpInfo(false));
+                VisitChilds<SceneObject>(a => a.DumpInfo(false));
         }
 
         public virtual Box3 WorldBounds { get; protected set; }

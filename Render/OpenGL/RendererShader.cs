@@ -15,9 +15,9 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Render.OpenGL
 {
     // A simple class meant to help create shaders.
-    public class Shader : IObjectLabel
+    public class RendererShader : IObjectLabel
     {
-        private static Serilog.ILogger Log = Aximo.Log.ForContext<Shader>();
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<RendererShader>();
 
         public int Handle { get; private set; }
         public string ObjectLabel { get { return Compilations.FirstOrDefault()?.ObjectLabel ?? ""; } set { } }
@@ -71,7 +71,7 @@ namespace Aximo.Render.OpenGL
             comp.SetOrdinals();
         }
 
-        public Shader()
+        public RendererShader()
         {
         }
 
@@ -79,7 +79,7 @@ namespace Aximo.Render.OpenGL
         // Shaders are written in GLSL, which is a language very similar to C in its semantics.
         // The GLSL source is compiled *at runtime*, so it can optimize itself for the graphics card it's currently being used on.
         // A commented example of GLSL can be found in shader.vert
-        public Shader(string vertPath, string fragPath, string geomPath = null, bool compile = true, IDictionary<string, object> defines = null)
+        public RendererShader(string vertPath, string fragPath, string geomPath = null, bool compile = true, IDictionary<string, object> defines = null)
         {
             AddSource(vertPath, ShaderType.VertexShader);
             AddSource(fragPath, ShaderType.FragmentShader);
@@ -205,7 +205,7 @@ namespace Aximo.Render.OpenGL
         {
             try
             {
-                var sh = new Shader();
+                var sh = new RendererShader();
                 foreach (var comp in Compilations)
                     foreach (var src in comp.Sources)
                         sh.AddSource(src.Path, comp.Type);
@@ -219,7 +219,7 @@ namespace Aximo.Render.OpenGL
             }
         }
 
-        private void SetFrom(Shader source)
+        private void SetFrom(RendererShader source)
         {
             Handle = source.Handle;
             Compilations = source.Compilations;
@@ -331,7 +331,7 @@ namespace Aximo.Render.OpenGL
             }
         }
 
-        public void SetMaterial(string name, Material material)
+        public void SetMaterial(string name, RendererMaterial material)
         {
             material.WriteToShader(name, this);
         }

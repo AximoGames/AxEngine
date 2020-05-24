@@ -12,24 +12,24 @@ namespace Aximo.Render.OpenGL
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext(nameof(InternalTextureManager));
 
-        public static Texture White { get; private set; }
-        public static Texture Black { get; private set; }
-        public static Texture Gray { get; private set; }
-        public static Texture Red { get; private set; }
-        public static Texture Green { get; private set; }
-        public static Texture Blue { get; private set; }
+        public static RendererTexture White { get; private set; }
+        public static RendererTexture Black { get; private set; }
+        public static RendererTexture Gray { get; private set; }
+        public static RendererTexture Red { get; private set; }
+        public static RendererTexture Green { get; private set; }
+        public static RendererTexture Blue { get; private set; }
 
         public static void Init()
         {
-            White = new Texture(new Vector3(1, 1, 1), nameof(White));
-            Black = new Texture(new Vector3(0, 0, 0), nameof(Black));
-            Gray = new Texture(new Vector3(0.5f, 0.5f, 0.5f), nameof(Gray));
-            Red = new Texture(new Vector3(1, 0, 0), nameof(Red));
-            Green = new Texture(new Vector3(0, 1, 0), nameof(Green));
-            Blue = new Texture(new Vector3(0, 0, 1), nameof(Blue));
+            White = new RendererTexture(new Vector3(1, 1, 1), nameof(White));
+            Black = new RendererTexture(new Vector3(0, 0, 0), nameof(Black));
+            Gray = new RendererTexture(new Vector3(0.5f, 0.5f, 0.5f), nameof(Gray));
+            Red = new RendererTexture(new Vector3(1, 0, 0), nameof(Red));
+            Green = new RendererTexture(new Vector3(0, 1, 0), nameof(Green));
+            Blue = new RendererTexture(new Vector3(0, 0, 1), nameof(Blue));
         }
 
-        private static Dictionary<int, WeakReference<Texture>> References = new Dictionary<int, WeakReference<Texture>>();
+        private static Dictionary<int, WeakReference<RendererTexture>> References = new Dictionary<int, WeakReference<RendererTexture>>();
 
         internal static void DeleteOrphaned()
         {
@@ -37,7 +37,7 @@ namespace Aximo.Render.OpenGL
             {
                 foreach (var reference in References.Values.ToArray())
                 {
-                    Texture texture;
+                    RendererTexture texture;
                     if (reference.TryGetTarget(out texture))
                     {
                         if (texture.Orphaned)
@@ -56,7 +56,7 @@ namespace Aximo.Render.OpenGL
                 {
                     foreach (var reference in References.Values)
                     {
-                        Texture texture;
+                        RendererTexture texture;
                         if (reference.TryGetTarget(out texture))
                         {
                             Log.Info("Texture #{Handle} {Name}", texture.Handle, texture.ObjectLabel);
@@ -71,13 +71,13 @@ namespace Aximo.Render.OpenGL
             return References.Count;
         }
 
-        internal static void AddRef(Texture texture)
+        internal static void AddRef(RendererTexture texture)
         {
             lock (References)
-                References.Set(texture.Handle, new WeakReference<Texture>(texture));
+                References.Set(texture.Handle, new WeakReference<RendererTexture>(texture));
         }
 
-        internal static void RemoveRef(Texture texture)
+        internal static void RemoveRef(RendererTexture texture)
         {
             lock (References)
                 References.Remove(texture.Handle);

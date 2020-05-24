@@ -15,7 +15,7 @@ namespace Aximo.Engine
 {
     public class PrimitiveSceneProxy
     {
-        public List<Material> Materials = new List<Material>();
+        public List<RendererMaterial> Materials = new List<RendererMaterial>();
 
         public PrimitiveSceneProxy(PrimitiveComponent component) { }
     }

@@ -16,7 +16,7 @@ namespace Aximo.Render.OpenGL
             SetMesh(meshData);
         }
 
-        public InternalMesh(Mesh meshData, Material material)
+        public InternalMesh(Mesh meshData, RendererMaterial material)
         {
             SetMesh(meshData);
             if (material == null)
@@ -25,7 +25,7 @@ namespace Aximo.Render.OpenGL
             Materials.Add(material);
         }
 
-        public Material Material
+        public RendererMaterial Material
         {
             get
             {
@@ -52,7 +52,7 @@ namespace Aximo.Render.OpenGL
                 MeshDataList.Add(mesh.GetMeshData(i));
         }
 
-        public List<Material> Materials = new List<Material>();
+        public List<RendererMaterial> Materials = new List<RendererMaterial>();
         public Mesh Mesh { get; private set; }
         private List<MeshData> MeshDataList { get; } = new List<MeshData>();
 
@@ -63,10 +63,10 @@ namespace Aximo.Render.OpenGL
 
         public ReadOnlyCollection<int> MaterialIds => Array.AsReadOnly(Mesh.MaterialIds.ToArray());
 
-        internal Material GetMaterial(int materialId)
+        internal RendererMaterial GetMaterial(int materialId)
         {
             if (materialId >= Materials.Count)
-                return Material.GetDefault();
+                return RendererMaterial.GetDefault();
 
             return Materials[materialId];
         }

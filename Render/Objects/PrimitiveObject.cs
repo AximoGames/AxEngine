@@ -39,7 +39,7 @@ namespace Aximo.Render
                 ShaderParams.Add(name, value);
         }
 
-        protected void ApplyShaderParams(Shader shader)
+        protected void ApplyShaderParams(RendererShader shader)
         {
             foreach (var entry in ShaderParams)
             {

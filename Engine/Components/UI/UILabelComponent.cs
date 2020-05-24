@@ -64,7 +64,7 @@ namespace Aximo.Engine.Components.UI
         {
             Log.ForContext("DumpInfo").Info(new string(' ', (Level + 1) * 2) + "{Type} #{Id} {Name} Text={Text}", GetType().Name, ObjectId, Name, Text);
             if (list)
-                VisitChilds<GameObject>(a => a.DumpInfo(false));
+                VisitChilds<SceneObject>(a => a.DumpInfo(false));
         }
     }
 }

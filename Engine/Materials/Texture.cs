@@ -15,18 +15,18 @@ using Image = SixLabors.ImageSharp.Image;
 
 namespace Aximo.Engine
 {
-    public class GameTexture : GameObject
+    public class Texture : SceneObject
     {
-        private static Serilog.ILogger Log = Aximo.Log.ForContext<GameTexture>();
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<Texture>();
 
-        internal Texture InternalTexture;
+        internal RendererTexture RendererTexture;
 
         public int Width { get; private set; }
         public int Height { get; private set; }
 
         public Vector2i Size => new Vector2i(Width, Height);
 
-        private GameTexture(int width, int height)
+        private Texture(int width, int height)
         {
             Width = width;
             Height = height;
@@ -40,24 +40,24 @@ namespace Aximo.Engine
             if (!HasDeallocation)
                 return;
 
-            if (InternalTexture == null)
+            if (RendererTexture == null)
                 return;
 
             Log.Verbose("Set InternalTexture.Orphaned");
 
-            InternalTexture.Orphaned = true;
-            InternalTexture = null;
+            RendererTexture.Orphaned = true;
+            RendererTexture = null;
 
             base.DoDeallocation();
         }
 
-        public static GameTexture CreateFromFile(string sourcePath)
+        public static Texture CreateFromFile(string sourcePath)
         {
             Log.Info("Loading: {SourcePath}", sourcePath);
             var imagePath = AssetManager.GetAssetsPath(sourcePath);
             Image bitmap = Image.Load(imagePath);
 
-            var txt = new GameTexture(bitmap.Width, bitmap.Height)
+            var txt = new Texture(bitmap.Width, bitmap.Height)
             {
                 SourcePath = sourcePath,
                 Label = Path.GetFileName(sourcePath),
@@ -67,16 +67,16 @@ namespace Aximo.Engine
             return txt;
         }
 
-        public static GameTexture GetFromFile(string sourcePath)
+        public static Texture GetFromFile(string sourcePath)
         {
             return TextureManager.GetFromFile(sourcePath);
         }
 
         private bool AutoDisposeBitmap = false;
 
-        public static GameTexture GetFromBitmap(Image bitmap, string name = null, bool autoDisposeBitmap = false)
+        public static Texture GetFromBitmap(Image bitmap, string name = null, bool autoDisposeBitmap = false)
         {
-            var txt = new GameTexture(bitmap.Width, bitmap.Height)
+            var txt = new Texture(bitmap.Width, bitmap.Height)
             {
                 Label = name,
                 AutoDisposeBitmap = autoDisposeBitmap,
@@ -106,19 +106,19 @@ namespace Aximo.Engine
                 return;
             HasChanges = false;
 
-            if (InternalTexture == null)
+            if (RendererTexture == null)
             {
-                InternalTexture = new Texture(Bitmap, Label);
+                RendererTexture = new RendererTexture(Bitmap, Label);
             }
             else
             {
                 if (BitmapChanged)
                 {
                     BitmapChanged = false;
-                    InternalTexture.SetData(Bitmap);
+                    RendererTexture.SetData(Bitmap);
                     if (AutoDisposeBitmap)
                     {
-                        Log.Verbose("Disposing Bitmap for {ObjectLabel}", InternalTexture.ObjectLabel);
+                        Log.Verbose("Disposing Bitmap for {ObjectLabel}", RendererTexture.ObjectLabel);
                         Bitmap.Dispose();
                         Bitmap = null;
                     }
@@ -130,9 +130,9 @@ namespace Aximo.Engine
         {
             if (disposing)
             {
-                InternalTexture?.Dispose();
+                RendererTexture?.Dispose();
             }
-            InternalTexture = null;
+            RendererTexture = null;
             base.Dispose(disposing);
         }
     }

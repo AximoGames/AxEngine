@@ -19,9 +19,9 @@ using OpenToolkit.Windowing.Desktop;
 namespace Aximo.Engine
 {
     /// <summary>
-    /// Initial configuration of <see cref="RenderApplication"/>
+    /// Initial configuration of <see cref="Application"/>
     /// </summary>
-    public class RenderApplicationConfig
+    public class ApplicationConfig
     {
         public Vector2i WindowSize { get; set; } = new Vector2i(800, 600);
         public Vector2i? WindowLocation { get; set; }
@@ -44,7 +44,7 @@ namespace Aximo.Engine
         /// </summary>
         public FlushRenderBackend FlushRenderBackend { get; set; } = FlushRenderBackend.None;
 
-        public RenderApplicationConfig()
+        public ApplicationConfig()
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {

@@ -14,7 +14,7 @@ namespace Aximo.AxDemo
     {
         public static void Main(string[] args)
         {
-            var config = new RenderApplicationConfig
+            var config = new ApplicationConfig
             {
                 WindowTitle = "AxEngineDemo",
                 WindowSize = new Vector2i(800, 600),
@@ -29,7 +29,7 @@ namespace Aximo.AxDemo
                 UseConsole = true,
             };
 
-            new GameStartup<DemoApplication, GtkUI>(config).Start();
+            new Startup<DemoApplication, GtkUI>(config).Start();
         }
     }
 }

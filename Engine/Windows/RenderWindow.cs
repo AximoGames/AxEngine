@@ -16,9 +16,9 @@ namespace Aximo.Engine.Windows
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderWindow>();
 
-        private RenderApplicationConfig Config;
+        private ApplicationConfig Config;
 
-        public RenderWindow(RenderApplicationConfig config)
+        public RenderWindow(ApplicationConfig config)
         : base(new GameWindowSettings { IsMultiThreaded = config.IsMultiThreaded, UpdateFrequency = config.UpdateFrequency, RenderFrequency = config.RenderFrequency }, new NativeWindowSettings { Size = config.WindowSize })
         {
             Log.Verbose("Created window");

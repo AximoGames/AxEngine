@@ -11,21 +11,21 @@ using Aximo.Render.OpenGL;
 namespace Aximo.Engine
 {
     /// <inheritdoc/>
-    public class GameStartup<TApp> : GameStartup
-        where TApp : RenderApplication
+    public class Startup<TApp> : Startup
+        where TApp : Application
     {
-        private RenderApplicationConfig Config;
+        private ApplicationConfig Config;
 
-        public GameStartup() : this(new RenderApplicationConfig())
+        public Startup() : this(new ApplicationConfig())
         {
         }
 
-        public GameStartup(RenderApplicationConfig config)
+        public Startup(ApplicationConfig config)
         {
             Config = config;
         }
 
-        private static Serilog.ILogger Log = Aximo.Log.ForContext<GameStartup<TApp>>();
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<Startup<TApp>>();
 
         private Thread th;
 
@@ -67,7 +67,7 @@ namespace Aximo.Engine
             }
         }
 
-        private RenderApplication demo;
+        private Application demo;
 
         private void UIThreadMain()
         {
@@ -96,23 +96,23 @@ namespace Aximo.Engine
                     case "q":
                         return;
                     case "diag":
-                        GameContext.Current.DumpInfo(true);
+                        SceneContext.Current.DumpInfo(true);
                         break;
                     case "actor new":
-                        RenderApplication.Current.DispatchUpdater(() =>
+                        Application.Current.DispatchUpdater(() =>
                         {
-                            GameContext.Current.AddActor(new Actor(new CubeComponent()));
+                            SceneContext.Current.AddActor(new Actor(new CubeComponent()));
                         });
                         break;
                     case "act del":
                     case "actor del":
-                        RenderApplication.Current.DispatchUpdater(() =>
+                        Application.Current.DispatchUpdater(() =>
                         {
-                            GameContext.Current.RemoveActor(GameContext.Current.Actors.LastOrDefault());
+                            SceneContext.Current.RemoveActor(SceneContext.Current.Actors.LastOrDefault());
                         });
                         break;
                     case "map list":
-                        RenderApplication.Current.DispatchUpdater(() =>
+                        Application.Current.DispatchUpdater(() =>
                         {
                             InternalTextureManager.DumpInfo(true);
                         });

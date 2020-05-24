@@ -11,9 +11,9 @@ using Aximo.Render.OpenGL;
 namespace Aximo.Engine
 {
     /// <summary>
-    /// Wrapper to start the <see cref="RenderApplication"/>. Takes care about thread ownership.
+    /// Wrapper to start the <see cref="Application"/>. Takes care about thread ownership.
     /// </summary>
-    public abstract class GameStartup : IDisposable
+    public abstract class Startup : IDisposable
     {
         protected abstract void Dispose(bool disposing);
 
@@ -23,15 +23,15 @@ namespace Aximo.Engine
         }
 
         public static void Start<TApp>()
-            where TApp : RenderApplication
+            where TApp : Application
         {
-            new GameStartup<TApp>().Start();
+            new Startup<TApp>().Start();
         }
 
-        public static void Start<TApp>(RenderApplicationConfig config)
-            where TApp : RenderApplication
+        public static void Start<TApp>(ApplicationConfig config)
+            where TApp : Application
         {
-            new GameStartup<TApp>(config).Start();
+            new Startup<TApp>(config).Start();
         }
     }
 }

@@ -14,15 +14,15 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-    public class GameMaterial : GameObject
+    public class Material : SceneObject
     {
-        public static GameMaterial Default => MaterialManager.DefaultMaterial;
+        public static Material Default => MaterialManager.DefaultMaterial;
 
         private static int LastMaterialId = 0;
         public int MaterialId { get; private set; }
-        internal Material InternalMaterial;
+        internal RendererMaterial RendererMaterial;
 
-        private List<GameTexture> Textures = new List<GameTexture>();
+        private List<Texture> Textures = new List<Texture>();
 
         public override void Visit<T>(Action<T> action, Func<T, bool> visitChilds = null)
         {
@@ -37,20 +37,20 @@ namespace Aximo.Engine
                 txt.Visit(action, visitChilds);
         }
 
-        public void AddTexture(GameTexture txt)
+        public void AddTexture(Texture txt)
         {
             Textures.Add(txt);
             txt.AddRef(this);
         }
 
-        public void RemoveTexture(GameTexture txt)
+        public void RemoveTexture(Texture txt)
         {
             Textures.Remove(txt);
             txt.RemoveRef(txt);
         }
 
-        private GameTexture _DiffuseTexture;
-        public GameTexture DiffuseTexture
+        private Texture _DiffuseTexture;
+        public Texture DiffuseTexture
         {
             get
             {
@@ -68,8 +68,8 @@ namespace Aximo.Engine
             }
         }
 
-        private GameTexture _SpecularTexture;
-        public GameTexture SpecularTexture
+        private Texture _SpecularTexture;
+        public Texture SpecularTexture
         {
             get
             {
@@ -92,12 +92,12 @@ namespace Aximo.Engine
         // private Shader ShadowShader;
         // private Shader CubeShadowShader;
 
-        public GameShader Shader { get; set; }
-        public GameShader DefGeometryShader { get; set; }
-        public GameShader ShadowShader { get; set; }
-        public GameShader CubeShadowShader { get; set; }
+        public Shader Shader { get; set; }
+        public Shader DefGeometryShader { get; set; }
+        public Shader ShadowShader { get; set; }
+        public Shader CubeShadowShader { get; set; }
 
-        public GameMaterial()
+        public Material()
         {
             MaterialId = Interlocked.Increment(ref LastMaterialId);
         }
@@ -134,7 +134,7 @@ namespace Aximo.Engine
             AddParameter(new Parameter(name, value, ParamterType.Matrix4));
         }
 
-        public void AddParameter(string name, GameTexture value)
+        public void AddParameter(string name, Texture value)
         {
             AddParameter(new Parameter(name, value, ParamterType.Texture));
         }
@@ -208,14 +208,14 @@ namespace Aximo.Engine
             DiffuseTexture?.Sync();
             SpecularTexture?.Sync();
 
-            if (InternalMaterial == null)
+            if (RendererMaterial == null)
             {
-                InternalMaterial = new Material();
+                RendererMaterial = new RendererMaterial();
 
                 if (Shader == null)
-                    Shader = new GameShader("Shaders/forward.vert", "Shaders/forward.frag");
+                    Shader = new Shader("Shaders/forward.vert", "Shaders/forward.frag");
                 if (DefGeometryShader == null)
-                    DefGeometryShader = new GameShader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
+                    DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
 
                 if (DiffuseTexture != null || SpecularTexture != null)
                     Defines.Add("USE_VERTEX_UV", "1");
@@ -224,13 +224,13 @@ namespace Aximo.Engine
                 if (ReceiveShadow && Renderer.Current.UseShadows)
                     Defines.Add("USE_SHADOW", "1");
 
-                InternalMaterial.Shader = new Shader(Shader.VertexShaderPath, Shader.FragmentShaderPath, Shader.GeometryShaderPath, true, Defines);
-                InternalMaterial.DefGeometryShader = new Shader(DefGeometryShader.VertexShaderPath, DefGeometryShader.FragmentShaderPath, DefGeometryShader.GeometryShaderPath, true, Defines);
+                RendererMaterial.Shader = new RendererShader(Shader.VertexShaderPath, Shader.FragmentShaderPath, Shader.GeometryShaderPath, true, Defines);
+                RendererMaterial.DefGeometryShader = new RendererShader(DefGeometryShader.VertexShaderPath, DefGeometryShader.FragmentShaderPath, DefGeometryShader.GeometryShaderPath, true, Defines);
 
-                InternalMaterial.CreateShaders();
+                RendererMaterial.CreateShaders();
             }
 
-            var mat = InternalMaterial;
+            var mat = RendererMaterial;
             if (DiffuseTexture == null)
             {
                 mat.DiffuseMap = InternalTextureManager.White;
@@ -238,7 +238,7 @@ namespace Aximo.Engine
             }
             else
             {
-                mat.DiffuseMap = DiffuseTexture.InternalTexture;
+                mat.DiffuseMap = DiffuseTexture.RendererTexture;
                 mat.DiffuseColor = Color;
             }
 
@@ -249,7 +249,7 @@ namespace Aximo.Engine
             }
             else
             {
-                mat.SpecularMap = SpecularTexture.InternalTexture;
+                mat.SpecularMap = SpecularTexture.RendererTexture;
                 mat.SpecularStrength = 1.0f;
             }
             mat.CastShadow = CastShadow;

@@ -30,7 +30,7 @@ namespace Aximo.Engine
 
         private static bool EmbeddedRessource(string subPath, string cachePath, object options)
         {
-            var asm = typeof(Render.Camera).Assembly;
+            var asm = typeof(Render.Renderer).Assembly;
             var resName = asm.GetName().Name + "." + subPath.Replace("/", ".").Replace("\\", ".");
             var names = asm.GetManifestResourceNames();
             if (!names.Contains(resName))

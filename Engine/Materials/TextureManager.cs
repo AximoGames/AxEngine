@@ -7,17 +7,17 @@ namespace Aximo.Engine
 {
     public static class TextureManager
     {
-        private static Dictionary<string, GameTexture> FileTextures = new Dictionary<string, GameTexture>();
+        private static Dictionary<string, Texture> FileTextures = new Dictionary<string, Texture>();
 
-        public static GameTexture GetFromFile(string path)
+        public static Texture GetFromFile(string path)
         {
             lock (FileTextures)
             {
-                GameTexture txt;
+                Texture txt;
                 if (FileTextures.TryGetValue(path, out txt))
                     return txt;
                 else
-                    FileTextures.Add(path, txt = GameTexture.CreateFromFile(path));
+                    FileTextures.Add(path, txt = Texture.CreateFromFile(path));
                 return txt;
             }
         }

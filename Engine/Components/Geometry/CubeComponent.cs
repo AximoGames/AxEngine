@@ -15,7 +15,7 @@ namespace Aximo.Engine.Components.Geometry
 {
     public class CubeComponent : StaticMeshComponent
     {
-        public CubeComponent() : base(MeshDataBuilder.Cube(), GameMaterial.Default)
+        public CubeComponent() : base(MeshDataBuilder.Cube(), Material.Default)
         {
         }
     }

@@ -29,7 +29,7 @@ namespace Aximo.AxTests
             }
             else
             {
-                GameMaterial mat1 = new GameMaterial
+                Material mat1 = new Material
                 {
                     Color = new Vector4(0.5f, 0.5f, 0, 1),
                     Ambient = 0.3f,
@@ -39,7 +39,7 @@ namespace Aximo.AxTests
                     CastShadow = true,
                 };
 
-                var mat2 = new GameMaterial()
+                var mat2 = new Material()
                 {
                     Color = new Vector4(0.5f, 0, 0.5f, 1),
                     Ambient = 0.3f,
@@ -49,7 +49,7 @@ namespace Aximo.AxTests
                     CastShadow = true,
                 };
 
-                GameContext.AddActor(new Actor(new CubeComponent()
+                SceneContext.AddActor(new Actor(new CubeComponent()
                 {
                     Name = "Ground",
                     RelativeScale = new Vector3(50, 50, 1),
@@ -57,7 +57,7 @@ namespace Aximo.AxTests
                     Material = mat1,
                 }));
 
-                GameContext.AddActor(new Actor(new CubeComponent()
+                SceneContext.AddActor(new Actor(new CubeComponent()
                 {
                     Name = "Box",
                     RelativeTranslation = new Vector3(0f, 0f, 0.5f),
@@ -67,14 +67,14 @@ namespace Aximo.AxTests
                 switch (test.LightType)
                 {
                     case LightType.Point:
-                        GameContext.AddActor(new Actor(new PointLightComponent()
+                        SceneContext.AddActor(new Actor(new PointLightComponent()
                         {
                             RelativeTranslation = new Vector3(1f, 2, 2.5f),
                             Name = "MovingLight",
                         }));
                         break;
                     case LightType.Directional:
-                        GameContext.AddActor(new Actor(new DirectionalLightComponent()
+                        SceneContext.AddActor(new Actor(new DirectionalLightComponent()
                         {
                             RelativeTranslation = new Vector3(1f, 2, 2.5f),
                             Name = "MovingLight",

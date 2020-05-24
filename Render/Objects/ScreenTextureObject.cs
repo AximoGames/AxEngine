@@ -16,7 +16,7 @@ namespace Aximo.Render
 {
     public class ScreenTextureObject : RenderObject, IRenderTarget, IScaleRotate, IPosition
     {
-        private Shader _shader;
+        private RendererShader _shader;
 
         public Vector3 Scale { get; set; } = Vector3.One;
         public Quaternion Rotate { get; set; }
@@ -26,13 +26,13 @@ namespace Aximo.Render
 
         private VertexArrayObject vao;
 
-        public Texture SourceTexture { get; set; }
+        public RendererTexture SourceTexture { get; set; }
 
         public override void Init()
         {
             UsePipeline<ScreenPipeline>();
 
-            _shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag");
+            _shader = new RendererShader("Shaders/screen.vert", "Shaders/screen.frag");
 
             var layout = VertexLayoutDefinition.CreateDefinitionFromVertexStruct<VertexDataPos2UV>();
             vao = new VertexArrayObject(layout.BindToShader(_shader));

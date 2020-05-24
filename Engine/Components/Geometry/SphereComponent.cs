@@ -14,7 +14,7 @@ namespace Aximo.Engine.Components.Geometry
 {
     public class SphereComponent : StaticMeshComponent
     {
-        public SphereComponent(int divisions = 2) : base(Mesh.CreateSphere(divisions), GameMaterial.Default)
+        public SphereComponent(int divisions = 2) : base(Mesh.CreateSphere(divisions), Material.Default)
         {
         }
     }

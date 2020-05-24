@@ -29,18 +29,18 @@ namespace Aximo.AxTests
             }
             else
             {
-                GameMaterial material = new GameMaterial
+                Material material = new Material
                 {
-                    SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                    SpecularTexture = Texture.GetFromFile("Textures/woodenbox_specular.png"),
                     Ambient = test.Ambient,
                     PipelineType = test.Pipeline,
                 };
                 if (test.DiffuseSource == "Texture")
-                    material.DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png");
+                    material.DiffuseTexture = Texture.GetFromFile("Textures/woodenbox.png");
                 else
                     material.Color = new Vector4(0, 1, 0, 1);
 
-                GameContext.AddActor(new Actor(new DebugCubeComponent()
+                SceneContext.AddActor(new Actor(new DebugCubeComponent()
                 {
                     Name = "Box1",
                     Transform = GetTestTransform(),
@@ -50,7 +50,7 @@ namespace Aximo.AxTests
                 switch (test.LightType)
                 {
                     case LightType.Point:
-                        GameContext.AddActor(new Actor(new PointLightComponent()
+                        SceneContext.AddActor(new Actor(new PointLightComponent()
                         {
                             Name = "StaticLight",
                             //RelativeTranslation = new Vector3(0, 2, 2.5f),
@@ -58,7 +58,7 @@ namespace Aximo.AxTests
                         }));
                         break;
                     case LightType.Directional:
-                        GameContext.AddActor(new Actor(new DirectionalLightComponent()
+                        SceneContext.AddActor(new Actor(new DirectionalLightComponent()
                         {
                             Name = "StaticLight",
                             //RelativeTranslation = new Vector3(0, 2, 2.5f),

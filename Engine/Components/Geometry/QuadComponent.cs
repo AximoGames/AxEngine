@@ -14,7 +14,7 @@ namespace Aximo.Engine.Components.Geometry
 {
     public class QuadComponent : StaticMeshComponent
     {
-        public QuadComponent() : base(Mesh.CreateQuad3(), GameMaterial.Default)
+        public QuadComponent() : base(Mesh.CreateQuad3(), Material.Default)
         {
         }
     }

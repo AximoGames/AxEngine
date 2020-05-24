@@ -22,21 +22,21 @@ namespace Aximo.AxTests
         [Fact]
         public void Sphere()
         {
-            GameContext.AddActor(new Actor(new DirectionalLightComponent()
+            SceneContext.AddActor(new Actor(new DirectionalLightComponent()
             {
                 Name = "StaticLight",
                 RelativeTranslation = new Vector3(-0.2f, -2.1f, 1.85f),
             }));
 
-            GameMaterial material = new GameMaterial
+            Material material = new Material
             {
-                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
-                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                DiffuseTexture = Texture.GetFromFile("Textures/woodenbox.png"),
+                SpecularTexture = Texture.GetFromFile("Textures/woodenbox_specular.png"),
                 Ambient = 0.5f,
                 PipelineType = PipelineType.Deferred,
             };
 
-            GameContext.AddActor(new Actor(new SphereComponent()
+            SceneContext.AddActor(new Actor(new SphereComponent()
             {
                 Name = "Sphere1",
                 Transform = GetTestTransform(),
@@ -49,7 +49,7 @@ namespace Aximo.AxTests
         [Fact]
         public void Bomb()
         {
-            GameContext.AddActor(new Actor(new DirectionalLightComponent()
+            SceneContext.AddActor(new Actor(new DirectionalLightComponent()
             {
                 Name = "StaticLight",
                 RelativeTranslation = new Vector3(-0.2f, -2.1f, 1.85f),
@@ -74,7 +74,7 @@ namespace Aximo.AxTests
                 RelativeScale = new Vector3(2),
             };
 
-            comp.AddMaterial(new GameMaterial()
+            comp.AddMaterial(new Material()
             {
                 Color = new Vector4(0.2f, 0.2f, 0.2f, 1),
                 Ambient = 0.5f,
@@ -83,7 +83,7 @@ namespace Aximo.AxTests
                 CastShadow = true,
             });
 
-            comp.AddMaterial(new GameMaterial()
+            comp.AddMaterial(new Material()
             {
                 Color = new Vector4(0.1f, 0.1f, 0.1f, 1),
                 Ambient = 0.5f,
@@ -92,7 +92,7 @@ namespace Aximo.AxTests
                 CastShadow = true,
             });
 
-            comp.AddMaterial(new GameMaterial()
+            comp.AddMaterial(new Material()
             {
                 Color = new Vector4(0.5f, 1 / 255f * 165 * 0.5f, 0, 1),
                 Ambient = 0.5f,
@@ -101,7 +101,7 @@ namespace Aximo.AxTests
                 CastShadow = true,
             });
 
-            GameContext.AddActor(new Actor(comp));
+            SceneContext.AddActor(new Actor(comp));
 
             RenderAndCompare(nameof(Bomb));
         }

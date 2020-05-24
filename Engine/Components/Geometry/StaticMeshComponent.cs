@@ -28,7 +28,7 @@ namespace Aximo.Engine.Components.Geometry
             SetMesh(mesh);
         }
 
-        public StaticMeshComponent(Mesh mesh, GameMaterial material)
+        public StaticMeshComponent(Mesh mesh, Material material)
         {
             SetMesh(mesh);
             Material = material;
@@ -104,7 +104,7 @@ namespace Aximo.Engine.Components.Geometry
                 InternalMesh.Materials.Clear();
                 foreach (var gameMat in Materials)
                 {
-                    InternalMesh.Materials.Add(gameMat.InternalMaterial);
+                    InternalMesh.Materials.Add(gameMat.RendererMaterial);
                 }
 
                 obj.UseTransparency = Materials.Any(m => m.UseTransparency);

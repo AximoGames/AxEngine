@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Render
+namespace Aximo
 {
     public class PerspectiveFieldOfViewCamera : Camera
     {

@@ -13,12 +13,12 @@ namespace Aximo.Render.Pipelines
     public class DeferredRenderPipeline : RenderPipeline
     {
         private FrameBuffer GBuffer;
-        private Texture GPosition;
-        private Texture GNormal;
-        private Texture GMaterial;
-        private Texture GAlbedoSpec;
+        private RendererTexture GPosition;
+        private RendererTexture GNormal;
+        private RendererTexture GMaterial;
+        private RendererTexture GAlbedoSpec;
 
-        private Shader _DefLightShader;
+        private RendererShader _DefLightShader;
         private VertexDataPos2UV[] _vertices = DataHelper.NDCQuadInvertedUV;
 
         private VertexArrayObject vao;
@@ -36,22 +36,22 @@ namespace Aximo.Render.Pipelines
             // R11fG11fB10f --> rgba16f
             // Warning: R11fG11fB10f has no sign bit!
 
-            GPosition = new Texture(nameof(GPosition), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            GPosition = new RendererTexture(nameof(GPosition), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             GPosition.SetNearestFilter();
             GBuffer.DestinationTextures.Add(GPosition);
             GBuffer.BindTexture(GPosition, FramebufferAttachment.ColorAttachment0);
 
-            GNormal = new Texture(nameof(GNormal), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            GNormal = new RendererTexture(nameof(GNormal), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             GNormal.SetNearestFilter();
             GBuffer.DestinationTextures.Add(GNormal);
             GBuffer.BindTexture(GNormal, FramebufferAttachment.ColorAttachment1);
 
-            GAlbedoSpec = new Texture(nameof(GAlbedoSpec), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            GAlbedoSpec = new RendererTexture(nameof(GAlbedoSpec), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             GAlbedoSpec.SetNearestFilter();
             GBuffer.DestinationTextures.Add(GAlbedoSpec);
             GBuffer.BindTexture(GAlbedoSpec, FramebufferAttachment.ColorAttachment2);
 
-            GMaterial = new Texture(nameof(GMaterial), TextureTarget.Texture2D, 0, PixelInternalFormat.R11fG11fB10f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            GMaterial = new RendererTexture(nameof(GMaterial), TextureTarget.Texture2D, 0, PixelInternalFormat.R11fG11fB10f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             GMaterial.SetNearestFilter();
             GBuffer.DestinationTextures.Add(GMaterial);
             GBuffer.BindTexture(GMaterial, FramebufferAttachment.ColorAttachment3);
@@ -73,7 +73,7 @@ namespace Aximo.Render.Pipelines
 
             GBuffer.Check();
 
-            _DefLightShader = new Shader("Shaders/deferred-shading.vert", "Shaders/deferred-shading.frag", null, false);
+            _DefLightShader = new RendererShader("Shaders/deferred-shading.vert", "Shaders/deferred-shading.frag", null, false);
             if (Renderer.Current.UseShadows)
                 _DefLightShader.SetDefine("USE_SHADOW");
             _DefLightShader.Compile();

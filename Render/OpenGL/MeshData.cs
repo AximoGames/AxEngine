@@ -24,7 +24,7 @@ namespace Aximo.Render.OpenGL
         public BufferData1D<ushort> Indicies { get; protected set; }
         public virtual int IndiciesCount { get; protected set; }
 
-        public VertexLayoutBinded BindLayoutToShader(Shader shader) => Layout.BindToShader(shader);
+        public VertexLayoutBinded BindLayoutToShader(RendererShader shader) => Layout.BindToShader(shader);
         public AxPrimitiveType PrimitiveType { get; protected set; }
     }
 }

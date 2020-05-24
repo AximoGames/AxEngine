@@ -10,6 +10,6 @@ namespace Aximo.Render.OpenGL
     {
         public DynamicInternalMesh() : base() { }
         public DynamicInternalMesh(Mesh meshData) : base(meshData) { }
-        public DynamicInternalMesh(Mesh meshData, Material material) : base(meshData, material) { }
+        public DynamicInternalMesh(Mesh meshData, RendererMaterial material) : base(meshData, material) { }
     }
 }

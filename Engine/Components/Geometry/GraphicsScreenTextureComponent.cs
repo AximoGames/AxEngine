@@ -22,7 +22,7 @@ namespace Aximo.Engine.Components.Geometry
         public GraphicsScreenTextureComponent(Vector2i size)
         {
             Image = new Image<Rgba32>(size.X, size.Y);
-            Texture = GameTexture.GetFromBitmap(Image, null);
+            Texture = Texture.GetFromBitmap(Image, null);
             Material.DiffuseTexture = Texture;
             UpdateTexture();
         }
@@ -38,7 +38,7 @@ namespace Aximo.Engine.Components.Geometry
 
         protected Image<Rgba32> Image { get; private set; }
 
-        public GameTexture Texture { get; private set; }
+        public Texture Texture { get; private set; }
 
         public void UpdateTexture()
         {

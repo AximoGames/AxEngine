@@ -15,7 +15,7 @@ namespace Aximo.Engine.Components.Geometry
 {
     public class DebugCubeComponent : StaticMeshComponent
     {
-        public DebugCubeComponent() : base(MeshDataBuilder.DebugCube(), GameMaterial.Default)
+        public DebugCubeComponent() : base(MeshDataBuilder.DebugCube(), Material.Default)
         {
         }
     }

@@ -21,7 +21,7 @@ namespace Aximo.Engine.Windows
     /// </remarks>
     public class WindowContext
     {
-        private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderApplication>();
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<Application>();
 
         public RenderWindow Window { get; private set; }
 
@@ -164,9 +164,9 @@ namespace Aximo.Engine.Windows
             Log.Info("GLFW Version: {Version}", GLFW.GetVersionString());
         }
 
-        private RenderApplicationConfig Config;
+        private ApplicationConfig Config;
 
-        public static void Init(RenderApplicationConfig config)
+        public static void Init(ApplicationConfig config)
         {
             if (Current != null)
                 return;
@@ -175,7 +175,7 @@ namespace Aximo.Engine.Windows
             Current.InitLocal(config);
         }
 
-        private void InitLocal(RenderApplicationConfig config)
+        private void InitLocal(ApplicationConfig config)
         {
             Config = config;
 

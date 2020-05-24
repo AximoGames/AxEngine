@@ -38,8 +38,8 @@ namespace Aximo.Render.Objects
                 * Matrix4.CreateTranslation((new Vector4(Position, 1.0f) * PositionMatrix).Xyz);
         }
 
-        private Material _MaterialTmp;
-        public Material Material
+        private RendererMaterial _MaterialTmp;
+        public RendererMaterial Material
         {
             get
             {
@@ -65,7 +65,7 @@ namespace Aximo.Render.Objects
         private class VertexArrayObjectMaterial
         {
             public VertexArrayObject Vao;
-            public Material Material;
+            public RendererMaterial Material;
         }
 
         public IRenderPipeline PrimaryRenderPipeline;

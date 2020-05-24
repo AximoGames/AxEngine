@@ -20,7 +20,7 @@ namespace Aximo.AxTests
 
         protected TestsApplication App;
 
-        protected GameContext GameContext => App.GameContext;
+        protected SceneContext SceneContext => App.SceneContext;
 
         private static AutoResetEvent AppWaiter = new AutoResetEvent(true);
 
@@ -233,20 +233,20 @@ namespace Aximo.AxTests
             yield return new object[] { test1 };
         }
 
-        protected GameMaterial SolidTextureMaterial(PipelineType pipelineType)
+        protected Material SolidTextureMaterial(PipelineType pipelineType)
         {
-            return new GameMaterial()
+            return new Material()
             {
-                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
-                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                DiffuseTexture = Texture.GetFromFile("Textures/woodenbox.png"),
+                SpecularTexture = Texture.GetFromFile("Textures/woodenbox_specular.png"),
                 Ambient = 0.2f,
                 PipelineType = pipelineType,
             };
         }
 
-        protected GameMaterial SolidColorMaterial(PipelineType pipelineType, Vector4 color)
+        protected Material SolidColorMaterial(PipelineType pipelineType, Vector4 color)
         {
-            return new GameMaterial()
+            return new Material()
             {
                 Ambient = 0.2f,
                 Color = color,

@@ -20,13 +20,13 @@ namespace Aximo.Render.OpenGL
         public GraphicsTexture(int width, int height)
         {
             Image = new Image<Rgba32>(width, height);
-            Texture = new Texture(Image, "GraphicsTexture");
+            Texture = new RendererTexture(Image, "GraphicsTexture");
             UpdateTexture();
         }
 
         private Image<Rgba32> Image;
 
-        public Texture Texture { get; private set; }
+        public RendererTexture Texture { get; private set; }
 
         public void UpdateTexture()
         {

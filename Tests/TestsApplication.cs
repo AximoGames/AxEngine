@@ -19,11 +19,11 @@ using Xunit;
 
 namespace Aximo.AxTests
 {
-    public class TestsApplication : RenderApplication
+    public class TestsApplication : Application
     {
         protected static TestsApplication CurrentTestApp;
 
-        public TestsApplication() : base(new RenderApplicationConfig
+        public TestsApplication() : base(new ApplicationConfig
         {
             WindowTitle = "AxTests",
             WindowSize = new Vector2i(160, 120),
@@ -46,8 +46,8 @@ namespace Aximo.AxTests
 
         protected override void SetupScene()
         {
-            GameContext.BackgroundColor = new Vector4(0.2f, 0.3f, 0.3f, 1);
-            GameContext.AddActor(new Actor(ScreenshotBuffer = new BufferComponent()));
+            SceneContext.BackgroundColor = new Vector4(0.2f, 0.3f, 0.3f, 1);
+            SceneContext.AddActor(new Actor(ScreenshotBuffer = new BufferComponent()));
         }
 
         protected override void BeforeUpdateFrame()

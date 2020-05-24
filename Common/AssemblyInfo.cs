@@ -3,4 +3,5 @@
 
 using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Aximo.Render")]
 [assembly: InternalsVisibleTo("AxEngine")]

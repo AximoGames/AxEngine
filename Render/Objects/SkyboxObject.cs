@@ -19,10 +19,10 @@ namespace Aximo.Render.Objects
     {
         public Camera Camera => Context.Camera;
 
-        private Shader _shader;
+        private RendererShader _shader;
         private VertexArrayObject vao;
 
-        private Texture txt;
+        private RendererTexture txt;
 
         private VertexDataPos[] _vertices = DataHelper.SkyBox;
 
@@ -30,9 +30,9 @@ namespace Aximo.Render.Objects
         {
             UsePipeline<ForwardRenderPipeline>();
 
-            _shader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
+            _shader = new RendererShader("Shaders/skybox.vert", "Shaders/skybox.frag");
             //txt = Texture.LoadCubeMap("Textures/desert-skybox/#.tga");
-            txt = Texture.LoadCubeMap("Textures/water-skybox/#.jpg");
+            txt = RendererTexture.LoadCubeMap("Textures/water-skybox/#.jpg");
 
             vao = new VertexArrayObject(VertexLayoutDefinition.CreateDefinitionFromVertexStruct<VertexDataPos>().BindToShader(_shader));
             vao.SetData(BufferData.Create(_vertices));

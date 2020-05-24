@@ -29,8 +29,8 @@ namespace Aximo.Engine.Windows
             OldPositionNDC = oldPosition;
             PositionNDC = position;
 
-            OldPosition = AxMath.MapFromNDC(OldPositionNDC, RenderApplication.Current.ScreenSize);
-            Position = AxMath.MapFromNDC(PositionNDC, RenderApplication.Current.ScreenSize);
+            OldPosition = AxMath.MapFromNDC(OldPositionNDC, Application.Current.ScreenSize);
+            Position = AxMath.MapFromNDC(PositionNDC, Application.Current.ScreenSize);
 
             Button = e.Button;
             Action = e.Action;

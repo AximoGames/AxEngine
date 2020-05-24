@@ -29,34 +29,34 @@ namespace Aximo.Engine.Components.Geometry
             return new PrimitiveSceneProxy(this);
         }
 
-        private List<GameMaterial> _Materials;
-        public ICollection<GameMaterial> Materials { get; private set; }
+        private List<Material> _Materials;
+        public ICollection<Material> Materials { get; private set; }
 
         public PrimitiveComponent()
         {
-            _Materials = new List<GameMaterial>();
-            Materials = new ReadOnlyCollection<GameMaterial>(_Materials);
+            _Materials = new List<Material>();
+            Materials = new ReadOnlyCollection<Material>(_Materials);
         }
 
-        public void AddMaterial(GameMaterial material)
+        public void AddMaterial(Material material)
         {
             _Materials.Add(material);
             material.AddRef(this);
         }
 
-        public void AddMaterial(GameMaterial material, int index)
+        public void AddMaterial(Material material, int index)
         {
             _Materials.Insert(index, material);
             material.AddRef(this);
         }
 
-        public void RemoveMaterial(GameMaterial material)
+        public void RemoveMaterial(Material material)
         {
             _Materials.Remove(material);
             material.RemoveRef(this);
         }
 
-        public GameMaterial Material
+        public Material Material
         {
             get
             {

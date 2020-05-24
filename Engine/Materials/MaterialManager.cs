@@ -14,14 +14,14 @@ namespace Aximo.Engine
 {
     public static class MaterialManager
     {
-        public static GameMaterial _DefaultMaterial;
-        public static GameMaterial DefaultMaterial
+        public static Material _DefaultMaterial;
+        public static Material DefaultMaterial
         {
             get
             {
                 if (_DefaultMaterial == null)
                 {
-                    _DefaultMaterial = new GameMaterial
+                    _DefaultMaterial = new Material
                     {
                         Color = new Vector4(0.5f, 0.5f, 0.5f, 1),
                         Ambient = 0.3f,
@@ -34,37 +34,37 @@ namespace Aximo.Engine
             }
         }
 
-        public static GameMaterial DefaultLineMaterial { get; } = new GameMaterial
+        public static Material DefaultLineMaterial { get; } = new Material
         {
-            Shader = new GameShader("Shaders/lines.vert", "Shaders/lines.frag"),
+            Shader = new Shader("Shaders/lines.vert", "Shaders/lines.frag"),
             PipelineType = PipelineType.Forward,
         };
 
-        public static GameMaterial DefaultScreenMaterial { get; } = new GameMaterial
+        public static Material DefaultScreenMaterial { get; } = new Material
         {
-            Shader = new GameShader("Shaders/screen.vert", "Shaders/screen.frag"),
+            Shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag"),
             PipelineType = PipelineType.Forward,
         };
 
-        public static GameMaterial CreateScreenMaterial(string texturePath)
+        public static Material CreateScreenMaterial(string texturePath)
         {
             var mat = CreateScreenMaterial();
-            mat.DiffuseTexture = GameTexture.GetFromFile(texturePath);
+            mat.DiffuseTexture = Texture.GetFromFile(texturePath);
             return mat;
         }
 
-        public static GameMaterial CreateScreenMaterial()
+        public static Material CreateScreenMaterial()
         {
-            return new GameMaterial
+            return new Material
             {
-                Shader = new GameShader("Shaders/screen.vert", "Shaders/screen.frag"),
+                Shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag"),
                 PipelineType = PipelineType.Screen,
             };
         }
 
-        public static GameMaterial CreateNewMaterial()
+        public static Material CreateNewMaterial()
         {
-            return new GameMaterial();
+            return new Material();
         }
     }
 }

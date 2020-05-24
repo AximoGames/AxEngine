@@ -11,7 +11,7 @@ namespace Aximo.Render.OpenGL
 {
     public class VertexLayoutDefinition
     {
-        public VertexLayoutBinded BindToShader(Shader shader)
+        public VertexLayoutBinded BindToShader(RendererShader shader)
         {
             var layout = new VertexLayoutBinded();
             layout._Stride = _Stride;

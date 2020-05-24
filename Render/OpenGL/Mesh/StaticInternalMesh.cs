@@ -10,6 +10,6 @@ namespace Aximo.Render.OpenGL
     {
         public StaticInternalMesh() : base() { }
         public StaticInternalMesh(Mesh meshData) : base(meshData) { }
-        public StaticInternalMesh(Mesh meshData, Material material) : base(meshData, material) { }
+        public StaticInternalMesh(Mesh meshData, RendererMaterial material) : base(meshData, material) { }
     }
 }

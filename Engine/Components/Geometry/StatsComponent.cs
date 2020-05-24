@@ -44,8 +44,8 @@ namespace Aximo.Engine.Components.Geometry
             {
                 LastStatUpdate = DateTime.UtcNow;
                 Image.Mutate(ctx => ctx.Clear(Color.Transparent));
-                var txt = "FPS: " + Math.Round(RenderApplication.Current.RenderCounter.EventsPerSecond).ToString();
-                txt += "\nUPS: " + Math.Round(RenderApplication.Current.UpdateCounter.EventsPerSecond).ToString();
+                var txt = "FPS: " + Math.Round(Application.Current.RenderCounter.EventsPerSecond).ToString();
+                txt += "\nUPS: " + Math.Round(Application.Current.UpdateCounter.EventsPerSecond).ToString();
                 Image.Mutate(ctx => ctx.DrawText(txt, DefaultFont, Color.White, new PointF(5, 5)));
                 UpdateTexture();
             }

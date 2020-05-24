@@ -7,9 +7,9 @@ using System.Threading;
 
 namespace Aximo.Engine
 {
-    public abstract class GameObject : IDisposable
+    public abstract class SceneObject : IDisposable
     {
-        private static Serilog.ILogger Log = Aximo.Log.ForContext<GameObject>();
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<SceneObject>();
         private static int LastGameObjectId;
 
         private int _ObjectId;
@@ -17,7 +17,7 @@ namespace Aximo.Engine
 
         public string Name { get; set; }
 
-        public GameObject()
+        public SceneObject()
         {
             _ObjectId = GetNewGameObjectId();
         }
@@ -29,9 +29,9 @@ namespace Aximo.Engine
 
         internal int RefCount => Consumers.Count;
 
-        private List<GameObject> Consumers = new List<GameObject>();
+        private List<SceneObject> Consumers = new List<SceneObject>();
 
-        internal void AddRef(GameObject consumer)
+        internal void AddRef(SceneObject consumer)
         {
             lock (Consumers)
             {
@@ -44,7 +44,7 @@ namespace Aximo.Engine
             DeallocateUndo();
         }
 
-        internal void RemoveRef(GameObject consumer)
+        internal void RemoveRef(SceneObject consumer)
         {
             lock (Consumers)
             {
@@ -64,8 +64,8 @@ namespace Aximo.Engine
                 return;
 
             HasDeallocation = false;
-            lock (GameContext.Current.ObjectsForDeallocation)
-                GameContext.Current.ObjectsForDeallocation.Remove(this);
+            lock (SceneContext.Current.ObjectsForDeallocation)
+                SceneContext.Current.ObjectsForDeallocation.Remove(this);
         }
 
         internal virtual void Deallocate()
@@ -74,9 +74,9 @@ namespace Aximo.Engine
                 return;
 
             HasDeallocation = true;
-            lock (GameContext.Current.ObjectsForDeallocation)
-                if (!GameContext.Current.ObjectsForDeallocation.Contains(this))
-                    GameContext.Current.ObjectsForDeallocation.Add(this);
+            lock (SceneContext.Current.ObjectsForDeallocation)
+                if (!SceneContext.Current.ObjectsForDeallocation.Contains(this))
+                    SceneContext.Current.ObjectsForDeallocation.Add(this);
         }
 
         private protected bool HasDeallocation;
@@ -91,7 +91,7 @@ namespace Aximo.Engine
 
         protected virtual void Dispose(bool disposing)
         {
-            if (GameContext.IsUpdateThread)
+            if (SceneContext.IsUpdateThread)
             {
                 Deallocate();
                 return;
@@ -109,7 +109,7 @@ namespace Aximo.Engine
             Disposed = true;
         }
 
-        ~GameObject()
+        ~SceneObject()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: false);
@@ -126,16 +126,16 @@ namespace Aximo.Engine
         }
 
         public virtual void Visit<T>(Action<T> action, Func<T, bool> visitChilds = null)
-            where T : GameObject
+            where T : SceneObject
         {
             if (this is T)
                 action((T)this);
         }
 
         public void VisitChilds<T>(Action<T> action, Func<T, bool> visitChilds = null)
-            where T : GameObject
+            where T : SceneObject
         {
-            Visit<T>(obj =>
+            Visit(obj =>
             {
                 if (obj != this)
                     action(obj);
@@ -146,7 +146,7 @@ namespace Aximo.Engine
         {
             Log.ForContext("DumpInfo").Info("{Type} #{Id} {Name}", GetType().Name, ObjectId, Name);
             if (list)
-                VisitChilds<GameObject>(a => a.DumpInfo(false));
+                VisitChilds<SceneObject>(a => a.DumpInfo(false));
         }
     }
 }

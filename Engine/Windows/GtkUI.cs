@@ -19,12 +19,12 @@ namespace Aximo.Engine.Windows
         }
 
         private Gtk.Window win;
-        private Application app;
+        private Gtk.Application app;
 
         private void Run()
         {
-            Application.Init();
-            app = new Application("", GLib.ApplicationFlags.None);
+            Gtk.Application.Init();
+            app = new Gtk.Application("", GLib.ApplicationFlags.None);
             app.Register(GLib.Cancellable.Current);
 
             win = new Gtk.Window("");
@@ -33,7 +33,7 @@ namespace Aximo.Engine.Windows
             Fill();
 
             win.ShowAll();
-            Application.Run();
+            Gtk.Application.Run();
         }
 
         private void Fill()

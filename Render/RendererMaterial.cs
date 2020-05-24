@@ -18,7 +18,7 @@ namespace Aximo.Render
         Sub = 4,
     }
 
-    public class Material
+    public class RendererMaterial
     {
         public Vector4 DiffuseColor { get; set; }
 
@@ -29,21 +29,21 @@ namespace Aximo.Render
 
         public bool CastShadow;
 
-        public Shader Shader { get; set; }
-        public Shader DefGeometryShader { get; set; }
-        public Shader ShadowShader { get; set; }
-        public Shader CubeShadowShader { get; set; }
+        public RendererShader Shader { get; set; }
+        public RendererShader DefGeometryShader { get; set; }
+        public RendererShader ShadowShader { get; set; }
+        public RendererShader CubeShadowShader { get; set; }
 
-        public Texture DiffuseMap;
-        public Texture SpecularMap;
+        public RendererTexture DiffuseMap;
+        public RendererTexture SpecularMap;
 
         public bool UseVertexColor;
 
         public IRenderPipeline RenderPipeline;
 
-        public static Material GetDefault()
+        public static RendererMaterial GetDefault()
         {
-            var mat = new Material()
+            var mat = new RendererMaterial()
             {
                 DiffuseColor = new Vector4(0.5f, 0.5f, 0.5f, 1),
                 Ambient = 0.3f,
@@ -57,16 +57,16 @@ namespace Aximo.Render
         public void CreateShaders()
         {
             if (Shader == null)
-                Shader = new Shader("Shaders/forward.vert", "Shaders/forward.frag");
+                Shader = new RendererShader("Shaders/forward.vert", "Shaders/forward.frag");
             if (DefGeometryShader == null)
-                DefGeometryShader = new Shader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
+                DefGeometryShader = new RendererShader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
             if (ShadowShader == null)
-                ShadowShader = new Shader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
+                ShadowShader = new RendererShader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
             if (CubeShadowShader == null)
-                CubeShadowShader = new Shader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
+                CubeShadowShader = new RendererShader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
         }
 
-        public void WriteToShader(string name, Shader shader)
+        public void WriteToShader(string name, RendererShader shader)
         {
             var prefix = name += ".";
             shader.SetVector4(prefix + "DiffuseColor", DiffuseColor);

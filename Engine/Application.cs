@@ -23,13 +23,13 @@ namespace Aximo.Engine
 {
     public delegate void AfterApplicationInitializedDelegate();
 
-    public class RenderApplication : IDisposable
+    public class Application : IDisposable
     {
-        private static Serilog.ILogger Log = Aximo.Log.ForContext<RenderApplication>();
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<Application>();
 
         public event AfterApplicationInitializedDelegate AfterApplicationInitialized;
 
-        public static RenderApplication Current { get; private set; }
+        public static Application Current { get; private set; }
 
         public Vector2i ScreenSize => Window.Size;
         public Vector2i WindowLocation
@@ -38,7 +38,7 @@ namespace Aximo.Engine
             set => Window.Location = value;
         }
 
-        private RenderApplicationConfig Config;
+        private ApplicationConfig Config;
 
         public bool IsMultiThreaded => Config.IsMultiThreaded;
 
@@ -50,7 +50,7 @@ namespace Aximo.Engine
 
         protected KeyboardState KeyboardState => Window.KeyboardState;
 
-        public RenderApplication(RenderApplicationConfig config)
+        public Application(ApplicationConfig config)
         {
             Config = config;
         }
@@ -77,8 +77,8 @@ namespace Aximo.Engine
         }
 
         public RenderContext RenderContext { get; private set; }
-        public GameContext GameContext { get; private set; }
-        public Renderer Renderer { get; private set; }
+        public SceneContext SceneContext { get; private set; }
+        internal Renderer Renderer { get; private set; }
 
         public virtual void Init()
         {
@@ -100,10 +100,10 @@ namespace Aximo.Engine
             };
             RenderContext.Current = RenderContext;
 
-            GameContext = new GameContext
+            SceneContext = new SceneContext
             {
             };
-            GameContext.Current = GameContext;
+            SceneContext.Current = SceneContext;
 
             RenderContext.Camera = new PerspectiveFieldOfViewCamera(new Vector3(2f, -5f, 2f), RenderContext.ScreenSize.X / (float)RenderContext.ScreenSize.Y)
             {
@@ -112,7 +112,7 @@ namespace Aximo.Engine
                 Facing = 1.88f,
             };
 
-            GameContext.Init();
+            SceneContext.Init();
 
             OnLoadInternal();
 
@@ -192,7 +192,7 @@ namespace Aximo.Engine
 
         /// <summary>
         /// Called from the Render thread before the render pipeline is invoked.
-        /// If <see cref="IsMultiThreaded"/> is enabled, do not access the window and to not write to an <see cref="GameObject"/>.
+        /// If <see cref="IsMultiThreaded"/> is enabled, do not access the window and to not write to an <see cref="SceneObject"/>.
         /// </summary>
         protected virtual void OnRenderFrame(FrameEventArgs e) { }
 
@@ -251,7 +251,7 @@ namespace Aximo.Engine
                 if (Closing)
                     return;
 
-                GameContext.Sync();
+                SceneContext.Sync();
                 Renderer.Render();
                 Window.SwapBuffers();
                 AfterRenderFrame();
@@ -281,7 +281,7 @@ namespace Aximo.Engine
                     if (e.Shift)
                     {
                         DebugCamera = !DebugCamera;
-                        var debugLine = GameContext.GetActor("DebugLine").RootComponent as LineComponent;
+                        var debugLine = SceneContext.GetActor("DebugLine").RootComponent as LineComponent;
                         debugLine.Visible = DebugCamera;
                         Console.WriteLine($"DebugCamera: {DebugCamera}");
                     }
@@ -330,7 +330,7 @@ namespace Aximo.Engine
 
             Console.WriteLine("OnScreenResize: " + e.Size.X + "x" + e.Size.Y);
             RenderContext.ScreenSize = e.Size;
-            GameContext.OnScreenResize(eventArgs);
+            SceneContext.OnScreenResize(eventArgs);
             DispatchRender(() => RenderContext.OnScreenResize(eventArgs));
         }
 
@@ -359,7 +359,7 @@ namespace Aximo.Engine
             if (UpdateCounter.Elapsed.TotalMilliseconds > 30 && UpdateFrameNumber > 2 && IsFocused)
                 Log.Warn("SLOW Update: " + UpdateCounter.Elapsed.ToString());
 
-            GameContext.UpdateTime();
+            SceneContext.UpdateTime();
 
             BeforeUpdateFrame();
 
@@ -369,10 +369,10 @@ namespace Aximo.Engine
             if (UpdateFrameNumber <= 2)
                 Log.Verbose($"Update Frame #{UpdateFrameNumber}");
 
-            foreach (var anim in GameContext.Animations)
+            foreach (var anim in SceneContext.Animations)
                 anim.ProcessAnimation();
 
-            GameContext.OnUpdateFrame();
+            SceneContext.OnUpdateFrame();
             if (Closing)
                 return;
 
@@ -575,7 +575,7 @@ namespace Aximo.Engine
             if (args.Handled)
                 return;
 
-            GameContext.OnScreenMouseMove(args);
+            SceneContext.OnScreenMouseMove(args);
 
             // Console.WriteLine(CurrentMouseWorldPosition.ToString());
             // Console.WriteLine(CurrentMousePosition.ToString());
@@ -594,7 +594,7 @@ namespace Aximo.Engine
             if (args.Handled)
                 return;
 
-            GameContext.OnScreenMouseDown(args);
+            SceneContext.OnScreenMouseDown(args);
         }
 
         private Vector2 OldMouseButtonPos;
@@ -611,7 +611,7 @@ namespace Aximo.Engine
             if (args.Handled)
                 return;
 
-            GameContext.OnScreenMouseUp(args);
+            SceneContext.OnScreenMouseUp(args);
         }
 
         protected virtual void OnMouseWheel(MouseWheelEventArgs e) { }

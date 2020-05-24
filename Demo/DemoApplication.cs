@@ -13,9 +13,9 @@ using SixLabors.ImageSharp;
 
 namespace Aximo.AxDemo
 {
-    public class DemoApplication : RenderApplication
+    public class DemoApplication : Application
     {
-        public DemoApplication(RenderApplicationConfig startup) : base(startup)
+        public DemoApplication(ApplicationConfig startup) : base(startup)
         {
         }
 
@@ -84,27 +84,27 @@ namespace Aximo.AxDemo
 
             //RenderContext.PrimaryRenderPipeline = RenderContext.GetPipeline<ForwardRenderPipeline>();
 
-            var materialWood1 = new GameMaterial()
+            var materialWood1 = new Material()
             {
-                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
-                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                DiffuseTexture = Texture.GetFromFile("Textures/woodenbox.png"),
+                SpecularTexture = Texture.GetFromFile("Textures/woodenbox_specular.png"),
                 Ambient = 0.3f,
                 Shininess = 32.0f,
                 SpecularStrength = 0.5f,
                 CastShadow = true,
             };
 
-            var materialWood2 = new GameMaterial()
+            var materialWood2 = new Material()
             {
-                DiffuseTexture = GameTexture.GetFromFile("Textures/wood.png"),
-                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                DiffuseTexture = Texture.GetFromFile("Textures/wood.png"),
+                SpecularTexture = Texture.GetFromFile("Textures/woodenbox_specular.png"),
                 Ambient = 0.3f,
                 Shininess = 32.0f,
                 SpecularStrength = 0.5f,
                 CastShadow = true,
             };
 
-            GameContext.AddActor(new Actor(new SphereComponent()
+            SceneContext.AddActor(new Actor(new SphereComponent()
             {
                 Name = "CompSphere",
                 RelativeTranslation = new Vector3(-3, 0, 0),
@@ -112,7 +112,7 @@ namespace Aximo.AxDemo
                 Material = materialWood2,
             }));
 
-            GameContext.AddActor(new Actor(new CubeComponent()
+            SceneContext.AddActor(new Actor(new CubeComponent()
             {
                 Name = "Ground",
                 RelativeScale = new Vector3(50, 50, 1),
@@ -120,24 +120,24 @@ namespace Aximo.AxDemo
                 Material = materialWood1,
             }));
 
-            GameContext.AddActor(new Actor(new GridPlaneComponent(10, true)
+            SceneContext.AddActor(new Actor(new GridPlaneComponent(10, true)
             {
                 Name = "GridPlaneXY",
                 RelativeTranslation = new Vector3(0f, 0f, 0.01f),
             }));
-            GameContext.AddActor(new Actor(new GridPlaneComponent(10, true)
+            SceneContext.AddActor(new Actor(new GridPlaneComponent(10, true)
             {
                 Name = "GridPlaneYZ",
                 RelativeTranslation = new Vector3(-10f, 0f, 0.01f),
                 RelativeRotation = new Vector3(0, 0.25f, 0).ToQuaternion(),
             }));
-            GameContext.AddActor(new Actor(new GridPlaneComponent(10, true)
+            SceneContext.AddActor(new Actor(new GridPlaneComponent(10, true)
             {
                 Name = "GridPlaneXZ",
                 RelativeTranslation = new Vector3(0f, 10f, 0.01f),
                 RelativeRotation = new Vector3(0.25f, 0, 0).ToQuaternion(),
             }));
-            GameContext.AddActor(new Actor(new CrossLineComponent(10, true)
+            SceneContext.AddActor(new Actor(new CrossLineComponent(10, true)
             {
                 Name = "CenterCross",
                 RelativeTranslation = new Vector3(0f, 0f, 0.02f),
@@ -156,7 +156,7 @@ namespace Aximo.AxDemo
                 DefaultChildSizes = new Vector2(0, 50),
                 ExtraChildMargin = new UIAnchors(10, 10, 10, 0),
             };
-            GameContext.AddActor(new Actor(flowContainer));
+            SceneContext.AddActor(new Actor(flowContainer));
 
             //flowContainer.AddComponent(new UIImage("Textures/woodenbox_specular.png")
             //{
@@ -181,29 +181,29 @@ namespace Aximo.AxDemo
 
             // --
 
-            GameContext.AddActor(new Actor(new StatsComponent()
+            SceneContext.AddActor(new Actor(new StatsComponent()
             {
                 Name = "Stats",
                 CustomOrder = 10,
             }));
 
-            GameContext.AddActor(new Actor(new LineComponent(new Vector3(0, 0, 0), new Vector3(2, 2, 2))
+            SceneContext.AddActor(new Actor(new LineComponent(new Vector3(0, 0, 0), new Vector3(2, 2, 2))
             {
                 Name = "DebugLine",
             }));
 
-            GameContext.AddActor(new Actor(new DirectionalLightComponent()
+            SceneContext.AddActor(new Actor(new DirectionalLightComponent()
             {
                 RelativeTranslation = new Vector3(0, 2, 2.5f),
                 Name = "MovingLight",
             }));
-            GameContext.AddActor(new Actor(new DirectionalLightComponent()
+            SceneContext.AddActor(new Actor(new DirectionalLightComponent()
             {
                 RelativeTranslation = new Vector3(2f, 0.5f, 3.25f),
                 Name = "StaticLight",
             }));
 
-            GameContext.AddActor(new Actor(new CubeComponent()
+            SceneContext.AddActor(new Actor(new CubeComponent()
             {
                 Name = "GroundCursor",
                 RelativeTranslation = new Vector3(0, 1, 0.05f),
@@ -211,7 +211,7 @@ namespace Aximo.AxDemo
                 Material = materialWood1,
             }));
 
-            GameContext.AddActor(new Actor(new DebugCubeComponent()
+            SceneContext.AddActor(new Actor(new DebugCubeComponent()
             {
                 Name = "Box1",
                 RelativeRotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
@@ -220,7 +220,7 @@ namespace Aximo.AxDemo
                 Material = materialWood1,
             }));
 
-            GameContext.AddActor(new Actor(new CubeComponent()
+            SceneContext.AddActor(new Actor(new CubeComponent()
             {
                 Name = "Box2",
                 RelativeScale = new Vector3(1),
@@ -228,13 +228,13 @@ namespace Aximo.AxDemo
                 Material = materialWood1,
             }));
 
-            GameContext.AddActor(new Actor(new SphereComponent()
+            SceneContext.AddActor(new Actor(new SphereComponent()
             {
                 Name = "Sphere1",
                 RelativeTranslation = new Vector3(3f, 3f, 0.5f),
                 Material = materialWood1,
             }));
-            GameContext.AddActor(new Actor(new CubeComponent()
+            SceneContext.AddActor(new Actor(new CubeComponent()
             {
                 Name = "Box4",
                 RelativeScale = new Vector3(1),
@@ -242,7 +242,7 @@ namespace Aximo.AxDemo
                 Material = materialWood1,
             }));
 
-            GameContext.AddActor(new Actor(
+            SceneContext.AddActor(new Actor(
                 new SceneComponent(
                     new CubeComponent
                     {
@@ -264,14 +264,14 @@ namespace Aximo.AxDemo
                 Name = "GroupActor1",
             });
 
-            GameContext.AddActor(new Actor(new DebugCubeComponent()
+            SceneContext.AddActor(new Actor(new DebugCubeComponent()
             {
                 Name = "BoxFar1",
                 RelativeScale = new Vector3(1),
                 RelativeTranslation = new Vector3(18, 0, 0.5f),
                 Material = materialWood1,
             }));
-            GameContext.AddActor(new Actor(new DebugCubeComponent()
+            SceneContext.AddActor(new Actor(new DebugCubeComponent()
             {
                 Name = "BoxFar2",
                 RelativeScale = new Vector3(1),
@@ -281,29 +281,29 @@ namespace Aximo.AxDemo
             }));
 
             // For performance reasons, skybox should rendered as last
-            GameContext.AddActor(new Actor(new SkyBoxComponent()
+            SceneContext.AddActor(new Actor(new SkyBoxComponent()
             {
                 Name = "Sky",
             }));
 
-            var materialWoodRemoveTest = new GameMaterial()
+            var materialWoodRemoveTest = new Material()
             {
-                DiffuseTexture = GameTexture.GetFromFile("Textures/woodenbox.png"),
-                SpecularTexture = GameTexture.GetFromFile("Textures/woodenbox_specular.png"),
+                DiffuseTexture = Texture.GetFromFile("Textures/woodenbox.png"),
+                SpecularTexture = Texture.GetFromFile("Textures/woodenbox_specular.png"),
                 Ambient = 0.3f,
                 Shininess = 32.0f,
                 SpecularStrength = 0.5f,
                 CastShadow = true,
             };
 
-            GameContext.AddActor(new Actor(new DebugCubeComponent()
+            SceneContext.AddActor(new Actor(new DebugCubeComponent()
             {
                 Name = "RemoveTets",
                 RelativeScale = new Vector3(1),
                 RelativeTranslation = new Vector3(18, 0, 0.5f),
                 Material = materialWoodRemoveTest,
             }));
-            GameContext.AddActor(new Actor(new DebugCubeComponent()
+            SceneContext.AddActor(new Actor(new DebugCubeComponent()
             {
                 Name = "RemoveTets",
                 RelativeScale = new Vector3(1),
@@ -320,16 +320,16 @@ namespace Aximo.AxDemo
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            var movingLight = GameContext.GetActor("MovingLight")?.GetComponent<LightComponent>();
+            var movingLight = SceneContext.GetActor("MovingLight")?.GetComponent<LightComponent>();
             if (movingLight != null)
             {
-                LightAngle = (float)GameContext.Time.TotalSeconds;
+                LightAngle = (float)SceneContext.Time.TotalSeconds;
                 var pos = new Vector3((float)(Math.Cos(LightAngle) * 2f), (float)(Math.Sin(LightAngle) * 2f), 1.5f);
 
                 movingLight.RelativeTranslation = pos;
             }
 
-            var actt = GameContext.GetActor("GroupActor1");
+            var actt = SceneContext.GetActor("GroupActor1");
             if (actt != null)
             {
                 var compp = actt.GetComponent<SceneComponent>("CompGroup1");
@@ -338,7 +338,7 @@ namespace Aximo.AxDemo
 
             if (CurrentMouseWorldPositionIsValid)
             {
-                var cursor = GameContext.GetActor("GroundCursor")?.RootComponent;
+                var cursor = SceneContext.GetActor("GroundCursor")?.RootComponent;
                 if (cursor != null)
                     cursor.RelativeTranslation = new Vector3(CurrentMouseWorldPosition.X, CurrentMouseWorldPosition.Y, cursor.RelativeTranslation.Z);
             }

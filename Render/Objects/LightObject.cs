@@ -59,7 +59,7 @@ namespace Aximo.Render.Objects
             }
         }
 
-        private Shader _shader;
+        private RendererShader _shader;
         private VertexArrayObject vao;
 
         private VertexDataPosNormalUV[] _vertices = DataHelper.DefaultCube;
@@ -68,7 +68,7 @@ namespace Aximo.Render.Objects
         {
             UsePipeline<ForwardRenderPipeline>();
 
-            _shader = new Shader("Shaders/forward.vert", "Shaders/white.frag");
+            _shader = new RendererShader("Shaders/forward.vert", "Shaders/white.frag");
 
             var layout = VertexLayoutDefinition.CreateDefinitionFromVertexStruct<VertexDataPosNormalUV>().BindToShader(_shader);
             vao = new VertexArrayObject(layout);

@@ -3,7 +3,7 @@
 
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Render
+namespace Aximo
 {
     public class OrthographicCamera : Camera
     {

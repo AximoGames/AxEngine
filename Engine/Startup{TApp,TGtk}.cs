@@ -12,11 +12,11 @@ namespace Aximo.Engine
 {
     /// <inheritdoc/>
     /// </summary>
-    public class GameStartup<TApp, TGtk> : GameStartup<TApp>
-        where TApp : RenderApplication
+    public class Startup<TApp, TGtk> : Startup<TApp>
+        where TApp : Application
         where TGtk : GtkUI
     {
-        public GameStartup(RenderApplicationConfig config) : base(config)
+        public Startup(ApplicationConfig config) : base(config)
         {
         }
 

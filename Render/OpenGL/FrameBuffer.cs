@@ -20,14 +20,14 @@ namespace Aximo.Render.OpenGL
             }
         }
 
-        public List<Texture> DestinationTextures = new List<Texture>();
+        public List<RendererTexture> DestinationTextures = new List<RendererTexture>();
 
-        public Texture GetDestinationTexture()
+        public RendererTexture GetDestinationTexture()
         {
             return DestinationTextures[0];
         }
 
-        public Texture GetDestinationTexture(int attachmentIndex)
+        public RendererTexture GetDestinationTexture(int attachmentIndex)
         {
             return DestinationTextures[attachmentIndex];
         }
@@ -78,7 +78,7 @@ namespace Aximo.Render.OpenGL
 
         public void InitNormal()
         {
-            var txt = new Texture(ObjectLabel, TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            var txt = new RendererTexture(ObjectLabel, TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             txt.SetLinearFilter();
             txt.Bind();
             DestinationTextures.Add(txt);
@@ -106,7 +106,7 @@ namespace Aximo.Render.OpenGL
                 RenderBuffer.Resize(this);
         }
 
-        public void BindTexture(Texture txt, FramebufferAttachment attachment)
+        public void BindTexture(RendererTexture txt, FramebufferAttachment attachment)
         {
             Bind();
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachment, TextureTarget.Texture2D, txt.Handle, 0);
@@ -116,7 +116,7 @@ namespace Aximo.Render.OpenGL
         {
             var layers = 2;
 
-            var txt = Texture.CreateArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+            var txt = RendererTexture.CreateArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
             txt.Bind();
             DestinationTextures.Add(txt);
 
@@ -131,7 +131,7 @@ namespace Aximo.Render.OpenGL
         {
             var layers = 2;
 
-            var txt = Texture.CreateCubeArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+            var txt = RendererTexture.CreateCubeArrayShadowMap(PixelInternalFormat.DepthComponent, Width, Height, layers, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
             txt.Bind();
             DestinationTextures.Add(txt);
 
