@@ -24,6 +24,8 @@ namespace Aximo.Engine.Windows
             Log.Verbose("Created window");
             Config = config;
             Title = Config.WindowTitle;
+            if (Config.WindowLocation != null)
+                Location = (Vector2i)Config.WindowLocation;
 
             var vsync = Config.VSync;
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && IsMultiThreaded && Config.VSync == VSyncMode.Adaptive)

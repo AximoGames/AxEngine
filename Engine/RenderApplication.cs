@@ -32,6 +32,11 @@ namespace Aximo.Engine
         public static RenderApplication Current { get; private set; }
 
         public Vector2i ScreenSize => Window.Size;
+        public Vector2i WindowLocation
+        {
+            get => Window.Location;
+            set => Window.Location = value;
+        }
 
         private RenderApplicationConfig Config;
 
@@ -108,6 +113,8 @@ namespace Aximo.Engine
             };
 
             GameContext.Init();
+
+            OnLoadInternal();
 
             //ObjectManager.PushDebugGroup("Setup", "Scene");
             SetupScene();
@@ -630,6 +637,13 @@ namespace Aximo.Engine
         private void OnFocusedChangedInternal(FocusedChangedEventArgs e)
         {
             OnFocusedChanged(e);
+        }
+
+        protected virtual void OnLoad() { }
+
+        private void OnLoadInternal()
+        {
+            OnLoad();
         }
 
         protected virtual void OnUnload() { }

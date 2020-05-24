@@ -24,7 +24,8 @@ Aximo Game Engine
         <div class="panel panel-default" style="min-height: 140px">
             <div class="panel-body">
                 <p><strong><a href="https://www.nuget.org/packages/Aximo">Nuget package</a></strong></p>
-                <p>You can integrate Aximo Engine via nuget package.</p>
+                <p>Integrate Aximo Engine via nuget package.</p>
+                <p>Pre-Relases are available at <a href="https://www.myget.org/feed/aximo/package/nuget/Aximo">MyGet</a></p>
             </div>
         </div>
     </div>

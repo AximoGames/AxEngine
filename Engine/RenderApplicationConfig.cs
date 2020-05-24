@@ -24,6 +24,7 @@ namespace Aximo.Engine
     public class RenderApplicationConfig
     {
         public Vector2i WindowSize { get; set; } = new Vector2i(800, 600);
+        public Vector2i? WindowLocation { get; set; }
         public string WindowTitle { get; set; } = "AxEngine";
         public WindowBorder WindowBorder { get; set; } = WindowBorder.Fixed;
         public int UpdateFrequency { get; set; } = 60;

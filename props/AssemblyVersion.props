@@ -1,7 +1,15 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <Version Condition="$(Version) == ''">1.0.3</Version>
-        <AssemblyVersion>$(Version)</AssemblyVersion>
-        <AssemblyFileVersion>$(Version)</AssemblyFileVersion>
+
+        <!-- allowed format: x.y.z. Only numerics and two dots allowed. -->
+        <AssemblyVersion Condition="$(AssemblyVersion) == ''">1.0.4</AssemblyVersion>
+
+        <!-- can be empty. Do not start with dash. Sample: pre1 -->
+        <VersionPostfix>pre1</VersionPostfix>
+
+        <!-- do not modify -->
+        <AssemblyFileVersion>$(AssemblyVersion)</AssemblyFileVersion>
+        <Version Condition="$(VersionPostfix) == ''">$(AssemblyVersion)</Version>
+        <Version Condition="$(VersionPostfix) != ''">$(AssemblyVersion)-$(VersionPostfix)</Version>
     </PropertyGroup>
 </Project>
