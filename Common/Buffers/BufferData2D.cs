@@ -19,7 +19,7 @@ namespace Aximo
         public int Width => SizeX;
         public int Height => SizeY;
 
-        public GamePixelFormat PixelFormat { get; set; }
+        public AxPixelFormat PixelFormat { get; set; }
 
         public abstract void FlipY();
     }

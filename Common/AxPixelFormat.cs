@@ -3,7 +3,7 @@
 
 namespace Aximo
 {
-    public enum GamePixelFormat
+    public enum AxPixelFormat
     {
         None,
         Rgba32,

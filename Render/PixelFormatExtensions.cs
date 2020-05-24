@@ -10,20 +10,20 @@ namespace Aximo.Render
 {
     public static class PixelFormatExtensions
     {
-        public static GamePixelFormat ToGamePixelFormat(this PixelFormat format)
+        public static AxPixelFormat ToGamePixelFormat(this PixelFormat format)
         {
             switch (format)
             {
                 case PixelFormat.Rgba:
-                    return GamePixelFormat.Rgba32;
+                    return AxPixelFormat.Rgba32;
                 case PixelFormat.Bgra:
-                    return GamePixelFormat.Bgra32;
+                    return AxPixelFormat.Bgra32;
                 case PixelFormat.Rgb:
-                    return GamePixelFormat.Rgb24;
+                    return AxPixelFormat.Rgb24;
                 case PixelFormat.Bgr:
-                    return GamePixelFormat.Bgr24;
+                    return AxPixelFormat.Bgr24;
                 default:
-                    return GamePixelFormat.None;
+                    return AxPixelFormat.None;
             }
         }
     }
