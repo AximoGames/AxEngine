@@ -3,7 +3,7 @@
 
 using Aximo.Render.OpenGL;
 using Aximo.Render.Pipelines;
-using Aximo.Render.VertexData;
+using Aximo.VertexData;
 using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;

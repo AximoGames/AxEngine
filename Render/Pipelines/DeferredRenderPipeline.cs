@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Aximo.Render.OpenGL;
-using Aximo.Render.VertexData;
+using Aximo.VertexData;
 using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render.Pipelines

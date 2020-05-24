@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Aximo.Engine;
 using Aximo.Render;
-using Aximo.Render.VertexData;
+using Aximo.VertexData;
 using OpenToolkit;
 using OpenToolkit.Mathematics;
 using Xunit;
