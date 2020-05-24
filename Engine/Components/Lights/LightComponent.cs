@@ -45,8 +45,6 @@ namespace Aximo.Engine.Components.Lights
 
         private bool LightAttributesChanged;
 
-        private static int ShadowIdx;
-
         internal override void SyncChanges()
         {
             if (!HasChanges)
