@@ -1,6 +1,11 @@
 # Changelog
 
 ### 1.0.5
+Fixed:
+
+* Detection of AppRootDir. Dtected wrong .cache directory.
+
+### 1.0.5
 
 Refactor:
 
