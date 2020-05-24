@@ -9,39 +9,34 @@ using Aximo.Engine;
 using Aximo.Engine.Components.Geometry;
 using Aximo.Engine.Components.Lights;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
 
 internal class Program
 {
     public static void Main(string[] args)
     {
-        GameStartup.Start<MyApplication>();
+        new MyApplication().Start();
     }
 }
 
-public class MyApplication : RenderApplication
+public class MyApplication : Application
 {
-    public MyApplication(RenderApplicationConfig startup) : base(startup)
-    {
-    }
-
     protected override void SetupScene()
     {
         // it's not required, but we should have a least one light.
-        GameContext.AddActor(new Actor(new PointLightComponent()
+        SceneContext.AddActor(new Actor(new PointLightComponent()
         {
             Name = "StaticLight",
             RelativeTranslation = new Vector3(2f, -1.5f, 3.25f),
         }));
 
         // add a cube
-        GameContext.AddActor(new Actor(new CubeComponent()
+        SceneContext.AddActor(new Actor(new CubeComponent()
         {
             Name = "Box1",
             RelativeRotation = new Vector3(0, 0, 0.5f).ToQuaternion(),
             RelativeScale = new Vector3(1),
             RelativeTranslation = new Vector3(0, 0, 0.5f),
-            Material = new GameMaterial
+            Material = new Material
             {
                 Color = new Vector4(1, 0, 1, 1),
             },
