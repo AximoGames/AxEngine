@@ -89,7 +89,7 @@ namespace Aximo.Engine
         public SceneContext SceneContext { get; private set; }
         internal Renderer Renderer { get; private set; }
 
-        public virtual void Init()
+        internal virtual void Init()
         {
             WindowContext.Init(Config);
             RegisterWindowEvents();
