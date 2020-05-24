@@ -1,4 +1,4 @@
-![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Actions Status](https://github.com/aximogames/axengine/workflows/Tests/badge.svg)](https://github.com/aximogames/axengine/actions) [![CodeFactor](https://www.codefactor.io/repository/github/aximogames/axengine/badge/master)](https://www.codefactor.io/repository/github/aximogames/axengine/overview/master)
+[![Join Discord https://discord.gg/wMCNgFC](https://img.shields.io/discord/714104184722685954?logo=discord)](https://discord.gg/wMCNgFC) ![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Actions Status](https://github.com/aximogames/axengine/workflows/Tests/badge.svg)](https://github.com/aximogames/axengine/actions) [![CodeFactor](https://www.codefactor.io/repository/github/aximogames/axengine/badge/master)](https://www.codefactor.io/repository/github/aximogames/axengine/overview/master)
 
 Documentation: http://www.aximo.games
 
@@ -80,6 +80,11 @@ public class MyApplication : RenderApplication
 ```
 
 Run your application via `dotnet run`.
+
+### Contributing
+
+We are open for every kind of pull request. Response time is normally below 24 hours.
+You can also meet us in [discord](https://discord.gg/wMCNgFC).
 
 ### Build the engine from source
 
