@@ -23,17 +23,18 @@ namespace Aximo.AxTests
     {
         protected static TestsApplication CurrentTestApp;
 
-        public TestsApplication() : base(new ApplicationConfig
+        public TestsApplication()
         {
-            WindowTitle = "AxTests",
-            WindowSize = new Vector2i(160, 120),
-            WindowBorder = WindowBorder.Fixed,
-            HideTitleBar = true,
-        })
-        {
+            SetConfig(new ApplicationConfig
+            {
+                WindowTitle = "AxTests",
+                WindowSize = new Vector2i(160, 120),
+                WindowBorder = WindowBorder.Fixed,
+                HideTitleBar = true,
+            });
         }
 
-        public override void Run()
+        internal override void Run()
         {
             CurrentTestApp = this;
             AfterApplicationInitialized += () =>

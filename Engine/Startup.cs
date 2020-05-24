@@ -22,16 +22,22 @@ namespace Aximo.Engine
             Dispose(true);
         }
 
-        public static void Start<TApp>()
-            where TApp : Application
+        public static void Start<TApplication>()
+            where TApplication : Application, new()
         {
-            new Startup<TApp>().Start();
+            new Startup<TApplication>().Start();
         }
 
-        public static void Start<TApp>(ApplicationConfig config)
-            where TApp : Application
+        public static void Start<TApplication>(ApplicationConfig config)
+            where TApplication : Application, new()
         {
-            new Startup<TApp>(config).Start();
+            new Startup<TApplication>(config).Start();
+        }
+
+        internal static void Start<TApplication>(ApplicationConfig config, TApplication instance)
+            where TApplication : Application, new()
+        {
+            new Startup<TApplication>(config).Start(instance);
         }
     }
 }

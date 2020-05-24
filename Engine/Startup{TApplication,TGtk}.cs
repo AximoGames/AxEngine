@@ -12,9 +12,9 @@ namespace Aximo.Engine
 {
     /// <inheritdoc/>
     /// </summary>
-    public class Startup<TApp, TGtk> : Startup<TApp>
-        where TApp : Application
-        where TGtk : GtkUI
+    public class Startup<TApplication, TGtk> : Startup<TApplication>
+        where TApplication : Application, new()
+        where TGtk : GtkUI, new()
     {
         public Startup(ApplicationConfig config) : base(config)
         {

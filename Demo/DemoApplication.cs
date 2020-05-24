@@ -15,10 +15,6 @@ namespace Aximo.AxDemo
 {
     public class DemoApplication : Application
     {
-        public DemoApplication(ApplicationConfig startup) : base(startup)
-        {
-        }
-
         protected override void SetupScene()
         {
             // GameMaterial material = new GameMaterial

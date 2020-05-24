@@ -28,8 +28,7 @@ namespace Aximo.AxDemo
                 // UseGtkUI = true,
                 UseConsole = true,
             };
-
-            new Startup<DemoApplication, GtkUI>(config).Start();
+            new DemoApplication().Start(config);
         }
     }
 }

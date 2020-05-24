@@ -11,8 +11,8 @@ using Aximo.Render.OpenGL;
 namespace Aximo.Engine
 {
     /// <inheritdoc/>
-    public class Startup<TApp> : Startup
-        where TApp : Application
+    public class Startup<TApplication> : Startup
+        where TApplication : Application, new()
     {
         private ApplicationConfig Config;
 
@@ -25,7 +25,7 @@ namespace Aximo.Engine
             Config = config;
         }
 
-        private static Serilog.ILogger Log = Aximo.Log.ForContext<Startup<TApp>>();
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<Startup<TApplication>>();
 
         private Thread th;
 
@@ -35,6 +35,12 @@ namespace Aximo.Engine
 
         public void Start()
         {
+            Start(null);
+        }
+
+        internal void Start(TApplication instance)
+        {
+            Application = instance;
             var bits = IntPtr.Size == 4 ? 32 : 64;
             Log.Verbose($"{bits} Bit System detected. (Pointer Size: {IntPtr.Size} Bytes)");
             Log.Verbose("OS: {OSVersion}", Environment.OSVersion);
@@ -55,8 +61,8 @@ namespace Aximo.Engine
 
                 ConsoleLoop();
 
-                demo.Stop();
-                demo.Dispose();
+                Application.Stop();
+                Application.Dispose();
                 th.Abort();
                 Environment.Exit(0);
             }
@@ -67,12 +73,15 @@ namespace Aximo.Engine
             }
         }
 
-        private Application demo;
+        private Application Application;
 
         private void UIThreadMain()
         {
-            demo = (TApp)Activator.CreateInstance(typeof(TApp), Config);
-            demo.RunSync();
+            if (Application == null)
+                Application = Activator.CreateInstance<TApplication>();
+
+            Application.SetConfig(Config);
+            Application.RunSync();
             Environment.Exit(0);
         }
 
@@ -131,10 +140,10 @@ namespace Aximo.Engine
             {
                 if (disposing)
                 {
-                    demo.Dispose();
+                    Application.Dispose();
                     ui.Dispose();
                 }
-                demo = null;
+                Application = null;
                 ui = null;
 
                 disposedValue = true;

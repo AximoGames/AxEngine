@@ -27,6 +27,11 @@ namespace Aximo.Engine
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<Application>();
 
+        public void SetConfig(ApplicationConfig config)
+        {
+            Config = config;
+        }
+
         public event AfterApplicationInitializedDelegate AfterApplicationInitialized;
 
         public static Application Current { get; private set; }
@@ -50,16 +55,11 @@ namespace Aximo.Engine
 
         protected KeyboardState KeyboardState => Window.KeyboardState;
 
-        public Application(ApplicationConfig config)
-        {
-            Config = config;
-        }
-
         public WindowContext WindowContext => WindowContext.Current;
         private GameWindow Window => WindowContext.Current.Window;
 
         private AutoResetEvent RunSyncWaiter;
-        public void RunSync()
+        internal void RunSync()
         {
             RunSyncWaiter = new AutoResetEvent(false);
             Run();
@@ -68,12 +68,21 @@ namespace Aximo.Engine
             RunSyncWaiter = null;
         }
 
-        public virtual void Run()
+        internal virtual void Run()
         {
             Current = this;
             Init();
             AfterApplicationInitialized?.Invoke();
             WindowContext.Enabled = true;
+        }
+
+        public void Start()
+        {
+            Start(new ApplicationConfig());
+        }
+        public void Start(ApplicationConfig config)
+        {
+            Startup.Start(config, this);
         }
 
         public RenderContext RenderContext { get; private set; }
