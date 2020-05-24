@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Aximo
 {
@@ -14,6 +15,8 @@ namespace Aximo
     /// </summary>
     public static class AssetManager
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext(nameof(AssetManager));
+
         private static string _BinDir;
         public static string BinDir
         {
@@ -31,7 +34,13 @@ namespace Aximo
             get
             {
                 if (_AppRootDir == null)
-                    _AppRootDir = new DirectoryInfo(Path.Combine(BinDir, "..", "..", "..", "..")).FullName;
+                {
+                    var dir = new DirectoryInfo(Path.Combine(BinDir, "..", "..", "..", "..")).FullName;
+                    if (new DirectoryInfo(dir).GetFiles("*.sln").Any())
+                        _AppRootDir = dir;
+                    else
+                        _AppRootDir = new DirectoryInfo(Path.Combine(BinDir, "..", "..", "..")).FullName;
+                }
                 return _AppRootDir;
             }
         }
@@ -82,6 +91,20 @@ namespace Aximo
             }
         }
 
+        private static string _GlobalCacheDir;
+        public static string GlobalCacheDir
+        {
+            get
+            {
+                if (_GlobalCacheDir == null)
+                {
+                    _GlobalCacheDir = Path.Combine(EngineRootDir, ".cache");
+                    Directory.CreateDirectory(_GlobalCacheDir);
+                }
+                return _GlobalCacheDir;
+            }
+        }
+
         private static string _AppCacheDir;
         public static string AppCacheDir
         {
@@ -89,7 +112,7 @@ namespace Aximo
             {
                 if (_AppCacheDir == null)
                 {
-                    _AppCacheDir = Path.Combine(EngineRootDir, ".cache", AssemblyName);
+                    _AppCacheDir = Path.Combine(GlobalCacheDir, AssemblyName);
                     Directory.CreateDirectory(_AppCacheDir);
                 }
                 return _AppCacheDir;
@@ -110,7 +133,11 @@ namespace Aximo
                     }
                     else
                     {
-                        _EngineRootDir = new DirectoryInfo(Path.Combine(AppRootDir, "..", "AxEngine")).FullName;
+                        var dir = Path.Combine(AppRootDir, "..", "AxEngine");
+                        if (Directory.Exists(dir))
+                            _EngineRootDir = new DirectoryInfo(dir).FullName;
+                        else
+                            _EngineRootDir = AppRootDir;
                     }
                 }
                 return _EngineRootDir;
@@ -206,7 +233,11 @@ namespace Aximo
                 var cachePath = Path.Combine(AppCacheDir, "Assets", subPath);
                 cachePath = AddOptionsKey(cachePath, options);
                 var parent = Path.GetDirectoryName(cachePath);
-                Directory.CreateDirectory(parent);
+                if (!Directory.Exists(parent))
+                {
+                    Directory.CreateDirectory(parent);
+                    Log.Verbose("Create directory {directory}", parent);
+                }
                 if (gen(subPath, cachePath, options))
                     return File.Exists(cachePath) || Directory.Exists(cachePath);
             }
