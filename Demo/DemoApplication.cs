@@ -308,24 +308,24 @@ namespace Aximo.AxDemo
                 Material = materialWoodRemoveTest,
             }));
 
-            SceneContext.AddAnimation(LightAnimation = new Animation2
+            SceneContext.AddTween(LightTween = new Tween2
             {
-                AnimationFunc = Animation2.Circle(),
+                TweenFunc = Tween2.Circle(),
                 Duration = TimeSpan.FromSeconds(8),
                 Repeat = true,
                 Enabled = true,
             });
-            SceneContext.AddAnimation(BoxAnimation = new Animation1
+            SceneContext.AddTween(BoxTween = new Tween1
             {
-                AnimationFunc = Animation1.Linear(AxMath.Norm2Rad),
+                TweenFunc = Tween1.Linear(AxMath.Norm2Rad),
                 Duration = TimeSpan.FromSeconds(6),
                 Repeat = true,
                 Enabled = true,
             });
         }
 
-        private Animation2 LightAnimation;
-        private Animation1 BoxAnimation;
+        private Tween2 LightTween;
+        private Tween1 BoxTween;
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
@@ -335,13 +335,13 @@ namespace Aximo.AxDemo
         {
             var movingLight = SceneContext.GetActor("MovingLight")?.GetComponent<LightComponent>();
             if (movingLight != null)
-                movingLight.RelativeTranslation = new Vector3(LightAnimation.Value.X, LightAnimation.Value.Y, 1.5f);
+                movingLight.RelativeTranslation = new Vector3(LightTween.Value.X, LightTween.Value.Y, 1.5f);
 
             var actt = SceneContext.GetActor("GroupActor1");
             if (actt != null)
             {
                 var compp = actt.GetComponent<SceneComponent>("CompGroup1");
-                compp.RelativeRotation = new Quaternion(0, 0, BoxAnimation.Value);
+                compp.RelativeRotation = new Quaternion(0, 0, BoxTween.Value);
             }
 
             if (CurrentMouseWorldPositionIsValid)

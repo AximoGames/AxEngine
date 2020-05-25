@@ -7,18 +7,18 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Engine
 {
     /// <inheritdoc/>
-    public class Animation<TValue> : Animation
+    public class Tween<TValue> : Tween
     {
-        public AnimationFunc<TValue> AnimationFunc;
+        public TweenFunc<TValue> TweenFunc;
 
         public TValue Value
         {
             get
             {
-                if (AnimationFunc == null)
+                if (TweenFunc == null)
                     return default;
 
-                return AnimationFunc(Position);
+                return TweenFunc(Position);
             }
         }
     }

@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.0.7
+
+* Renamed Animataion to Tween. Make Tween generic.
+
 ### 1.0.6
 Fixed:
 

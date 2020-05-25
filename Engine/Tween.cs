@@ -6,21 +6,21 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-    public delegate TValue AnimationFunc<TValue>(float position);
-    public delegate void AnimationFinishedDelegate();
+    public delegate TValue TweenFunc<TValue>(float position);
+    public delegate void TweenFinishedDelegate();
 
     /// <summary>
-    /// Simple Animation caclulation over time.
-    /// An animatin is defined by its duration and animation function.
+    /// Simple Tween caclulation over time.
+    /// An Tween is defined by its duration and Tween function.
     /// </summary>
-    public abstract class Animation
+    public abstract class Tween
     {
         public bool Enabled;
         public TimeSpan Duration;
         protected DateTime StartTime;
         public bool Repeat;
 
-        public event AnimationFinishedDelegate AnimationFinished;
+        public event TweenFinishedDelegate TweenFinished;
 
         public void Start()
         {
@@ -31,7 +31,7 @@ namespace Aximo.Engine
             StartTime = DateTime.UtcNow;
         }
 
-        public void ProcessAnimation()
+        public void ProcessTween()
         {
             if (!Enabled)
                 return;
@@ -41,7 +41,7 @@ namespace Aximo.Engine
             {
                 if (!Repeat)
                     Enabled = false;
-                AnimationFinished?.Invoke();
+                TweenFinished?.Invoke();
                 if (Repeat)
                     StartTime = DateTime.UtcNow;
             }

@@ -22,11 +22,11 @@ namespace Aximo.Engine
         public static bool IsRenderThread => WindowContext.IsRenderThread;
         public static bool IsUpdateThread => WindowContext.IsUpdateThread;
 
-        public List<Animation> Animations = new List<Animation>();
+        public List<Tween> Tweens = new List<Tween>();
 
-        public void AddAnimation(Animation animation)
+        public void AddTween(Tween tween)
         {
-            Animations.Add(animation);
+            Tweens.Add(tween);
         }
 
         public IList<Actor> Actors = new List<Actor>(); //TODO: Sync

@@ -7,18 +7,18 @@ using OpenToolkit.Mathematics;
 namespace Aximo.Engine
 {
     /// <inheritdoc/>
-    public class Animation1 : Animation<float>
+    public class Tween1 : Tween<float>
     {
-        public static AnimationFunc<float> Linear()
+        public static TweenFunc<float> Linear()
             => (p) => p;
 
-        public static AnimationFunc<float> LinearReverse()
+        public static TweenFunc<float> LinearReverse()
             => (p) => 1 - p;
 
-        public static AnimationFunc<float> Linear(float scale)
+        public static TweenFunc<float> Linear(float scale)
             => (p) => p * scale;
 
-        public static AnimationFunc<float> LinearReverse(float scale)
+        public static TweenFunc<float> LinearReverse(float scale)
             => (p) => scale - (p * scale);
     }
 }
