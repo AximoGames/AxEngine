@@ -7,24 +7,5 @@ namespace Aximo.Engine
 {
     public static class AnimationFuncs
     {
-        public static AnimationFunc Linear()
-        {
-            return (p) => { return p; };
-        }
-
-        public static AnimationFunc LinearReverse()
-        {
-            return (p) => { return 1 - p; };
-        }
-
-        public static AnimationFunc Linear(float scale)
-        {
-            return (p) => { return p * scale; };
-        }
-
-        public static AnimationFunc LinearReverse(float scale)
-        {
-            return (p) => { return scale - (p * scale); };
-        }
     }
 }

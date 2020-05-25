@@ -19,6 +19,16 @@ namespace Aximo
         /// </summary>
         public const float Rad2Deg = 1F / Deg2Rad;
 
+        /// <summary>
+        /// Normal-to-radians conversion constant. Normal: 0f..1f
+        /// </summary>
+        public const float Norm2Rad = MathF.PI * 2F;
+
+        /// <summary>
+        /// Radians-to-normal conversion constant. Normal: 0f..1f
+        /// </summary>
+        public const float Rad2Norm = 1F / Norm2Rad;
+
         /// <summary
         /// Compares two floating point values if they are similar.
         /// <summary>
@@ -98,5 +108,11 @@ namespace Aximo
         {
             return Map(input, new Vector2(-1), new Vector2(1), Vector2.Zero, toMax.ToVector2());
         }
+
+        public static float SinDeg(float deg) => MathF.Sin(deg * Deg2Rad);
+        public static float CosDeg(float deg) => MathF.Cos(deg * Deg2Rad);
+        public static float SinNorm(float norm) => MathF.Sin(norm * Norm2Rad);
+        public static float CosNorm(float norm) => MathF.Cos(norm * Norm2Rad);
+
     }
 }

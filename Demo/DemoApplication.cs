@@ -7,6 +7,7 @@ using Aximo.Engine.Components.Geometry;
 using Aximo.Engine.Components.Lights;
 using Aximo.Engine.Components.UI;
 using OpenToolkit;
+using OpenToolkit.Graphics.ES11;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using SixLabors.ImageSharp;
@@ -306,9 +307,25 @@ namespace Aximo.AxDemo
                 RelativeTranslation = new Vector3(18, 0, 0.5f),
                 Material = materialWoodRemoveTest,
             }));
+
+            SceneContext.AddAnimation(LightAnimation = new Animation2
+            {
+                AnimationFunc = Animation2.Circle(),
+                Duration = TimeSpan.FromSeconds(8),
+                Repeat = true,
+                Enabled = true,
+            });
+            SceneContext.AddAnimation(BoxAnimation = new Animation1
+            {
+                AnimationFunc = Animation1.Linear(AxMath.Norm2Rad),
+                Duration = TimeSpan.FromSeconds(6),
+                Repeat = true,
+                Enabled = true,
+            });
         }
 
-        private float LightAngle = 0;
+        private Animation2 LightAnimation;
+        private Animation1 BoxAnimation;
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
@@ -318,18 +335,13 @@ namespace Aximo.AxDemo
         {
             var movingLight = SceneContext.GetActor("MovingLight")?.GetComponent<LightComponent>();
             if (movingLight != null)
-            {
-                LightAngle = (float)SceneContext.Time.TotalSeconds;
-                var pos = new Vector3((float)(Math.Cos(LightAngle) * 2f), (float)(Math.Sin(LightAngle) * 2f), 1.5f);
-
-                movingLight.RelativeTranslation = pos;
-            }
+                movingLight.RelativeTranslation = new Vector3(LightAnimation.Value.X, LightAnimation.Value.Y, 1.5f);
 
             var actt = SceneContext.GetActor("GroupActor1");
             if (actt != null)
             {
                 var compp = actt.GetComponent<SceneComponent>("CompGroup1");
-                compp.RelativeRotation = new Quaternion(0, 0, LightAngle * 2);
+                compp.RelativeRotation = new Quaternion(0, 0, BoxAnimation.Value);
             }
 
             if (CurrentMouseWorldPositionIsValid)

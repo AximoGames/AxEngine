@@ -240,7 +240,7 @@ namespace Aximo.Render.OpenGL
                 // We can use `GL.GetShaderInfoLog(shader)` to get information about the error.
                 var msg = GL.GetShaderInfoLog(shader);
                 Console.WriteLine(msg);
-                File.WriteAllText(Path.Combine(AssetManager.GlobalCacheDir,"error.glsl"), comp.AllSources());
+                File.WriteAllText(Path.Combine(AssetManager.GlobalCacheDir, "error.glsl"), comp.AllSources());
                 throw new Exception($"Error occurred whilst compiling Shader({shader}): {msg}");
             }
 

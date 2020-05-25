@@ -2,17 +2,18 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-    public delegate float AnimationFunc(float position);
+    public delegate TValue AnimationFunc<TValue>(float position);
     public delegate void AnimationFinishedDelegate();
 
     /// <summary>
     /// Simple Animation caclulation over time.
     /// An animatin is defined by its duration and animation function.
     /// </summary>
-    public class Animation
+    public abstract class Animation
     {
         public bool Enabled;
         public TimeSpan Duration;
@@ -56,19 +57,6 @@ namespace Aximo.Engine
                     return 0;
                 var ts = DateTime.UtcNow - StartTime;
                 return (float)(1.0 / Duration.TotalMilliseconds * ts.TotalMilliseconds);
-            }
-        }
-
-        public AnimationFunc AnimationFunc;
-
-        public float Value
-        {
-            get
-            {
-                if (AnimationFunc == null)
-                    return Position;
-
-                return AnimationFunc(Position);
             }
         }
     }
