@@ -32,40 +32,40 @@ namespace Aximo
 
             public TgaData(byte[] image)
             {
-                this.idFieldLength = image[0];
-                this.colorMapType = image[1];
-                this.imageType = image[2];
-                this.colorMapIndex = image[4] << 8 | image[3];
-                this.colorMapLength = image[6] << 8 | image[5];
-                this.colorMapDepth = image[7];
-                this.imageOriginX = image[9] << 8 | image[8];
-                this.imageOriginY = image[11] << 8 | image[10];
-                this.imageWidth = image[13] << 8 | image[12];
-                this.imageHeight = image[15] << 8 | image[14];
-                this.bitPerPixel = image[16];
-                this.descriptor = image[17];
-                this.colorData = new byte[image.Length - TgaHeaderSize];
-                Array.Copy(image, TgaHeaderSize, this.colorData, 0, this.colorData.Length);
+                idFieldLength = image[0];
+                colorMapType = image[1];
+                imageType = image[2];
+                colorMapIndex = image[4] << 8 | image[3];
+                colorMapLength = image[6] << 8 | image[5];
+                colorMapDepth = image[7];
+                imageOriginX = image[9] << 8 | image[8];
+                imageOriginY = image[11] << 8 | image[10];
+                imageWidth = image[13] << 8 | image[12];
+                imageHeight = image[15] << 8 | image[14];
+                bitPerPixel = image[16];
+                descriptor = image[17];
+                colorData = new byte[image.Length - TgaHeaderSize];
+                Array.Copy(image, TgaHeaderSize, colorData, 0, colorData.Length);
                 // Index color RLE or Full color RLE or Gray RLE
-                if (this.imageType == 9 || this.imageType == 10 || this.imageType == 11)
-                    this.colorData = this.DecodeRLE();
+                if (imageType == 9 || imageType == 10 || imageType == 11)
+                    colorData = DecodeRLE();
             }
 
             public int Width
             {
-                get { return this.imageWidth; }
+                get { return imageWidth; }
             }
 
             public int Height
             {
-                get { return this.imageHeight; }
+                get { return imageHeight; }
             }
 
             public int GetPixel(int x, int y)
             {
                 if (colorMapType == 0)
                 {
-                    switch (this.imageType)
+                    switch (imageType)
                     {
                         // Index color
                         case 1:
@@ -76,18 +76,18 @@ namespace Aximo
                         // Full color
                         case 2:
                         case 10:
-                            int elementCount = this.bitPerPixel / 8;
-                            int dy = ((this.descriptor & 0x20) == 0 ? (this.imageHeight - 1 - y) : y) * this.imageWidth * elementCount;
-                            int dx = ((this.descriptor & 0x10) == 0 ? x : (this.imageWidth - 1 - x)) * elementCount;
+                            int elementCount = bitPerPixel / 8;
+                            int dy = ((descriptor & 0x20) == 0 ? (imageHeight - 1 - y) : y) * imageWidth * elementCount;
+                            int dx = ((descriptor & 0x10) == 0 ? x : (imageWidth - 1 - x)) * elementCount;
                             int index = dy + dx;
 
-                            int b = this.colorData[index + 0] & 0xFF;
-                            int g = this.colorData[index + 1] & 0xFF;
-                            int r = this.colorData[index + 2] & 0xFF;
+                            int b = colorData[index + 0] & 0xFF;
+                            int g = colorData[index + 1] & 0xFF;
+                            int r = colorData[index + 2] & 0xFF;
 
                             if (elementCount == 4) // this.bitPerPixel == 32
                             {
-                                int a = this.colorData[index + 3] & 0xFF;
+                                int a = colorData[index + 3] & 0xFF;
                                 return (a << 24) | (r << 16) | (g << 8) | b;
                             }
                             else if (elementCount == 3) // this.bitPerPixel == 24
@@ -113,20 +113,20 @@ namespace Aximo
 
             protected byte[] DecodeRLE()
             {
-                int elementCount = this.bitPerPixel / 8;
+                int elementCount = bitPerPixel / 8;
                 byte[] elements = new byte[elementCount];
-                int decodeBufferLength = elementCount * this.imageWidth * this.imageHeight;
+                int decodeBufferLength = elementCount * imageWidth * imageHeight;
                 byte[] decodeBuffer = new byte[decodeBufferLength];
                 int decoded = 0;
                 int offset = 0;
                 while (decoded < decodeBufferLength)
                 {
-                    int packet = this.colorData[offset++] & 0xFF;
+                    int packet = colorData[offset++] & 0xFF;
                     if ((packet & 0x80) != 0)
                     {
                         for (int i = 0; i < elementCount; i++)
                         {
-                            elements[i] = this.colorData[offset++];
+                            elements[i] = colorData[offset++];
                         }
                         int count = (packet & 0x7F) + 1;
                         for (int i = 0; i < count; i++)
@@ -142,7 +142,7 @@ namespace Aximo
                         int count = (packet + 1) * elementCount;
                         for (int i = 0; i < count; i++)
                         {
-                            decodeBuffer[decoded++] = this.colorData[offset++];
+                            decodeBuffer[decoded++] = colorData[offset++];
                         }
                     }
                 }

@@ -15,9 +15,9 @@ namespace Aximo.Util.IcoSphere
 
         public TriangleIndices(int v1, int v2, int v3)
         {
-            this.V1 = v1;
-            this.V2 = v2;
-            this.V3 = v3;
+            V1 = v1;
+            V2 = v2;
+            V3 = v3;
         }
     }
 }

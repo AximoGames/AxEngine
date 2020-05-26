@@ -36,7 +36,7 @@ namespace Aximo.Render.OpenGL
 
         public virtual VertexLayoutBindedAttribute AddAttribute(Type type, int index, int size, bool normalized = false)
         {
-            var attr = this.AddAttribute(type, "", size, normalized) as VertexLayoutBindedAttribute;
+            var attr = AddAttribute(type, "", size, normalized) as VertexLayoutBindedAttribute;
             attr.Index = index;
             return attr;
         }

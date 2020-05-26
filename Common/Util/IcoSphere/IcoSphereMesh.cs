@@ -21,7 +21,7 @@ namespace Aximo.Util.IcoSphere
 
         public IcoSphereMesh(int divisions)
         {
-            this.Create(divisions);
+            Create(divisions);
         }
 
         private void ComputeEquirectangularUVForSpherePoint(Vector3 p, out float u, out float v)

@@ -35,14 +35,14 @@ namespace Aximo.Util.IcoSphere
             long key = (smallerIndex << 32) + greaterIndex;
 
             int ret;
-            if (this.middlePointIndexCache.TryGetValue(key, out ret))
+            if (middlePointIndexCache.TryGetValue(key, out ret))
             {
                 return ret;
             }
 
             // not in cache, calculate it
-            Vector3 point1 = this.geometry.Positions[p1];
-            Vector3 point2 = this.geometry.Positions[p2];
+            Vector3 point1 = geometry.Positions[p1];
+            Vector3 point2 = geometry.Positions[p2];
             Vector3 middle = new Vector3(
                                  (point1.X + point2.X) / 2.0f,
                                  (point1.Y + point2.Y) / 2.0f,
@@ -52,15 +52,15 @@ namespace Aximo.Util.IcoSphere
             int i = AddVertex(middle);
 
             // store it, return index
-            this.middlePointIndexCache.Add(key, i);
+            middlePointIndexCache.Add(key, i);
             return i;
         }
 
         public MeshGeometry3D Create(int recursionLevel)
         {
-            this.geometry = new MeshGeometry3D();
-            this.middlePointIndexCache = new Dictionary<long, int>();
-            this.index = 0;
+            geometry = new MeshGeometry3D();
+            middlePointIndexCache = new Dictionary<long, int>();
+            index = 0;
 
             // create 12 vertices of a icosahedron
             float t = (float)((1.0f + Math.Sqrt(5.0)) / 2.0);
@@ -130,17 +130,17 @@ namespace Aximo.Util.IcoSphere
                 faces = faces2;
             }
 
-            this.geometry.Faces = faces;
+            geometry.Faces = faces;
 
             // done, now add triangles to mesh
             foreach (var tri in faces)
             {
-                this.geometry.MeshIndicies.Add(tri.V1);
-                this.geometry.MeshIndicies.Add(tri.V2);
-                this.geometry.MeshIndicies.Add(tri.V3);
+                geometry.MeshIndicies.Add(tri.V1);
+                geometry.MeshIndicies.Add(tri.V2);
+                geometry.MeshIndicies.Add(tri.V3);
             }
 
-            return this.geometry;
+            return geometry;
         }
     }
 }
