@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Aximo.Render.OpenGL;
 using Aximo.Render.Pipelines;
-using OpenToolkit;
-using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.Render.Objects
@@ -124,9 +122,9 @@ namespace Aximo.Render.Objects
                 mat.Vao.Bind();
 
                 if (mat.Material.DiffuseMap != null)
-                    mat.Material.DiffuseMap.Bind(TextureUnit.Texture0);
+                    mat.Material.DiffuseMap.Bind(0);
                 if (mat.Material.SpecularMap != null)
-                    mat.Material.SpecularMap.Bind(TextureUnit.Texture1);
+                    mat.Material.SpecularMap.Bind(1);
 
                 var model = GetModelMatrix();
 
@@ -144,9 +142,9 @@ namespace Aximo.Render.Objects
 
                 if (Renderer.Current.UseShadows)
                 {
-                    Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture2);
+                    Context.GetPipeline<DirectionalShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(2);
                     shader.SetInt("DirectionalShadowMap", 2);
-                    Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(TextureUnit.Texture3);
+                    Context.GetPipeline<PointShadowRenderPipeline>().FrameBuffer.GetDestinationTexture().Bind(3);
                     shader.SetInt("PointShadowMap", 3);
                 }
 
@@ -167,15 +165,15 @@ namespace Aximo.Render.Objects
                 mat.Vao.Bind();
 
                 if (mat.Material.DiffuseMap != null)
-                    mat.Material.DiffuseMap.Bind(TextureUnit.Texture0);
+                    mat.Material.DiffuseMap.Bind(0);
 
                 shader.SetMatrix4("Model", GetModelMatrix());
 
                 //GL.Disable(EnableCap.CullFace);
-                GL.CullFace(CullFaceMode.Front);
+                GraphicsDevice.Default.CullFaceMode = CullFaceMode.Front;
                 mat.Vao.Draw();
                 //GL.Enable(EnableCap.CullFace);
-                GL.CullFace(CullFaceMode.Back);
+                GraphicsDevice.Default.CullFaceMode = CullFaceMode.Back;
             }
         }
 
@@ -192,9 +190,9 @@ namespace Aximo.Render.Objects
                     mat.Vao.Bind();
 
                     if (mat.Material.DiffuseMap != null)
-                        mat.Material.DiffuseMap.Bind(TextureUnit.Texture0);
+                        mat.Material.DiffuseMap.Bind(0);
                     if (mat.Material.SpecularMap != null)
-                        mat.Material.SpecularMap.Bind(TextureUnit.Texture1);
+                        mat.Material.SpecularMap.Bind(1);
 
                     defGeometryShader.SetMaterial("material", mat.Material);
 

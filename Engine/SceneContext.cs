@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Linq;
 using Aximo.Engine.Windows;
 using Aximo.Render;
-using OpenToolkit;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine

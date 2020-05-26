@@ -3,12 +3,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using OpenToolkit;
-using OpenToolkit.Graphics;
-using OpenToolkit.Input;
-using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Desktop;
 
 namespace Aximo.Engine.Windows
 {

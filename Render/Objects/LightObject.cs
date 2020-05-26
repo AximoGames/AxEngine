@@ -4,7 +4,6 @@
 using Aximo.Render.OpenGL;
 using Aximo.Render.Pipelines;
 using Aximo.VertexData;
-using OpenToolkit;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.Render.Objects

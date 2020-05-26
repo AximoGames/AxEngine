@@ -4,9 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Aximo.VertexData;
-using OpenToolkit;
 using OpenToolkit.Mathematics;
 
 #pragma warning disable CA1819 // Properties should not return arrays

@@ -3,21 +3,15 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using Aximo.Engine.Components.Geometry;
 using Aximo.Engine.Windows;
 using Aximo.Render;
-using OpenToolkit;
-using OpenToolkit.Graphics.OpenGL4;
-using OpenToolkit.Input;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using OpenToolkit.Windowing.Common.Input;
 using OpenToolkit.Windowing.Desktop;
-using OpenToolkit.Windowing.GraphicsLibraryFramework;
 
 namespace Aximo.Engine
 {

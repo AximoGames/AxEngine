@@ -7,8 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using Aximo.Render;
-using OpenToolkit;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.Util.IcoSphere

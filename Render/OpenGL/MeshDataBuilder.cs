@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using Aximo.VertexData;
-using OpenToolkit;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.Render.OpenGL

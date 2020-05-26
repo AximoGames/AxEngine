@@ -3,12 +3,6 @@
 
 using System;
 using System.Linq;
-using System.Threading;
-using Aximo.Engine;
-using Aximo.Render;
-using OpenToolkit;
-
-using Xunit;
 
 namespace Aximo.AxTests
 {

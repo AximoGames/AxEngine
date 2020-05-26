@@ -3,7 +3,6 @@
 
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Common.Input;
 
 namespace Aximo.Engine.Windows
 {

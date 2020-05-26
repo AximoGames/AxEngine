@@ -4,13 +4,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using Aximo.Render.Objects;
-using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using Image = SixLabors.ImageSharp.Image;
 
@@ -336,6 +333,11 @@ namespace Aximo.Render.OpenGL
         {
             GL.ActiveTexture(unit);
             GL.BindTexture(Target, Handle);
+        }
+
+        public void Bind(int textureUnit)
+        {
+            Bind(TextureUnit.Texture0 + textureUnit);
         }
 
         protected override void Dispose(bool disposing)

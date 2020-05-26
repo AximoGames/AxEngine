@@ -7,9 +7,7 @@
 
 using System;
 using System.Collections.Generic;
-using Aximo.Render;
 using Aximo.VertexData;
-using OpenToolkit;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.Util.IcoSphere

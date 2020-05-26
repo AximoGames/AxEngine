@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Aximo.Render;
 using Aximo.VertexData;
 
 namespace Aximo

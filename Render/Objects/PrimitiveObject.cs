@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using Aximo.Render.Objects;
 using Aximo.Render.OpenGL;
 using Aximo.Render.Pipelines;
-using OpenToolkit;
-using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.Render

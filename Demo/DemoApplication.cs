@@ -6,11 +6,8 @@ using Aximo.Engine;
 using Aximo.Engine.Components.Geometry;
 using Aximo.Engine.Components.Lights;
 using Aximo.Engine.Components.UI;
-using OpenToolkit;
-using OpenToolkit.Graphics.ES11;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
-using SixLabors.ImageSharp;
 
 namespace Aximo.AxDemo
 {

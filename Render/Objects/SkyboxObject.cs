@@ -4,8 +4,6 @@
 using Aximo.Render.OpenGL;
 using Aximo.Render.Pipelines;
 using Aximo.VertexData;
-using OpenToolkit;
-using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.Render.Objects
@@ -48,15 +46,15 @@ namespace Aximo.Render.Objects
             _shader.SetMatrix4("View", Camera.GetViewMatrix(Vector3.Zero));
             _shader.SetMatrix4("Projection", Camera.ProjectionMatrix);
 
-            txt.Bind(TextureUnit.Texture0);
+            txt.Bind(0);
             _shader.SetInt("Skybox", 0);
 
-            GL.DepthMask(false);
+            GraphicsDevice.Default.DepthMask = false;
             //GL.DepthFunc(DepthFunction.Equal);
-            GL.DepthFunc(DepthFunction.Lequal);
+            GraphicsDevice.Default.DepthFunc = DepthFunction.Lequal;
             vao.Draw();
-            GL.DepthFunc(DepthFunction.Less);
-            GL.DepthMask(true);
+            GraphicsDevice.Default.DepthFunc = DepthFunction.Less;
+            GraphicsDevice.Default.DepthMask = true;
         }
 
         public override void Free()

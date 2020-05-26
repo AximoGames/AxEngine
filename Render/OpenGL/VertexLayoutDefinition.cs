@@ -4,8 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using OpenToolkit;
-using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render.OpenGL
 {

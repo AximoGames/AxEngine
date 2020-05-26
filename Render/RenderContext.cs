@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Aximo.Render.OpenGL;
 using Aximo.Render.Pipelines;
-using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 

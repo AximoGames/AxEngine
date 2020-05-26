@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using OpenToolkit;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.VertexData

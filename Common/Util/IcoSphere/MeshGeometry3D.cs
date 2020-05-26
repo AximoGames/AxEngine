@@ -5,10 +5,7 @@
 // http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
 // Changes Copyright (C) 2014 by David Jeske, and donated to the public domain.
 
-using System;
 using System.Collections.Generic;
-using Aximo.Render;
-using OpenToolkit;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.Util.IcoSphere

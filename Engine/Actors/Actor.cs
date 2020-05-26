@@ -6,7 +6,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using Aximo.Engine.Windows;
 
 #pragma warning disable CA1721 // Property names should not match get methods

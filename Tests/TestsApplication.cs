@@ -2,20 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using Aximo.Engine;
-using Aximo.Render;
-using OpenToolkit;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Advanced;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.Formats.Bmp;
-using SixLabors.ImageSharp.Processing;
-using Xunit;
 
 namespace Aximo.AxTests
 {

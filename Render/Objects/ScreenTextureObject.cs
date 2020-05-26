@@ -5,8 +5,6 @@ using Aximo.Render.Objects;
 using Aximo.Render.OpenGL;
 using Aximo.Render.Pipelines;
 using Aximo.VertexData;
-using OpenToolkit;
-using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 using SixLabors.ImageSharp;
 
@@ -83,12 +81,12 @@ namespace Aximo.Render
 
             _shader.Bind();
             _shader.SetMatrix4("Model", GetModelMatrix());
-            SourceTexture.Bind(TextureUnit.Texture0);
+            SourceTexture.Bind(0);
             _shader.SetInt("screenTexture", 0);
 
-            GL.Disable(EnableCap.CullFace);
+            GraphicsDevice.Default.CullFace = false;
             vao.Draw();
-            GL.Enable(EnableCap.CullFace);
+            GraphicsDevice.Default.CullFace = true;
         }
 
         protected override void Dispose(bool disposing)

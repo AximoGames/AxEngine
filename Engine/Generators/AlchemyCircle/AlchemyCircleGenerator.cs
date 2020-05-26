@@ -5,8 +5,6 @@
 // Credits: CiaccoDavide
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
