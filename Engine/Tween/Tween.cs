@@ -33,6 +33,22 @@ namespace Aximo.Engine
     }
 
     /// <summary>
+    /// The behavior to use when manually stopping a tween.
+    /// </summary>
+    public enum TweenStopBehavior
+    {
+        /// <summary>
+        /// Does not change the current value.
+        /// </summary>
+        AsIs,
+
+        /// <summary>
+        /// Forces the tween progress to the end value.
+        /// </summary>
+        ForceComplete,
+    }
+
+    /// <summary>
     /// Simple Tween caclulation over time.
     /// An Tween is defined by its duration and Tween function.
     /// </summary>
@@ -42,6 +58,8 @@ namespace Aximo.Engine
         public Action OnStart;
         public ScaleFunc ScaleFunc;
         public TweenState State = TweenState.Stopped;
+        public TweenStopBehavior StopBehavior = TweenStopBehavior.AsIs;
+
         public float DefaultScaleFunc(float position) => position;
 
         public Tween()
@@ -100,8 +118,19 @@ namespace Aximo.Engine
 
         public void Stop()
         {
+            Stop(StopBehavior);
+        }
+
+        public void Stop(TweenStopBehavior stopBehavior)
+        {
             _Enabled = false;
             SceneContext.Current.RemoveUpdateFrameObject(this);
+            if (stopBehavior == TweenStopBehavior.ForceComplete)
+            {
+                Position = 1;
+                if (Tick != null)
+                    Tick();
+            }
         }
 
         public void End()
@@ -125,31 +154,32 @@ namespace Aximo.Engine
             if (!_Enabled)
                 return;
 
-            var pos = Position;
-            if (pos >= 1.0)
+            if (Duration == TimeSpan.Zero)
             {
-                if (!Repeat)
-                    Stop();
-                TweenFinished?.Invoke();
-                if (Repeat)
-                    StartTime = DateTime.UtcNow;
+                Stop();
+            }
+            else
+            {
+                var ts = DateTime.UtcNow - StartTime;
+                Position = (float)(1.0 / Duration.TotalMilliseconds * ts.TotalMilliseconds);
+
+                if (Position >= 1.0)
+                {
+                    if (!Repeat)
+                        Stop();
+                    else
+                        Position = 0;
+
+                    TweenFinished?.Invoke();
+                    if (Repeat)
+                        StartTime = DateTime.UtcNow;
+                }
             }
 
             if (Tick != null)
                 Tick();
         }
 
-        public float Position
-        {
-            get
-            {
-                if (!_Enabled)
-                    return 0;
-                if (Duration == TimeSpan.Zero)
-                    return 0;
-                var ts = DateTime.UtcNow - StartTime;
-                return (float)(1.0 / Duration.TotalMilliseconds * ts.TotalMilliseconds);
-            }
-        }
+        public float Position { get; private set; }
     }
 }

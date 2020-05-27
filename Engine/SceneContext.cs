@@ -142,7 +142,7 @@ namespace Aximo.Engine
                 act.PostUpdate();
         }
 
-        internal IList<SceneObject> ObjectsForDeallocation = new List<SceneObject>(); //TODO: Sync
+        internal IList<SceneObject> ObjectsForDeallocation = new SynchronizedCollection<SceneObject>();
 
         public void Sync()
         {
