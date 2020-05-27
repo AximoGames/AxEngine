@@ -372,8 +372,8 @@ namespace Aximo.Engine
             if (UpdateFrameNumber <= 2)
                 Log.Verbose($"Update Frame #{UpdateFrameNumber}");
 
-            foreach (var tween in SceneContext.Tweens)
-                tween.ProcessTween();
+            foreach (var obj in SceneContext.UpdateFrameObjects.ToArray())
+                obj.OnUpdateFrame();
 
             SceneContext.OnUpdateFrame();
             if (Closing)

@@ -21,11 +21,16 @@ namespace Aximo.Engine
         public static bool IsRenderThread => WindowContext.IsRenderThread;
         public static bool IsUpdateThread => WindowContext.IsUpdateThread;
 
-        public List<Tween> Tweens = new List<Tween>();
+        public List<IUpdateFrame> UpdateFrameObjects = new List<IUpdateFrame>();
 
-        public void AddTween(Tween tween)
+        public void AddUpdateFrameObject(IUpdateFrame obj)
         {
-            Tweens.Add(tween);
+            UpdateFrameObjects.Add(obj);
+        }
+
+        public void RemoveUpdateFrameObject(IUpdateFrame obj)
+        {
+            UpdateFrameObjects.Add(obj);
         }
 
         public IList<Actor> Actors = new List<Actor>(); //TODO: Sync

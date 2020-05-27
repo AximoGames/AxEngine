@@ -305,20 +305,20 @@ namespace Aximo.AxDemo
                 Material = materialWoodRemoveTest,
             }));
 
-            SceneContext.AddTween(LightTween = new Tween2
+            LightTween = new Tween2
             {
                 TweenFunc = Tween2.Circle(),
                 Duration = TimeSpan.FromSeconds(8),
                 Repeat = true,
                 Enabled = true,
-            });
-            SceneContext.AddTween(BoxTween = new Tween1
+            };
+            BoxTween = new Tween1
             {
                 TweenFunc = Tween1.Linear(AxMath.Norm2Rad),
                 Duration = TimeSpan.FromSeconds(6),
                 Repeat = true,
                 Enabled = true,
-            });
+            };
         }
 
         private Tween2 LightTween;
