@@ -9,8 +9,28 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-    public delegate TValue TweenFunc<TValue>(float position);
     public delegate void TweenFinishedDelegate();
+
+    /// <summary>
+    /// State of an Tween object
+    /// </summary>
+    public enum TweenState
+    {
+        /// <summary>
+        /// The tween is running.
+        /// </summary>
+        Running,
+
+        /// <summary>
+        /// The tween is paused.
+        /// </summary>
+        Paused,
+
+        /// <summary>
+        /// The tween is stopped.
+        /// </summary>
+        Stopped,
+    }
 
     /// <summary>
     /// Simple Tween caclulation over time.
@@ -18,6 +38,17 @@ namespace Aximo.Engine
     /// </summary>
     public abstract class Tween : IUpdateFrame
     {
+        public Action Tick;
+        public Action OnStart;
+        public ScaleFunc ScaleFunc;
+        public TweenState State = TweenState.Stopped;
+        public float DefaultScaleFunc(float position) => position;
+
+        public Tween()
+        {
+            ScaleFunc = DefaultScaleFunc;
+        }
+
         private bool _Enabled;
         public bool Enabled
         {
@@ -33,7 +64,8 @@ namespace Aximo.Engine
                     Stop();
             }
         }
-        public TimeSpan Duration;
+
+        public TimeSpan Duration = TimeSpan.FromSeconds(15);
         protected DateTime StartTime;
         public bool Repeat;
 
@@ -54,10 +86,14 @@ namespace Aximo.Engine
 
         public void Start()
         {
-            if (Duration == TimeSpan.Zero)
-                return;
+            //if (Duration == TimeSpan.Zero)
+            //    return;
 
             _Enabled = true;
+
+            if (OnStart != null)
+                OnStart();
+
             StartTime = DateTime.UtcNow;
             SceneContext.Current.AddUpdateFrameObject(this);
         }
@@ -84,7 +120,7 @@ namespace Aximo.Engine
             throw new NotImplementedException();
         }
 
-        public void OnUpdateFrame()
+        public virtual void OnUpdateFrame()
         {
             if (!_Enabled)
                 return;
@@ -98,6 +134,9 @@ namespace Aximo.Engine
                 if (Repeat)
                     StartTime = DateTime.UtcNow;
             }
+
+            if (Tick != null)
+                Tick();
         }
 
         public float Position

@@ -8,9 +8,16 @@ namespace Aximo.Engine
     /// <inheritdoc/>
     public class Tween2 : Tween<Vector2>
     {
-        public static TweenFunc<Vector2> Circle()
-            => (p) => new Vector2(AxMath.CosNorm(p), AxMath.SinNorm(p));
-        public static TweenFunc<Vector2> Circle(float scale)
-            => (p) => new Vector2(AxMath.CosNorm(p) * scale, AxMath.SinNorm(p) * scale);
+
+        public Tween2()
+        {
+            LerpFunc = Vector2.Lerp;
+        }
+
+        public static LerpFunc<Vector2> Circle()
+            => (start, end, p) => new Vector2(AxMath.CosNorm(p), AxMath.SinNorm(p));
+
+        public static LerpFunc<Vector2> Circle(float scale)
+            => (start, end, p) => new Vector2(AxMath.CosNorm(p) * scale, AxMath.SinNorm(p) * scale);
     }
 }

@@ -3,7 +3,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using Gtk;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
@@ -21,7 +23,7 @@ namespace Aximo.Engine
         {
             var tween = tweenTarget.NewTween<Tween2>();
             var targets = tweenTarget.Targets.ToArray();
-            tween.Tick = (value) =>
+            tween.Tick = () =>
             {
                 foreach (var comp in targets)
                     comp.RelativeTranslation = new Vector3(value.X, value.Y, comp.RelativeTranslation.Z);
@@ -31,12 +33,19 @@ namespace Aximo.Engine
 
         public static TweenBuilder<SceneComponent> Scale(this TweenBuilder<SceneComponent> tweenTarget, Vector3 scale)
         {
-            var tween = tweenTarget.NewTween<Tween2>();
-            var targets = tweenTarget.Targets.ToArray();
-            tween.Tick = (value) =>
+            var tween = tweenTarget.NewTween<Tween3>();
+            Tuple<SceneComponent, Vector3>[] targets = null;
+            tween.OnStart = () =>
+            {
+                targets = tweenTarget.Targets.Select(t => new Tuple<SceneComponent, Vector3>(t, t.RelativeScale)).ToArray();
+            };
+
+            //var targets = tweenTarget.Targets.Select(t => new Tuple<SceneComponent, Vector3>(t, t.RelativeScale)).ToArray();
+            //var targets = tweenTarget.Targets).ToArray();
+            tween.Tick = () =>
             {
                 foreach (var comp in targets)
-                    comp.RelativeScale = scale;
+                    comp.Item1.RelativeScale = tween.LerpFunc(comp.Item2, scale, tween.ScaledPosition);
             };
             return tweenTarget;
         }

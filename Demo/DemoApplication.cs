@@ -307,14 +307,14 @@ namespace Aximo.AxDemo
 
             LightTween = new Tween2
             {
-                TweenFunc = Tween2.Circle(),
+                LerpFunc = Tween2.Circle(),
                 Duration = TimeSpan.FromSeconds(8),
                 Repeat = true,
                 Enabled = true,
             };
             BoxTween = new Tween1
             {
-                TweenFunc = Tween1.Linear(AxMath.Norm2Rad),
+                ScaleFunc = ScaleFuncs.Linear(AxMath.Norm2Rad),
                 Duration = TimeSpan.FromSeconds(6),
                 Repeat = true,
                 Enabled = true,
@@ -338,7 +338,7 @@ namespace Aximo.AxDemo
             if (actt != null)
             {
                 var compp = actt.GetComponent<SceneComponent>("CompGroup1");
-                compp.RelativeRotation = new Quaternion(0, 0, BoxTween.Value);
+                compp.RelativeRotation = new Quaternion(0, 0, BoxTween.ScaledPosition);
             }
 
             if (CurrentMouseWorldPositionIsValid)

@@ -65,6 +65,7 @@ namespace Aximo.Engine
             NextTarget = newTarget;
             newTarget.CurrentTween.Duration = CurrentTween.Duration;
             newTarget.CurrentTween.Repeat = CurrentTween.Repeat;
+            newTarget.ChainLevel = ChainLevel + 1;
             return newTarget;
         }
 

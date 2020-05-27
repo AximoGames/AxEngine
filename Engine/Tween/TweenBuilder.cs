@@ -33,6 +33,10 @@ namespace Aximo.Engine
         public TweenBuilder NextTarget { get; internal set; }
         public TweenBuilder Root { get; internal set; }
 
+        protected int ChainLevel = 0;
+
+        public bool IsRootChain => ChainLevel == 0;
+
         public IEnumerable<TweenBuilder> TweenTargets
         {
             get
