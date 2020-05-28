@@ -87,7 +87,7 @@ namespace Aximo.Engine
         protected DateTime StartTime;
         public bool Repeat;
 
-        public TweenFinishedDelegate TweenFinished;
+        public TweenFinishedDelegate TweenComplete;
 
         public static TweenBuilder<SceneComponent> For(SceneComponent component)
         {
@@ -123,13 +123,21 @@ namespace Aximo.Engine
 
         public void Stop(TweenStopBehavior stopBehavior)
         {
+            Stop(stopBehavior, true);
+        }
+
+        public void Stop(TweenStopBehavior stopBehavior, bool fireEvents)
+        {
             _Enabled = false;
             SceneContext.Current.RemoveUpdateFrameObject(this);
             if (stopBehavior == TweenStopBehavior.ForceComplete)
             {
                 Position = 1;
+
                 if (Tick != null)
                     Tick();
+
+                TweenComplete?.Invoke();
             }
         }
 
@@ -154,9 +162,12 @@ namespace Aximo.Engine
             if (!_Enabled)
                 return;
 
+            bool doTick = true;
+
             if (Duration == TimeSpan.Zero)
             {
-                Stop();
+                Stop(TweenStopBehavior.ForceComplete);
+                doTick = false;
             }
             else
             {
@@ -165,18 +176,25 @@ namespace Aximo.Engine
 
                 if (Position >= 1.0)
                 {
-                    if (!Repeat)
-                        Stop();
-                    else
+                    if (Repeat)
+                    {
                         Position = 0;
+                    }
+                    else
+                    {
+                        Stop(TweenStopBehavior.ForceComplete);
+                    }
 
-                    TweenFinished?.Invoke();
                     if (Repeat)
                         StartTime = DateTime.UtcNow;
                 }
+                else
+                {
+                    doTick = true;
+                }
             }
 
-            if (Tick != null)
+            if (doTick && Tick != null)
                 Tick();
         }
 
