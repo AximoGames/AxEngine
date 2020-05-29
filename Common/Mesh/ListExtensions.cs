@@ -27,6 +27,12 @@ namespace Aximo
 
     public static class ListExtensions
     {
+        public static T[] ToArray<T>(this SynchronizedCollection<T> list)
+        {
+            lock (list.SyncRoot)
+                return Enumerable.ToArray(list);
+        }
+
         public static void AddRange<T>(this IList<T> list, ICollection<T> items)
         {
             if (list is List<T> l)

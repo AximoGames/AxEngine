@@ -46,6 +46,12 @@ namespace Aximo.Engine
             return this;
         }
 
+        public TweenBuilder<TTarget> ScaleFunc(ScaleFunc scaleFunc)
+        {
+            CurrentTween.ScaleFunc = scaleFunc;
+            return this;
+        }
+
         /// <summary>
         /// Append a new chain element
         /// </summary>
@@ -55,6 +61,7 @@ namespace Aximo.Engine
             newTarget.Root = Root;
             NextChain = newTarget;
             newTarget.CurrentTween.Duration = CurrentTween.Duration;
+            newTarget.CurrentTween.ScaleFunc = CurrentTween.ScaleFunc;
             //newTarget.CurrentTween.Repeat = CurrentTween.Repeat;
             newTarget.CurrentTween.Order = CurrentTween.Order + 1;
             return newTarget;
@@ -66,6 +73,7 @@ namespace Aximo.Engine
             newTarget.Root = Root;
             NextTarget = newTarget;
             newTarget.CurrentTween.Duration = CurrentTween.Duration;
+            newTarget.CurrentTween.ScaleFunc = CurrentTween.ScaleFunc;
             //newTarget.CurrentTween.Repeat = CurrentTween.Repeat;
             newTarget.CurrentTween.Order = CurrentTween.Order + 1;
             newTarget.ChainLevel = ChainLevel + 1;

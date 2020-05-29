@@ -26,6 +26,7 @@ namespace Aximo.Engine
         {
             var tween = new TTween();
             tween.Duration = CurrentTween.Duration;
+            tween.ScaleFunc = CurrentTween.ScaleFunc;
             tween.Order = Root.AllTweens.Count() + 1;
             //tween.Repeat = CurrentTween.Repeat;
             CurrentTween = tween;
