@@ -99,6 +99,10 @@ namespace Aximo.Render.OpenGL
                 Compile();
         }
 
+        internal int SourceHash { get; set; }
+
+        private static Dictionary<int, RendererShader> ShaderCache = new Dictionary<int, RendererShader>();
+
         public void Compile()
         {
             // There are several different types of shaders, but the only two you need for basic rendering are the vertex and fragment shaders.
@@ -109,14 +113,23 @@ namespace Aximo.Render.OpenGL
 
             // GL.CreateShader will create an empty shader (obviously). The ShaderType enum denotes which type of shader will be created.
             foreach (var comp in Compilations)
-            {
                 comp.GenerateSource();
 
-                comp.Handle = GL.CreateShader(comp.Type);
-                var shaderSources = comp.Sources.Select(s => s.Source).ToArray();
+            SourceHash = string.Join("", Compilations.Select(comp => comp.Sources.Select(s => s.Source))).GetHashCode();
+            if (ShaderCache.TryGetValue(SourceHash, out var shader))
+            {
+                //SetFrom(shader);
+                //Bind();
+                Log.Warn("Multiple compilation of source: {ShaderLabel}", ObjectLabel);
+                //return;
+            }
 
+            foreach (var comp in Compilations)
+            {
+                var shaderSources = comp.Sources.Select(s => s.Source).ToArray();
                 var len = shaderSources.Select(s => s.Length).ToArray();
 
+                comp.Handle = GL.CreateShader(comp.Type);
                 // Now, bind the GLSL source code
                 GL.ShaderSource(comp.Handle, shaderSources.Length, shaderSources, len);
 
@@ -195,6 +208,8 @@ namespace Aximo.Render.OpenGL
                 // and then add it to the dictionary.
                 _uniformBlockLocations.Add(key, location);
             }
+
+            ShaderCache.TryAdd(SourceHash, this);
         }
 
         public void Reload()
@@ -218,8 +233,10 @@ namespace Aximo.Render.OpenGL
         private void SetFrom(RendererShader source)
         {
             Handle = source.Handle;
+            SourceHash = source.SourceHash;
             Compilations = source.Compilations;
             _uniformLocations = source._uniformLocations;
+            _uniformBlockLocations = source._uniformBlockLocations;
         }
 
         private static void CompileShader(ShaderCompilation comp)
@@ -269,6 +286,18 @@ namespace Aximo.Render.OpenGL
                 return;
             CurrentHandle = Handle;
             GL.UseProgram(Handle);
+            //BindParams();
+        }
+
+        private void BindParams()
+        {
+            foreach (var kv in LocalUniformValues.ToArray())
+            {
+                var location = kv.Key;
+                var type = kv.Value.GetType();
+                if (type == typeof(int))
+                    GL.Uniform1(location, (int)kv.Value);
+            }
         }
 
         public void Free()
@@ -287,6 +316,34 @@ namespace Aximo.Render.OpenGL
                 Log.Warn($"GetAttribLocation({attribName}): attrib not found");
             }
             return attrHandle;
+        }
+
+        private Dictionary<int, object> SharedUniformValues = new Dictionary<int, object>();
+        private Dictionary<int, object> LocalUniformValues = new Dictionary<int, object>();
+
+        private bool PrepareSetUniform(string name, out int location, object value)
+        {
+            if (_uniformLocations.TryGetValue(name, out location))
+            {
+                //LocalUniformValues.Set(location, value);
+
+                //if (CurrentHandle != Handle)
+                //    return false;
+
+                if (SharedUniformValues.TryGetValue(location, out var v))
+                {
+                    if (Equals(value, v))
+                        return false;
+
+                    SharedUniformValues[location] = value;
+                }
+                else
+                {
+                    SharedUniformValues.Add(location, value);
+                }
+                return true;
+            }
+            return false;
         }
 
         // Uniform setters
@@ -319,7 +376,7 @@ namespace Aximo.Render.OpenGL
         /// <param name="data">The data to set</param>
         public void SetInt(string name, int data)
         {
-            if (_uniformLocations.TryGetValue(name, out var location))
+            if (PrepareSetUniform(name, out var location, data))
             {
                 Bind();
                 GL.Uniform1(location, data);
@@ -338,7 +395,7 @@ namespace Aximo.Render.OpenGL
         /// <param name="data">The data to set</param>
         public void SetFloat(string name, float data)
         {
-            if (_uniformLocations.TryGetValue(name, out var location))
+            if (PrepareSetUniform(name, out var location, data))
             {
                 Bind();
                 GL.Uniform1(location, data);
@@ -357,7 +414,7 @@ namespace Aximo.Render.OpenGL
         /// </remarks>
         public void SetMatrix4(string name, Matrix4 data)
         {
-            if (_uniformLocations.TryGetValue(name, out var location))
+            if (PrepareSetUniform(name, out var location, data))
             {
                 Bind();
                 GL.UniformMatrix4(location, true, ref data);
@@ -376,7 +433,7 @@ namespace Aximo.Render.OpenGL
         /// </remarks>
         public void SetMatrix3(string name, Matrix3 data)
         {
-            if (_uniformLocations.TryGetValue(name, out var location))
+            if (PrepareSetUniform(name, out var location, data))
             {
                 Bind();
                 GL.UniformMatrix3(location, true, ref data);
@@ -390,7 +447,7 @@ namespace Aximo.Render.OpenGL
         /// <param name="data">The data to set</param>
         public void SetVector2(string name, Vector2 data)
         {
-            if (_uniformLocations.TryGetValue(name, out var location))
+            if (PrepareSetUniform(name, out var location, data))
             {
                 Bind();
                 GL.Uniform2(location, data);
@@ -404,7 +461,7 @@ namespace Aximo.Render.OpenGL
         /// <param name="data">The data to set</param>
         public void SetVector3(string name, Vector3 data)
         {
-            if (_uniformLocations.TryGetValue(name, out var location))
+            if (PrepareSetUniform(name, out var location, data))
             {
                 Bind();
                 GL.Uniform3(location, data);
@@ -418,7 +475,7 @@ namespace Aximo.Render.OpenGL
         /// <param name="data">The data to set</param>
         public void SetVector4(string name, Vector4 data)
         {
-            if (_uniformLocations.TryGetValue(name, out var location))
+            if (PrepareSetUniform(name, out var location, data))
             {
                 Bind();
                 GL.Uniform4(location, data);
