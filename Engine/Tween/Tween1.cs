@@ -6,12 +6,11 @@ namespace Aximo.Engine
     /// <inheritdoc/>
     public class Tween1 : Tween<float>
     {
+        internal static float LerpFloat(float start, float end, float progress) { return start + ((end - start) * progress); }
 
-        private static float LerpFloat(float start, float end, float progress) { return start + ((end - start) * progress); }
-
-        public Tween1()
+        protected override LerpFunc<float> GetDefaultLerpFunc()
         {
-            LerpFunc = LerpFloat;
+            return LerpFloat;
         }
     }
 }

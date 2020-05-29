@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
@@ -31,6 +32,32 @@ namespace Aximo.Engine
 
         public TValue StartValue;
         public TValue EndValue;
+
+        protected virtual LerpFunc<TValue> GetDefaultLerpFunc()
+        {
+            var type = typeof(TValue);
+            if (type == typeof(float))
+            {
+                LerpFunc<float> lerpFunc = Tween1.LerpFloat;
+                return (LerpFunc<TValue>)(object)lerpFunc;
+            }
+            if (type == typeof(Vector2))
+            {
+                LerpFunc<Vector2> lerpFunc = Vector2.Lerp;
+                return (LerpFunc<TValue>)(object)lerpFunc;
+            }
+            if (type == typeof(Vector3))
+            {
+                LerpFunc<Vector3> lerpFunc = Vector3.Lerp;
+                return (LerpFunc<TValue>)(object)lerpFunc;
+            }
+            return null;
+        }
+
+        public Tween()
+        {
+            LerpFunc = GetDefaultLerpFunc();
+        }
 
         public float ScaledPosition
         {

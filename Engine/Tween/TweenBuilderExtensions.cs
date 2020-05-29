@@ -13,41 +13,79 @@ namespace Aximo.Engine
 
     public static class TweenBuilderExtensions
     {
-        public static TweenBuilder<SceneComponent> Move(this TweenBuilder<SceneComponent> tweenTarget, float x, float y)
+        public static TweenBuilder<TTarget> Value<TTarget, TValue>(TweenBuilder<TTarget> tweenTarget, TValue value, Func<TTarget, TValue> getValue, Action<TTarget, TValue> setValue)
         {
-            Move(tweenTarget, new Vector2(x, y));
-            return tweenTarget;
-        }
-
-        public static TweenBuilder<SceneComponent> Move(this TweenBuilder<SceneComponent> tweenTarget, Vector2 value)
-        {
-            var tween = tweenTarget.NewTween<Tween2>();
-            var targets = tweenTarget.Targets.ToArray();
+            var tween = tweenTarget.NewTween<Tween<TValue>>();
+            Tuple<TTarget, TValue>[] targets = null;
+            tween.OnStart = () =>
+            {
+                targets = tweenTarget.Targets.Select(t => new Tuple<TTarget, TValue>(t, getValue(t))).ToArray();
+            };
             tween.Tick = () =>
             {
                 foreach (var comp in targets)
-                    comp.RelativeTranslation = new Vector3(value.X, value.Y, comp.RelativeTranslation.Z);
+                {
+                    var v = tween.LerpFunc(comp.Item2, value, tween.ScaledPosition);
+                    setValue(comp.Item1, v);
+                }
             };
             return tweenTarget;
+        }
+
+        public static TweenBuilder<SceneComponent> Translate(this TweenBuilder<SceneComponent> tweenTarget, float x, float y)
+        {
+            return Translate(tweenTarget, new Vector2(x, y));
+        }
+
+        public static TweenBuilder<SceneComponent> Translate(this TweenBuilder<SceneComponent> tweenTarget, Vector2 translation)
+        {
+            return Value(
+                tweenTarget,
+                translation,
+                t => t.RelativeTranslation.Xy,
+                (t, v) => t.RelativeTranslation = new Vector3(v.X, v.Y, t.RelativeTranslation.Z));
+        }
+
+        public static TweenBuilder<SceneComponent> Translate(this TweenBuilder<SceneComponent> tweenTarget, float x, float y, float z)
+        {
+            return Translate(tweenTarget, new Vector3(x, y, z));
+        }
+
+        public static TweenBuilder<SceneComponent> Translate(this TweenBuilder<SceneComponent> tweenTarget, Vector3 translation)
+        {
+            return Value(
+                tweenTarget,
+                translation,
+                t => t.RelativeTranslation,
+                (t, v) => t.RelativeTranslation = new Vector3(v.X, v.Y, v.Z));
+        }
+
+        public static TweenBuilder<SceneComponent> Scale(this TweenBuilder<SceneComponent> tweenTarget, float scale)
+        {
+            return Scale(tweenTarget, new Vector3(scale));
+        }
+
+        public static TweenBuilder<SceneComponent> Scale(this TweenBuilder<SceneComponent> tweenTarget, float x, float y, float z)
+        {
+            return Scale(tweenTarget, new Vector3(x, y, z));
         }
 
         public static TweenBuilder<SceneComponent> Scale(this TweenBuilder<SceneComponent> tweenTarget, Vector3 scale)
         {
-            var tween = tweenTarget.NewTween<Tween3>();
-            Tuple<SceneComponent, Vector3>[] targets = null;
-            tween.OnStart = () =>
-            {
-                targets = tweenTarget.Targets.Select(t => new Tuple<SceneComponent, Vector3>(t, t.RelativeScale)).ToArray();
-            };
+            return Value(
+                tweenTarget,
+                scale,
+                t => t.RelativeScale,
+                (t, v) => t.RelativeScale = v);
+        }
 
-            //var targets = tweenTarget.Targets.Select(t => new Tuple<SceneComponent, Vector3>(t, t.RelativeScale)).ToArray();
-            //var targets = tweenTarget.Targets).ToArray();
-            tween.Tick = () =>
-            {
-                foreach (var comp in targets)
-                    comp.Item1.RelativeScale = tween.LerpFunc(comp.Item2, scale, tween.ScaledPosition);
-            };
-            return tweenTarget;
+        public static TweenBuilder<SceneComponent> Rotate(this TweenBuilder<SceneComponent> tweenTarget, Quaternion quaternion)
+        {
+            return Value(
+                tweenTarget,
+                quaternion,
+                t => t.RelativeRotation,
+                (t, v) => t.RelativeRotation = v);
         }
     }
 }

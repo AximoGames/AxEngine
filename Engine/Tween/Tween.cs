@@ -59,6 +59,8 @@ namespace Aximo.Engine
         public ScaleFunc ScaleFunc;
         public TweenState State = TweenState.Stopped;
         public TweenStopBehavior StopBehavior = TweenStopBehavior.AsIs;
+        public string Name;
+        internal int Order;
 
         public float DefaultScaleFunc(float position) => position;
 
@@ -83,7 +85,7 @@ namespace Aximo.Engine
             }
         }
 
-        public TimeSpan Duration = TimeSpan.FromSeconds(15);
+        public TimeSpan Duration = TimeSpan.FromSeconds(30);
         protected DateTime StartTime;
         public bool Repeat;
 
@@ -98,7 +100,7 @@ namespace Aximo.Engine
         {
             //Tween.For(null).Move(0, 3).Repeat();
             //Tween.For(null).Move(0, 3).For(null).Move(0, -3).Duration(2).Repeat();
-            Tween.For(null).Move(0, 3).Then().Move(0, -3).Duration(2).Duration(1).Repeat();
+            Tween.For(null).Translate(0, 3).Then().Translate(0, -3).Duration(2).Duration(1).Repeat();
             //Tween.For(null).Move(0, 3).Duration(1);
         }
 

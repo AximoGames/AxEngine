@@ -29,7 +29,8 @@ namespace Aximo.Engine
         /// </summary>
         public TweenBuilder<TTarget> Repeat()
         {
-            CurrentTween.Repeat = true;
+            //CurrentTween.Repeat = true;
+            Repat = true;
             return this;
         }
 
@@ -51,20 +52,22 @@ namespace Aximo.Engine
         public TweenBuilder<TTarget> Then()
         {
             var newTarget = new TweenBuilder<TTarget>(Targets);
-            newTarget.Root = this;
+            newTarget.Root = Root;
             NextChain = newTarget;
             newTarget.CurrentTween.Duration = CurrentTween.Duration;
-            newTarget.CurrentTween.Repeat = CurrentTween.Repeat;
+            //newTarget.CurrentTween.Repeat = CurrentTween.Repeat;
+            newTarget.CurrentTween.Order = CurrentTween.Order + 1;
             return newTarget;
         }
 
         public TweenBuilder<TNewTarget> For<TNewTarget>(TNewTarget target)
         {
             var newTarget = new TweenBuilder<TNewTarget>(target);
-            newTarget.Root = this;
+            newTarget.Root = Root;
             NextTarget = newTarget;
             newTarget.CurrentTween.Duration = CurrentTween.Duration;
-            newTarget.CurrentTween.Repeat = CurrentTween.Repeat;
+            //newTarget.CurrentTween.Repeat = CurrentTween.Repeat;
+            newTarget.CurrentTween.Order = CurrentTween.Order + 1;
             newTarget.ChainLevel = ChainLevel + 1;
             return newTarget;
         }

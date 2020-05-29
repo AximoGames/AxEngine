@@ -8,9 +8,9 @@ namespace Aximo.Engine
     /// <inheritdoc/>
     public class Tween3 : Tween<Vector3>
     {
-        public Tween3()
+        protected override LerpFunc<Vector3> GetDefaultLerpFunc()
         {
-            LerpFunc = Vector3.Lerp;
+            return Vector3.Lerp;
         }
     }
 }

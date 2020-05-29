@@ -8,10 +8,9 @@ namespace Aximo.Engine
     /// <inheritdoc/>
     public class Tween2 : Tween<Vector2>
     {
-
-        public Tween2()
+        protected override LerpFunc<Vector2> GetDefaultLerpFunc()
         {
-            LerpFunc = Vector2.Lerp;
+            return Vector2.Lerp;
         }
 
         public static LerpFunc<Vector2> Circle()

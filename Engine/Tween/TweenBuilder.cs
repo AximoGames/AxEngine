@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using OpenToolkit.Mathematics;
 
@@ -13,6 +14,7 @@ namespace Aximo.Engine
     {
         public List<Tween> Tweens { get; private set; } = new List<Tween>();
         protected Tween CurrentTween = new Tween<int>(); // dummy assignment to receive values
+        private protected bool Repat;
 
         internal TweenBuilder()
         {
@@ -24,7 +26,9 @@ namespace Aximo.Engine
         {
             var tween = new TTween();
             tween.Duration = CurrentTween.Duration;
-            tween.Repeat = CurrentTween.Repeat;
+            tween.Order = Root.AllTweens.Count() + 1;
+            //tween.Repeat = CurrentTween.Repeat;
+            CurrentTween = tween;
             Tweens.Add(tween);
             return tween;
         }
@@ -44,7 +48,8 @@ namespace Aximo.Engine
                 TweenBuilder t = this;
                 while (t != null)
                 {
-                    yield return t;
+                    if (t.Tweens.Count > 0)
+                        yield return t;
                     t = t.NextTarget;
                 }
             }
@@ -57,26 +62,76 @@ namespace Aximo.Engine
                 TweenBuilder t = this;
                 while (t != null)
                 {
-                    yield return t;
+                    if (t.Tweens.Count > 0)
+                        yield return t;
                     t = t.NextChain;
                 }
             }
         }
 
-        public void Stop()
+        public IEnumerable<Tween> AllTweens
         {
-            foreach (var chain in Root.TweenChains)
-                foreach (var tweenTarget in chain.TweenTargets)
-                    foreach (var tween in tweenTarget.Tweens)
-                        tween.Stop();
+            get
+            {
+                foreach (var chain in Root.TweenChains)
+                    foreach (var tweenTarget in chain.TweenTargets)
+                        foreach (var tween in tweenTarget.Tweens)
+                            yield return tween;
+            }
         }
 
-        public void Start()
+        public void Stop()
+        {
+            foreach (var tween in AllTweens)
+                tween.Stop();
+        }
+
+        private void InitEvents()
+        {
+            foreach (var chain in Root.TweenChains)
+            {
+                var nextChain = chain.NextChain;
+                if (nextChain == null)
+                {
+                    if (!Repat)
+                        break;
+
+                    nextChain = Root;
+                }
+
+                if (nextChain.Tweens.Count == 0)
+                    continue;
+
+                var tweens = new List<Tween>();
+                foreach (var tweenTarget in chain.TweenTargets)
+                    foreach (var tween in tweenTarget.Tweens)
+                        tweens.Add(tween);
+
+                var longestTween = tweens.OrderByDescending(t => t.Duration).ThenByDescending(t => t.Order).FirstOrDefault();
+                if (longestTween != null)
+                    longestTween.TweenComplete += StartNextChain(nextChain);
+            }
+        }
+
+        private TweenFinishedDelegate StartNextChain(TweenBuilder nextChain)
+        {
+            return () =>
+            {
+                foreach (var tweenTarget in nextChain.TweenTargets)
+                    foreach (var tween in tweenTarget.Tweens)
+                        tween.Start();
+            };
+        }
+
+        public TweenBuilder Start()
         {
             Stop();
+            InitEvents();
             foreach (var targets in Root.TweenTargets)
                 foreach (var tween in targets.Tweens)
                     tween.Start();
+
+            return this;
         }
     }
 }
