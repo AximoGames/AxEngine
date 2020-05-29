@@ -283,22 +283,63 @@ namespace Aximo.Render.OpenGL
         // A wrapper function that enables the shader program.
         public void Bind()
         {
+            BindInternal();
+            BindParams();
+        }
+
+        public void BindInternal()
+        {
             if (CurrentHandle == Handle)
                 return;
             CurrentHandle = Handle;
             GL.UseProgram(Handle);
-            //BindParams();
         }
 
         private void BindParams()
         {
-            foreach (var kv in LocalUniformValues.ToArray())
+            foreach (var kv in LocalUniformValues)
             {
                 var location = kv.Key;
-                var type = kv.Value.GetType();
+                var value = kv.Value;
+
+                if (SharedUniformValues.TryGetValue(location, out var v))
+                {
+                    if (Equals(value, v))
+                        continue;
+
+                    SharedUniformValues[location] = value;
+                }
+                else
+                {
+                    SharedUniformValues.Add(location, value);
+                }
+
+                var type = value.GetType();
                 if (type == typeof(int))
-                    GL.Uniform1(location, (int)kv.Value);
+                    BindParam(location, (int)value, GL.Uniform1);
+                else if (type == typeof(float))
+                    BindParam(location, (float)value, GL.Uniform1);
+                else if (type == typeof(bool))
+                    BindParam(location, (bool)value ? 1 : 0, GL.Uniform1);
+                else if (type == typeof(Vector2))
+                    BindParam(location, (Vector2)value, GL.Uniform2);
+                else if (type == typeof(Vector3))
+                    BindParam(location, (Vector3)value, GL.Uniform3);
+                else if (type == typeof(Vector4))
+                    BindParam(location, (Vector4)value, GL.Uniform4);
+                else if (type == typeof(Matrix3))
+                    BindParam(location, (Matrix3)value, GLUniformMatrix3);
+                else if (type == typeof(Matrix4))
+                    BindParam(location, (Matrix4)value, GLUniformMatrix4);
+                else
+                    throw new ArgumentOutOfRangeException(type.Name);
             }
+        }
+
+        private void BindParam<T>(int location, T value, Action<int, T> setter)
+        {
+            SharedUniformValues.Set(location, value);
+            setter(location, value);
         }
 
         public void Free()
@@ -329,8 +370,8 @@ namespace Aximo.Render.OpenGL
 
             LocalUniformValues.Set(location, value);
 
-            //if (CurrentHandle != Handle)
-            //    return false;
+            if (CurrentHandle != Handle)
+                return false;
 
             if (SharedUniformValues.TryGetValue(location, out var v))
             {
