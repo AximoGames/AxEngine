@@ -322,12 +322,12 @@ namespace Aximo.Render.OpenGL
         private Dictionary<int, object> SharedUniformValues = new Dictionary<int, object>();
         private Dictionary<int, object> LocalUniformValues = new Dictionary<int, object>();
 
-        private bool SetInternal<T>(string name, out int location, T value, Action<int, T> setter)
+        private bool SetInternal<T>(string name, T value, Action<int, T> setter)
         {
-            if (!_uniformLocations.TryGetValue(name, out location))
+            if (!_uniformLocations.TryGetValue(name, out var location))
                 return false;
 
-            //LocalUniformValues.Set(location, value);
+            LocalUniformValues.Set(location, value);
 
             //if (CurrentHandle != Handle)
             //    return false;
@@ -364,25 +364,14 @@ namespace Aximo.Render.OpenGL
         /// </summary>
         /// <param name="name">The name of the uniform</param>
         /// <param name="data">The data to set</param>
-        public void SetBool(string name, bool data)
-        {
-            SetInternal<int>(name, out var location, data ? 1 : 0, GL.Uniform1);
-        }
+        public void SetBool(string name, bool data) => SetInternal(name, data ? 1 : 0, GL.Uniform1);
 
         /// <summary>
         /// Set a uniform int on this shader.
         /// </summary>
         /// <param name="name">The name of the uniform</param>
         /// <param name="data">The data to set</param>
-        public void SetInt(string name, int data)
-        {
-            SetInternal<int>(name, out var location, data, GL.Uniform1);
-        }
-
-        private void SetInternal<T>(int location, T value, Action<T> setter)
-        {
-            setter(value);
-        }
+        public void SetInt(string name, int data) => SetInternal(name, data, GL.Uniform1);
 
         public void SetMaterial(string name, RendererMaterial material)
         {
@@ -394,10 +383,7 @@ namespace Aximo.Render.OpenGL
         /// </summary>
         /// <param name="name">The name of the uniform</param>
         /// <param name="data">The data to set</param>
-        public void SetFloat(string name, float data)
-        {
-            SetInternal<float>(name, out var location, data, GL.Uniform1);
-        }
+        public void SetFloat(string name, float data) => SetInternal(name, data, GL.Uniform1);
 
         /// <summary>
         /// Set a uniform Matrix4 on this shader
@@ -409,10 +395,7 @@ namespace Aximo.Render.OpenGL
         ///   The matrix is transposed before being sent to the shader.
         ///   </para>
         /// </remarks>
-        public void SetMatrix4(string name, Matrix4 data)
-        {
-            SetInternal<Matrix4>(name, out var location, data, GLUniformMatrix4);
-        }
+        public void SetMatrix4(string name, Matrix4 data) => SetInternal(name, data, GLUniformMatrix4);
 
         private static void GLUniformMatrix3(int location, Matrix3 data) => GL.UniformMatrix3(location, true, ref data);
         private static void GLUniformMatrix4(int location, Matrix4 data) => GL.UniformMatrix4(location, true, ref data);
@@ -427,40 +410,28 @@ namespace Aximo.Render.OpenGL
         ///   The matrix is transposed before being sent to the shader.
         ///   </para>
         /// </remarks>
-        public void SetMatrix3(string name, Matrix3 data)
-        {
-            SetInternal<Matrix3>(name, out var location, data, GLUniformMatrix3);
-        }
+        public void SetMatrix3(string name, Matrix3 data) => SetInternal(name, data, GLUniformMatrix3);
 
         /// <summary>
         /// Set a uniform Vector2 on this shader.
         /// </summary>
         /// <param name="name">The name of the uniform</param>
         /// <param name="data">The data to set</param>
-        public void SetVector2(string name, Vector2 data)
-        {
-            SetInternal<Vector2>(name, out var location, data, GL.Uniform2);
-        }
+        public void SetVector2(string name, Vector2 data) => SetInternal(name, data, GL.Uniform2);
 
         /// <summary>
         /// Set a uniform Vector3 on this shader.
         /// </summary>
         /// <param name="name">The name of the uniform</param>
         /// <param name="data">The data to set</param>
-        public void SetVector3(string name, Vector3 data)
-        {
-            SetInternal<Vector3>(name, out var location, data, GL.Uniform3);
-        }
+        public void SetVector3(string name, Vector3 data) => SetInternal(name, data, GL.Uniform3);
 
         /// <summary>
         /// Set a uniform Vector4 on this shader.
         /// </summary>
         /// <param name="name">The name of the uniform</param>
         /// <param name="data">The data to set</param>
-        public void SetVector4(string name, Vector4 data)
-        {
-            SetInternal<Vector4>(name, out var location, data, GL.Uniform4);
-        }
+        public void SetVector4(string name, Vector4 data) => SetInternal(name, data, GL.Uniform4);
 
         public void BindBlock(string blockName, BindingPoint bindingPoint)
         {
