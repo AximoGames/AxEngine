@@ -37,6 +37,8 @@ namespace Aximo.Engine
         public TweenBuilder NextTarget { get; internal set; }
         public TweenBuilder Root { get; internal set; }
 
+        public TweenBuilder NextNonEmptyChain => TweenChains.Skip(1).FirstOrDefault();
+
         protected int ChainLevel = 0;
 
         public bool IsRootChain => ChainLevel == 0;
@@ -90,7 +92,7 @@ namespace Aximo.Engine
         {
             foreach (var chain in Root.TweenChains)
             {
-                var nextChain = chain.NextChain;
+                var nextChain = chain.NextNonEmptyChain;
                 if (nextChain == null)
                 {
                     if (!Repat)
