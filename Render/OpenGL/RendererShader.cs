@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.ServiceModel;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 
@@ -321,29 +322,32 @@ namespace Aximo.Render.OpenGL
         private Dictionary<int, object> SharedUniformValues = new Dictionary<int, object>();
         private Dictionary<int, object> LocalUniformValues = new Dictionary<int, object>();
 
-        private bool PrepareSetUniform(string name, out int location, object value)
+        private bool SetInternal<T>(string name, out int location, T value, Action<int, T> setter)
         {
-            if (_uniformLocations.TryGetValue(name, out location))
+            if (!_uniformLocations.TryGetValue(name, out location))
+                return false;
+
+            //LocalUniformValues.Set(location, value);
+
+            //if (CurrentHandle != Handle)
+            //    return false;
+
+            if (SharedUniformValues.TryGetValue(location, out var v))
             {
-                //LocalUniformValues.Set(location, value);
+                if (Equals(value, v))
+                    return false;
 
-                //if (CurrentHandle != Handle)
-                //    return false;
-
-                if (SharedUniformValues.TryGetValue(location, out var v))
-                {
-                    if (Equals(value, v))
-                        return false;
-
-                    SharedUniformValues[location] = value;
-                }
-                else
-                {
-                    SharedUniformValues.Add(location, value);
-                }
-                return true;
+                SharedUniformValues[location] = value;
             }
-            return false;
+            else
+            {
+                SharedUniformValues.Add(location, value);
+            }
+
+            Bind();
+            setter(location, value);
+
+            return true;
         }
 
         // Uniform setters
@@ -362,11 +366,7 @@ namespace Aximo.Render.OpenGL
         /// <param name="data">The data to set</param>
         public void SetBool(string name, bool data)
         {
-            if (_uniformLocations.TryGetValue(name, out var location))
-            {
-                Bind();
-                GL.Uniform1(location, data ? 1 : 0);
-            }
+            SetInternal<int>(name, out var location, data ? 1 : 0, GL.Uniform1);
         }
 
         /// <summary>
@@ -376,11 +376,12 @@ namespace Aximo.Render.OpenGL
         /// <param name="data">The data to set</param>
         public void SetInt(string name, int data)
         {
-            if (PrepareSetUniform(name, out var location, data))
-            {
-                Bind();
-                GL.Uniform1(location, data);
-            }
+            SetInternal<int>(name, out var location, data, GL.Uniform1);
+        }
+
+        private void SetInternal<T>(int location, T value, Action<T> setter)
+        {
+            setter(value);
         }
 
         public void SetMaterial(string name, RendererMaterial material)
@@ -395,11 +396,7 @@ namespace Aximo.Render.OpenGL
         /// <param name="data">The data to set</param>
         public void SetFloat(string name, float data)
         {
-            if (PrepareSetUniform(name, out var location, data))
-            {
-                Bind();
-                GL.Uniform1(location, data);
-            }
+            SetInternal<float>(name, out var location, data, GL.Uniform1);
         }
 
         /// <summary>
@@ -414,12 +411,11 @@ namespace Aximo.Render.OpenGL
         /// </remarks>
         public void SetMatrix4(string name, Matrix4 data)
         {
-            if (PrepareSetUniform(name, out var location, data))
-            {
-                Bind();
-                GL.UniformMatrix4(location, true, ref data);
-            }
+            SetInternal<Matrix4>(name, out var location, data, GLUniformMatrix4);
         }
+
+        private static void GLUniformMatrix3(int location, Matrix3 data) => GL.UniformMatrix3(location, true, ref data);
+        private static void GLUniformMatrix4(int location, Matrix4 data) => GL.UniformMatrix4(location, true, ref data);
 
         /// <summary>
         /// Set a uniform Matrix3 on this shader
@@ -433,11 +429,7 @@ namespace Aximo.Render.OpenGL
         /// </remarks>
         public void SetMatrix3(string name, Matrix3 data)
         {
-            if (PrepareSetUniform(name, out var location, data))
-            {
-                Bind();
-                GL.UniformMatrix3(location, true, ref data);
-            }
+            SetInternal<Matrix3>(name, out var location, data, GLUniformMatrix3);
         }
 
         /// <summary>
@@ -447,11 +439,7 @@ namespace Aximo.Render.OpenGL
         /// <param name="data">The data to set</param>
         public void SetVector2(string name, Vector2 data)
         {
-            if (PrepareSetUniform(name, out var location, data))
-            {
-                Bind();
-                GL.Uniform2(location, data);
-            }
+            SetInternal<Vector2>(name, out var location, data, GL.Uniform2);
         }
 
         /// <summary>
@@ -461,11 +449,7 @@ namespace Aximo.Render.OpenGL
         /// <param name="data">The data to set</param>
         public void SetVector3(string name, Vector3 data)
         {
-            if (PrepareSetUniform(name, out var location, data))
-            {
-                Bind();
-                GL.Uniform3(location, data);
-            }
+            SetInternal<Vector3>(name, out var location, data, GL.Uniform3);
         }
 
         /// <summary>
@@ -475,11 +459,7 @@ namespace Aximo.Render.OpenGL
         /// <param name="data">The data to set</param>
         public void SetVector4(string name, Vector4 data)
         {
-            if (PrepareSetUniform(name, out var location, data))
-            {
-                Bind();
-                GL.Uniform4(location, data);
-            }
+            SetInternal<Vector4>(name, out var location, data, GL.Uniform4);
         }
 
         public void BindBlock(string blockName, BindingPoint bindingPoint)
