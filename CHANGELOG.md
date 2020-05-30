@@ -3,6 +3,10 @@
 ### 1.0.7
 
 * Renamed Animataion to Tween. Make Tween generic.
+* Skip unnecessary uniform set
+* Cache Shaders (deduplication)
+* Cache Vertex Data (deduplication)
+* new tweening system
 
 ### 1.0.6
 Fixed:
