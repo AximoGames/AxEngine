@@ -103,7 +103,7 @@ namespace Aximo.Render.OpenGL
         internal int SourceHash { get; set; }
 
         private static Dictionary<int, RendererShader> ShaderCache = new Dictionary<int, RendererShader>();
-
+        private bool Cached;
         public void Compile()
         {
             // There are several different types of shaders, but the only two you need for basic rendering are the vertex and fragment shaders.
@@ -116,13 +116,15 @@ namespace Aximo.Render.OpenGL
             foreach (var comp in Compilations)
                 comp.GenerateSource();
 
-            SourceHash = string.Join("", Compilations.Select(comp => comp.Sources.Select(s => s.Source))).GetHashCode();
+            var hashSource = string.Join(' ', Compilations.SelectMany(comp => comp.Sources.Select(s => s.Source)));
+            SourceHash = FNVHash.FNV32(hashSource);
             if (ShaderCache.TryGetValue(SourceHash, out var shader))
             {
-                //SetFrom(shader);
-                //Bind();
-                Log.Warn("Multiple compilation of source: {ShaderLabel}", ObjectLabel);
-                //return;
+                SetFrom(shader);
+                Cached = true;
+                Bind();
+                //Log.Warn("Multiple compilation of source: {ShaderLabel}. Use cached Shader.", ObjectLabel);
+                return;
             }
 
             foreach (var comp in Compilations)
@@ -192,6 +194,11 @@ namespace Aximo.Render.OpenGL
                         _uniformLocations.Add(keyN, GL.GetUniformLocation(Handle, keyN));
                     }
                 }
+
+                if (_uniformLocations.Count == 808)
+                {
+                    var s = "";
+                }
             }
 
             // First, we have to get the number of active uniforms in the shader.
@@ -211,6 +218,7 @@ namespace Aximo.Render.OpenGL
             }
 
             ShaderCache.TryAdd(SourceHash, this);
+            Log.Verbose("Compiled shader {ObjectLabel}", ObjectLabel);
         }
 
         public void Reload()
@@ -236,6 +244,7 @@ namespace Aximo.Render.OpenGL
             Handle = source.Handle;
             SourceHash = source.SourceHash;
             Compilations = source.Compilations;
+            SharedUniformValues = source.SharedUniformValues;
             _uniformLocations = source._uniformLocations;
             _uniformBlockLocations = source._uniformBlockLocations;
         }
@@ -283,6 +292,10 @@ namespace Aximo.Render.OpenGL
         // A wrapper function that enables the shader program.
         public void Bind()
         {
+            if (Cached)
+            {
+                var s = "";
+            }
             BindInternal();
             BindParams();
         }

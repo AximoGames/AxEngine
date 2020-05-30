@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <RootNamespace>AxCommon</RootNamespace>
+    <RootNamespace>Aximo</RootNamespace>
     <AssemblyName>AxCommon</AssemblyName>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <NoWarn>CS0162</NoWarn>
