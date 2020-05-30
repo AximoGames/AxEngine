@@ -10,6 +10,9 @@ namespace Aximo.Render.OpenGL
     {
         public static void SetLabel(IObjectLabel obj)
         {
+            if (!Enabled)
+                return;
+
             // if (MaxLabelLength == -1)
             //     MaxLabelLength = GL.GetInteger((GetIndexedPName)(int)All.MaxLabelLength);
 
@@ -21,12 +24,20 @@ namespace Aximo.Render.OpenGL
 
         public static void PushDebugGroup(string verb, string nome)
         {
+            if (!Enabled)
+                return;
+
             var name = $"{verb} {nome}]";
             GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, -1, name.Length, name);
         }
 
+        public static bool Enabled => Renderer.Current.UseFrameDebug;
+
         public static void PushDebugGroup(string verb, IRenderObject obj)
         {
+            if (!Enabled)
+                return;
+
             var objName = obj.Name;
             if (string.IsNullOrEmpty(objName))
                 objName = obj.GetType().Name;
@@ -36,12 +47,18 @@ namespace Aximo.Render.OpenGL
 
         public static void PushDebugGroup(string verb, IRenderPipeline obj)
         {
+            if (!Enabled)
+                return;
+
             var name = $"{verb} RenderPipeline {obj.GetType().Name}]";
             GL.PushDebugGroup(DebugSourceExternal.DebugSourceApplication, -1, name.Length, name);
         }
 
         public static void PopDebugGroup()
         {
+            if (!Enabled)
+                return;
+
             GL.PopDebugGroup();
         }
     }

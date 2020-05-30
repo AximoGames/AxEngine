@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Aximo
 {
@@ -35,7 +36,11 @@ namespace Aximo
             {
                 if (_AppRootDir == null)
                 {
-                    var dir = new DirectoryInfo(Path.Combine(BinDir, "..", "..", "..", "..")).FullName;
+                    var dir = BinDir;
+                    if (Path.GetFileName(Path.GetDirectoryName(dir)) == "publish")
+                        dir = new DirectoryInfo(Path.Combine(dir, "..")).FullName;
+
+                    dir = new DirectoryInfo(Path.Combine(dir, "..", "..", "..", "..")).FullName;
                     if (new DirectoryInfo(dir).GetFiles("*.sln").Any())
                         _AppRootDir = dir;
                     else
@@ -74,7 +79,11 @@ namespace Aximo
             {
                 if (_AppSourceDir == null)
                 {
-                    _AppSourceDir = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..")).FullName;
+                    var dir = AppDomain.CurrentDomain.BaseDirectory;
+                    if (Path.GetFileName(Path.GetDirectoryName(dir)) == "publish")
+                        dir = new DirectoryInfo(Path.Combine(dir, "..")).FullName;
+
+                    _AppSourceDir = new DirectoryInfo(Path.Combine(dir, "..", "..", "..")).FullName;
                 }
                 return _AppSourceDir;
             }

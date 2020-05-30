@@ -105,5 +105,13 @@ namespace Aximo.Render.OpenGL
             foreach (var attr in Attributes)
                 Console.WriteLine(attr.GetDumpString());
         }
+
+        public override int GetHashCode()
+        {
+            var hash = Hashing.HashInteger(Stride);
+            foreach (var attr in Attributes)
+                hash = Hashing.HashInteger(hash, attr.GetHashCode());
+            return hash;
+        }
     }
 }

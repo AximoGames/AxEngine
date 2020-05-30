@@ -2,6 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render.OpenGL
@@ -107,8 +110,36 @@ namespace Aximo.Render.OpenGL
             Initialized = true;
         }
 
+        private int HashCode;
+        private static Dictionary<int, ValueTuple<VertexArrayObject, int>> Cache = new Dictionary<int, ValueTuple<VertexArrayObject, int>>();
+
         internal void SetData(BufferData1D vertices, BufferData1D<ushort> indicies = null)
         {
+            var vertHashCode = vertices.GetHashCode();
+            var indicieshashCode = indicies?.GetHashCode() ?? 0;
+            var layoutHashCode = Layout.GetHashCode();
+            HashCode = Hashing.HashInteger(vertHashCode, indicieshashCode, layoutHashCode, (int)PrimitiveType);
+
+            if (Cache.TryGetValue(HashCode, out var cachedEntry))
+            {
+                var cached = cachedEntry.Item1;
+                cachedEntry.Item2++;
+                Cache[HashCode] = cachedEntry;
+
+                _Handle = cached._Handle;
+                Layout = cached.Layout;
+                Initialized = true;
+                PrimitiveType = cached.PrimitiveType;
+                VertexCount = cached.VertexCount;
+                _vbo = cached._vbo;
+                _ebo = cached._ebo;
+                return;
+            }
+            else
+            {
+                Cache.TryAdd(HashCode, (this, 1));
+            }
+
             EnsureInitialized();
             _vbo.SetData(vertices);
             VertexCount = vertices.Length * vertices.ElementSize / Layout.Stride;
@@ -123,8 +154,8 @@ namespace Aximo.Render.OpenGL
 
         internal void SetData(MeshData data)
         {
-            SetData(data.Data, data.Indicies);
             PrimitiveType = GetPrimitiveType(data.PrimitiveType);
+            SetData(data.Data, data.Indicies);
         }
 
         private PrimitiveType GetPrimitiveType(AxPrimitiveType primitiveType)
@@ -144,9 +175,27 @@ namespace Aximo.Render.OpenGL
         //{
         //}
 
+        private bool Disposed;
+
         public void Free()
         {
-            GL.DeleteVertexArray(_Handle);
+            if (Disposed)
+                return;
+
+            Disposed = true;
+            if (Cache.TryGetValue(HashCode, out var cachedEntry))
+            {
+                if (cachedEntry.Item2 > 1)
+                {
+                    cachedEntry.Item2--;
+                    Cache[HashCode] = cachedEntry;
+                }
+                else
+                {
+                    Cache.Remove(HashCode);
+                    GL.DeleteVertexArray(_Handle);
+                }
+            }
         }
     }
 }

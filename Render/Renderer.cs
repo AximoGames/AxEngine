@@ -20,6 +20,7 @@ namespace Aximo.Render
         public Vector2i ScreenSize;
         public FlushRenderBackend FlushRenderBackend;
         public bool UseShadows;
+        public bool UseFrameDebug;
 
         public RenderContext Context => RenderContext.Current;
 

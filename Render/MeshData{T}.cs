@@ -6,6 +6,7 @@ using System;
 namespace Aximo.Render.OpenGL
 {
     public class MeshData<T> : MeshData
+        where T : struct
     {
         protected BufferData1D<T> _Data;
 

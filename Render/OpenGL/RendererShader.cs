@@ -117,7 +117,7 @@ namespace Aximo.Render.OpenGL
                 comp.GenerateSource();
 
             var hashSource = string.Join(' ', Compilations.SelectMany(comp => comp.Sources.Select(s => s.Source)));
-            SourceHash = FNVHash.FNV32(hashSource);
+            SourceHash = Hashing.FNV32(hashSource);
             if (ShaderCache.TryGetValue(SourceHash, out var shader))
             {
                 SetFrom(shader);

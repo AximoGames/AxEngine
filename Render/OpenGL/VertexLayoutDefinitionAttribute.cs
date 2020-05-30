@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using OpenToolkit.Graphics.OpenGL4;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Aximo.Render.OpenGL
 {
@@ -13,6 +14,11 @@ namespace Aximo.Render.OpenGL
         public bool Normalized;
         public int Stride;
         public int Offset;
+
+        public override int GetHashCode()
+        {
+            return Hashing.HashInteger(Name.GetHashCode(), Size, (int)Type, Normalized ? 1 : 0, Stride, Offset);
+        }
 
         public void CopyTo(VertexLayoutDefinitionAttribute destination)
         {

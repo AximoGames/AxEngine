@@ -26,6 +26,13 @@ namespace Aximo.Render.Objects
         {
             get
             {
+                var cachedCamera = GetExtraData<Camera>("ShadowCamera");
+                if (cachedCamera != null)
+                {
+                    cachedCamera.Position = Position;
+                    return cachedCamera;
+                }
+
                 if (LightType == LightType.Directional)
                 {
                     //var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
@@ -41,6 +48,7 @@ namespace Aximo.Render.Objects
                         shadowCamera.LookAt = new Vector3(0, 0, 0);
 
                     shadowCamera.SetExraData("Light", this);
+                    SetExraData("ShadowCamera", shadowCamera);
 
                     return shadowCamera;
                 }
@@ -53,6 +61,7 @@ namespace Aximo.Render.Objects
                         Fov = 90f,
                     };
                     cam.SetExraData("Light", this);
+                    SetExraData("ShadowCamera", cam);
                     return cam;
                 }
             }

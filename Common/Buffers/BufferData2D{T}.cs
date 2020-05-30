@@ -11,6 +11,7 @@ using OpenToolkit.Mathematics;
 namespace Aximo
 {
     public class BufferData2D<T> : BufferData2D, IEnumerable<T>
+        where T : struct
     {
         public BufferData2D(Vector2i size) : this(size.X, size.Y)
         {

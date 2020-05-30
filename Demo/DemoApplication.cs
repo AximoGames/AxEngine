@@ -332,7 +332,7 @@ namespace Aximo.AxDemo
         {
             var movingLight = SceneContext.GetActor("MovingLight")?.GetComponent<LightComponent>();
             if (movingLight != null)
-                movingLight.RelativeTranslation = new Vector3(LightTween.Value.X, LightTween.Value.Y, 1.5f);
+                movingLight.RelativeTranslation = new Vector3(LightTween.Value.X, LightTween.Value.Y, 2.0f);
 
             var actt = SceneContext.GetActor("GroupActor1");
             if (actt != null)

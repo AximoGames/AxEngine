@@ -91,12 +91,8 @@ namespace Aximo
             return array;
         }
 
-        public BufferData1D<T> ToBuffer()
-        {
-            return new BufferData1D<T>(ToArray());
-        }
-
         public BufferData1D<TDestination> ToBuffer<TDestination>()
+            where TDestination : struct
         {
             return new BufferData1D<TDestination>(ToArray<TDestination>());
         }

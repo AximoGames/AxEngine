@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 namespace Aximo
 {
     public class BufferData1D<T> : BufferData1D
+        where T : struct
     {
         public BufferData1D(T[] data)
         {
@@ -36,6 +37,11 @@ namespace Aximo
         {
             get { return _Data[index]; }
             set { _Data[index] = value; }
+        }
+
+        public override int GetHashCode()
+        {
+            return Hashing.FNV32(Span);
         }
 
         private int _Length;

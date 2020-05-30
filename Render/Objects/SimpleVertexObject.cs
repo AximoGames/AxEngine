@@ -307,7 +307,7 @@ namespace Aximo.Render.Objects
 
                     cubeShadowShader.SetMatrix4("Model", GetModelMatrix());
                     for (var i = 0; i < CubeShadowsMatrices.Count; i++)
-                        cubeShadowShader.SetMatrix4($"ShadowMatrices[{i}]", CubeShadowsMatrices[i]);
+                        cubeShadowShader.SetMatrix4("ShadowMatrices[" + i + "]", CubeShadowsMatrices[i]);
                     cubeShadowShader.SetVector3("Light.Position", light.Position);
                     cubeShadowShader.SetFloat("Light.FarPlane", shadowCamera.FarPlane);
                     cubeShadowShader.SetInt("Light.ShadowLayer", light.ShadowTextureIndex);

@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 namespace Aximo
 {
     public class BufferData3D<T> : BufferData3D
+        where T : struct
     {
         public BufferData3D(T[,,] data)
         {

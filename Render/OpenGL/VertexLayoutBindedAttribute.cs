@@ -11,5 +11,10 @@ namespace Aximo.Render.OpenGL
         {
             return $"{base.GetDumpString()}, Index: {Index}";
         }
+
+        public override int GetHashCode()
+        {
+            return Hashing.HashInteger(Index, base.GetHashCode());
+        }
     }
 }

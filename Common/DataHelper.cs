@@ -137,6 +137,7 @@ namespace Aximo.Render
         public static readonly VertexDataPos2UV[] NDCQuadInvertedUV = VertexDataPos2UV.NDCQuadInvertedUV.ToPolygonVertices();
 
         public static void GetData<T>(BufferData2D<T> target, Action<IntPtr> getPixels)
+            where T : struct
         {
             var handle = target.CreateHandle();
             try
