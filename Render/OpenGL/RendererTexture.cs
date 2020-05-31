@@ -113,7 +113,7 @@ namespace Aximo.Render.OpenGL
             txt.AddRef();
             GL.TexImage3D(TextureTarget.Texture2DArray, 0, PixelInternalFormat.DepthComponent16, width, height, layers, border, format, type, pixels);
 
-            //txt.SetNearestFilter();
+            txt.SetNearestFilter();
             txt.SetClampToBordreWrap();
             txt.SetBorderColor();
 
