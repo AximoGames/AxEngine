@@ -49,6 +49,7 @@ namespace Aximo.AxTests
                     Name = "StaticLight",
                     //RelativeTranslation = new Vector3(0, 2, 2.5f),
                     RelativeTranslation = new Vector3(-0.2f, -2.1f, 1.85f),
+                    Direction = GetTestFrontLightDirection(),
                 }));
 
                 RenderAndCompare(nameof(Box) + test.ToString());

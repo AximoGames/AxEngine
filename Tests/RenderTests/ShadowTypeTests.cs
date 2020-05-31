@@ -76,6 +76,7 @@ namespace Aximo.AxTests
                         {
                             RelativeTranslation = new Vector3(1f, 2, 2.5f),
                             Name = "MovingLight",
+                            Direction = GetTestBackLightDirection(),
                         }));
                         break;
                 }

@@ -208,6 +208,25 @@ namespace Aximo.AxTests
             };
         }
 
+        protected Transform GetTestLightTransform()
+        {
+            return new Transform
+            {
+                Translation = new Vector3(-0.2f, -2.1f, 1.85f),
+            };
+        }
+        protected Vector3 GetTestFrontLightDirection()
+        {
+            var lookAt = Vector3.Zero;
+            return (lookAt - new Vector3(-0.2f, -2.1f, 1.85f)).Normalized();
+        }
+
+        protected Vector3 GetTestBackLightDirection()
+        {
+            var lookAt = Vector3.Zero;
+            return (lookAt - new Vector3(1f, 2, 2.5f)).Normalized();
+        }
+
         protected static PipelineType[] Pipelines = new PipelineType[] { PipelineType.Forward, PipelineType.Deferred };
 
         protected static object[] TestDataResult(TestCaseBase test)

@@ -49,6 +49,7 @@ namespace Aximo.AxTests
             {
                 Name = "StaticLight",
                 RelativeTranslation = new Vector3(-0.2f, -2.1f, 1.85f),
+                Direction = GetTestFrontLightDirection(),
             }));
 
             var tmp = Mesh.CreateSphere();
