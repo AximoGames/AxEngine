@@ -8,6 +8,7 @@ struct SLight {
 	vec3 Position; //The position of the light.
 	vec4 Color; //The color of the light.
 	mat4 LightSpaceMatrix;
+    vec3 Direction;
 	int ShadowLayer;
 
 	int DirectionalLight;

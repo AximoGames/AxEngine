@@ -161,6 +161,7 @@ namespace Aximo.Render
                     lightData.Linear = 0.1f;
                     lightData.Quadric = 0f;
                     lightData.FarPlane = light.LightCamera.FarPlane;
+                    //lightData.Direction = light.Direction;
                     lightDataList.Add(lightData);
                 }
                 ubo.SetData(BufferData.Create(lightDataList.ToArray()));
@@ -217,17 +218,21 @@ namespace Aximo.Render
             public Matrix4 LightSpaceMatrix;
 
             [FieldOffset(96)]
-            public int ShadowLayer;
-
-            [FieldOffset(100)]
-            public int DirectionalLight; // Bool
-
-            [FieldOffset(104)]
-            public float Linear;
+            public Vector3 Direction;
 
             [FieldOffset(108)]
-            public float Quadric;
+            public int ShadowLayer;
+
             [FieldOffset(112)]
+            public int DirectionalLight; // Bool
+
+            [FieldOffset(116)]
+            public float Linear;
+
+            [FieldOffset(120)]
+            public float Quadric;
+
+            [FieldOffset(124)]
             public float FarPlane;
         }
     }
