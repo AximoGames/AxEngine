@@ -1,11 +1,12 @@
-// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Aximo
 {
-    internal static class DynamicArrayExtensions
+    public static class DynamicArrayExtensions
     {
         internal static void SetValueWithExpand<T>(this IDynamicArray<T> array, int index, T value)
         {
@@ -19,7 +20,7 @@ namespace Aximo
             return array[index];
         }
 
-        internal static void Clear<T>(this IDynamicArray<T> array)
+        public static void Clear<T>(this IDynamicArray<T> array)
         {
             array.SetLength(0);
         }
@@ -41,6 +42,15 @@ namespace Aximo
         internal static void RemoveAt<T>(this IDynamicArray<T> array, int index)
         {
             throw new NotImplementedException();
+        }
+
+        public static T[] ToArray<T>(this IDynamicArray<T> array)
+        {
+            var ar = new T[array.Count];
+            var count = array.Count;
+            for (var i = 0; i < count; i++)
+                ar[i] = array[i];
+            return ar;
         }
     }
 }

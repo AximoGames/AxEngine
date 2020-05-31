@@ -21,7 +21,7 @@ namespace Aximo.Engine
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<Application>();
 
-        public void SetConfig(ApplicationConfig config)
+        internal void SetConfig(ApplicationConfig config)
         {
             Config = config;
         }

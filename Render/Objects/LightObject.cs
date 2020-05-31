@@ -13,6 +13,7 @@ namespace Aximo.Render.Objects
         private static Serilog.ILogger Log = Aximo.Log.ForContext<LightObject>();
         public Camera Camera => Context.Camera;
 
+        public Vector3 Direction { get; set; }
         public Vector3 Position { get; set; }
         public Vector4 Color { get; set; } = Vector4.One;
         public float Linear { get; set; } = 0.1f;

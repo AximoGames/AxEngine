@@ -36,7 +36,7 @@ namespace Aximo.Engine.Components.Lights
             set { if (_Color == value) return; _Color = value; LightAttributesChanged = true; }
         }
 
-        private bool LightAttributesChanged;
+        private bool LightAttributesChanged = true;
 
         internal override void SyncChanges()
         {

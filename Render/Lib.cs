@@ -99,6 +99,7 @@ namespace Aximo.Render
         Vector4 Color { get; set; }
         float Linear { get; set; }
         float Quadric { get; set; }
+        Vector3 Direction { get; set; }
     }
 
     public enum LightType

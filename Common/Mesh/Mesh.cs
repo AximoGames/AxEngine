@@ -617,11 +617,21 @@ namespace Aximo
                 comp[i] *= scale;
         }
 
+        public void Translate(float x, float y, float z)
+        {
+            Translate(new Vector3(x, y, z));
+        }
+
         public void Translate(Vector3 direction)
         {
             var comp = GetComponent<MeshPosition3Component>();
             for (var i = 0; i < comp.Count; i++)
                 comp[i] += direction;
+        }
+
+        public void Translate(float x, float y)
+        {
+            Translate(new Vector2(x, y));
         }
 
         public void Translate(Vector2 direction)
