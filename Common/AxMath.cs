@@ -112,6 +112,5 @@ namespace Aximo
         public static float CosDeg(float deg) => MathF.Cos(deg * Deg2Rad);
         public static float SinNorm(float norm) => MathF.Sin(norm * Norm2Rad);
         public static float CosNorm(float norm) => MathF.Cos(norm * Norm2Rad);
-
     }
 }

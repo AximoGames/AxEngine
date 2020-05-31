@@ -1,4 +1,7 @@
-﻿using System;
+﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,7 +13,6 @@ namespace Aximo
     /// </summary>
     public static class Hashing
     {
-
         private const double IntToDoubleMultiplier = 1.0 / (int.MaxValue + 1.0);
         private const double UIntToDoubleMultiplier = 1.0 / (uint.MaxValue + 1.0);
 
@@ -219,7 +221,7 @@ namespace Aximo
             {
                 uint hash = 0;
                 for (uint i = 0; i < len; ++i)
-                    hash = 101 * hash + key[i];
+                    hash = (101 * hash) + key[i];
                 return hash;
             }
         }

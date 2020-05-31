@@ -8,7 +8,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public class TweenBuilder<TTarget> : TweenBuilder
     {
         public List<TTarget> Targets;
@@ -79,6 +78,5 @@ namespace Aximo.Engine
             newTarget.ChainLevel = ChainLevel + 1;
             return newTarget;
         }
-
     }
 }

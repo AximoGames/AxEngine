@@ -9,7 +9,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public abstract class TweenBuilder
     {
         public List<Tween> Tweens { get; private set; } = new List<Tween>();

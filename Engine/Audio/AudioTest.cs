@@ -12,7 +12,6 @@ using OpenToolkit.Audio.OpenAL;
 
 namespace Aximo.Engine.Audio
 {
-
     public abstract class AudioModul
     {
         public Port[] Ports;
@@ -20,7 +19,6 @@ namespace Aximo.Engine.Audio
 
     public class AudioPCMInputModul : AudioModul
     {
-
         public AudioStream S;
 
         public AudioPCMInputModul()

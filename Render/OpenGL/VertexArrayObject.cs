@@ -111,7 +111,7 @@ namespace Aximo.Render.OpenGL
         }
 
         private int HashCode;
-        private static Dictionary<int, ValueTuple<VertexArrayObject, int>> Cache = new Dictionary<int, ValueTuple<VertexArrayObject, int>>();
+        private static Dictionary<int, ValueTuple<VertexArrayObject, int>> Cache = new Dictionary<int, (VertexArrayObject, int)>();
 
         internal void SetData(BufferData1D vertices, BufferData1D<ushort> indicies = null)
         {

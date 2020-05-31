@@ -10,7 +10,6 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public static class TweenBuilderExtensions
     {
         public static TweenBuilder<TTarget> Value<TTarget, TValue>(TweenBuilder<TTarget> tweenTarget, TValue value, Func<TTarget, TValue> getValue, Action<TTarget, TValue> setValue)
