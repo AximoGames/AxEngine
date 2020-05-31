@@ -113,8 +113,10 @@ namespace Aximo.Render.OpenGL
             txt.AddRef();
             GL.TexImage3D(TextureTarget.Texture2DArray, 0, PixelInternalFormat.DepthComponent16, width, height, layers, border, format, type, pixels);
 
-            txt.SetNearestFilter();
+            //txt.SetNearestFilter();
             txt.SetClampToBordreWrap();
+            txt.SetBorderColor();
+
             return txt;
         }
 
@@ -234,6 +236,13 @@ namespace Aximo.Render.OpenGL
             GL.TexParameter(Target, TextureParameterName.TextureWrapS, (int)All.ClampToEdge);
             GL.TexParameter(Target, TextureParameterName.TextureWrapT, (int)All.ClampToEdge);
             GL.TexParameter(Target, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
+        }
+
+        public void SetBorderColor()
+        {
+            Bind();
+            float[] borderColor = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
+            GL.TexParameter(Target, TextureParameterName.TextureBorderColor, borderColor);
         }
 
         public RendererTexture(Vector3 color, string name)
