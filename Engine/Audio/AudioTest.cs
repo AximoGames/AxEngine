@@ -2,185 +2,19 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using OpenToolkit.Audio;
 using OpenToolkit.Audio.OpenAL;
 
 namespace Aximo.Engine.Audio
 {
-    public abstract class AudioModul
-    {
-        public Port[] Ports;
-    }
-
-    public class AudioPCMInputModul : AudioModul
-    {
-        public AudioStream S;
-
-        public AudioPCMInputModul()
-        {
-        }
-    }
-
-    public class Channel
-    {
-        public int Number;
-        public bool Active;
-        public float Voltage;
-        public Port Port;
-
-        public Channel(int number, Port port)
-        {
-            Number = number;
-            Port = port;
-        }
-    }
-
-    public class Port
-    {
-        public Channel[] Channels;
-        public const int MaxChannels = 16;
-
-        public Port()
-        {
-            Channels = new Channel[MaxChannels];
-            for (var i = 0; i < MaxChannels; i++)
-                Channels[i] = new Channel(i, this);
-        }
-
-        public void SetVoltage(float voltage, int channel = 0)
-        {
-            Channels[channel].Voltage = voltage;
-        }
-
-        public float GetVoltage(int channel = 0)
-        {
-            return Channels[channel].Voltage;
-        }
-    }
-
-    public interface IDataStream
-    {
-    }
-
-    public interface IDataStream<T> : IDataStream
-    {
-    }
-
-    public class AudioStream : IDataStream
-    {
-        private protected Stream Stream;
-        private protected BinaryReader Reader;
-        public int Channels;
-        public int Bits;
-        public int Rate;
-        private long DataStartPosition;
-
-        private void ReadHeader()
-        {
-            Reader = new BinaryReader(Stream);
-            // RIFF header
-            string signature = new string(Reader.ReadChars(4));
-            if (signature != "RIFF")
-                throw new NotSupportedException("Specified stream is not a wave file.");
-
-            int riff_chunck_size = Reader.ReadInt32();
-
-            string format = new string(Reader.ReadChars(4));
-            if (format != "WAVE")
-                throw new NotSupportedException("Specified stream is not a wave file.");
-
-            // WAVE header
-            string format_signature = new string(Reader.ReadChars(4));
-            if (format_signature != "fmt ")
-                throw new NotSupportedException("Specified wave file is not supported.");
-
-            int format_chunk_size = Reader.ReadInt32();
-            int audio_format = Reader.ReadInt16();
-            int num_channels = Reader.ReadInt16();
-            int sample_rate = Reader.ReadInt32();
-            int byte_rate = Reader.ReadInt32();
-            int block_align = Reader.ReadInt16();
-            int bits_per_sample = Reader.ReadInt16();
-
-            string data_signature = new string(Reader.ReadChars(4));
-            if (data_signature != "data")
-                throw new NotSupportedException("Specified wave file is not supported.");
-
-            int data_chunk_size = Reader.ReadInt32();
-
-            Channels = num_channels;
-            Bits = bits_per_sample;
-            Rate = sample_rate;
-
-            DataStartPosition = Reader.BaseStream.Position;
-        }
-
-        private protected AudioStream(Stream stream)
-        {
-            Stream = stream;
-        }
-
-        public static AudioStream Load(Stream stream)
-        {
-            var audio = new AudioInt16Stream(stream);
-            audio.ReadHeader();
-            return audio;
-        }
-
-        public static AudioStream Load(string filePath)
-        {
-            return Load(File.OpenRead(filePath));
-        }
-
-        public bool EndOfStream => Stream.Position >= Stream.Length;
-        public long Length => Stream.Length - DataStartPosition;
-    }
-
-    public abstract class AudioStream<T> : AudioStream, IDataStream<T>
-        where T : unmanaged
-    {
-        public AudioStream(Stream stream)
-            : base(stream)
-        {
-        }
-
-        public abstract T NextSample();
-
-        public T[] ToArray()
-        {
-            var samples = new List<T>((int)Length);
-            while (!EndOfStream)
-                samples.Add(NextSample());
-            return samples.ToArray();
-        }
-    }
-
-    public class AudioInt16Stream : AudioStream<short>
-    {
-        public AudioInt16Stream(Stream stream)
-            : base(stream)
-        {
-        }
-
-        public override short NextSample()
-        {
-            return Reader.ReadInt16();
-        }
-    }
-
-    public abstract class ConvertShortToFloatConverter
-    {
-    }
-
     public class AudioTest
     {
         //public static readonly string Filename = "/home/sebastian/Downloads/the_ring_that_fell.wav";
-        public static readonly string Filename = "c:/users/sebastian/Downloads/the_ring_that_fell.wav";
+        public static readonly string Filename = "c:/users/sebastian/Downloads/275416__georcduboe__ambient-naturept2-squarepurity-2-135bpm.wav";
+        //public static readonly string Filename = "c:/users/sebastian/Downloads/the_ring_that_fell.wav";
 
         public static float[] ShortToFloat(short[] data)
         {
@@ -253,8 +87,9 @@ namespace Aximo.Engine.Audio
                     data[i] = reader.ReadInt16();
 
                 return FloatToShort(ShortToFloat(data));
+                //return data;
 
-                //reader.ReadBytes((int)reader.BaseStream.Length;
+                //return reader.ReadBytes((int)reader.BaseStream.Length);
             }
         }
 
@@ -282,18 +117,57 @@ namespace Aximo.Engine.Audio
             int source = AL.GenSource();
             int state;
 
-            int channels, bits_per_sample, sample_rate;
-            var sound_data = LoadWave(File.Open(Filename, FileMode.Open), out channels, out bits_per_sample, out sample_rate);
-            AL.BufferData(buffer, GetSoundFormat(channels, bits_per_sample), sound_data, sound_data.Length, sample_rate);
+            //int channels, bits_per_sample, sample_rate;
+            //var sound_data = LoadWave(File.Open(Filename, FileMode.Open), out channels, out bits_per_sample, out sample_rate);
+            //AL.BufferData(buffer, GetSoundFormat(channels, bits_per_sample), sound_data, sound_data.Length * 2, sample_rate);
+            //CheckALError();
+
+            var file = (AudioInt16Stream)AudioStream.Load(Filename);
+            var rack = new AudioRack();
+
+            var inMod = new AudioPCMInputModule();
+            inMod.SetInput(file);
+            inMod.OnEndOfStream += () => rack.Stop();
+
+            var outMod = new AudioPCMSinkModule();
+            var outFile = new AudioSinkStream();
+            outMod.SetOutputStream(outFile);
+
+            var ampMod = new AudioAmplifierModule();
+
+            rack.AddModule(inMod);
+            rack.AddModule(outMod);
+            rack.AddModule(ampMod);
+
+            rack.AddCable(new AudioCable(inMod.GetOutput("Left"), ampMod.GetInput("Left")));
+            rack.AddCable(new AudioCable(inMod.GetOutput("Right"), ampMod.GetInput("Right")));
+            rack.AddCable(new AudioCable(ampMod.GetOutput("Left"), outMod.GetInput("Left")));
+            rack.AddCable(new AudioCable(ampMod.GetOutput("Right"), outMod.GetInput("Right")));
+            rack.AddCable(new AudioCable(inMod.GetOutput("Gate"), outMod.GetInput("Gate")));
+
+            rack.MainLoop();
+
+            var d = outFile.ToArray();
 
             //var file = (AudioInt16Stream)AudioStream.Load(Filename);
             //var sound_data = file.ToArray();
-            //AL.BufferData(buffer, GetSoundFormat(file.Channels, file.Bits), sound_data, sound_data.Length, file.Rate);
+            var sound_data = d;
+            int len;
+            if (file.Channels == 1)
+                len = sound_data.Length;
+            else
+                len = sound_data.Length * 2;
+
+            AL.BufferData(buffer, GetSoundFormat(file.Channels, file.Bits), sound_data, len, file.Rate);
 
             AL.Source(source, ALSourcei.Buffer, buffer);
+            CheckALError();
             AL.SourcePlay(source);
+            CheckALError();
 
             Trace.Write("Playing");
+
+            var time = DateTime.UtcNow;
 
             // Query the source to find out when it stops playing.
             do
@@ -303,8 +177,9 @@ namespace Aximo.Engine.Audio
                 AL.GetSource(source, ALGetSourcei.SourceState, out state);
             }
             while ((ALSourceState)state == ALSourceState.Playing);
+            var duration = DateTime.UtcNow - time;
 
-            Trace.WriteLine("");
+            Trace.WriteLine($"Duration {duration}");
 
             AL.SourceStop(source);
             AL.DeleteSource(source);
@@ -316,7 +191,8 @@ namespace Aximo.Engine.Audio
             ALError error = AL.GetError();
             if (error != ALError.NoError)
             {
-                Console.WriteLine($"ALError: {AL.GetErrorString(error)}");
+                var msg = $"ALError: {AL.GetErrorString(error)}";
+                throw new Exception(msg);
             }
         }
     }

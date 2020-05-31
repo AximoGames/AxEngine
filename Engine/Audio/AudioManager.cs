@@ -8,6 +8,7 @@ using NetCoreAudio;
 
 namespace Aximo.Engine.Audio
 {
+
     public class AudioManager
     {
         public bool Mute => CommandLineOptions.Current.Mute;

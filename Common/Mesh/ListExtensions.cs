@@ -7,24 +7,6 @@ using Aximo.VertexData;
 
 namespace Aximo
 {
-    // public class TestClass
-    // {
-    //     public ref VertexDataPosNormalUV Test
-    //     {
-    //         get
-    //         {
-    //             var sp = new Span<VertexDataPosNormalUV>(null);
-    //             return ref sp[0];
-    //         }
-    //     }
-
-    //     public void sdfdf()
-    //     {
-    //         Test.Normal.X = 5;
-    //     }
-
-    // }
-
     public static class ListExtensions
     {
         public static T[] ToArray<T>(this SynchronizedCollection<T> list)
