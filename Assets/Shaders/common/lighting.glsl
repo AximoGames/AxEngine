@@ -13,15 +13,26 @@ for(int i = 0; i < LightCount; ++i)
     SLight light = lights[i];
 
     // diffuse
-    vec3 lightDir = normalize(light.Position - FragPos);
+    vec3 lightDir;
+    if(light.DirectionalLight == 1)
+        lightDir = -light.Direction;
+    else
+        lightDir = normalize(light.Position - FragPos);
+
     vec4 diffuse = max(dot(normal, lightDir), 0.0) * matDiffuse * light.Color;
     // specular
     vec3 halfwayDir = normalize(lightDir + viewDir);  
     float spec = pow(max(dot(normal, halfwayDir), 0.0), matShininess);
     vec4 specular = light.Color * spec * matSpecular;
     // attenuation
-    float distance = length(light.Position - FragPos);
-    float attenuation = 1.0 / (1.0 + light.Linear * distance + light.Quadratic * (distance * distance));
+    float attenuation;
+    if(light.DirectionalLight == 1) {
+        attenuation = 1.0;
+    }
+    else {
+        float distance = length(light.Position - FragPos);
+        attenuation = 1.0 / (1.0 + light.Linear * distance + light.Quadratic * (distance * distance));
+    }
 
     //attenuation = 1.0; // debug
 

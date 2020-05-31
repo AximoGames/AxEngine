@@ -1,5 +1,12 @@
 # Changelog
 
+### 1.0.8
+
+* Fixed Shadows if they are out of shadow map
+* Corrected Directional light
+* Removed SetConfig() from public API.
+* Preparation for OpenAL
+
 ### 1.0.7
 
 * Renamed Animataion to Tween. Make Tween generic.

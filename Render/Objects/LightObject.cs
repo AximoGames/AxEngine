@@ -27,12 +27,13 @@ namespace Aximo.Render.Objects
         {
             get
             {
-                var cachedCamera = GetExtraData<Camera>("ShadowCamera");
-                if (cachedCamera != null)
-                {
-                    cachedCamera.Position = Position;
-                    return cachedCamera;
-                }
+                // TODO: Invalidate on property change
+                //var cachedCamera = GetExtraData<Camera>("ShadowCamera");
+                //if (cachedCamera != null)
+                //{
+                //    cachedCamera.Position = Position;
+                //    return cachedCamera;
+                //}
 
                 if (LightType == LightType.Directional)
                 {
@@ -44,9 +45,23 @@ namespace Aximo.Render.Objects
                     };
                     var box = Context.GetObjectByName("Box1"); // TODO: Remove Debug
                     if (box != null)
+                    {
                         shadowCamera.LookAt = (box as IPosition).Position;
+                    }
                     else
-                        shadowCamera.LookAt = new Vector3(0, 0, 0);
+                    {
+                        if (Direction == Vector3.Zero) // usefull default?
+                        {
+                            shadowCamera.LookAt = new Vector3(0, 0, 0);
+                        }
+                        else
+                        {
+                            var dir = Direction;
+                            if (dir == -Vector3.UnitZ)
+                                dir += new Vector3(0.000001f, 0, 0); // some values because of gimbal lock!
+                            shadowCamera.LookAt = Position + dir;
+                        }
+                    }
 
                     shadowCamera.SetExraData("Light", this);
                     SetExraData("ShadowCamera", shadowCamera);

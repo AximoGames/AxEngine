@@ -161,7 +161,7 @@ namespace Aximo.Render
                     lightData.Linear = 0.1f;
                     lightData.Quadric = 0f;
                     lightData.FarPlane = light.LightCamera.FarPlane;
-                    //lightData.Direction = light.Direction;
+                    lightData.Direction = light.Direction.Normalized();
                     lightDataList.Add(lightData);
                 }
                 ubo.SetData(BufferData.Create(lightDataList.ToArray()));

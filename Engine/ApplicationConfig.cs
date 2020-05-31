@@ -27,7 +27,7 @@ namespace Aximo.Engine
         public bool UseConsole { get; set; } = true;
         public bool UseGtkUI { get; set; } = false;
         public bool UseShadows { get; set; } = true;
-        public bool UseFrameDebug { get; set; } = false;
+        public bool UseFrameDebug { get; set; } = true;
 
         /// <summary>
         /// Get or set when rendering backend should be flushed.
