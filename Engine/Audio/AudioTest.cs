@@ -31,8 +31,7 @@ namespace Aximo.Engine.Audio
             var ampMod = new AudioAmplifierModule();
             ampMod.GetParameter("Volume").SetValue(0.5f);
 
-            var ampMod = new AudioAmplifierModule();
-            ampMod.GetParameter("Volume").SetValue(0.5f);
+            var ampMix = new AudioMix4Module();
 
             rack.AddModule(inMod);
             rack.AddModule(outMod);
