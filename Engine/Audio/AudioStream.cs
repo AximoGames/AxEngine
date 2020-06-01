@@ -8,6 +8,7 @@ namespace Aximo.Engine.Audio
 {
     public class AudioStream : IDataStream
     {
+        public string Name;
         private protected Stream Stream;
         private protected BinaryReader Reader;
         public int Channels;
@@ -46,19 +47,36 @@ namespace Aximo.Engine.Audio
             if (data_signature != "data")
                 throw new NotSupportedException("Specified wave file is not supported.");
 
-            int data_chunk_size = Reader.ReadInt32();
+            DataLength = Reader.ReadInt32();
 
             Channels = num_channels;
             Bits = bits_per_sample;
             Rate = sample_rate;
 
-            DataStartPosition = Reader.BaseStream.Position;
+            SampleSizeAllChannels = (bits_per_sample / 8) * Channels;
+            DataStartPosition = Reader.BaseStream.Position; // normally 44
         }
+
+        public int SampleSizeAllChannels;
 
         private protected AudioStream(Stream stream)
         {
             Stream = stream;
-            Length = stream.Length; // TODO: If real stream, set Length to 0 (or -1)
+            BaseLength = stream.Length; // TODO: If real stream, set Length to 0 (or -1)
+        }
+
+        public void PreloadAll()
+        {
+            if (Stream is MemoryStream)
+                return;
+
+            var oldPosition = Stream.Position;
+            Stream.Position = 0;
+            var stream = new MemoryStream(Stream.ReadToEnd());
+            stream.Position = oldPosition;
+            Stream.Dispose();
+            Stream = stream;
+            Reader = new BinaryReader(stream);
         }
 
         public static AudioStream Load(Stream stream)
@@ -70,13 +88,16 @@ namespace Aximo.Engine.Audio
 
         public static AudioStream Load(string filePath)
         {
-            return Load(File.OpenRead(filePath));
+            var stream = Load(File.OpenRead(filePath));
+            stream.Name = Path.GetFileNameWithoutExtension(filePath);
+            return stream;
         }
 
-        public bool EndOfStream => Stream.Position >= Length;
-        public long Position => Stream.Position - DataStartPosition;
+        public bool EndOfStream => DataPosition + (SampleSizeAllChannels - 1) >= DataLength;
+        public long DataPosition => Stream.Position - DataStartPosition;
 
-        public long Length;
+        private long BaseLength;
+        public long DataLength;
 
         public void SetPosition(long position)
         {

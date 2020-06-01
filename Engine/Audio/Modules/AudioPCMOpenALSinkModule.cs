@@ -69,6 +69,7 @@ namespace Aximo.Engine.Audio
 
         private int Bits = 16;
         private int Rate = 44100;
+        private long BuffersProcessed = 0;
 
         private void PresentBuffer(short[] buf)
         {
@@ -122,6 +123,7 @@ namespace Aximo.Engine.Audio
             AL.GetSource(source, ALGetSourcei.BuffersQueued, out queued);
 
             CheckALError();
+            BuffersProcessed++;
         }
 
         public static ALFormat GetSoundFormat(int channels, int bits)
@@ -180,7 +182,7 @@ namespace Aximo.Engine.Audio
 
             if (!Inputs[2].IsConnected || Inputs[2].GetVoltage() >= 0.9f)
                 for (var i = 0; i < InputChannels.Length; i++)
-                    WritePCMSample(PCMConversion.FloatToShort(InputChannels[i].GetVoltage() / 10));
+                    WritePCMSample(PCMConversion.FloatToShort(InputChannels[i].GetVoltage() / 5f));
             else
                 for (var i = 0; i < InputChannels.Length; i++)
                     WritePCMSample(0);

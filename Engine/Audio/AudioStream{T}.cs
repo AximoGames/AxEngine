@@ -18,7 +18,7 @@ namespace Aximo.Engine.Audio
 
         public T[] ToArray()
         {
-            var samples = new List<T>((int)Length);
+            var samples = new List<T>((int)DataLength);
             while (!EndOfStream)
                 samples.Add(NextSample());
             return samples.ToArray();

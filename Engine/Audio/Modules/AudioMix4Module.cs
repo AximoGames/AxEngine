@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -21,16 +22,16 @@ namespace Aximo.Engine.Audio
         private Port[] InputChannels;
         private Port[] OutputChannels;
 
-        private AudioParameter[] VolumeParam;
+        const float DefaultVolume = 0.5f;
 
         public AudioMix4Module()
         {
             Name = "Amplifier";
 
-            ConfigureParameter("Volume1", 0, 0, 1, 1);
-            ConfigureParameter("Volume2", 1, 0, 1, 1);
-            ConfigureParameter("Volume3", 2, 0, 1, 1);
-            ConfigureParameter("Volume4", 3, 0, 1, 1);
+            ConfigureParameter("Volume1", 0, 0, 1, DefaultVolume);
+            ConfigureParameter("Volume2", 1, 0, 1, DefaultVolume);
+            ConfigureParameter("Volume3", 2, 0, 1, DefaultVolume);
+            ConfigureParameter("Volume4", 3, 0, 1, DefaultVolume);
 
             ConfigureInput("Left1", 0);
             ConfigureInput("Right1", 1);

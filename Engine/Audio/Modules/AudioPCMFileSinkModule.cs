@@ -40,7 +40,7 @@ namespace Aximo.Engine.Audio
         {
             if (Inputs[2].GetVoltage() >= 0.9f)
                 for (var i = 0; i < InputChannels.Length; i++)
-                    OutputStream.Write(PCMConversion.FloatToShort(InputChannels[i].GetVoltage() / 10));
+                    OutputStream.Write(PCMConversion.FloatToShort(InputChannels[i].GetVoltage() / 5f));
         }
     }
 }
