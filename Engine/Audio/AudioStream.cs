@@ -75,5 +75,10 @@ namespace Aximo.Engine.Audio
         public bool EndOfStream => Stream.Position >= Stream.Length;
         public long Position => Stream.Position - DataStartPosition;
         public long Length => Stream.Length - DataStartPosition;
+
+        public void SetPosition(long position)
+        {
+            Stream.Position = DataStartPosition + position;
+        }
     }
 }

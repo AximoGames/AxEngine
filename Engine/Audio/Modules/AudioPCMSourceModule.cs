@@ -32,6 +32,12 @@ namespace Aximo.Engine.Audio
         public event Action OnEndOfStream;
         private bool OnEndOfStreamRaised = false;
 
+        public void Play()
+        {
+            OnEndOfStreamRaised = false;
+            InputStream.SetPosition(0);
+        }
+
         public void SetInput(AudioStream stream)
         {
             InputStream = stream;

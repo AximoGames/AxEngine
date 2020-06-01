@@ -21,9 +21,13 @@ namespace Aximo.Engine.Audio
         private Port[] InputChannels;
         private Port[] OutputChannels;
 
+        private AudioParameter VolumeParam;
+
         public AudioAmplifierModule()
         {
             Name = "Amplifier";
+
+            VolumeParam = ConfigureParameter("Volume", 0, 0, 1, 1);
 
             ConfigureInput("Left", 0);
             ConfigureInput("Right", 1);
@@ -34,8 +38,6 @@ namespace Aximo.Engine.Audio
             OutputChannels = new Port[] { Outputs[0], Outputs[1] };
         }
 
-        public float Volume = 0.5f;
-
         [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override void Process()
         {
@@ -43,7 +45,7 @@ namespace Aximo.Engine.Audio
             var len = InputChannels.Length;
             var outputChannels = OutputChannels;
 
-            var volume = Volume;
+            var volume = VolumeParam.Value;
 
             for (var i = 0; i < len; i++)
                 outputChannels[i].SetVoltage(inputChannels[i].GetVoltage() * volume);
