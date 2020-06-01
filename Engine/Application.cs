@@ -87,7 +87,8 @@ namespace Aximo.Engine
         internal virtual void Init()
         {
             Process.GetCurrentProcess().PriorityBoostEnabled = true;
-            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
 
             WindowContext.Init(Config);
             RegisterWindowEvents();
