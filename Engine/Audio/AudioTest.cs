@@ -132,7 +132,7 @@ namespace Aximo.Engine.Audio
 
             var inMod = new AudioPCMSourceModule();
             inMod.SetInput(file);
-            inMod.OnEndOfStream += () => rack.Stop();
+            //inMod.OnEndOfStream += () => rack.Stop();
 
             //var outMod = new AudioPCMFileSinkModule();
             var outMod = new AudioPCMOpenALSinkModule();

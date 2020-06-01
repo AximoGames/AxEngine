@@ -73,6 +73,7 @@ namespace Aximo.Engine.Audio
         {
             Thread = new Thread(MainLoop);
             Thread.Priority = ThreadPriority.Highest;
+            Thread.IsBackground = false;
             Thread.Start();
         }
 

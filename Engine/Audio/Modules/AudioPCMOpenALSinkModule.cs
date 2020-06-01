@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using System.Transactions;
 using OpenToolkit.Audio;
 using OpenToolkit.Audio.OpenAL;
 using OpenToolkit.Graphics.ES20;
@@ -19,6 +20,8 @@ namespace Aximo.Engine.Audio
 
     public class AudioPCMOpenALSinkModule : AudioModule
     {
+        private static Serilog.ILogger Log = Aximo.Log.ForContext<AudioPCMOpenALSinkModule>();
+
         public void SetOutputStream()
         {
         }
@@ -45,7 +48,7 @@ namespace Aximo.Engine.Audio
         private short[] Buf;
         private long BufPosition;
         private int SampleSize = sizeof(short) * Channels;
-        private long BufSize = 1300 * Channels;
+        private long BufSize = 5000 * Channels;
 
         private const int Channels = 2;
 
@@ -67,70 +70,57 @@ namespace Aximo.Engine.Audio
         private int Bits = 16;
         private int Rate = 44100;
 
-        private bool IsPlaying;
-        private int BuffersInQueue = 0;
-
         private void PresentBuffer(short[] buf)
         {
-            Console.WriteLine("Got Buffer. Tick: " + Rack.Tick);
+            //Console.WriteLine("Got Buffer. Tick: " + Rack.Tick);
             //if (file.Channels == 1)
             //    len = sound_data.Length;
             //else
             var len = buf.Length * Channels;
 
-            if (!IsPlaying)
-            {
-                IsPlaying = true;
-                AL.BufferData(buffer, GetSoundFormat(Channels, Bits), buf, len, Rate);
-                AL.SourceQueueBuffers(source, 1, ref buffer);
-                CheckALError();
-                AL.SourcePlay(source);
-                CheckALError();
-            }
+            int nextBuf;
+            if (buffer == buffer1)
+                nextBuf = buffer2;
             else
+                nextBuf = buffer1;
+            buffer = nextBuf;
+
+            int processed;
+            int queued = 2;
+            //if (queued < 2)
+            //    break;
+
+            while (true)
             {
-                int nextBuf;
-                if (buffer == buffer1)
-                    nextBuf = buffer2;
-                else
-                    nextBuf = buffer1;
+                AL.GetSource(source, ALGetSourcei.BuffersProcessed, out processed);
+                AL.GetSource(source, ALGetSourcei.BuffersQueued, out queued);
 
-                if (BuffersInQueue == 0)
-                {
-                    AL.BufferData(nextBuf, GetSoundFormat(Channels, Bits), buf, len, Rate);
-                    CheckALError();
-                    AL.SourceQueueBuffers(source, 1, ref nextBuf);
-                    CheckALError();
-                    BuffersInQueue = 1;
-                }
-                else
-                {
-                    int processed;
-                    int queued;
-                    do
-                    {
-                        AL.GetSource(source, ALGetSourcei.BuffersProcessed, out processed);
-                        AL.GetSource(source, ALGetSourcei.BuffersQueued, out queued);
-                        Thread.Sleep(1);
-                        Console.Write(" " + processed + "-" + queued);
-                    }
-                    while (processed == 0);
+                if (queued < 2 || (processed > 0 && queued == 2))
+                    break;
 
-                    AL.SourceUnqueueBuffers(source, 1, ref nextBuf);
-                    AL.BufferData(nextBuf, GetSoundFormat(Channels, Bits), buf, len, Rate);
-                    AL.SourceQueueBuffers(source, 1, ref nextBuf);
-
-                    int state;
-                    AL.GetSource(source, ALGetSourcei.SourceState, out state);
-                    if ((ALSourceState)state != ALSourceState.Playing)
-                    {
-                        var s = "";
-                        AL.SourcePlay(source);
-                    }
-
-                    CheckALError();
-                }
+                Thread.Sleep(1);
             }
+
+            if (queued == 2 && processed == 2)
+                Log.Error("AUDIO BUFFER UNDERRUN");
+
+            if (queued >= 2)
+                AL.SourceUnqueueBuffers(source, 1, ref nextBuf);
+
+            CheckALError();
+            AL.BufferData(nextBuf, GetSoundFormat(Channels, Bits), buf, len, Rate);
+            CheckALError();
+            AL.SourceQueueBuffers(source, 1, ref nextBuf);
+            CheckALError();
+
+            int state;
+            AL.GetSource(source, ALGetSourcei.SourceState, out state);
+            if ((ALSourceState)state != ALSourceState.Playing)
+                AL.SourcePlay(source);
+
+            AL.GetSource(source, ALGetSourcei.BuffersProcessed, out processed);
+            AL.GetSource(source, ALGetSourcei.BuffersQueued, out queued);
+
             CheckALError();
         }
 

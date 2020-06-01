@@ -3,6 +3,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using Aximo.Engine.Components.Geometry;
@@ -85,6 +86,9 @@ namespace Aximo.Engine
 
         internal virtual void Init()
         {
+            Process.GetCurrentProcess().PriorityBoostEnabled = true;
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+
             WindowContext.Init(Config);
             RegisterWindowEvents();
 
