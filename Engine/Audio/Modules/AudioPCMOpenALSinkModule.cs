@@ -48,7 +48,7 @@ namespace Aximo.Engine.Audio
         private short[] Buf;
         private long BufPosition;
         private int SampleSize = sizeof(short) * Channels;
-        private long BufSize = 5000 * Channels;
+        private long BufSize = 3000 * Channels;
 
         private const int Channels = 2;
 
@@ -178,12 +178,12 @@ namespace Aximo.Engine.Audio
         {
             EnsureBuffer();
 
-            if (Inputs[2].GetVoltage() < 0.9f)
-                for (var i = 0; i < InputChannels.Length; i++)
-                    WritePCMSample(0);
-            else
+            if (!Inputs[2].IsConnected || Inputs[2].GetVoltage() >= 0.9f)
                 for (var i = 0; i < InputChannels.Length; i++)
                     WritePCMSample(PCMConversion.FloatToShort(InputChannels[i].GetVoltage() / 10));
+            else
+                for (var i = 0; i < InputChannels.Length; i++)
+                    WritePCMSample(0);
         }
 
         private void WritePCMSample(short sample)

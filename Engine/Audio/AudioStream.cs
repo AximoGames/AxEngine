@@ -58,6 +58,7 @@ namespace Aximo.Engine.Audio
         private protected AudioStream(Stream stream)
         {
             Stream = stream;
+            Length = stream.Length; // TODO: If real stream, set Length to 0 (or -1)
         }
 
         public static AudioStream Load(Stream stream)
@@ -72,9 +73,10 @@ namespace Aximo.Engine.Audio
             return Load(File.OpenRead(filePath));
         }
 
-        public bool EndOfStream => Stream.Position >= Stream.Length;
+        public bool EndOfStream => Stream.Position >= Length;
         public long Position => Stream.Position - DataStartPosition;
-        public long Length => Stream.Length - DataStartPosition;
+
+        public long Length;
 
         public void SetPosition(long position)
         {

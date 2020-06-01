@@ -51,11 +51,13 @@ namespace Aximo.Engine.Audio
                 Channels[i] = new Channel(i, this);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public void SetVoltage(float voltage, int channel = 0)
         {
             Channels[channel].Voltage = voltage;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public float GetVoltage(int channel = 0)
         {
             return Channels[channel].Voltage;

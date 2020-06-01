@@ -33,11 +33,13 @@ namespace Aximo.Engine.Audio
             Value = min;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public void SetValue(float value)
         {
             Value = MathF.Max(MathF.Min(value, Max), Min);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public float GetValue() => Value;
 
     }

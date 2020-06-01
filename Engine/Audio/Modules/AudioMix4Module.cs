@@ -34,12 +34,12 @@ namespace Aximo.Engine.Audio
 
             ConfigureInput("Left1", 0);
             ConfigureInput("Right1", 1);
-            ConfigureInput("Left1", 2);
-            ConfigureInput("Right1", 3);
-            ConfigureInput("Left1", 4);
-            ConfigureInput("Right1", 5);
-            ConfigureInput("Left1", 6);
-            ConfigureInput("Right1", 7);
+            ConfigureInput("Left2", 2);
+            ConfigureInput("Right2", 3);
+            ConfigureInput("Left3", 4);
+            ConfigureInput("Right3", 5);
+            ConfigureInput("Left4", 6);
+            ConfigureInput("Right4", 7);
 
             ConfigureOutput("Left", 0);
             ConfigureOutput("Right", 1);
@@ -61,11 +61,18 @@ namespace Aximo.Engine.Audio
             tmpOut[1] = 0;
             var parameters = Parameters;
 
-            for (var leftIdx = 0; leftIdx < len; leftIdx += 2)
+            for (var i = 0; i < len; i++)
             {
-                var rightIdx = leftIdx + 1;
-                tmpOut[leftIdx] += inputChannels[leftIdx].GetVoltage() * parameters[leftIdx].Value;
-                tmpOut[rightIdx] += inputChannels[rightIdx].GetVoltage() * parameters[rightIdx].Value;
+                var param = parameters[i];
+                var volume = param.Value;
+
+                var idx = i * 2;
+                var input = inputChannels[idx];
+                tmpOut[0] += input.GetVoltage() * volume;
+
+                idx++;
+                input = inputChannels[idx];
+                tmpOut[1] += input.GetVoltage() * volume;
             }
 
             outputChannels[0].SetVoltage(tmpOut[0]);
