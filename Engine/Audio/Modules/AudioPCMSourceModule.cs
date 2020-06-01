@@ -64,16 +64,9 @@ namespace Aximo.Engine.Audio
             {
                 var inputStreamChannels = InputStream.Channels;
                 for (var i = 0; i < inputStreamChannels; i++)
-                    outputs[i].SetVoltage(ShortToFloat(Stream16.NextSample()) * 10);
+                    outputs[i].SetVoltage(PCMConversion.ShortToFloat(Stream16.NextSample()) * 10);
             }
             outputs[2].SetVoltage(Playing ? 1 : 0);
-        }
-
-        // http://blog.bjornroche.com/2009/12/int-float-int-its-jungle-out-there.html
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        private static float ShortToFloat(short data)
-        {
-            return (data + 0.5f) / (0x7FFF + 0.5f);
         }
     }
 }

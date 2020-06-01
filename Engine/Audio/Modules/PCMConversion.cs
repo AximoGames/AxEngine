@@ -15,32 +15,13 @@ using OpenToolkit.Audio.OpenAL;
 namespace Aximo.Engine.Audio
 {
 
-    public class AudioPCMSinkModule : AudioModule
+    public static class PCMConversion
     {
-        public AudioSinkStream OutputStream;
-
-        public void SetOutputStream(AudioSinkStream stream)
+        // http://blog.bjornroche.com/2009/12/int-float-int-its-jungle-out-there.html
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static float ShortToFloat(short data)
         {
-            OutputStream = stream;
-        }
-
-        public AudioPCMSinkModule()
-        {
-            Name = "PCM Sink";
-            ConfigureInput("Left", 0);
-            ConfigureInput("Right", 1);
-            ConfigureInput("Gate", 2);
-            InputChannels = new Port[] { Inputs[0], Inputs[1] };
-        }
-
-        private Port[] InputChannels;
-
-        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-        public override void Process()
-        {
-            if (Inputs[2].GetVoltage() >= 0.9f)
-                for (var i = 0; i < InputChannels.Length; i++)
-                    OutputStream.Write(FloatToShort(InputChannels[i].GetVoltage() / 10));
+            return (data + 0.5f) / (0x7FFF + 0.5f);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
@@ -54,4 +35,5 @@ namespace Aximo.Engine.Audio
             return (short)((data * (0x7FFF + 0.5f)) - 0.5f);
         }
     }
+
 }

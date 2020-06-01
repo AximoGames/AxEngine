@@ -103,19 +103,24 @@ namespace Aximo.Engine.Audio
             }
         }
 
+        private class ALBuffer
+        {
+            public int Handle;
+        }
+
         public static void Main_()
         {
-            var devices = ALC.GetStringList(GetEnumerationStringList.DeviceSpecifier);
-            Console.WriteLine($"Devices: {string.Join(", ", devices)}");
+            //var devices = ALC.GetStringList(GetEnumerationStringList.DeviceSpecifier);
+            //Console.WriteLine($"Devices: {string.Join(", ", devices)}");
 
-            var device = ALC.OpenDevice(devices.First());
-            var con = ALC.CreateContext(device, (int[])null);
-            ALC.MakeContextCurrent(con);
-            CheckALError();
+            //var device = ALC.OpenDevice(devices.First());
+            //var con = ALC.CreateContext(device, (int[])null);
+            //ALC.MakeContextCurrent(con);
+            //CheckALError();
 
-            int buffer = AL.GenBuffer();
-            int source = AL.GenSource();
-            int state;
+            //int buffer = AL.GenBuffer();
+            //int source = AL.GenSource();
+            //int state;
 
             //int channels, bits_per_sample, sample_rate;
             //var sound_data = LoadWave(File.Open(Filename, FileMode.Open), out channels, out bits_per_sample, out sample_rate);
@@ -129,9 +134,10 @@ namespace Aximo.Engine.Audio
             inMod.SetInput(file);
             inMod.OnEndOfStream += () => rack.Stop();
 
-            var outMod = new AudioPCMSinkModule();
+            //var outMod = new AudioPCMFileSinkModule();
+            var outMod = new AudioPCMOpenALSinkModule();
             var outFile = new AudioSinkStream();
-            outMod.SetOutputStream(outFile);
+            //outMod.SetOutputStream(outFile);
 
             var ampMod = new AudioAmplifierModule();
 
@@ -151,39 +157,39 @@ namespace Aximo.Engine.Audio
 
             //var file = (AudioInt16Stream)AudioStream.Load(Filename);
             //var sound_data = file.ToArray();
-            var sound_data = d;
-            int len;
-            if (file.Channels == 1)
-                len = sound_data.Length;
-            else
-                len = sound_data.Length * 2;
+            //var sound_data = d;
+            //int len;
+            //if (file.Channels == 1)
+            //    len = sound_data.Length;
+            //else
+            //    len = sound_data.Length * 2;
 
-            AL.BufferData(buffer, GetSoundFormat(file.Channels, file.Bits), sound_data, len, file.Rate);
+            //AL.BufferData(buffer, GetSoundFormat(file.Channels, file.Bits), sound_data, len, file.Rate);
 
-            AL.Source(source, ALSourcei.Buffer, buffer);
-            CheckALError();
-            AL.SourcePlay(source);
-            CheckALError();
+            //AL.Source(source, ALSourcei.Buffer, buffer);
+            //CheckALError();
+            //AL.SourcePlay(source);
+            //CheckALError();
 
-            Trace.Write("Playing");
+            //Trace.Write("Playing");
 
-            var time = DateTime.UtcNow;
+            //var time = DateTime.UtcNow;
 
-            // Query the source to find out when it stops playing.
-            do
-            {
-                Thread.Sleep(250);
-                Trace.Write(".");
-                AL.GetSource(source, ALGetSourcei.SourceState, out state);
-            }
-            while ((ALSourceState)state == ALSourceState.Playing);
-            var duration = DateTime.UtcNow - time;
+            //// Query the source to find out when it stops playing.
+            //do
+            //{
+            //    Thread.Sleep(250);
+            //    Trace.Write(".");
+            //    AL.GetSource(source, ALGetSourcei.SourceState, out state);
+            //}
+            //while ((ALSourceState)state == ALSourceState.Playing);
+            //var duration = DateTime.UtcNow - time;
 
-            Trace.WriteLine($"Duration {duration}");
+            //Trace.WriteLine($"Duration {duration}");
 
-            AL.SourceStop(source);
-            AL.DeleteSource(source);
-            AL.DeleteBuffer(buffer);
+            //AL.SourceStop(source);
+            //AL.DeleteSource(source);
+            //AL.DeleteBuffer(buffer);
         }
 
         public static void CheckALError()

@@ -19,6 +19,7 @@ namespace Aximo.Engine.Audio
         public void AddModule(AudioModule module)
         {
             Modules = Modules.AppendElement(module);
+            module.Rack = this;
         }
 
         public void AddCable(AudioCable cable)

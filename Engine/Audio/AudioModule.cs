@@ -15,6 +15,7 @@ namespace Aximo.Engine.Audio
 {
     public abstract class AudioModule
     {
+        internal AudioRack Rack;
         public Port[] Outputs = Array.Empty<Port>();
         public Port[] Inputs = Array.Empty<Port>();
 
