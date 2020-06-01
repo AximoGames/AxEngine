@@ -151,9 +151,9 @@ namespace Aximo.Engine.Audio
             rack.AddCable(ampMod.GetOutput("Right"), outMod.GetInput("Right"));
             rack.AddCable(inMod.GetOutput("Gate"), outMod.GetInput("Gate"));
 
-            rack.MainLoop();
+            rack.StartThread();
 
-            var d = outFile.ToArray();
+            //var d = outFile.ToArray();
 
             //var file = (AudioInt16Stream)AudioStream.Load(Filename);
             //var sound_data = file.ToArray();

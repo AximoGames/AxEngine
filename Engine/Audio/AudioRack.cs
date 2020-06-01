@@ -68,6 +68,14 @@ namespace Aximo.Engine.Audio
             }
         }
 
+        private Thread Thread;
+        public void StartThread()
+        {
+            Thread = new Thread(MainLoop);
+            Thread.Priority = ThreadPriority.Highest;
+            Thread.Start();
+        }
+
         public void Stop()
         {
             Running = false;
