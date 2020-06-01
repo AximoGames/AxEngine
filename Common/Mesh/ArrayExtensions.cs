@@ -29,5 +29,13 @@ namespace Aximo
             ar[ar.Length - 1] = element;
             return ar;
         }
+
+        public static T[] RemoveElement<T>(this T[] input, T element)
+        {
+            // TODO: Don't use List<>
+            var list = new List<T>(input);
+            list.Remove(element);
+            return list.ToArray();
+        }
     }
 }

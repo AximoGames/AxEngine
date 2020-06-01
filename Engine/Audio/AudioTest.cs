@@ -125,7 +125,7 @@ namespace Aximo.Engine.Audio
             var file = (AudioInt16Stream)AudioStream.Load(Filename);
             var rack = new AudioRack();
 
-            var inMod = new AudioPCMInputModule();
+            var inMod = new AudioPCMSourceModule();
             inMod.SetInput(file);
             inMod.OnEndOfStream += () => rack.Stop();
 
@@ -139,11 +139,11 @@ namespace Aximo.Engine.Audio
             rack.AddModule(outMod);
             rack.AddModule(ampMod);
 
-            rack.AddCable(new AudioCable(inMod.GetOutput("Left"), ampMod.GetInput("Left")));
-            rack.AddCable(new AudioCable(inMod.GetOutput("Right"), ampMod.GetInput("Right")));
-            rack.AddCable(new AudioCable(ampMod.GetOutput("Left"), outMod.GetInput("Left")));
-            rack.AddCable(new AudioCable(ampMod.GetOutput("Right"), outMod.GetInput("Right")));
-            rack.AddCable(new AudioCable(inMod.GetOutput("Gate"), outMod.GetInput("Gate")));
+            rack.AddCable(inMod.GetOutput("Left"), ampMod.GetInput("Left"));
+            rack.AddCable(inMod.GetOutput("Right"), ampMod.GetInput("Right"));
+            rack.AddCable(ampMod.GetOutput("Left"), outMod.GetInput("Left"));
+            rack.AddCable(ampMod.GetOutput("Right"), outMod.GetInput("Right"));
+            rack.AddCable(inMod.GetOutput("Gate"), outMod.GetInput("Gate"));
 
             rack.MainLoop();
 

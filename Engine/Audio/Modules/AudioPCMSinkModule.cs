@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using OpenToolkit.Audio;
@@ -25,14 +26,16 @@ namespace Aximo.Engine.Audio
 
         public AudioPCMSinkModule()
         {
-            SetupInput("Left", 0);
-            SetupInput("Right", 1);
-            SetupInput("Gate", 2);
+            Name = "PCM Sink";
+            ConfigureInput("Left", 0);
+            ConfigureInput("Right", 1);
+            ConfigureInput("Gate", 2);
             InputChannels = new Port[] { Inputs[0], Inputs[1] };
         }
 
         private Port[] InputChannels;
 
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override void Process()
         {
             if (Inputs[2].GetVoltage() >= 0.9f)
@@ -40,6 +43,7 @@ namespace Aximo.Engine.Audio
                     OutputStream.Write(FloatToShort(InputChannels[i].GetVoltage() / 10));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static short FloatToShort(float data)
         {
             if (data > 1)

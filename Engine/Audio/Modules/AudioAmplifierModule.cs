@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using GLib;
@@ -22,20 +23,30 @@ namespace Aximo.Engine.Audio
 
         public AudioAmplifierModule()
         {
-            SetupInput("Left", 0);
-            SetupInput("Right", 1);
-            SetupOutput("Left", 0);
-            SetupOutput("Right", 1);
+            Name = "Amplifier";
+
+            ConfigureInput("Left", 0);
+            ConfigureInput("Right", 1);
+            ConfigureOutput("Left", 0);
+            ConfigureOutput("Right", 1);
+
             InputChannels = new Port[] { Inputs[0], Inputs[1] };
             OutputChannels = new Port[] { Outputs[0], Outputs[1] };
         }
 
         public float Volume = 0.5f;
 
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override void Process()
         {
-            for (var i = 0; i < InputChannels.Length; i++)
-                OutputChannels[i].SetVoltage(InputChannels[i].GetVoltage() * Volume);
+            var inputChannels = InputChannels;
+            var len = InputChannels.Length;
+            var outputChannels = OutputChannels;
+
+            var volume = Volume;
+
+            for (var i = 0; i < len; i++)
+                outputChannels[i].SetVoltage(inputChannels[i].GetVoltage() * volume);
         }
     }
 }

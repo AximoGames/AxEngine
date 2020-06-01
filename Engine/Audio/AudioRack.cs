@@ -10,22 +10,6 @@ using NetCoreAudio;
 
 namespace Aximo.Engine.Audio
 {
-    public class AudioCable
-    {
-        public Port Input;
-        public Port Output;
-
-        public AudioCable(Port input, Port output)
-        {
-            Input = input;
-            Output = output;
-        }
-
-        public void Process()
-        {
-            Output.SetVoltage(Input.GetVoltage());
-        }
-    }
 
     public class AudioRack
     {
@@ -40,16 +24,36 @@ namespace Aximo.Engine.Audio
         public void AddCable(AudioCable cable)
         {
             Cables = Cables.AppendElement(cable);
+            cable.CableInput.AddCable(cable);
+            cable.CableOutput.AddCable(cable);
+        }
+
+        public void AddCable(Port moduleOutput, Port moduleInput)
+        {
+            AddCable(new AudioCable(moduleOutput, moduleInput));
+        }
+
+        public void RemoveCable(AudioCable cable)
+        {
+            Cables = Cables.RemoveElement(cable);
+            cable.CableInput.RemoveCable(cable);
+            cable.CableOutput.RemoveCable(cable);
         }
 
         public long Tick;
 
         public void Process()
         {
-            for (var i = 0; i < Modules.Length; i++)
-                Modules[i].Process();
-            for (var i = 0; i < Cables.Length; i++)
-                Cables[i].Process();
+            var modules = Modules;
+            var len = modules.Length;
+            for (var i = 0; i < len; i++)
+                modules[i].Process();
+
+            var cables = Cables;
+            len = cables.Length;
+            for (var i = 0; i < len; i++)
+                cables[i].Process();
+
             Tick++;
         }
 

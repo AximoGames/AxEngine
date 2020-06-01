@@ -23,23 +23,23 @@ namespace Aximo.Engine.Audio
 
         public string Name;
 
-        public virtual void Process() { }
+        public abstract void Process();
 
-        protected Port SetupOutput(string name, int i = 0)
+        protected Port ConfigureOutput(string name, int i = 0)
         {
             Outputs = Outputs.EnsureSize(i + 1);
             if (Outputs[i] == null)
-                Outputs[i] = new Port();
+                Outputs[i] = new Port(this, PortDirection.Output, name);
             var port = Outputs[i];
             port.Name = name;
             return port;
         }
 
-        protected Port SetupInput(string name, int i = 0)
+        protected Port ConfigureInput(string name, int i = 0)
         {
             Inputs = Inputs.EnsureSize(i + 1);
             if (Inputs[i] == null)
-                Inputs[i] = new Port();
+                Inputs[i] = new Port(this, PortDirection.Input, name);
             var port = Inputs[i];
             port.Name = name;
             return port;

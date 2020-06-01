@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using OpenToolkit.Audio;
@@ -14,12 +15,19 @@ using OpenToolkit.Audio.OpenAL;
 namespace Aximo.Engine.Audio
 {
 
-    public class AudioPCMInputModule : AudioModule
+    public class AudioPCMSourceModule : AudioModule
     {
         public AudioStream InputStream;
         private AudioInt16Stream Stream16;
 
-        private bool Playing => !Stream16.EndOfStream; // TODO
+        private bool Playing
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return !Stream16.EndOfStream; // TODO
+            }
+        }
 
         public event Action OnEndOfStream;
         private bool OnEndOfStreamRaised = false;
@@ -30,22 +38,18 @@ namespace Aximo.Engine.Audio
             Stream16 = (AudioInt16Stream)stream;
         }
 
-        public AudioPCMInputModule()
+        public AudioPCMSourceModule()
         {
-            SetupOutput("Left", 0);
-            SetupOutput("Right", 1);
-            SetupOutput("Gate", 2);
+            Name = "PCM Source";
+            ConfigureOutput("Left", 0);
+            ConfigureOutput("Right", 1);
+            ConfigureOutput("Gate", 2);
         }
 
-
-
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override void Process()
         {
-            if (InputStream.Position >= 314540)
-            {
-                var s = "";
-            }
-
+            var outputs = Outputs;
             if (InputStream.EndOfStream)
             {
                 if (!OnEndOfStreamRaised)
@@ -53,21 +57,20 @@ namespace Aximo.Engine.Audio
                     OnEndOfStreamRaised = true;
                     OnEndOfStream?.Invoke();
                 }
-                Outputs[0].SetVoltage(0);
-                Outputs[1].SetVoltage(0);
+                outputs[0].SetVoltage(0);
+                outputs[1].SetVoltage(0);
             }
             else
             {
-                for (var i = 0; i < InputStream.Channels; i++)
-                {
-                    Outputs[i].SetVoltage(ShortToFloat(Stream16.NextSample()) * 10);
-                }
+                var inputStreamChannels = InputStream.Channels;
+                for (var i = 0; i < inputStreamChannels; i++)
+                    outputs[i].SetVoltage(ShortToFloat(Stream16.NextSample()) * 10);
             }
-            Outputs[2].SetVoltage(Playing ? 1 : 0);
+            outputs[2].SetVoltage(Playing ? 1 : 0);
         }
 
         // http://blog.bjornroche.com/2009/12/int-float-int-its-jungle-out-there.html
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         private static float ShortToFloat(short data)
         {
             return (data + 0.5f) / (0x7FFF + 0.5f);
