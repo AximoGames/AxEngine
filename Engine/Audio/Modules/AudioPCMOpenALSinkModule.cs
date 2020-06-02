@@ -22,6 +22,9 @@ namespace Aximo.Engine.Audio
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<AudioPCMOpenALSinkModule>();
 
+        private const int BufferCount = 2;
+        private long BufSize = 3000 * Channels;
+
         public void SetOutputStream()
         {
         }
@@ -48,7 +51,6 @@ namespace Aximo.Engine.Audio
         private short[] Buf;
         private long BufPosition;
         private int SampleSize = sizeof(short) * Channels;
-        private long BufSize = 3000 * Channels;
 
         private const int Channels = 2;
 
@@ -79,15 +81,8 @@ namespace Aximo.Engine.Audio
             //else
             var len = buf.Length * Channels;
 
-            int nextBuf;
-            if (buffer == buffer1)
-                nextBuf = buffer2;
-            else
-                nextBuf = buffer1;
-            buffer = nextBuf;
-
             int processed;
-            int queued = 2;
+            int queued = BufferCount;
             //if (queued < 2)
             //    break;
 
@@ -96,17 +91,25 @@ namespace Aximo.Engine.Audio
                 AL.GetSource(source, ALGetSourcei.BuffersProcessed, out processed);
                 AL.GetSource(source, ALGetSourcei.BuffersQueued, out queued);
 
-                if (queued < 2 || (processed > 0 && queued == 2))
+                if (queued < BufferCount || (processed > 0 && queued == BufferCount))
                     break;
 
                 Thread.Sleep(1);
             }
 
-            if (queued == 2 && processed == 2)
+            if (queued == BufferCount && processed == BufferCount)
                 Log.Error("AUDIO BUFFER UNDERRUN");
 
-            if (queued >= 2)
+            int nextBuf = 0;
+            if (queued >= BufferCount)
+            {
                 AL.SourceUnqueueBuffers(source, 1, ref nextBuf);
+            }
+            else
+            {
+                nextBuf = buffers[bufferIndex++];
+                buffer = nextBuf;
+            }
 
             CheckALError();
             AL.BufferData(nextBuf, GetSoundFormat(Channels, Bits), buf, len, Rate);
@@ -136,8 +139,8 @@ namespace Aximo.Engine.Audio
             }
         }
 
-        private int buffer1;
-        private int buffer2;
+        private int[] buffers = new int[BufferCount];
+        private int bufferIndex = 0;
         private int buffer;
         private int source;
 
@@ -151,9 +154,10 @@ namespace Aximo.Engine.Audio
             ALC.MakeContextCurrent(con);
             CheckALError();
 
-            buffer1 = AL.GenBuffer();
-            buffer2 = AL.GenBuffer();
-            buffer = buffer1;
+            for (var i = 0; i < BufferCount; i++)
+                buffers[i] = AL.GenBuffer();
+
+            buffer = buffers[0];
             source = AL.GenSource();
             int state;
         }
@@ -172,7 +176,8 @@ namespace Aximo.Engine.Audio
         {
             AL.SourceStop(source);
             AL.DeleteSource(source);
-            AL.DeleteBuffer(buffer);
+            for (var i = 0; i < BufferCount; i++)
+                AL.DeleteBuffer(buffers[i]);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveOptimization)]

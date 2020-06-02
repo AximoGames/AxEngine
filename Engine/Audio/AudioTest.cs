@@ -22,9 +22,17 @@ namespace Aximo.Engine.Audio
 
             var inMod = new AudioPCMSourceModule();
             inMod.SetInput(AudioStream.Load(Filename));
+            inMod.OnEndOfStream += () =>
+            {
+                inMod.Play();
+            };
 
             var inMod2 = new AudioPCMSourceModule();
             inMod2.SetInput(AudioStream.Load(Filename));
+            inMod2.OnEndOfStream += () =>
+            {
+                inMod2.Play();
+            };
 
             var outMod = new AudioPCMOpenALSinkModule();
             var outFile = new AudioSinkStream();
@@ -47,8 +55,9 @@ namespace Aximo.Engine.Audio
             //rack.AddCable(inMod.GetOutput("Gate"), outMod.GetInput("Gate"));
 
             rack.StartThread();
-            Thread.Sleep(1000);
-            inMod2.Play();
+            inMod.Play();
+            //Thread.Sleep(1000);
+            //inMod2.Play();
         }
     }
 }
