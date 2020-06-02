@@ -2,18 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using System.Runtime;
 using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using System.Transactions;
-using OpenToolkit.Audio;
 using OpenToolkit.Audio.OpenAL;
-using OpenToolkit.Graphics.ES20;
-using OpenToolkit.Windowing.GraphicsLibraryFramework;
 
 namespace Aximo.Engine.Audio
 {
@@ -22,12 +15,19 @@ namespace Aximo.Engine.Audio
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<AudioPCMOpenALSinkModule>();
 
-        private const int BufferCount = 2;
-        private long BufSize = 3000 * Channels;
+        /// <summary>
+        /// Buffer size in miliseconds
+        /// </summary>
+        public const int DefaultBufferSizeMiliseconds = 60;
+        public const int DefaultBufferCount = 8;
+        public const int DefaultFrequency = 44100;
+        public const int Bits = 16;
+        public const int Channels = 2;
 
-        public void SetOutputStream()
-        {
-        }
+        private int BufferSizeMiliseconds;
+        private int BufferCount;
+        private int BufferSize;
+        private int Frequency;
 
         public AudioPCMOpenALSinkModule()
         {
@@ -37,97 +37,64 @@ namespace Aximo.Engine.Audio
             ConfigureInput("Gate", 2);
             InputChannels = new Port[] { Inputs[0], Inputs[1] };
 
-            Buf1 = new short[BufSize];
-            Buf2 = new short[BufSize];
-            Buf = Buf1;
-
             Init();
+        }
+
+        private int[] BufferHandles;
+        private int BufferHandleIndex = 0;
+        private int SourceHandle;
+
+        private void Init()
+        {
+            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+
+            BufferSizeMiliseconds = DefaultBufferSizeMiliseconds;
+            BufferCount = DefaultBufferCount;
+
+            Frequency = DefaultFrequency;
+            BufferSize = (int)(((Frequency / 1000f) * BufferSizeMiliseconds) / BufferCount) * Channels;
+            BufferHandles = new int[BufferCount];
+
+            Log.Info("Audio Delay: {delay}, Buffers: {buffers}, Frames per Buffer: {samples}", BufferSizeMiliseconds, BufferCount, BufferSize / 2);
+
+            Data1 = new short[BufferSize];
+            Data2 = new short[BufferSize];
+            Data = Data1;
+
+            var devices = ALC.GetStringList(GetEnumerationStringList.DeviceSpecifier);
+            Console.WriteLine($"Devices: {string.Join(", ", devices)}");
+
+            var device = ALC.OpenDevice(devices.First());
+            var con = ALC.CreateContext(device, (int[])null);
+            ALC.MakeContextCurrent(con);
+            CheckALError();
+
+            Format = GetSoundFormat(Channels, Bits);
+
+            for (var i = 0; i < BufferCount; i++)
+                BufferHandles[i] = AL.GenBuffer();
+
+            SourceHandle = AL.GenSource();
+            int state;
+        }
+
+        private void Dispose()
+        {
+            AL.SourceStop(SourceHandle);
+            AL.DeleteSource(SourceHandle);
+            for (var i = 0; i < BufferCount; i++)
+                AL.DeleteBuffer(BufferHandles[i]);
         }
 
         private Port[] InputChannels;
 
-        private short[] Buf1;
-        private short[] Buf2;
-        private short[] Buf;
-        private long BufPosition;
-        private int SampleSize = sizeof(short) * Channels;
+        private short[] Data1;
+        private short[] Data2;
+        private short[] Data;
+        private long DataPosition;
 
-        private const int Channels = 2;
-
-        private void EnsureBuffer()
-        {
-            if (BufPosition >= BufSize)
-            {
-                PresentBuffer(Buf);
-
-                if (Buf == Buf1)
-                    Buf = Buf2;
-                else
-                    Buf = Buf1;
-
-                BufPosition = 0;
-            }
-        }
-
-        private int Bits = 16;
-        private int Rate = 44100;
-        private long BuffersProcessed = 0;
-
-        private void PresentBuffer(short[] buf)
-        {
-            //Console.WriteLine("Got Buffer. Tick: " + Rack.Tick);
-            //if (file.Channels == 1)
-            //    len = sound_data.Length;
-            //else
-            var len = buf.Length * Channels;
-
-            int processed;
-            int queued = BufferCount;
-            //if (queued < 2)
-            //    break;
-
-            while (true)
-            {
-                AL.GetSource(source, ALGetSourcei.BuffersProcessed, out processed);
-                AL.GetSource(source, ALGetSourcei.BuffersQueued, out queued);
-
-                if (queued < BufferCount || (processed > 0 && queued == BufferCount))
-                    break;
-
-                Thread.Sleep(1);
-            }
-
-            if (queued == BufferCount && processed == BufferCount)
-                Log.Error("AUDIO BUFFER UNDERRUN");
-
-            int nextBuf = 0;
-            if (queued >= BufferCount)
-            {
-                AL.SourceUnqueueBuffers(source, 1, ref nextBuf);
-            }
-            else
-            {
-                nextBuf = buffers[bufferIndex++];
-                buffer = nextBuf;
-            }
-
-            CheckALError();
-            AL.BufferData(nextBuf, GetSoundFormat(Channels, Bits), buf, len, Rate);
-            CheckALError();
-            AL.SourceQueueBuffers(source, 1, ref nextBuf);
-            CheckALError();
-
-            int state;
-            AL.GetSource(source, ALGetSourcei.SourceState, out state);
-            if ((ALSourceState)state != ALSourceState.Playing)
-                AL.SourcePlay(source);
-
-            AL.GetSource(source, ALGetSourcei.BuffersProcessed, out processed);
-            AL.GetSource(source, ALGetSourcei.BuffersQueued, out queued);
-
-            CheckALError();
-            BuffersProcessed++;
-        }
+        public long BuffersProcessed = 0;
+        private ALFormat Format;
 
         public static ALFormat GetSoundFormat(int channels, int bits)
         {
@@ -139,29 +106,6 @@ namespace Aximo.Engine.Audio
             }
         }
 
-        private int[] buffers = new int[BufferCount];
-        private int bufferIndex = 0;
-        private int buffer;
-        private int source;
-
-        private void Init()
-        {
-            var devices = ALC.GetStringList(GetEnumerationStringList.DeviceSpecifier);
-            Console.WriteLine($"Devices: {string.Join(", ", devices)}");
-
-            var device = ALC.OpenDevice(devices.First());
-            var con = ALC.CreateContext(device, (int[])null);
-            ALC.MakeContextCurrent(con);
-            CheckALError();
-
-            for (var i = 0; i < BufferCount; i++)
-                buffers[i] = AL.GenBuffer();
-
-            buffer = buffers[0];
-            source = AL.GenSource();
-            int state;
-        }
-
         public static void CheckALError()
         {
             ALError error = AL.GetError();
@@ -170,14 +114,6 @@ namespace Aximo.Engine.Audio
                 var msg = $"ALError: {AL.GetErrorString(error)}";
                 throw new Exception(msg);
             }
-        }
-
-        private void Dispose()
-        {
-            AL.SourceStop(source);
-            AL.DeleteSource(source);
-            for (var i = 0; i < BufferCount; i++)
-                AL.DeleteBuffer(buffers[i]);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveOptimization)]
@@ -195,8 +131,65 @@ namespace Aximo.Engine.Audio
 
         private void WritePCMSample(short sample)
         {
-            Buf[BufPosition] = sample;
-            BufPosition += 1;
+            Data[DataPosition] = sample;
+            DataPosition += 1;
+        }
+
+        private void EnsureBuffer()
+        {
+            if (DataPosition >= BufferSize)
+            {
+                PresentBuffer(Data);
+
+                if (Data == Data1)
+                    Data = Data2;
+                else
+                    Data = Data1;
+
+                DataPosition = 0;
+            }
+        }
+
+        private void PresentBuffer(short[] buf)
+        {
+            var len = buf.Length * Channels;
+
+            int processed;
+            int queued;
+
+            while (true)
+            {
+                AL.GetSource(SourceHandle, ALGetSourcei.BuffersProcessed, out processed);
+                AL.GetSource(SourceHandle, ALGetSourcei.BuffersQueued, out queued);
+
+                if (queued < BufferCount || (processed > 0 && queued == BufferCount))
+                    break;
+
+                Thread.Sleep((BufferSizeMiliseconds / BufferCount) - 1);
+            }
+
+            if (queued == BufferCount && processed == BufferCount)
+                Log.Error("AUDIO BUFFER UNDERRUN");
+
+            int nextBufferHandle = 0;
+            if (queued >= BufferCount)
+                AL.SourceUnqueueBuffers(SourceHandle, 1, ref nextBufferHandle);
+            else
+                nextBufferHandle = BufferHandles[BufferHandleIndex++];
+
+            CheckALError();
+            AL.BufferData(nextBufferHandle, Format, buf, len, Frequency);
+            CheckALError();
+            AL.SourceQueueBuffers(SourceHandle, 1, ref nextBufferHandle);
+            CheckALError();
+
+            int state;
+            AL.GetSource(SourceHandle, ALGetSourcei.SourceState, out state);
+            if ((ALSourceState)state != ALSourceState.Playing)
+                AL.SourcePlay(SourceHandle);
+
+            CheckALError();
+            BuffersProcessed++;
         }
     }
 }

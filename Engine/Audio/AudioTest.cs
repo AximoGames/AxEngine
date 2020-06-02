@@ -35,7 +35,7 @@ namespace Aximo.Engine.Audio
             };
 
             var outMod = new AudioPCMOpenALSinkModule();
-            var outFile = new AudioSinkStream();
+            //var outFile = new AudioSinkStream();
 
             var mixMod = new AudioMix4Module();
             mixMod.GetParameter("Volume1").SetValue(0.5f);
@@ -58,6 +58,7 @@ namespace Aximo.Engine.Audio
             inMod.Play();
             //Thread.Sleep(1000);
             //inMod2.Play();
+            //while (true) { Thread.Sleep(10000); }
         }
     }
 }
