@@ -1,32 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <RootNamespace>Aximo.Engine</RootNamespace>
-    <AssemblyName>AxEngine</AssemblyName>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <ApplicationIcon />
-    <OutputType>Library</OutputType>
-    <StartupObject />
-    <NoWarn>CS0162</NoWarn>
-    <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <Import Project="..\props\AssemblyVersion.props" />
-  <Import Project="..\props\Nuspec.props" />
-  <PropertyGroup>
-      <PackageId>Aximo.Engine</PackageId>
-      <Description>$(DependencyDescription)</Description>
-  </PropertyGroup>
-  <Import Project="..\props\SharedProjectSettings.props" />
-  <ItemGroup>
-    <PackageReference Include="AdvancedDLSupport" Version="3.2.0" />
-    <PackageReference Include="GtkSharp" Version="3.22.25.74" />
-    <PackageReference Include="NetCoreAudio" Version="1.5.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Render\Render.csproj" />
-    <ProjectReference Include="..\Common\Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="OpenTK" Version="4.0.0-pre9.1" />
-  </ItemGroup>
+    <PropertyGroup>
+        <RootNamespace>Aximo.Engine</RootNamespace>
+        <AssemblyName>AxEngine</AssemblyName>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <ApplicationIcon />
+        <OutputType>Library</OutputType>
+        <StartupObject />
+        <NoWarn>CS0162</NoWarn>
+        <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <Import Project="..\props\AssemblyVersion.props" />
+    <Import Project="..\props\Nuspec.props" />
+    <PropertyGroup>
+        <PackageId>Aximo.Engine</PackageId>
+        <Description>$(DependencyDescription)</Description>
+    </PropertyGroup>
+    <Import Project="..\props\SharedProjectSettings.props" />
+    <ItemGroup>
+        <PackageReference Include="AdvancedDLSupport" Version="3.2.0" />
+        <PackageReference Include="GtkSharp" Version="3.22.25.74" />
+        <PackageReference Include="NetCoreAudio" Version="1.5.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Aximo.Audio.Rack\Aximo.Audio.Rack.csproj" />
+        <ProjectReference Include="..\Render\Render.csproj" />
+        <ProjectReference Include="..\Common\Common.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="OpenTK" Version="4.0.0-pre9.1" />
+    </ItemGroup>
 </Project>

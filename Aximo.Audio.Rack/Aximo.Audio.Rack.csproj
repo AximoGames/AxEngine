@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>Aximo.Audio.Rack</RootNamespace>
+        <AssemblyName>Aximo.Audio.Rack</AssemblyName>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <NoWarn>CS0162</NoWarn>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
+    <Import Project="..\props\AssemblyVersion.props" />
+    <Import Project="..\props\Nuspec.props" />
+    <PropertyGroup>
+        <PackageId>Aximo.Audio.Rack</PackageId>
+        <Description>$(DependencyDescription)</Description>
+    </PropertyGroup>
+    <Import Project="..\props\SharedProjectSettings.props" />
+    <ItemGroup>
+        <PackageReference Include="OpenTK" Version="4.0.0-pre9.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Common\Common.csproj" />
+    </ItemGroup>
+</Project>
