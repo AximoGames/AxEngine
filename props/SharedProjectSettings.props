@@ -42,7 +42,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="$(MSBuildProjectDirectory)\..\props\stylecop.json" Link="stylecop.json" />
+    <AdditionalFiles Condition="Exists('$(MSBuildProjectDirectory)\..\props\stylecop.json')" Include="$(MSBuildProjectDirectory)\..\props\stylecop.json" Link="stylecop.json" />
+    <AdditionalFiles Condition="Exists('$(MSBuildProjectDirectory)\..\..\props\stylecop.json')" Include="$(MSBuildProjectDirectory)\..\..\props\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 
   <Target Name="DisableAnalyzers"

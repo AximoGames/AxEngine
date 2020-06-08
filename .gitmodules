@@ -2,3 +2,6 @@
 	path = External/Net3dBool
 	url = https://github.com/arakis/Net3dBool.git
 	pushurl = git@github.com:arakis/Net3dBool.git
+[submodule "Aximo.AudioRack"]
+	path = Aximo.AudioRack
+	url = https://github.com/AximoGames/Aximo.AudioRack.git
