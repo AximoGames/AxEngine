@@ -115,6 +115,11 @@ namespace Aximo.Engine.Components.UI
             Material.UseTransparency = true; // TODO: Set only where required
         }
 
+        public override bool ContainsScreenCoordinate(Vector2 pos)
+        {
+            return AbsoluteDrawRect.Contains(pos);
+        }
+
         // Size+Border+Margin
         internal Box2 AbsoluteOuterRect; // Absoute Rect of this control incl. Margin
 
@@ -147,7 +152,7 @@ namespace Aximo.Engine.Components.UI
                 if (_Size == value)
                     return;
                 _Size = value;
-                Update();
+                PropertyChanged();
             }
         }
 
@@ -214,52 +219,6 @@ namespace Aximo.Engine.Components.UI
         protected virtual void OnResized()
         {
             Redraw();
-        }
-
-        public virtual void OnMouseEnter(MouseMoveArgs e)
-        {
-        }
-
-        public virtual void OnMouseLeave(MouseMoveArgs e)
-        {
-        }
-
-        public bool MouseEntered { get; private set; }
-
-        public override void OnScreenMouseMove(MouseMoveArgs e)
-        {
-            if (AbsoluteDrawRect.Contains(e.Position))
-            {
-                if (!MouseEntered)
-                {
-                    MouseEntered = true;
-                    Log.Verbose("MouseEnter #{ObjectId} {Name}", ObjectId, Name);
-                    OnMouseEnter(e);
-                }
-
-                OnMouseMove(e);
-            }
-            else
-            {
-                if (MouseEntered)
-                {
-                    MouseEntered = false;
-                    Log.Verbose("MouseLeave #{ObjectId} {Name}", ObjectId, Name);
-                    OnMouseLeave(e);
-                }
-            }
-        }
-
-        public override void OnScreenMouseDown(MouseButtonArgs e)
-        {
-            if (MouseEntered && AbsoluteDrawRect.Contains(e.Position))
-                OnMouseDown(e);
-        }
-
-        public override void OnScreenMouseUp(MouseButtonArgs e)
-        {
-            if (MouseEntered && AbsoluteDrawRect.Contains(e.Position))
-                OnMouseUp(e);
         }
     }
 }

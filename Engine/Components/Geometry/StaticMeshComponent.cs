@@ -49,7 +49,7 @@ namespace Aximo.Engine.Components.Geometry
         private protected void UpdateMesh()
         {
             MeshChanged = true;
-            Update();
+            PropertyChanged();
         }
 
         public override PrimitiveSceneProxy CreateProxy()

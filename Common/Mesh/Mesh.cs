@@ -7,6 +7,7 @@ using System.Linq;
 using Aximo.Render;
 using Aximo.VertexData;
 using OpenToolkit.Mathematics;
+using SixLabors.ImageSharp.Processing;
 
 namespace Aximo
 {
@@ -520,17 +521,7 @@ namespace Aximo
             NormalSolver.RecalculateNormals(this, angle);
         }
 
-        public void AddMesh(Mesh mesh)
-        {
-            AddMeshInternal(mesh, -1);
-        }
-
-        public void AddMesh(Mesh mesh, int filterMaterialId)
-        {
-            AddMeshInternal(mesh, filterMaterialId);
-        }
-
-        public void AddMesh(Mesh mesh, int filterMaterialId, int newMaterialId)
+        public void AddMesh(Mesh mesh, int newMaterialId = -1, int filterMaterialId = -1)
         {
             AddMeshInternal(mesh, filterMaterialId, newMaterialId);
         }
@@ -574,6 +565,20 @@ namespace Aximo
             mesh.PrimitiveType = PrimitiveType;
             mesh.Name = Name;
             return mesh;
+        }
+
+        public void Rotate(Quaternion quaternion)
+        {
+            var comp = GetComponent<MeshPosition3Component>();
+            for (var i = 0; i < comp.Count; i++)
+                comp[i] = Vector3.Transform(comp[i], quaternion);
+        }
+
+        public void Rotate(Rotor3 quaternion)
+        {
+            var comp = GetComponent<MeshPosition3Component>();
+            for (var i = 0; i < comp.Count; i++)
+                comp[i] = Rotor3.Rotate(quaternion, comp[i]);
         }
 
         public void Scale(float scaleX, float scaleY)
@@ -627,6 +632,21 @@ namespace Aximo
             var comp = GetComponent<MeshPosition3Component>();
             for (var i = 0; i < comp.Count; i++)
                 comp[i] += direction;
+        }
+
+        public void TranslateX(float x)
+        {
+            Translate(new Vector3(x, 0, 0));
+        }
+
+        public void TranslateY(float y)
+        {
+            Translate(new Vector3(0, y, 0));
+        }
+
+        public void TranslateZ(float z)
+        {
+            Translate(new Vector3(0, 0, z));
         }
 
         public void Translate(float x, float y)

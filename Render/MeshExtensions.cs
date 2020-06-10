@@ -12,14 +12,9 @@ namespace Aximo.Render.OpenGL
     {
         public static MeshData GetMeshData(this Mesh m, int materialId)
         {
-            if (m.Name == "Bomb")
-            {
-                var s = "";
-            }
-
             // return ToPrimitive(PrimitiveType, materialId).GetMeshData();
             var mesh = m.CloneEmpty();
-            mesh.AddMesh(m, materialId);
+            mesh.AddMesh(m, filterMaterialId: materialId);
 
             if (mesh.PrimitiveType >= MeshFaceType.Quad)
                 mesh = mesh.ToPrimitive(MeshFaceType.Triangle);

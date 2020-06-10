@@ -30,7 +30,7 @@ namespace Aximo.Engine
             {
                 if (_Visible == value)
                     return;
-                Update();
+                PropertyChanged();
                 _Visible = value;
             }
         }
@@ -308,14 +308,14 @@ namespace Aximo.Engine
         private protected bool TransformChanged;
         private protected void UpdateTransform()
         {
-            Update();
+            PropertyChanged();
             TransformChanged = true;
         }
 
         private protected bool ParentChanged;
         private protected void UpdateParent()
         {
-            Update();
+            PropertyChanged();
             ParentChanged = true;
         }
 
@@ -359,16 +359,55 @@ namespace Aximo.Engine
         {
         }
 
+        public virtual void OnMouseEnter(MouseMoveArgs e)
+        {
+        }
+
+        public virtual void OnMouseLeave(MouseMoveArgs e)
+        {
+        }
+
+        public virtual bool ContainsScreenCoordinate(Vector2 pos)
+        {
+            return false;
+        }
+
+        public bool MouseEntered { get; private set; }
+
         public virtual void OnScreenMouseMove(MouseMoveArgs e)
         {
+            if (ContainsScreenCoordinate(e.Position))
+            {
+                if (!MouseEntered)
+                {
+                    MouseEntered = true;
+                    Log.Verbose("MouseEnter #{ObjectId} {Name}", ObjectId, Name);
+                    OnMouseEnter(e);
+                }
+
+                OnMouseMove(e);
+            }
+            else
+            {
+                if (MouseEntered)
+                {
+                    MouseEntered = false;
+                    Log.Verbose("MouseLeave #{ObjectId} {Name}", ObjectId, Name);
+                    OnMouseLeave(e);
+                }
+            }
         }
 
         public virtual void OnScreenMouseDown(MouseButtonArgs e)
         {
+            if (MouseEntered && ContainsScreenCoordinate(e.Position))
+                OnMouseDown(e);
         }
 
         public virtual void OnScreenMouseUp(MouseButtonArgs e)
         {
+            if (MouseEntered && ContainsScreenCoordinate(e.Position))
+                OnMouseUp(e);
         }
 
         public event Action<MouseMoveArgs> MouseMove;

@@ -61,7 +61,7 @@ namespace Aximo.Engine.Components.Geometry
             {
                 c.Order = order++;
                 c.OrderChanged = true;
-                c.Update();
+                c.PropertyChanged();
             });
         }
 

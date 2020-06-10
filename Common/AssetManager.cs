@@ -144,9 +144,25 @@ namespace Aximo
                     {
                         var dir = Path.Combine(AppRootDir, "..", "AxEngine");
                         if (Directory.Exists(dir))
+                        {
                             _EngineRootDir = new DirectoryInfo(dir).FullName;
+                        }
                         else
-                            _EngineRootDir = AppRootDir;
+                        {
+                            dir = Path.Combine(AppRootDir, "..", "..", "AxEngine");
+                            if (Directory.Exists(dir))
+                            {
+                                _EngineRootDir = new DirectoryInfo(dir).FullName;
+                            }
+                            else
+                            {
+                                dir = Path.Combine(AppRootDir, "..", "..", "..", "AxEngine");
+                                if (Directory.Exists(dir))
+                                    _EngineRootDir = new DirectoryInfo(dir).FullName;
+                                else
+                                    _EngineRootDir = AppRootDir;
+                            }
+                        }
                     }
                 }
                 return _EngineRootDir;

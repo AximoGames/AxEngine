@@ -33,7 +33,7 @@ namespace Aximo.Engine.Components.Geometry
         public void UpdateTexture()
         {
             Texture.SetData(Image);
-            Update();
+            PropertyChanged();
         }
     }
 }
