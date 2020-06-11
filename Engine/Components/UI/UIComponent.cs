@@ -65,7 +65,7 @@ namespace Aximo.Engine.Components.UI
             }
             if (AbsoluteDrawRect != oldDrawRect)
             {
-                SetRectanglePixels(AbsoluteDrawRect.ToRectangleF());
+                SetRectangleScaled(AbsoluteDrawRect.ToRectangleF());
                 if (AbsoluteClientRect.Size != oldDrawRect.Size)
                     OnResized();
             }
@@ -104,9 +104,9 @@ namespace Aximo.Engine.Components.UI
             {
                 var size = Size;
                 if (size.X == 0)
-                    size.X = RenderContext.Current.ScreenSize.X;
+                    size.X = SceneContext.Current.ScreenScaledSize.X;
                 if (size.Y == 0)
-                    size.Y = RenderContext.Current.ScreenSize.Y;
+                    size.Y = SceneContext.Current.ScreenScaledSize.Y;
                 AbsoluteOuterRect = BoxHelper.FromSize(Location, size);
 
                 CalculateSizes();
@@ -189,6 +189,19 @@ namespace Aximo.Engine.Components.UI
             SetRectangleUV(new RectangleF(pos1.X, pos1.Y, pos2.X - pos1.X, pos2.Y - pos1.Y));
             _RectangleUV = null;
             _RectanglePixels = value;
+        }
+
+        private RectangleF? _RectangleScaled;
+        public void SetRectangleScaled(RectangleF value)
+        {
+            if (_RectangleScaled == value)
+                return;
+
+            var pos1 = new Vector2(value.X, value.Y) * SceneContext.Current.ScaleToPixelFactor;
+            var pos2 = new Vector2(value.Right, value.Bottom) * SceneContext.Current.ScaleToPixelFactor;
+
+            SetRectanglePixels(new RectangleF(pos1.X, pos1.Y, pos2.X - pos1.X, pos2.Y - pos1.Y));
+            _RectangleScaled = value;
         }
 
         protected bool _NeedRedraw = false;

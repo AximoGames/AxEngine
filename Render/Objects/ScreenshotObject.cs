@@ -21,7 +21,7 @@ namespace Aximo.Render.Objects
         public override void OnWorldRendered()
         {
             if (Data == null)
-                Data = new BufferData2D<int>(Context.ScreenSize.X, Context.ScreenSize.Y);
+                Data = new BufferData2D<int>(Context.ScreenPixelSize.X, Context.ScreenPixelSize.Y);
             //FrameBuffer.Default.GetData(Data);
 
             var fb = Context.GetPipeline<ForwardRenderPipeline>().FrameBuffer;

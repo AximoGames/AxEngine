@@ -8,21 +8,27 @@ namespace Aximo.Engine.Windows
 {
     public class MouseMoveArgs
     {
-        public Vector2 OldPosition { get; private set; }
-        public Vector2 Position { get; private set; }
+        public Vector2 OldPixelPosition { get; private set; }
+        public Vector2 PixelPosition { get; private set; }
         public Vector2 Delta { get; private set; }
         public float DeltaX { get; private set; }
         public float DeltaY { get; private set; }
+
+        public Vector2 OldPosition { get; private set; }
+        public Vector2 Position { get; private set; }
 
         public bool Handled { get; set; }
 
         internal MouseMoveArgs(MouseMoveEventArgs e)
         {
-            Position = e.Position;
+            PixelPosition = e.Position;
             Delta = e.Delta;
             DeltaX = e.DeltaX;
             DeltaY = e.DeltaY;
-            OldPosition = Position - Delta;
+            OldPixelPosition = PixelPosition - Delta;
+
+            Position = PixelPosition * SceneContext.Current.ScreenScale;
+            OldPosition = OldPixelPosition * SceneContext.Current.ScreenScale;
         }
     }
 }

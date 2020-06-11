@@ -15,7 +15,7 @@ namespace Aximo.Render.OpenGL
             get
             {
                 if (_Default == null)
-                    _Default = CreateFromHandle(0, RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y);
+                    _Default = CreateFromHandle(0, RenderContext.Current.ScreenPixelSize.X, RenderContext.Current.ScreenPixelSize.Y);
                 return _Default;
             }
         }

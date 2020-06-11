@@ -16,6 +16,13 @@ namespace Aximo.Engine
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<SceneContext>();
 
+        public float ReferenceScreenWidth { get; private set; } = 3840f;
+        public Vector2 PixelToScaleFactor { get; private set; }
+        public Vector2 ScaleToPixelFactor { get; private set; }
+        public Vector2 ScreenScale { get; set; } = Vector2.One;
+        public Vector2i ScreenPixelSize => RenderContext.ScreenPixelSize;
+        public Vector2 ScreenScaledSize => ScreenPixelSize.ToVector2() * ScreenScale;
+
         public static SceneContext Current { get; set; }
 
         public static bool IsRenderThread => WindowContext.IsRenderThread;
@@ -194,9 +201,17 @@ namespace Aximo.Engine
 
         public void Init()
         {
+            SetScale();
             TimeWatcher = new Stopwatch();
             TimeWatcher.Start();
             EngineAssets.Init();
+        }
+
+        private void SetScale()
+        {
+            ScreenScale = Application.Current.GetScreenPixelScale();
+            PixelToScaleFactor = ScreenScale;
+            ScaleToPixelFactor = Vector2.Divide(Vector2.One, ScreenScale);
         }
 
         private Stopwatch TimeWatcher;
@@ -209,6 +224,7 @@ namespace Aximo.Engine
 
         public void OnScreenResize(ScreenResizeEventArgs e)
         {
+            SetScale();
             Visit<Actor>(c => c.OnScreenResize(e));
         }
 

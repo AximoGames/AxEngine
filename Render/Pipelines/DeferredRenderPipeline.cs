@@ -25,8 +25,8 @@ namespace Aximo.Render.Pipelines
 
         public override void Init()
         {
-            var width = RenderContext.Current.ScreenSize.X;
-            var height = RenderContext.Current.ScreenSize.Y;
+            var width = RenderContext.Current.ScreenPixelSize.X;
+            var height = RenderContext.Current.ScreenPixelSize.Y;
 
             GBuffer = new FrameBuffer(width, height);
             GBuffer.ObjectLabel = nameof(GBuffer);
@@ -111,7 +111,7 @@ namespace Aximo.Render.Pipelines
 
         private void RenderPass1(RenderContext context, Camera camera)
         {
-            GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
+            GL.Viewport(0, 0, context.ScreenPixelSize.X, context.ScreenPixelSize.Y);
             GBuffer.Bind();
             GL.Enable(EnableCap.DepthTest);
 

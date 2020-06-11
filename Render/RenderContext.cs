@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.Xml;
 using Aximo.Render.OpenGL;
 using Aximo.Render.Pipelines;
 using OpenToolkit.Graphics.OpenGL4;
@@ -49,15 +50,18 @@ namespace Aximo.Render
                 obj.OnWorldRendered();
         }
 
-        private Vector2i _ScreenSize;
-        public Vector2i ScreenSize
+        public float ScreenBaseScale { get; set; } = 1;
+        public float ScreenScale { get; set; } = 1;
+
+        private Vector2i _ScreenPixelSize;
+        public Vector2i ScreenPixelSize
         {
-            get { return _ScreenSize; }
+            get { return _ScreenPixelSize; }
             set
             {
-                _ScreenSize = value;
+                _ScreenPixelSize = value;
                 ScreenAspectRatio = (float)value.X / (float)value.Y;
-                PixelToUVFactor = new Vector2(1.0f / _ScreenSize.X, 1.0f / _ScreenSize.Y);
+                PixelToUVFactor = new Vector2(1.0f / _ScreenPixelSize.X, 1.0f / _ScreenPixelSize.Y);
                 PixelToNDCFactor = PixelToUVFactor * 2;
             }
         }
@@ -159,11 +163,11 @@ namespace Aximo.Render
 
         public void OnScreenResize(ScreenResizeEventArgs e)
         {
-            GL.Viewport(0, 0, ScreenSize.X, ScreenSize.Y);
+            GL.Viewport(0, 0, ScreenPixelSize.X, ScreenPixelSize.Y);
 
             // GL.Scissor(0, 0, ScreenSize.X, ScreenSize.Y);
             // GL.Enable(EnableCap.ScissorTest);
-            Camera.SetAspectRatio(ScreenSize.X, ScreenSize.Y);
+            Camera.SetAspectRatio(ScreenPixelSize.X, ScreenPixelSize.Y);
 
             foreach (var pipe in RenderPipelines)
                 pipe.OnScreenResize(e);

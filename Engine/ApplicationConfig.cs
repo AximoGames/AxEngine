@@ -30,6 +30,11 @@ namespace Aximo.Engine
         public bool UseFrameDebug { get; set; } = true;
 
         /// <summary>
+        /// Resolution independent UI Size
+        /// </summary>
+        public Vector2 NormalizedUISize { get; set; } = new Vector2(1920, 1080);
+
+        /// <summary>
         /// Get or set when rendering backend should be flushed.
         /// Usefull when measuring draw call times.
         /// </summary>

@@ -31,7 +31,9 @@ namespace Aximo.Engine
 
         public static Application Current { get; private set; }
 
-        public Vector2i ScreenSize => Window.Size;
+        public Vector2i ScreenPixelSize => Window.Size;
+        public float ScreenPixelAspectRation => (float)ScreenPixelSize.X / (float)ScreenPixelSize.Y;
+
         public Vector2i WindowLocation
         {
             get => Window.Location;
@@ -105,7 +107,7 @@ namespace Aximo.Engine
             {
                 // It's important to take a the size of the new created window instead of the startupConfig,
                 // Because they may not be accepted or changed because of other DPI than 100%
-                ScreenSize = Window.Size,
+                ScreenPixelSize = Window.Size,
             };
             RenderContext.Current = RenderContext;
 
@@ -114,7 +116,7 @@ namespace Aximo.Engine
             };
             SceneContext.Current = SceneContext;
 
-            RenderContext.Camera = new PerspectiveFieldOfViewCamera(new Vector3(2f, -5f, 2f), RenderContext.ScreenSize.X / (float)RenderContext.ScreenSize.Y)
+            RenderContext.Camera = new PerspectiveFieldOfViewCamera(new Vector3(2f, -5f, 2f), RenderContext.ScreenPixelSize.X / (float)RenderContext.ScreenPixelSize.Y)
             {
                 NearPlane = 0.1f,
                 FarPlane = 100.0f,
@@ -332,13 +334,13 @@ namespace Aximo.Engine
             if (!Initialized)
                 return;
 
-            if (e.Size == RenderContext.ScreenSize)
+            if (e.Size == RenderContext.ScreenPixelSize)
                 return;
 
-            var eventArgs = new ScreenResizeEventArgs(RenderContext.ScreenSize, e.Size);
+            var eventArgs = new ScreenResizeEventArgs(RenderContext.ScreenPixelSize, e.Size);
 
             Console.WriteLine("OnScreenResize: " + e.Size.X + "x" + e.Size.Y);
-            RenderContext.ScreenSize = e.Size;
+            RenderContext.ScreenPixelSize = e.Size;
             SceneContext.OnScreenResize(eventArgs);
             DispatchRender(() => RenderContext.OnScreenResize(eventArgs));
         }
@@ -575,10 +577,10 @@ namespace Aximo.Engine
             // if (e.Mouse.LeftButton == ButtonState.Pressed)
             //     MouseDelta = new Vector2(e.XDelta, e.YDelta);
 
-            var x = (float)(((double)e.X / (double)ScreenSize.X * 2.0) - 1.0);
-            var y = (float)(((double)e.Y / (double)ScreenSize.Y * 2.0) - 1.0);
+            var x = (float)(((double)e.X / (double)ScreenPixelSize.X * 2.0) - 1.0);
+            var y = (float)(((double)e.Y / (double)ScreenPixelSize.Y * 2.0) - 1.0);
 
-            CurrentMousePosition = new Vector2(x, y);
+            CurrentMousePositionNDC = new Vector2(x, y);
 
             OnMouseMove(args);
             if (args.Handled)
@@ -596,8 +598,8 @@ namespace Aximo.Engine
 
         private void OnMouseDownInternal(MouseButtonEventArgs e)
         {
-            var args = new MouseButtonArgs(OldMouseButtonPos, CurrentMousePosition, e);
-            OldMouseButtonPos = CurrentMousePosition;
+            var args = new MouseButtonArgs(OldMouseButtonPos, CurrentMousePositionNDC, e);
+            OldMouseButtonPos = CurrentMousePositionNDC;
 
             OnMouseDown(args);
             if (args.Handled)
@@ -613,8 +615,8 @@ namespace Aximo.Engine
 
         private void OnMouseUpInternal(MouseButtonEventArgs e)
         {
-            var args = new MouseButtonArgs(OldMouseButtonPos, CurrentMousePosition, e);
-            OldMouseButtonPos = CurrentMousePosition;
+            var args = new MouseButtonArgs(OldMouseButtonPos, CurrentMousePositionNDC, e);
+            OldMouseButtonPos = CurrentMousePositionNDC;
 
             OnMouseUp(args);
             if (args.Handled)
@@ -718,7 +720,7 @@ namespace Aximo.Engine
         }
 
         private Vector2 _CurrentMousePosition;
-        public Vector2 CurrentMousePosition
+        public Vector2 CurrentMousePositionNDC
         {
             get
             {
@@ -737,7 +739,7 @@ namespace Aximo.Engine
 
         internal void UpdateMouseWorldPosition()
         {
-            var pos = ScreenPositionToWorldPosition(CurrentMousePosition);
+            var pos = ScreenPositionToWorldPosition(CurrentMousePositionNDC);
             if (pos != null)
             {
                 _CurrentMouseWorldPosition = (Vector3)pos;
@@ -823,5 +825,14 @@ namespace Aximo.Engine
             Stopped = true;
             RunSyncWaiter?.Set();
         }
+
+        /// <summary>
+        /// Returns the pixel scale factor.
+        /// </summary>
+        public virtual Vector2 GetScreenPixelScale()
+        {
+            return Vector2.Divide(Config.NormalizedUISize, ScreenPixelSize.ToVector2());
+        }
+
     }
 }

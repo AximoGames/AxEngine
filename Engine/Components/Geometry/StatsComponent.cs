@@ -19,7 +19,7 @@ namespace Aximo.Engine.Components.Geometry
     public class StatsComponent : UIComponent
     {
         private DateTime LastStatUpdate;
-        private Font DefaultFont = new Font(SystemFonts.Families.First(), 12, FontStyle.Regular);
+        private Font DefaultFont = new Font(SystemFonts.Families.First(), 24, FontStyle.Regular);
 
         public StatsComponent() : this(new Vector2i(200, 100))
         {

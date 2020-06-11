@@ -9,6 +9,9 @@ namespace Aximo.Engine.Windows
 {
     public class MouseButtonArgs
     {
+        public Vector2 OldPixelPosition { get; private set; }
+        public Vector2 PixelPosition { get; private set; }
+
         public Vector2 OldPosition { get; private set; }
         public Vector2 Position { get; private set; }
 
@@ -29,13 +32,16 @@ namespace Aximo.Engine.Windows
             OldPositionNDC = oldPosition;
             PositionNDC = position;
 
-            OldPosition = AxMath.MapFromNDC(OldPositionNDC, Application.Current.ScreenSize);
-            Position = AxMath.MapFromNDC(PositionNDC, Application.Current.ScreenSize);
+            OldPixelPosition = AxMath.MapFromNDC(OldPositionNDC, Application.Current.ScreenPixelSize);
+            PixelPosition = AxMath.MapFromNDC(PositionNDC, Application.Current.ScreenPixelSize);
 
             Button = e.Button;
             Action = e.Action;
             Modifiers = e.Modifiers;
             IsPressed = e.IsPressed;
+
+            Position = PixelPosition * SceneContext.Current.ScreenScale;
+            OldPosition = OldPixelPosition * SceneContext.Current.ScreenScale;
         }
     }
 }

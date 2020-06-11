@@ -13,7 +13,7 @@ namespace Aximo.Render.Pipelines
 
         private void CreateFrameBuffer()
         {
-            FrameBuffer = new FrameBuffer(RenderContext.Current.ScreenSize.X, RenderContext.Current.ScreenSize.Y)
+            FrameBuffer = new FrameBuffer(RenderContext.Current.ScreenPixelSize.X, RenderContext.Current.ScreenPixelSize.Y)
             {
                 ObjectLabel = "Forward",
             };
@@ -33,7 +33,7 @@ namespace Aximo.Render.Pipelines
 
         public override void InitRender(RenderContext context, Camera camera)
         {
-            GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
+            GL.Viewport(0, 0, context.ScreenPixelSize.X, context.ScreenPixelSize.Y);
             FrameBuffer.Bind();
 
             var bgColor = context.BackgroundColor;
@@ -43,7 +43,7 @@ namespace Aximo.Render.Pipelines
 
         public override void Render(RenderContext context, Camera camera)
         {
-            GL.Viewport(0, 0, context.ScreenSize.X, context.ScreenSize.Y);
+            GL.Viewport(0, 0, context.ScreenPixelSize.X, context.ScreenPixelSize.Y);
             FrameBuffer.Bind();
             GL.Enable(EnableCap.DepthTest);
 
