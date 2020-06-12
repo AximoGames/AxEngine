@@ -5,14 +5,5 @@ namespace Aximo.Engine.Components.UI
 {
     public class UIFloatingContainer : UIContainerComponent
     {
-        internal override void SetChildBounds()
-        {
-            foreach (var child in UIComponents)
-            {
-                var location = child.Location;
-                var size = child.Size + Padding.Size + Border.Size + Margin.Size;
-                child.AbsoluteOuterRect = BoxHelper.FromSize(AbsolutePaddingRect.Min + location, size);
-            }
-        }
     }
 }

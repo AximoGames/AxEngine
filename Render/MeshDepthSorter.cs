@@ -10,9 +10,11 @@ namespace Aximo.Render
     {
         public Camera Camera;
         private Vector3 CameraPosition;
+        private bool DistanceCheck;
 
-        public MeshDepthSorter(Camera camera)
+        public MeshDepthSorter(Camera camera, bool distanceCheck = true)
         {
+            DistanceCheck = distanceCheck;
             Camera = camera;
             CameraPosition = camera.Position;
         }
@@ -26,14 +28,15 @@ namespace Aximo.Render
             if (x.UseTransparency != y.UseTransparency)
                 return x.UseTransparency.CompareTo(y.UseTransparency);
 
-            var reverse = 0;
-            if (x.UseTransparency) // no check for Y needed
-            {
-                reverse = 1;
-            }
-
             if (x.DrawPriority != y.DrawPriority)
                 return x.DrawPriority.CompareTo(y.DrawPriority);
+
+            var reverse = 0;
+            if (x.UseTransparency) // no check for Y needed
+                reverse = 1;
+
+            if (!DistanceCheck)
+                return 0; // TODO: Use index in array
 
             var boundsX = x as IBounds;
             var boundsY = y as IBounds;

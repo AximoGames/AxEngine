@@ -7,6 +7,8 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Aximo.Engine.Components.UI
 {
+
+
     public class UIButton : UIContainerComponent
     {
         public UILabelComponent LabelComponent;
@@ -72,11 +74,6 @@ namespace Aximo.Engine.Components.UI
         public override void OnMouseLeave(MouseMoveArgs e)
         {
             InvokeDrawControl();
-        }
-
-        protected override void OnResized()
-        {
-            base.OnResized();
         }
     }
 }

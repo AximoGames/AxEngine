@@ -173,6 +173,13 @@ namespace Aximo.AxDemo
             //    //Margin = new UIAnchors(20, 20, 20, 20),
             //});
 
+            flowContainer.AddComponent(new UISlider()
+            {
+                Name = "bt1",
+                //Size = new Vector2(100, 100),
+                //Margin = new UIAnchors(20, 20, 20, 20),
+            });
+
             // --
 
             SceneContext.AddActor(new Actor(new StatsComponent()

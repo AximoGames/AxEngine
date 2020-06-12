@@ -24,6 +24,7 @@ namespace Aximo.AxDemo
                 VSync = VSyncMode.Off,
                 // UseGtkUI = true,
                 UseConsole = true,
+                NormalizedUISize = new Vector2(800, 600),
             };
             new DemoApplication().Start(config);
         }
