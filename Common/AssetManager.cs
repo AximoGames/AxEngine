@@ -5,7 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using Newtonsoft.Json;
 
 namespace Aximo
 {
@@ -108,10 +111,59 @@ namespace Aximo
                 if (_GlobalCacheDir == null)
                 {
                     _GlobalCacheDir = Path.Combine(EngineRootDir, ".cache");
-                    Directory.CreateDirectory(_GlobalCacheDir);
+                    CheckCache();
                 }
                 return _GlobalCacheDir;
             }
+        }
+
+        private static void CheckCache()
+        {
+            var cacheVersionFile = Path.Combine(GlobalCacheDir, "cacheinfo.json");
+            var assemblyVersion = typeof(AssetManager).Assembly.GetName().Version.ToString();
+
+            if (Directory.Exists(GlobalCacheDir))
+            {
+                var deleteDir = true;
+                try
+                {
+                    if (File.Exists(cacheVersionFile))
+                    {
+                        var versionInfo = JsonConvert.DeserializeObject<CacheInfo>(File.ReadAllText(cacheVersionFile));
+                        if (versionInfo.AssemblyVersion == assemblyVersion)
+                            deleteDir = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+                }
+
+                if (deleteDir)
+                {
+                    Log.Verbose("Delete Cache directory: {Path}", GlobalCacheDir);
+                    Directory.Delete(GlobalCacheDir, true);
+
+                    var n = 10;
+                    while (Directory.Exists(GlobalCacheDir) && n-- > 0)
+                    {
+                        Thread.Sleep(1000);
+                    }
+                }
+            }
+
+            if (!Directory.Exists(GlobalCacheDir))
+            {
+                Log.Verbose("Create Cache directory: {Path}", GlobalCacheDir);
+                Directory.CreateDirectory(GlobalCacheDir);
+                var versionInfo = new CacheInfo { AssemblyVersion = assemblyVersion };
+                File.WriteAllText(cacheVersionFile, JsonConvert.SerializeObject(versionInfo));
+            }
+        }
+
+        private class CacheInfo
+        {
+            public string AssemblyVersion;
         }
 
         private static string _AppCacheDir;
