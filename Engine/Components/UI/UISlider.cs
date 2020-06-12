@@ -3,6 +3,7 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using Aximo.Engine.Windows;
 using OpenToolkit.Mathematics;
 using SixLabors.ImageSharp;
@@ -17,10 +18,44 @@ namespace Aximo.Engine.Components.UI
         Vertical,
     }
 
+    public class SliderValueChangedArgs
+    {
+        public float OldValue;
+        public float NewValue;
+        public UISlider.UISliderButton Button;
+    }
+
+    public delegate void SliderValueChanged(SliderValueChangedArgs e);
+
     public class UISlider : UIContainerComponent
     {
 
+        public float MinValue { get; set; }
+        public float MaxValue { get; set; }
+        public float SliderThickness { get; set; } = 20;
+        public Orientation Orientation { get; set; } = Orientation.Horizontal;
 
+        public event SliderValueChanged SliderValueChanged;
+
+        public float Progress
+        {
+            get => Button.Progress;
+            set => Button.Progress = value;
+        }
+
+        public float Value
+        {
+            get => Button.Value;
+            set => Button.Value = value;
+        }
+
+        internal void RaiseSliderValueChanged(SliderValueChangedArgs e)
+        {
+            if (Parent == null)
+                return;
+
+            SliderValueChanged?.Invoke(e);
+        }
 
         public class UISliderButton : UIButton
         {
@@ -28,53 +63,60 @@ namespace Aximo.Engine.Components.UI
             {
                 Padding = new UIAnchors();
                 Margin = new UIAnchors();
-
-                MinValue = 0;
-                MaxValue = 100;
-                Value = 0;
             }
 
-            public float _ProgressFactor;
-            public float ProgressFactor
+            public new UISlider Parent => (UISlider)base.Parent;
+
+            private float _ProgressFactor;
+            internal float Progress
             {
                 get => _ProgressFactor;
                 set
                 {
-                    Value = value / ValueToProgressFactor;
+                    Value = (value / ValueToProgressFactor) + MinValue;
                 }
             }
 
-            public float _Value;
-            public float Value
+            private float _Value;
+            internal float Value
             {
                 get => _Value;
                 set
                 {
                     if (value == _Value)
                         return;
+
+                    var oldValue = _Value;
                     _Value = Math.Clamp(value, MinValue, MaxValue);
-                    _ProgressFactor = Math.Clamp(_Value * ValueToProgressFactor, 0, 1);
+                    _ProgressFactor = Math.Clamp((_Value - MinValue) * ValueToProgressFactor, 0, 1);
+
+                    Parent.RaiseSliderValueChanged(new SliderValueChangedArgs
+                    {
+                        OldValue = oldValue,
+                        NewValue = _Value,
+                        Button = this,
+                    });
                 }
             }
 
-            public float MinValue { get; set; }
-            public float MaxValue { get; set; }
+            private float MinValue => Parent.MinValue;
+            private float MaxValue => Parent.MaxValue;
 
-            public float SliderThickness { get; set; } = 20;
+            private float SliderThickness => Parent.SliderThickness;
 
-            private Box2 ParentRect => ((UIComponent)Parent).AbsolutePaddingRect;
+            private Box2 ParentRect => Parent.AbsolutePaddingRect;
             private Vector2 SliderSize => SwapAxis(new Vector2(SliderThickness, SwapAxis(ParentRect.Size).Y));
             private float PixelRange => SwapAxis(ParentRect.Size).X - SwapAxis(SliderSize).X;
             private float PixelToProgressFactor => 1 / PixelRange;
             private float ValueToProgressFactor => 1 / (MaxValue - MinValue);
 
-            public Orientation Orientation { get; set; } = Orientation.Vertical;
+            private Orientation Orientation => Parent.Orientation;
             private Vector2 SwapAxis(Vector2 vec) => Orientation == Orientation.Horizontal ? vec : new Vector2(vec.Y, vec.X);
 
             internal override void SetComponentSize()
             {
                 Size = SliderSize;
-                var xPos = PixelRange * ProgressFactor;
+                var xPos = PixelRange * Progress;
                 Location = SwapAxis(new Vector2(xPos, SwapAxis(Location).Y));
 
                 base.SetComponentSize();
@@ -87,7 +129,7 @@ namespace Aximo.Engine.Components.UI
             {
                 InMovement = true;
                 StartPosition = e.Position;
-                StartProgress = ProgressFactor;
+                StartProgress = Progress;
                 base.OnMouseDown(e);
             }
 
@@ -108,7 +150,7 @@ namespace Aximo.Engine.Components.UI
 
                 var diffPixel = e.Position - StartPosition;
                 var progressDiff = SwapAxis(diffPixel).X * PixelToProgressFactor;
-                ProgressFactor = StartProgress + progressDiff;
+                Progress = StartProgress + progressDiff;
             }
         }
 
@@ -121,6 +163,10 @@ namespace Aximo.Engine.Components.UI
             AddComponent(Button);
             BackColor = new Color(new System.Numerics.Vector4(0, 1, 0, 0.5f));
             BackColorHover = new Color(new System.Numerics.Vector4(1, 1, 0, 0.5f));
+
+            MinValue = 0;
+            MaxValue = 100;
+            Value = 0;
         }
 
         internal override void SetChildBounds()

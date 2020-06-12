@@ -176,6 +176,9 @@ namespace Aximo.AxDemo
             flowContainer.AddComponent(new UISlider()
             {
                 Name = "bt1",
+                MinValue = 20,
+                MaxValue = 40,
+                Value = 25,
                 //Size = new Vector2(100, 100),
                 //Margin = new UIAnchors(20, 20, 20, 20),
             });
