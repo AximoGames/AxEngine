@@ -1,5 +1,13 @@
 # Changelog
 
+### 1.0.9
+
+* Check Cache version
+* Added UISlider
+* Added OpenAL
+* Added some Audio Modules
+* Implemented Scaled UI Pixels for resolution independent posisions.
+
 ### 1.0.8
 
 * Fixed Shadows if they are out of shadow map
