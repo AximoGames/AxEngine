@@ -50,6 +50,22 @@ namespace Aximo.Engine
                 comp.Visit(action, visitChilds);
         }
 
+        public override IEnumerable<T> Find<T>(Func<T, bool> visitChilds = null)
+        {
+
+            foreach (var itm in base.Find(visitChilds))
+                yield return itm;
+
+            if (visitChilds != null)
+                if (this is T obj)
+                    if (!visitChilds.Invoke(obj))
+                        yield break;
+
+            foreach (var comp in Components)
+                foreach (var itm in comp.Find(visitChilds))
+                    yield return itm;
+        }
+
         private ConcurrentDictionary<string, List<ActorComponent>> ComponentNameHash = new ConcurrentDictionary<string, List<ActorComponent>>();
 
         public T GetComponent<T>(string name)

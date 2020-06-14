@@ -1,7 +1,10 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Aximo.Render;
 using Aximo.Render.OpenGL;
+using OpenToolkit.Mathematics;
+using SixLabors.ImageSharp;
 
 #pragma warning disable CA1044 // Properties should not be write only
 
@@ -73,4 +76,5 @@ namespace Aximo.Engine.Components.Geometry
                 SetOrders();
         }
     }
+
 }

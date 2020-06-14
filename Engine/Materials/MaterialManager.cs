@@ -27,10 +27,18 @@ namespace Aximo.Engine
             }
         }
 
-        public static Material DefaultLineMaterial { get; } = new Material
+        public static Material DefaultLineMaterial { get; } = CreateDefaultLineMaterial();
+
+        public static Material CreateDefaultLineMaterial() => new Material
         {
             Shader = new Shader("Shaders/lines.vert", "Shaders/lines.frag"),
             PipelineType = PipelineType.Forward,
+        };
+
+        public static Material CreateDefaultScreenLineMaterial() => new Material
+        {
+            Shader = new Shader("Shaders/screen-lines.vert", "Shaders/screen-lines.frag"),
+            PipelineType = PipelineType.Screen,
         };
 
         public static Material DefaultScreenMaterial { get; } = new Material

@@ -58,7 +58,7 @@ namespace Aximo.Render.Objects
 
         private InternalMesh Mesh;
 
-        private List<VertexArrayObjectMaterial> vaoList = new List<VertexArrayObjectMaterial>();
+        private List<VertexArrayObjectMaterial> VaoList = new List<VertexArrayObjectMaterial>();
 
         private class VertexArrayObjectMaterial
         {
@@ -91,31 +91,37 @@ namespace Aximo.Render.Objects
             if (Mesh.Materials.All(m => m.RenderPipeline == null))
                 UsePipeline(PrimaryRenderPipeline);
 
-            foreach (var materialId in Mesh.MaterialIds)
+            VaoList.Clear();
+            if (Mesh.HasData)
             {
-                var m = Mesh.GetMaterial(materialId);
-                UsePipeline(m.RenderPipeline);
-                m.CreateShaders();
-
-                var data = Mesh.GetMeshData(materialId);
-                var vao = new VertexArrayObject(data.BindLayoutToShader(m.Shader));
-                vao.SetData(data);
-                vaoList.Add(new VertexArrayObjectMaterial
+                foreach (var materialId in Mesh.MaterialIds)
                 {
-                    Vao = vao,
-                    Material = m,
-                });
+                    var m = Mesh.GetMaterial(materialId);
+                    UsePipeline(m.RenderPipeline);
+                    m.CreateShaders();
+
+                    var data = Mesh.GetMeshData(materialId);
+                    var vao = new VertexArrayObject(data.BindLayoutToShader(m.Shader));
+                    vao.SetData(data);
+                    VaoList.Add(new VertexArrayObjectMaterial
+                    {
+                        Vao = vao,
+                        Material = m,
+                    });
+                }
             }
         }
 
         public void SetVertices(InternalMesh mesh)
         {
             Mesh = mesh;
+            if (VaoList.Count > 0)
+                Init();
         }
 
         public void OnForwardRender()
         {
-            foreach (var mat in vaoList)
+            foreach (var mat in VaoList)
             {
                 var shader = mat.Material.Shader;
                 shader.Bind();
@@ -157,7 +163,7 @@ namespace Aximo.Render.Objects
 
         public void OnScreenRender()
         {
-            foreach (var mat in vaoList)
+            foreach (var mat in VaoList)
             {
                 var shader = mat.Material.Shader;
                 shader.Bind();
@@ -182,7 +188,7 @@ namespace Aximo.Render.Objects
             var pipe = Context.GetPipeline<DeferredRenderPipeline>();
             if (pipe.Pass == DeferredPass.Pass1)
             {
-                foreach (var mat in vaoList)
+                foreach (var mat in VaoList)
                 {
                     var defGeometryShader = mat.Material.DefGeometryShader;
                     defGeometryShader.Bind();
@@ -232,7 +238,7 @@ namespace Aximo.Render.Objects
             if (lights.Count == 0)
                 return;
 
-            foreach (var mat in vaoList)
+            foreach (var mat in VaoList)
             {
                 if (!mat.Material.CastShadow)
                     continue;
@@ -271,7 +277,7 @@ namespace Aximo.Render.Objects
             if (lights.Count == 0)
                 return;
 
-            foreach (var mat in vaoList)
+            foreach (var mat in VaoList)
             {
                 if (!mat.Material.CastShadow)
                     continue;
@@ -346,11 +352,11 @@ namespace Aximo.Render.Objects
 
         public override void Free()
         {
-            foreach (var itm in vaoList)
+            foreach (var itm in VaoList)
             {
                 itm.Vao.Free();
             }
-            vaoList.Clear();
+            VaoList.Clear();
         }
 
         public void OnReload()

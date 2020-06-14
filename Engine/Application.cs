@@ -613,6 +613,10 @@ namespace Aximo.Engine
         {
         }
 
+        protected virtual void OnPostMouseUp(MouseButtonArgs e)
+        {
+        }
+
         private void OnMouseUpInternal(MouseButtonEventArgs e)
         {
             var args = new MouseButtonArgs(OldMouseButtonPos, CurrentMousePositionNDC, e);
@@ -623,6 +627,8 @@ namespace Aximo.Engine
                 return;
 
             SceneContext.OnScreenMouseUp(args);
+
+            OnPostMouseUp(args);
         }
 
         protected virtual void OnMouseWheel(MouseWheelEventArgs e) { }

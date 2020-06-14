@@ -25,6 +25,8 @@ namespace Aximo.Render.OpenGL
             Materials.Add(material);
         }
 
+        public bool HasData => Mesh != null;
+
         public RendererMaterial Material
         {
             get
@@ -48,8 +50,12 @@ namespace Aximo.Render.OpenGL
         public void SetMesh(Mesh mesh)
         {
             Mesh = mesh;
-            for (var i = 0; i < mesh.MaterialCount; i++)
-                MeshDataList.Add(mesh.GetMeshData(i));
+            MeshDataList.Clear();
+            if (mesh != null)
+            {
+                for (var i = 0; i < mesh.MaterialCount; i++)
+                    MeshDataList.Add(mesh.GetMeshData(i));
+            }
         }
 
         public List<RendererMaterial> Materials = new List<RendererMaterial>();

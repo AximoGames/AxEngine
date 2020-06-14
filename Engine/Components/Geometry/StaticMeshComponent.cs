@@ -40,6 +40,13 @@ namespace Aximo.Engine.Components.Geometry
         /// <param name="mesh">The mesh data.</param>
         public void SetMesh(Mesh mesh)
         {
+            if (mesh == null)
+            {
+                Mesh = null;
+                UpdateMesh();
+                return;
+            }
+
             Mesh = mesh;
             mesh.CalculateBounds();
             UpdateMesh();
@@ -94,6 +101,10 @@ namespace Aximo.Engine.Components.Geometry
                 {
                     InternalMesh = new StaticInternalMesh(Mesh);
                     obj.Name = Name;
+                }
+                else
+                {
+                    InternalMesh.SetMesh(Mesh);
                 }
                 InternalMesh.Materials.Clear();
                 foreach (var gameMat in Materials)

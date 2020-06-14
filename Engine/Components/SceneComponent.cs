@@ -140,6 +140,21 @@ namespace Aximo.Engine
                 comp.Visit(action, visitChilds);
         }
 
+        public override IEnumerable<T> Find<T>(Func<T, bool> visitChilds = null)
+        {
+            foreach (var itm in base.Find(visitChilds))
+                yield return itm;
+
+            if (visitChilds != null)
+                if (this is T obj)
+                    if (!visitChilds.Invoke(obj))
+                        yield break;
+
+            foreach (var comp in Components)
+                foreach (var itm in comp.Find(visitChilds))
+                    yield return itm;
+        }
+
         public override void Detach()
         {
             if (Parent != null)

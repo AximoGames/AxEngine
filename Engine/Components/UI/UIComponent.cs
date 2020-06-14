@@ -141,6 +141,8 @@ namespace Aximo.Engine.Components.UI
 
         public UIAnchors Margin;
 
+        public Vector2 AbsoluteCenter => AbsoluteClientRect.Center;
+
         public Vector2 Location;
         // Inner Padding Size!
         private Vector2 _Size;
@@ -165,14 +167,7 @@ namespace Aximo.Engine.Components.UI
             if (_RectangleUV == value)
                 return;
 
-            var pos = new Vector3(
-                ((value.X + (value.Width / 2f)) * 2) - 1.0f,
-                ((1 - (value.Y + (value.Height / 2f))) * 2) - 1.0f,
-                0);
-
-            var scale = new Vector3(value.Width, -value.Height, 1.0f);
-            RelativeTranslation = pos;
-            RelativeScale = scale;
+            Transform = TransformUtil.TransformUVRectangleToScreenSpace(value);
             _RectanglePixels = null;
             _RectangleUV = value;
         }
@@ -183,10 +178,7 @@ namespace Aximo.Engine.Components.UI
             if (_RectanglePixels == value)
                 return;
 
-            var pos1 = new Vector2(value.X, value.Y) * RenderContext.Current.PixelToUVFactor;
-            var pos2 = new Vector2(value.Right, value.Bottom) * RenderContext.Current.PixelToUVFactor;
-
-            SetRectangleUV(new RectangleF(pos1.X, pos1.Y, pos2.X - pos1.X, pos2.Y - pos1.Y));
+            Transform = TransformUtil.TransformPixelRectangleToScreenSpace(value);
             _RectangleUV = null;
             _RectanglePixels = value;
         }
@@ -197,10 +189,7 @@ namespace Aximo.Engine.Components.UI
             if (_RectangleScaled == value)
                 return;
 
-            var pos1 = new Vector2(value.X, value.Y) * SceneContext.Current.ScaleToPixelFactor;
-            var pos2 = new Vector2(value.Right, value.Bottom) * SceneContext.Current.ScaleToPixelFactor;
-
-            SetRectanglePixels(new RectangleF(pos1.X, pos1.Y, pos2.X - pos1.X, pos2.Y - pos1.Y));
+            Transform = TransformUtil.TransformScaleRectangleToScreenSpace(value);
             _RectangleScaled = value;
         }
 

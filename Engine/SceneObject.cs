@@ -132,6 +132,13 @@ namespace Aximo.Engine
                 action((T)this);
         }
 
+        public virtual IEnumerable<T> Find<T>(Func<T, bool> visitChilds = null)
+            where T : SceneObject
+        {
+            if (this is T)
+                yield return (T)this;
+        }
+
         public void VisitChilds<T>(Action<T> action, Func<T, bool> visitChilds = null)
             where T : SceneObject
         {

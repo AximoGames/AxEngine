@@ -6,7 +6,7 @@
 * Added UISlider
 * Added OpenAL
 * Added some Audio Modules
-* Implemented Scaled UI Pixels for resolution independent posisions.
+* Implemented Scaled UI Pixels for resolution independent positions
 
 ### 1.0.8
 

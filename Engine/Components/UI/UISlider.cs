@@ -49,11 +49,16 @@ namespace Aximo.Engine.Components.UI
             set => Button.Value = value;
         }
 
-        internal void RaiseSliderValueChanged(SliderValueChangedArgs e)
+        internal void OnSliderValueChangedInternal(SliderValueChangedArgs e)
         {
             if (Parent == null)
                 return;
 
+            OnSliderValueChanged(e);
+        }
+
+        protected virtual void OnSliderValueChanged(SliderValueChangedArgs e)
+        {
             SliderValueChanged?.Invoke(e);
         }
 
@@ -90,7 +95,7 @@ namespace Aximo.Engine.Components.UI
                     _Value = Math.Clamp(value, MinValue, MaxValue);
                     _ProgressFactor = Math.Clamp((_Value - MinValue) * ValueToProgressFactor, 0, 1);
 
-                    Parent.RaiseSliderValueChanged(new SliderValueChangedArgs
+                    Parent.OnSliderValueChangedInternal(new SliderValueChangedArgs
                     {
                         OldValue = oldValue,
                         NewValue = _Value,
@@ -181,6 +186,7 @@ namespace Aximo.Engine.Components.UI
         public Color BorderColorHover { get; set; } = Color.Black;
 
         public float BorderSize { get; set; } = 1;
+        public float BorderRadius { get; set; } = 10;
 
         protected override void DrawControl()
         {
@@ -199,7 +205,7 @@ namespace Aximo.Engine.Components.UI
             }
 
             Image.Mutate(ctx => ctx.Clear(bgColor));
-            Image.Mutate(ctx => ctx.DrawButton(BorderSize, borderColor, 10f));
+            Image.Mutate(ctx => ctx.DrawButton(BorderSize, borderColor, BorderRadius));
         }
 
         public override void OnMouseEnter(MouseMoveArgs e)

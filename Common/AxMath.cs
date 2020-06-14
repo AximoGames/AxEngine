@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Runtime.CompilerServices;
 using OpenToolkit.Mathematics;
 
 namespace Aximo
@@ -51,6 +52,16 @@ namespace Aximo
             return new Vector2i((int)vec.X, (int)vec.Y);
         }
 
+        public static Vector3 ToVector3(this Vector2 vec)
+        {
+            return new Vector3(vec.X, vec.Y, 0);
+        }
+
+        public static Vector3 ToVector3(this Vector2 vec, float z)
+        {
+            return new Vector3(vec.X, vec.Y, z);
+        }
+
         public static float NormalizedToRadians(float normalizedAngle)
         {
             return normalizedAngle * MathF.PI * 2;
@@ -71,6 +82,7 @@ namespace Aximo
             return QuaternionFromNormalizedAngles(normalizedAngle);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static float Map(float input, float fromMin, float fromMax, float toMin, float toMax)
         {
             return ((input - fromMin) / (fromMax - fromMin) * (toMax - toMin)) + toMin;
@@ -112,5 +124,8 @@ namespace Aximo
         public static float CosDeg(float deg) => MathF.Cos(deg * Deg2Rad);
         public static float SinNorm(float norm) => MathF.Sin(norm * Norm2Rad);
         public static float CosNorm(float norm) => MathF.Cos(norm * Norm2Rad);
+
+        public static float Digits(float value) => value - MathF.Truncate(value);
+        public static double Digits(double value) => value - Math.Truncate(value);
     }
 }

@@ -116,18 +116,22 @@ namespace Aximo
             source.Fill(graphicsOptions, Brushes.Solid(color));
         }
 
-        public static IImageProcessingContext DrawButton(this IImageProcessingContext processingContext, float borderTickness, Color borderColor, float cornerRadius)
+        public static IImageProcessingContext DrawButton(this IImageProcessingContext processingContext, float borderTickness, Color borderColor, float cornerRadius = 0)
         {
             var size = processingContext.GetCurrentSize();
             var options = new ShapeGraphicsOptions();
             processingContext.DrawLines(options, borderColor, borderTickness * 2, new PointF(0, 0), new PointF(size.Width, 0), new PointF(size.Width, size.Height), new PointF(0, size.Height), new PointF(0, 0));
-            return processingContext.ApplyRoundedCorners(borderTickness, borderColor, cornerRadius);
+            processingContext.ApplyRoundedCorners(borderTickness, borderColor, cornerRadius);
+            return processingContext;
         }
 
         // This method can be seen as an inline implementation of an `IImageProcessor`:
         // (The combination of `IImageOperations.Apply()` + this could be replaced with an `IImageProcessor`)
         private static IImageProcessingContext ApplyRoundedCorners(this IImageProcessingContext ctx, float borderThickness, Color borderColor, float cornerRadius)
         {
+            if (cornerRadius <= 0)
+                return ctx;
+
             Size size = ctx.GetCurrentSize();
             var corners = BuildCorners(size.Width, size.Height, cornerRadius);
 

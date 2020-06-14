@@ -43,6 +43,7 @@ namespace Aximo.Engine.Components.UI
 
         public Color BorderColor { get; set; } = Color.Black;
         public Color BorderColorHover { get; set; } = Color.Black;
+        public float BorderRadius { get; set; } = 10;
 
         public float BorderSize { get; set; } = 1;
 
@@ -63,7 +64,7 @@ namespace Aximo.Engine.Components.UI
             }
 
             Image.Mutate(ctx => ctx.Clear(bgColor));
-            Image.Mutate(ctx => ctx.DrawButton(BorderSize, borderColor, 10f));
+            Image.Mutate(ctx => ctx.DrawButton(BorderSize, borderColor, BorderRadius));
         }
 
         public override void OnMouseEnter(MouseMoveArgs e)

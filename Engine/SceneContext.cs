@@ -78,6 +78,14 @@ namespace Aximo.Engine
                 act.Visit(action, visitChilds);
         }
 
+        public override IEnumerable<T> Find<T>(Func<T, bool> visitChilds = null)
+        {
+            foreach (var act in Actors)
+                foreach (var result in act.Find(visitChilds))
+                    yield return result;
+
+        }
+
         public void Visit(Action<Actor> action)
         {
             foreach (var act in Actors)
