@@ -47,6 +47,16 @@ namespace Aximo
             return new Vector3(MathF.Round(vec.X, digits), MathF.Round(vec.Y, digits), MathF.Round(vec.Z, digits));
         }
 
+        public static Vector2 Round(this Vector2 vec)
+        {
+            return new Vector2(MathF.Round(vec.X), MathF.Round(vec.Y));
+        }
+
+        public static Vector2 Round(this Vector2 vec, int digits)
+        {
+            return new Vector2(MathF.Round(vec.X, digits), MathF.Round(vec.Y, digits));
+        }
+
         public static Vector2i ToVector2i(this Vector2 vec)
         {
             return new Vector2i((int)vec.X, (int)vec.Y);

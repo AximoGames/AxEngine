@@ -63,8 +63,8 @@ namespace Aximo.Engine.Components.UI
                 borderColor = BorderColor;
             }
 
-            Image.Mutate(ctx => ctx.Clear(bgColor));
-            Image.Mutate(ctx => ctx.DrawButton(BorderSize, borderColor, BorderRadius));
+            ImageContext.Clear(bgColor);
+            ImageContext.DrawButton(BorderSize, borderColor, BorderRadius);
         }
 
         public override void OnMouseEnter(MouseMoveArgs e)

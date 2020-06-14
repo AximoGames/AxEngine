@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Linq;
+using OpenToolkit.Mathematics;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
@@ -24,7 +25,6 @@ namespace Aximo.Engine.Components.UI
             }
         }
 
-        private static FontFamily DefaultFamily = SystemFonts.Families.First();
         public float FontSize { get; set; } = 15;
 
         public UILabelComponent()
@@ -41,18 +41,12 @@ namespace Aximo.Engine.Components.UI
 
         protected override void DrawControl()
         {
-            var options = new TextGraphicsOptions
-            {
-                TextOptions = new TextOptions
-                {
-                    VerticalAlignment = VerticalAlignment.Center,
-                },
-            };
-
-            Image.Mutate(ctx => ctx.Clear(Color.Transparent));
+            ImageContext.Clear(Color.Transparent);
+            ImageContext.VerticalTextAlignment = VerticalAlignment.Center;
+            ImageContext.FontSize = FontSize;
 
             if (Text != null)
-                Image.Mutate(ctx => ctx.DrawText(options, Text, new Font(DefaultFamily, FontSize, FontStyle.Regular), Color, new PointF(0, RelatativePaddingRect.Size.Y / 2)));
+                ImageContext.DrawText(Text, Color, new Vector2(0, RelatativePaddingRect.Size.Y / 2));
         }
 
         protected override void OnResized()

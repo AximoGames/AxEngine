@@ -19,7 +19,6 @@ namespace Aximo.Engine.Components.Geometry
     public class StatsComponent : UIComponent
     {
         private DateTime LastStatUpdate;
-        private Font DefaultFont = new Font(SystemFonts.Families.First(), 24, FontStyle.Regular);
 
         public StatsComponent() : this(new Vector2i(200, 100))
         {
@@ -27,7 +26,7 @@ namespace Aximo.Engine.Components.Geometry
 
         public StatsComponent(Vector2i size) : base(size)
         {
-            Image.Mutate(ctx => ctx.Clear(Color.Transparent));
+            ImageContext.Clear(Color.Transparent);
             UpdateTexture();
         }
 
@@ -36,10 +35,12 @@ namespace Aximo.Engine.Components.Geometry
             if ((DateTime.UtcNow - LastStatUpdate).TotalSeconds > 1)
             {
                 LastStatUpdate = DateTime.UtcNow;
-                Image.Mutate(ctx => ctx.Clear(Color.Transparent));
+                ImageContext.Clear(Color.Transparent);
                 var txt = "FPS: " + Math.Round(Application.Current.RenderCounter.EventsPerSecond).ToString();
                 txt += "\nUPS: " + Math.Round(Application.Current.UpdateCounter.EventsPerSecond).ToString();
-                Image.Mutate(ctx => ctx.DrawText(txt, DefaultFont, Color.White, new PointF(5, 5)));
+                ImageContext.FontSize = 24;
+                ImageContext.FillStyle(Color.White);
+                ImageContext.DrawText(txt, new Vector2(5, 5));
                 UpdateTexture();
             }
             base.UpdateFrame();
