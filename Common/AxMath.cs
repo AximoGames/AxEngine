@@ -37,6 +37,11 @@ namespace Aximo
             return Math.Abs(b - a) < Math.Max(0.000001f * Math.Max(Math.Abs(a), Math.Abs(b)), float.Epsilon * 8);
         }
 
+        public static bool Approximately(this Vector2 a, Vector2 b)
+        {
+            return Approximately(a.X, b.X) && Approximately(a.Y, b.Y);
+        }
+
         public static Vector3 Round(this Vector3 vec)
         {
             return new Vector3(MathF.Round(vec.X), MathF.Round(vec.Y), MathF.Round(vec.Z));

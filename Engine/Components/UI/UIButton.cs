@@ -16,6 +16,7 @@ namespace Aximo.Engine.Components.UI
         public UIButton()
         {
             Padding = new UIAnchors(10, 10, 10, 10);
+            Border = new UIAnchors(1);
             LabelComponent = new UILabelComponent();
             AddComponent(LabelComponent);
         }
@@ -45,8 +46,6 @@ namespace Aximo.Engine.Components.UI
         public Color BorderColorHover { get; set; } = Color.Black;
         public float BorderRadius { get; set; } = 10;
 
-        public float BorderSize { get; set; } = 1;
-
         protected override void DrawControl()
         {
             Color bgColor;
@@ -64,7 +63,7 @@ namespace Aximo.Engine.Components.UI
             }
 
             ImageContext.Clear(bgColor);
-            ImageContext.DrawButton(BorderSize, borderColor, BorderRadius);
+            ImageContext.DrawButton(Border, borderColor, BorderRadius);
         }
 
         public override void OnMouseEnter(MouseMoveArgs e)

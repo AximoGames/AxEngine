@@ -7,28 +7,28 @@ namespace Aximo.Engine.Components.UI
 {
     public class UIImage : UIComponent
     {
-        public UIImage(Material material) : this(material, new Vector2i(100, 100))
+        public UIImage(Material material) : this(material, new Vector2(100, 100))
         {
         }
 
-        public UIImage(Material material, Vector2i size) : base(size)
+        public UIImage(Material material, Vector2 size) : base(size)
         {
             Material = material;
         }
 
-        public UIImage(string imagePath) : this(Texture.GetFromFile(imagePath), new Vector2i(100, 100))
+        public UIImage(string imagePath) : this(Texture.GetFromFile(imagePath), new Vector2(100, 100))
         {
         }
 
-        public UIImage(string imagePath, Vector2i size) : this(Texture.GetFromFile(imagePath), size)
+        public UIImage(string imagePath, Vector2 size) : this(Texture.GetFromFile(imagePath), size)
         {
         }
 
-        public UIImage(Texture image) : this(image, new Vector2i(100, 100))
+        public UIImage(Texture image) : this(image, new Vector2(100, 100))
         {
         }
 
-        public UIImage(Texture image, Vector2i size) : base(size)
+        public UIImage(Texture image, Vector2 size) : base(size)
         {
             Material.DiffuseTexture = image;
         }

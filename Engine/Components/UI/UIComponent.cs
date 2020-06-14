@@ -14,11 +14,11 @@ namespace Aximo.Engine.Components.UI
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<UIComponent>();
 
-        public UIComponent() : this(new Vector2i(100, 100))
+        public UIComponent() : this(new Vector2(100, 100))
         {
         }
 
-        public UIComponent(Vector2i size) : base(size)
+        public UIComponent(Vector2 size) : base(size)
         {
             IsAbsoluteScale = true;
             IsAbsoluteRotation = true;
@@ -59,14 +59,14 @@ namespace Aximo.Engine.Components.UI
             RelatativePaddingRect = BoxHelper.FromSize(relPos, relSize);
             AbsolutePaddingRect = BoxHelper.FromSize(AbsoluteOuterRect.Min + relPos, relSize);
 
-            if (AbsoluteDrawRect.Size != oldDrawRect.Size)
+            if (!AbsoluteDrawRect.Size.Approximately(oldDrawRect.Size))
             {
-                ResizeImage(DrawSize.ToVector2i());
+                ResizeImage(DrawSize);
             }
             if (AbsoluteDrawRect != oldDrawRect)
             {
                 SetRectangleScaled(AbsoluteDrawRect.ToRectangleF());
-                if (AbsoluteClientRect.Size != oldDrawRect.Size)
+                if (!AbsoluteDrawRect.Size.Approximately(oldDrawRect.Size))
                     OnResized();
             }
         }
@@ -107,7 +107,12 @@ namespace Aximo.Engine.Components.UI
                     size.X = SceneContext.Current.ScreenScaledSize.X;
                 if (size.Y == 0)
                     size.Y = SceneContext.Current.ScreenScaledSize.Y;
-                AbsoluteOuterRect = BoxHelper.FromSize(Location, size);
+
+                var newAbsoluteOuterRect = BoxHelper.FromSize(Location, size);
+                //if (newAbsoluteOuterRect == AbsoluteOuterRect) // TODO: Fix
+                //    return;
+
+                AbsoluteOuterRect = newAbsoluteOuterRect;
 
                 CalculateSizes();
             }
@@ -144,6 +149,7 @@ namespace Aximo.Engine.Components.UI
         public Vector2 AbsoluteCenter => AbsoluteClientRect.Center;
 
         public Vector2 Location;
+
         // Inner Padding Size!
         private Vector2 _Size;
         public Vector2 Size
@@ -155,6 +161,15 @@ namespace Aximo.Engine.Components.UI
                     return;
                 _Size = value;
                 PropertyChanged();
+            }
+        }
+
+        public Vector2 OuterSize
+        {
+            get => Size + Border.Size + Margin.Size;
+            set
+            {
+                Size = value - Border.Size - Margin.Size;
             }
         }
 

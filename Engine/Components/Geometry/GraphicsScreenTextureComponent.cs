@@ -9,26 +9,26 @@ namespace Aximo.Engine.Components.Geometry
 {
     public class GraphicsScreenTextureComponent : ScreenTextureComponent
     {
-        public GraphicsScreenTextureComponent(Vector2i size)
+        public GraphicsScreenTextureComponent(Vector2 size)
         {
-            size = TransformSize(size);
-            Image = new Image<Rgba32>(size.X, size.Y);
+            var realSize = TransformSize(size);
+            Image = new Image<Rgba32>(realSize.X, realSize.Y);
             ImageContext = new ImageContext(Image, SceneContext.Current.ScaleToPixelFactor);
             Texture = Texture.GetFromBitmap(Image, null);
             Material.DiffuseTexture = Texture;
             UpdateTexture();
         }
 
-        private Vector2i TransformSize(Vector2i size) => (size.ToVector2() * SceneContext.Current.ScaleToPixelFactor).Round().ToVector2i();
+        private Vector2i TransformSize(Vector2 size) => (size * SceneContext.Current.ScaleToPixelFactor).Round().ToVector2i();
 
-        protected void ResizeImage(Vector2i size)
+        protected void ResizeImage(Vector2 size)
         {
-            size = TransformSize(size);
+            var realSize = TransformSize(size);
 
-            if (size.X == 0 || size.Y == 0)
+            if (realSize.X == 0 || realSize.Y == 0)
                 return;
 
-            Image = new Image<Rgba32>(size.X, size.Y);
+            Image = new Image<Rgba32>(realSize.X, realSize.Y);
             ImageContext.SetImage(Image);
             UpdateTexture();
         }

@@ -20,15 +20,17 @@ namespace Aximo.Engine.Components.Geometry
     {
         private DateTime LastStatUpdate;
 
-        public StatsComponent() : this(new Vector2i(200, 100))
+        public StatsComponent() : this(new Vector2(200, 100))
         {
         }
 
-        public StatsComponent(Vector2i size) : base(size)
+        public StatsComponent(Vector2 size) : base(size)
         {
             ImageContext.Clear(Color.Transparent);
             UpdateTexture();
         }
+
+        public float FontSize = 24;
 
         public override void UpdateFrame()
         {
@@ -38,7 +40,7 @@ namespace Aximo.Engine.Components.Geometry
                 ImageContext.Clear(Color.Transparent);
                 var txt = "FPS: " + Math.Round(Application.Current.RenderCounter.EventsPerSecond).ToString();
                 txt += "\nUPS: " + Math.Round(Application.Current.UpdateCounter.EventsPerSecond).ToString();
-                ImageContext.FontSize = 24;
+                ImageContext.FontSize = FontSize;
                 ImageContext.FillStyle(Color.White);
                 ImageContext.DrawText(txt, new Vector2(5, 5));
                 UpdateTexture();

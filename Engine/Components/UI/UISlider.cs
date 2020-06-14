@@ -120,7 +120,7 @@ namespace Aximo.Engine.Components.UI
 
             internal override void SetComponentSize()
             {
-                Size = SliderSize;
+                OuterSize = SliderSize;
                 var xPos = PixelRange * Progress;
                 Location = SwapAxis(new Vector2(xPos, SwapAxis(Location).Y));
 
@@ -185,7 +185,6 @@ namespace Aximo.Engine.Components.UI
         public Color BorderColor { get; set; } = Color.Black;
         public Color BorderColorHover { get; set; } = Color.Black;
 
-        public float BorderSize { get; set; } = 1;
         public float BorderRadius { get; set; } = 10;
 
         protected override void DrawControl()
@@ -205,7 +204,7 @@ namespace Aximo.Engine.Components.UI
             }
 
             ImageContext.Clear(bgColor);
-            ImageContext.DrawButton(BorderSize, borderColor, BorderRadius);
+            ImageContext.DrawButton(Border, borderColor, BorderRadius);
         }
 
         public override void OnMouseEnter(MouseMoveArgs e)

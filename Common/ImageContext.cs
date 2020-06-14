@@ -141,6 +141,10 @@ namespace Aximo
         {
             ctx.Image.Mutate(c => c.DrawButton(ctx.Transform(borderTickness), borderColor, ctx.Transform(cornerRadius)));
         }
-    }
 
+        public static void DrawButton(this ImageContext ctx, UIAnchors borderTickness, Color borderColor, float cornerRadius = 0)
+        {
+            ctx.Image.Mutate(c => c.DrawButton(ctx.Transform(borderTickness.Left), borderColor, ctx.Transform(cornerRadius)));
+        }
+    }
 }

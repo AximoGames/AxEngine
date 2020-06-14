@@ -3,7 +3,7 @@
 
 using OpenToolkit.Mathematics;
 
-namespace Aximo.Engine.Components.UI
+namespace Aximo
 {
     public struct UIAnchors
     {
@@ -14,6 +14,15 @@ namespace Aximo.Engine.Components.UI
             Right = right;
             Bottom = bottom;
         }
+
+        public UIAnchors(float all)
+        {
+            Left = all;
+            Top = all;
+            Right = all;
+            Bottom = all;
+        }
+
 
         public static UIAnchors Zero => new UIAnchors();
 

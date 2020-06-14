@@ -23,6 +23,13 @@ namespace Aximo.Engine.Components.UI
                 {
                     var location = child.Location;
                     var size = child.Size + child.PaddingInternal.Size + child.Border.Size + child.Margin.Size;
+
+                    //location.X += Border.Left;
+                    //location.Y += Border.Top;
+
+                    //size.X -= child.Border.Size.X;
+                    //size.Y -= child.Border.Size.Y;
+
                     child.AbsoluteOuterRect = BoxHelper.FromSize(AbsolutePaddingRect.Min + location, size);
                 }
             }
