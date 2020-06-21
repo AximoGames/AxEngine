@@ -33,6 +33,8 @@ namespace Aximo.Engine.Audio
             if (Mute)
                 return;
 
+            AudioModuleManager.Current.RegisterModules(typeof(AudioPCMSourceModule).Assembly);
+
             var rack = new AudioMainRack();
             Rack = rack;
 
@@ -70,21 +72,7 @@ namespace Aximo.Engine.Audio
             rack.AddCable(mixMod.GetOutput("Left"), outMod.GetInput("Left"));
             rack.AddCable(mixMod.GetOutput("Right"), outMod.GetInput("Right"));
 
-            //rack.AddCable(inMod.GetOutput("Gate"), outMod.GetInput("Gate"));
-
-            //var dbgMod = new AudioDebugLogValuesModule();
-            //dbgMod.SetOutputFile("/tmp/test.log");
-            //rack.AddModule(dbgMod);
-            //rack.AddCable(inMod.GetOutput("Left"), dbgMod.GetInput("Probe"));
-
             rack.StartThread();
-            //PlayAsync("Sounds/marble-moving.wav");
-            //Thread.Sleep(200);
-            //PlayAsync("Sounds/marble-adding.wav");
-            //while (true)
-            //{
-            //    var s = "";
-            //}
         }
 
         private string GetPath(string path)

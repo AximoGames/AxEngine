@@ -65,5 +65,19 @@ namespace Aximo
         {
             return array.ToArray();
         }
+
+        public static bool HasIndex<T>(this List<T> input, int index)
+        {
+            return index >= 0 && input.Count > index;
+        }
+
+        public static T TryGet<T>(this List<T> input, int index)
+        {
+            if (!HasIndex(input, index))
+                return default;
+
+            return input[index];
+        }
+
     }
 }

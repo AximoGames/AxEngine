@@ -23,6 +23,7 @@
         <PackageReference Include="NetCoreAudio" Version="1.5.0" />
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\Aximo.AudioRack\Aximo.Audio.Rack.Modules\Aximo.Audio.Rack.Modules.csproj" />
         <ProjectReference Include="..\Aximo.AudioRack\Aximo.Audio.Rack\Aximo.Audio.Rack.csproj" />
         <ProjectReference Include="..\Render\Render.csproj" />
         <ProjectReference Include="..\Common\Common.csproj" />
