@@ -5,3 +5,4 @@
 [submodule "Aximo.AudioRack"]
 	path = Aximo.AudioRack
 	url = https://github.com/AximoGames/Aximo.AudioRack.git
+	pushurl = git@github.com:AximoGames/Aximo.AudioRack.git
