@@ -14,6 +14,7 @@ namespace Aximo.Engine.Components.Geometry
             var realSize = TransformSize(size);
             Image = new Image<Rgba32>(realSize.X, realSize.Y);
             ImageContext = new ImageContext(Image, SceneContext.Current.ScaleToPixelFactor);
+            ImageContext.OnFlush += () => UpdateTexture();
             Texture = Texture.GetFromBitmap(Image, null);
             Material.DiffuseTexture = Texture;
             UpdateTexture();
@@ -34,7 +35,7 @@ namespace Aximo.Engine.Components.Geometry
         }
 
         protected Image<Rgba32> Image { get; private set; }
-        protected ImageContext ImageContext { get; private set; }
+        public ImageContext ImageContext { get; private set; }
 
         public Texture Texture { get; private set; }
 

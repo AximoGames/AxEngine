@@ -26,14 +26,14 @@ namespace Aximo.Engine.Audio
             Default = new AudioManager();
         }
 
-        public AudioRack Rack;
+        public AudioMainRack Rack;
 
         public AudioManager()
         {
             if (Mute)
                 return;
 
-            var rack = new AudioRack();
+            var rack = new AudioMainRack();
             Rack = rack;
 
             var inMod = new AudioPCMSourceModule();

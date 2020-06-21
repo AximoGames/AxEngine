@@ -435,8 +435,10 @@ namespace Aximo.Engine
             MouseMove?.Invoke(e);
         }
 
+        private bool IsMouseDownThisControl = false;
         public virtual void OnMouseDown(MouseButtonArgs e)
         {
+            IsMouseDownThisControl = true;
             MouseDown?.Invoke(e);
         }
 
@@ -447,7 +449,11 @@ namespace Aximo.Engine
             if (e.Handled)
                 return;
 
-            OnMouseClick(e);
+            if (IsMouseDownThisControl)
+            {
+                IsMouseDownThisControl = false;
+                OnMouseClick(e);
+            }
         }
 
         public virtual void OnMouseClick(MouseButtonArgs e)

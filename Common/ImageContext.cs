@@ -94,6 +94,7 @@ namespace Aximo
         private FontFamily FontFamily = SystemFonts.Families.First();
         private Font Font;
         private IBrush Brush;
+        public float StrokeThickness = 1;
 
         public VerticalAlignment VerticalTextAlignment { get; set; } = VerticalAlignment.Top;
 
@@ -133,6 +134,46 @@ namespace Aximo
             Image.Mutate(ctx => ctx.Clear(color));
         }
 
+        public void BeginPath()
+        {
+            Paths.Clear();
+        }
+
+        public void MoveTo(PointF to)
+        {
+            CurrentPathPosition = to;
+        }
+
+        public void MoveTo(Vector2 to)
+        {
+            MoveTo(new PointF(to.X, to.Y));
+        }
+
+        private List<IPath> Paths = new List<IPath>();
+        private PointF CurrentPathPosition = PointF.Empty;
+
+        public void LineTo(PointF to)
+        {
+            Paths.Add(new Polygon(new LinearLineSegment(CurrentPathPosition, to)));
+            CurrentPathPosition = to;
+        }
+
+        public void LineTo(Vector2 to)
+        {
+            LineTo(new PointF(to.X, to.Y));
+        }
+
+        public void Stroke()
+        {
+            var pathCollection = new PathCollection(Paths);
+            Image.Mutate(ctx => ctx.Draw(Brush, StrokeThickness, pathCollection));
+        }
+
+        public event Action OnFlush;
+        public void Flush()
+        {
+            OnFlush?.Invoke();
+        }
     }
 
     public static class ImageContextExtensions

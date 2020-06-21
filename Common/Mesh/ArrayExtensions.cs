@@ -37,5 +37,18 @@ namespace Aximo
             list.Remove(element);
             return list.ToArray();
         }
+
+        public static bool HasIndex<T>(this T[] input, int index)
+        {
+            return index >= 0 && input.Length > index;
+        }
+
+        public static T TryGet<T>(this T[] input, int index)
+        {
+            if (!HasIndex(input, index))
+                return default;
+
+            return input[index];
+        }
     }
 }

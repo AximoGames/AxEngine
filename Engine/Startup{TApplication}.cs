@@ -3,6 +3,7 @@
 
 using System;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading;
 using Aximo.Engine.Components.Geometry;
 using Aximo.Engine.Windows;
@@ -10,6 +11,7 @@ using Aximo.Render.OpenGL;
 
 namespace Aximo.Engine
 {
+
     /// <inheritdoc/>
     public class Startup<TApplication> : Startup
         where TApplication : Application, new()
@@ -127,7 +129,10 @@ namespace Aximo.Engine
                         });
                         break;
                     default:
-                        Console.WriteLine("Unknown command");
+                        var a = new ExecuteConsoleCommandLineArgs(cmd);
+                        CommandLineManager.Current.InvokeExecuteConsoleCommandLine(a);
+                        if (!a.Handled)
+                            Console.WriteLine("Unknown command");
                         break;
                 }
             }
