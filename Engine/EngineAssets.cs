@@ -49,7 +49,7 @@ namespace Aximo.Engine
             var whiteBrush = Brushes.Solid(Color.White);
             var charsX = "12345678";
             var charsY = "ABCDEFGH";
-            var font = new Font(SystemFonts.Families.First(), 56f, FontStyle.Regular);
+            var font = new Font(SharedLib.DefaultFontFamily(), 56f, FontStyle.Regular);
 
             for (var y = 0; y < 8; y++)
             {
