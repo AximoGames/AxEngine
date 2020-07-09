@@ -1,6 +1,7 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
@@ -41,12 +42,6 @@ namespace Aximo.Engine
             PipelineType = PipelineType.Screen,
         };
 
-        public static Material DefaultScreenMaterial { get; } = new Material
-        {
-            Shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag"),
-            PipelineType = PipelineType.Forward,
-        };
-
         public static Material CreateScreenMaterial(string texturePath)
         {
             var mat = CreateScreenMaterial();
@@ -54,11 +49,19 @@ namespace Aximo.Engine
             return mat;
         }
 
+        private static Lazy<Shader> DefaultScreenShader = new Lazy<Shader>(() => new Shader("Shaders/screen.vert", "Shaders/screen.frag"));
+
+        public static Material DefaultScreenMaterial { get; } = new Material
+        {
+            Shader = DefaultScreenShader.Value,
+            PipelineType = PipelineType.Screen,
+        };
+
         public static Material CreateScreenMaterial()
         {
             return new Material
             {
-                Shader = new Shader("Shaders/screen.vert", "Shaders/screen.frag"),
+                Shader = DefaultScreenShader.Value,
                 PipelineType = PipelineType.Screen,
             };
         }

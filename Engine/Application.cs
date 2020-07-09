@@ -141,6 +141,7 @@ namespace Aximo.Engine
                 UpdateMouseWorldPosition();
             };
 
+            RegisterWindowEventsStage2();
             Initialized = true;
         }
 
@@ -149,6 +150,12 @@ namespace Aximo.Engine
             // Dont's forget UnregisterWindowEvents!
             WindowContext.RenderFrame += (e) => OnRenderFrameInternal(e);
             WindowContext.UpdateFrame += (e) => OnUpdateFrameInternal(e);
+            Window.Closing += (e) => OnClosingInternal(e);
+            Window.Closed += OnClosed;
+        }
+
+        private void RegisterWindowEventsStage2()
+        {
             Window.MouseMove += (e) => OnMouseMoveInternal(e);
             Window.KeyDown += (e) => OnKeyDownInternal(e);
             Window.MouseDown += (e) => OnMouseDownInternal(e);
@@ -157,8 +164,6 @@ namespace Aximo.Engine
             Window.Unload += () => OnUnloadInternal();
             Window.Resize += (e) => OnScreenResizeInternal(e);
             Window.FocusedChanged += (e) => OnFocusedChangedInternal(e);
-            Window.Closing += (e) => OnClosingInternal(e);
-            Window.Closed += OnClosed;
         }
 
         private void UnregisterWindowEvents()
@@ -566,6 +571,8 @@ namespace Aximo.Engine
                 if (obj is IReloadable reloadable)
                     reloadable.OnReload();
         }
+
+        protected bool IsFirstUpdate => UpdateFrameNumber == 0;
 
         protected virtual void OnMouseMove(MouseMoveArgs e) { }
 

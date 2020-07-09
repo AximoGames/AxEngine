@@ -91,7 +91,7 @@ namespace Aximo
             }
         }
 
-        private FontFamily FontFamily = SystemFonts.Families.First();
+        private FontFamily FontFamily = SharedLib.DefaultFontFamily();
         private Font Font;
         private IBrush Brush;
         public float StrokeThickness = 1;

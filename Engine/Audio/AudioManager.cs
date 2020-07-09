@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml;
+using Aximo.Audio.Rack.JsonModel;
 using Aximo.Engine.Audio.Modules;
 //using System.Media;
 using NetCoreAudio;
@@ -44,16 +46,21 @@ namespace Aximo.Engine.Audio
             var inMod3 = new AudioPCMSourceModule();
             var inMod4 = new AudioPCMSourceModule();
 
+            var inRack1 = new AudioRackParentConnectorModule();
+
             var outMod = new AudioPCMOpenALSinkModule();
             var outFile = new AudioSinkStream();
 
             var mixMod = new AudioMix4Module();
             mixMod.GetParameter("Volume1").SetValue(1f);
 
+
             rack.AddModule(inMod);
             rack.AddModule(inMod2);
             rack.AddModule(inMod3);
             rack.AddModule(inMod4);
+
+            rack.AddModule(inRack1);
 
             rack.AddModule(outMod);
             rack.AddModule(mixMod);
@@ -67,8 +74,10 @@ namespace Aximo.Engine.Audio
             rack.AddCable(inMod3.GetOutput("Left"), mixMod.GetInput("Left3"));
             rack.AddCable(inMod3.GetOutput("Right"), mixMod.GetInput("Right3"));
 
-            rack.AddCable(inMod4.GetOutput("Left"), mixMod.GetInput("Left4"));
-            rack.AddCable(inMod4.GetOutput("Right"), mixMod.GetInput("Right4"));
+            //rack.AddCable(inMod4.GetOutput("Left"), mixMod.GetInput("Left4"));
+            //rack.AddCable(inMod4.GetOutput("Right"), mixMod.GetInput("Right4"));
+            rack.AddCable(inRack1.GetOutput("Output1"), mixMod.GetInput("Left4"));
+            rack.AddCable(inRack1.GetOutput("Output2"), mixMod.GetInput("Right4"));
 
             rack.AddCable(mixMod.GetOutput("Left"), outMod.GetInput("Left"));
             rack.AddCable(mixMod.GetOutput("Right"), outMod.GetInput("Right"));
@@ -89,15 +98,36 @@ namespace Aximo.Engine.Audio
             {
                 try
                 {
-                    var stream = AudioStream.Load(GetPath(path));
-                    stream.PreloadAll();
-                    //Log.Verbose("Play {path}", path);
-                    var mod = Rack.GetModules<AudioPCMSourceModule>().OrderBy(m => m.GetOutput("Gate").GetVoltage()).ThenByDescending(m => m.GetOutput("Progress").GetVoltage()).FirstOrDefault();
-                    Rack.Dispatch(() =>
+                    if (Path.GetExtension(path) == ".json")
                     {
-                        mod.SetInput(stream);
-                        mod.Play();
-                    });
+                        var mods = Rack.GetModules<AudioRackParentConnectorModule>().ToArray();
+                        var mod = mods.FirstOrDefault(m => (string)m.Tag == path);
+                        if (mod == null)
+                        {
+                            mod = mods.FirstOrDefault(m => m.Tag == null);
+                            if (mod == null)
+                                throw new Exception("Rack cycling not implemented yet");
+
+                            mod.LoadFromJson(JsRack.LoadFile(GetPath(path)));
+                            mod.Tag = path;
+                        }
+                        Rack.Dispatch(() =>
+                        {
+                            mod.GetInput("Trigger").Pulse();
+                        });
+                    }
+                    else
+                    {
+                        var stream = AudioStream.Load(GetPath(path));
+                        stream.PreloadAll();
+                        //Log.Verbose("Play {path}", path);
+                        var mod = Rack.GetModules<AudioPCMSourceModule>().OrderBy(m => m.GetOutput("Gate").GetVoltage()).ThenByDescending(m => m.GetOutput("Progress").GetVoltage()).FirstOrDefault();
+                        Rack.Dispatch(() =>
+                        {
+                            mod.SetInput(stream);
+                            mod.Play();
+                        });
+                    }
                 }
                 catch (Exception ex)
                 {

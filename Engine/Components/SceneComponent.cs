@@ -15,7 +15,7 @@ namespace Aximo.Engine
         private static Serilog.ILogger Log = Aximo.Log.ForContext<SceneObject>();
 
         private IList<SceneComponent> _Components;
-        public ICollection<SceneComponent> Components { get; private set; }
+        public IList<SceneComponent> Components { get; private set; }
 
         public SceneComponent Parent { get; private set; }
 
@@ -118,6 +118,8 @@ namespace Aximo.Engine
             child.Parent = null;
 
             Actor?.RegisterComponentName(child);
+
+            child.Visit<ActorComponent>(c => c.Deallocate());
         }
 
         private List<SceneComponent> _ParentComponents;
@@ -160,9 +162,13 @@ namespace Aximo.Engine
             if (Parent != null)
                 Parent.RemoveComponent(this);
 
-            Visit<ActorComponent>(c => c.Deallocate());
-
             base.Detach();
+        }
+
+        public void RemoveComponents()
+        {
+            for (var i = Components.Count - 1; i >= 0; i--)
+                RemoveComponent(Components[i]);
         }
 
         private bool _IsAbsoluteScale;
