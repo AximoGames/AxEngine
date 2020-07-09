@@ -24,7 +24,7 @@ namespace Aximo.Engine.Components.UI
             }
         }
 
-        private static FontFamily DefaultFamily = SystemFonts.Families.First();
+        private static FontFamily DefaultFamily = SharedLib.DefaultFontFamily();
         public float FontSize { get; set; } = 15;
 
         public UILabelComponent()
