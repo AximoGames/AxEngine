@@ -28,6 +28,7 @@ namespace Aximo.Engine
         public bool UseGtkUI { get; set; } = false;
         public bool UseShadows { get; set; } = true;
         public bool UseFrameDebug { get; set; } = true;
+        public bool InitializeAudio { get; set; } = true;
 
         /// <summary>
         /// Resolution independent UI Size

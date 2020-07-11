@@ -127,6 +127,9 @@ namespace Aximo.Engine
 
             OnLoadInternal();
 
+            if (Config.InitializeAudio)
+                Audio.AudioManager.Initialize();
+
             //ObjectManager.PushDebugGroup("Setup", "Scene");
             SetupScene();
             //ObjectManager.PopDebugGroup();

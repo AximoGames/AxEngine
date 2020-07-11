@@ -21,6 +21,7 @@ namespace Aximo.AxTests
                 WindowSize = new Vector2i(160, 120),
                 WindowBorder = WindowBorder.Fixed,
                 HideTitleBar = true,
+                InitializeAudio = false,
             });
         }
 

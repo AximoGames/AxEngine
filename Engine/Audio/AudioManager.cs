@@ -26,7 +26,24 @@ namespace Aximo.Engine.Audio
         static AudioManager()
         {
             Log = Aximo.Log.ForContext<AudioManager>();
-            Default = new AudioManager();
+            Initialize();
+        }
+
+        private static bool Initialized;
+        public static void Initialize()
+        {
+            if (Initialized)
+                return;
+
+            try
+            {
+                Default = new AudioManager();
+                Initialized = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+            }
         }
 
         public AudioMainRack Rack;
@@ -96,6 +113,8 @@ namespace Aximo.Engine.Audio
         public void PlayAsync(string path)
         {
             if (Mute) return;
+
+            Log.Debug("Play {path}", path);
 
             ThreadPool.QueueUserWorkItem((state) =>
             {
