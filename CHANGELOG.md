@@ -7,6 +7,7 @@
 * Added OpenAL
 * Added some Audio Modules
 * Implemented Scaled UI Pixels for resolution independent positions
+* Fixed Default Font Selection Bug
 
 ### 1.0.8
 

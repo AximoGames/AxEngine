@@ -2,7 +2,7 @@
     <PropertyGroup>
 
         <!-- allowed format: x.y.z. Only numerics and two dots allowed. -->
-        <AssemblyVersion Condition="$(AssemblyVersion) == ''">1.0.8</AssemblyVersion>
+        <AssemblyVersion Condition="$(AssemblyVersion) == ''">1.0.9</AssemblyVersion>
 
         <!-- can be empty. Do not start with dash. Sample: pre1 -->
         <VersionPostfix></VersionPostfix>

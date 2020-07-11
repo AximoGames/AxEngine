@@ -7,7 +7,7 @@
         <RepositoryUrl>https://github.com/AximoGames/AxEngine</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <IncludeBuildOutput>true</IncludeBuildOutput>
-        <PackageOutputPath>$(MSBuildProjectDirectory)\..\.cache\packages</PackageOutputPath>
+        <PackageOutputPath>$(MSBuildThisFileDirectory)\..\.cache\packages</PackageOutputPath>
 
         <!-- custom property! -->
         <CommonDescription>
