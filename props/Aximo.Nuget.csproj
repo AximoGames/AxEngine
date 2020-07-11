@@ -16,5 +16,7 @@
     <ProjectReference Include="..\Engine\Engine.csproj" />
     <ProjectReference Include="..\Render\Render.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Engine\Aximo.AudioRack\Aximo.Audio.Rack\Aximo.Audio.Rack.csproj" />
+    <ProjectReference Include="..\Engine\Aximo.AudioRack\Aximo.Audio.Rack.Modules\Aximo.Audio.Rack.Modules.csproj" />
   </ItemGroup>
 </Project>
