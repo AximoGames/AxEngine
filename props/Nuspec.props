@@ -11,7 +11,7 @@
 
         <!-- custom property! -->
         <CommonDescription>
-            Aximo Game Engine is a Open Source Game Engine written purly in C#.
+            Aximo Game Engine is an Open Source Game Engine written purly in C#.
             Documentation: https://www.aximo.games
             Source: https://github.com/AximoGames/AxEngine
         </CommonDescription>
