@@ -11,5 +11,14 @@ namespace Aximo
         {
             return new Box2(location, location + size);
         }
+
+        public static Box2 FromCenteredSize(Vector2 center, Vector2 size)
+        {
+            return new Box2
+            {
+                Center = center,
+                Size = size,
+            };
+        }
     }
 }

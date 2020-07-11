@@ -142,5 +142,17 @@ namespace Aximo
 
         public static float Digits(float value) => value - MathF.Truncate(value);
         public static double Digits(double value) => value - Math.Truncate(value);
+        public static float SetSign(float value, float signFromValue)
+        {
+            return SetSign(value, signFromValue >= 0);
+        }
+
+        public static float SetSign(float value, bool positive)
+        {
+            if (positive)
+                return MathF.Abs(value);
+            else
+                return -MathF.Abs(value);
+        }
     }
 }
