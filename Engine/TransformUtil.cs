@@ -20,8 +20,8 @@ namespace Aximo.Engine.Components.Geometry
             var value = new RectangleF(-scale.X, -scale.Y, scale.X, scale.Y);
 
             var pos = new Vector3(
-                ((value.X + (value.Width))) - 1.0f,
-                ((1 - (value.Y + (value.Height)))),
+                value.X + value.Width - 1.0f,
+                1 - (value.Y + value.Height),
                 0);
 
             var trans = Transform.Identity;

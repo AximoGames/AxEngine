@@ -8,7 +8,6 @@ using SixLabors.ImageSharp.Processing;
 namespace Aximo.Engine.Components.UI
 {
 
-
     public class UIButton : UIContainerComponent
     {
         public UILabelComponent LabelComponent;

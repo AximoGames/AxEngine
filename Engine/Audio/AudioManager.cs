@@ -47,6 +47,7 @@ namespace Aximo.Engine.Audio
             var inMod4 = new AudioPCMSourceModule();
 
             var inRack1 = new AudioRackParentConnectorModule();
+            var inRack2 = new AudioRackParentConnectorModule();
 
             var outMod = new AudioPCMOpenALSinkModule();
             var outFile = new AudioSinkStream();
@@ -54,13 +55,13 @@ namespace Aximo.Engine.Audio
             var mixMod = new AudioMix4Module();
             mixMod.GetParameter("Volume1").SetValue(1f);
 
-
             rack.AddModule(inMod);
             rack.AddModule(inMod2);
             rack.AddModule(inMod3);
             rack.AddModule(inMod4);
 
             rack.AddModule(inRack1);
+            rack.AddModule(inRack2);
 
             rack.AddModule(outMod);
             rack.AddModule(mixMod);
@@ -71,13 +72,15 @@ namespace Aximo.Engine.Audio
             rack.AddCable(inMod2.GetOutput("Left"), mixMod.GetInput("Left2"));
             rack.AddCable(inMod2.GetOutput("Right"), mixMod.GetInput("Right2"));
 
-            rack.AddCable(inMod3.GetOutput("Left"), mixMod.GetInput("Left3"));
-            rack.AddCable(inMod3.GetOutput("Right"), mixMod.GetInput("Right3"));
+            //rack.AddCable(inMod3.GetOutput("Left"), mixMod.GetInput("Left3"));
+            //rack.AddCable(inMod3.GetOutput("Right"), mixMod.GetInput("Right3"));
+            rack.AddCable(inRack1.GetOutput("Output1"), mixMod.GetInput("Left3"));
+            rack.AddCable(inRack1.GetOutput("Output2"), mixMod.GetInput("Right3"));
 
             //rack.AddCable(inMod4.GetOutput("Left"), mixMod.GetInput("Left4"));
             //rack.AddCable(inMod4.GetOutput("Right"), mixMod.GetInput("Right4"));
-            rack.AddCable(inRack1.GetOutput("Output1"), mixMod.GetInput("Left4"));
-            rack.AddCable(inRack1.GetOutput("Output2"), mixMod.GetInput("Right4"));
+            rack.AddCable(inRack2.GetOutput("Output1"), mixMod.GetInput("Left4"));
+            rack.AddCable(inRack2.GetOutput("Output2"), mixMod.GetInput("Right4"));
 
             rack.AddCable(mixMod.GetOutput("Left"), outMod.GetInput("Left"));
             rack.AddCable(mixMod.GetOutput("Right"), outMod.GetInput("Right"));

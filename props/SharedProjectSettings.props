@@ -41,9 +41,16 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+
+  <PropertyGroup>
+    <AximoStylecopPath Condition="$(AximoStylecopPath)=='' And Exists('$(MSBuildProjectDirectory)\stylecop.json')">$(MSBuildProjectDirectory)</AximoStylecopPath>
+    <AximoStylecopPath Condition="$(AximoStylecopPath)=='' And Exists('$(MSBuildProjectDirectory)\props\stylecop.json')">$(MSBuildProjectDirectory)\props</AximoStylecopPath>
+    <AximoStylecopPath Condition="$(AximoStylecopPath)=='' And Exists('$(MSBuildProjectDirectory)\..\props\stylecop.json')">$(MSBuildProjectDirectory)\..\props</AximoStylecopPath>
+    <AximoStylecopPath Condition="$(AximoStylecopPath)=='' And Exists('$(MSBuildProjectDirectory)\..\..\props\stylecop.json')">$(MSBuildProjectDirectory)\..\..\props</AximoStylecopPath>
+  </PropertyGroup>
+
   <ItemGroup>
-    <AdditionalFiles Condition="Exists('$(MSBuildProjectDirectory)\..\props\stylecop.json')" Include="$(MSBuildProjectDirectory)\..\props\stylecop.json" Link="stylecop.json" />
-    <AdditionalFiles Condition="Exists('$(MSBuildProjectDirectory)\..\..\props\stylecop.json')" Include="$(MSBuildProjectDirectory)\..\..\props\stylecop.json" Link="stylecop.json" />
+    <AdditionalFiles Condition="$(AximoStylecopPath) != ''" Include="$(AximoStylecopPath)\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 
   <Target Name="DisableAnalyzers"

@@ -152,12 +152,12 @@ namespace Aximo
         {
             unchecked
             {
-                a = (a + 0x7ed55d16) + (a << 12);
-                a = (a ^ 0xc761c23c) ^ (a >> 19);
-                a = (a + 0x165667b1) + (a << 5);
+                a = a + 0x7ed55d16 + (a << 12);
+                a = a ^ 0xc761c23c ^ (a >> 19);
+                a = a + 0x165667b1 + (a << 5);
                 a = (a + 0xd3a2646c) ^ (a << 9);
-                a = (a + 0xfd7046c5) + (a << 3);
-                a = (a ^ 0xb55a4f09) ^ (a >> 16);
+                a = a + 0xfd7046c5 + (a << 3);
+                a = a ^ 0xb55a4f09 ^ (a >> 16);
                 return a;
             }
         }
@@ -200,7 +200,7 @@ namespace Aximo
                 if (num < 0)
                 {
                     long num2 = maxValue - minValue;
-                    return ((int)((long)(d * num2))) + minValue;
+                    return ((int)(long)(d * num2)) + minValue;
                 }
                 return ((int)(d * num)) + minValue;
             }
@@ -248,7 +248,7 @@ namespace Aximo
             {
                 key = (key << 18) - key - 1;
                 key = key ^ RotateRight(key, 31);
-                key = (key + (key << 2)) + (key << 4);
+                key = key + (key << 2) + (key << 4);
                 key = key ^ RotateRight(key, 11);
                 key = key + (key << 6);
                 key = key ^ RotateRight(key, 22);

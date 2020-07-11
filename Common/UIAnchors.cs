@@ -23,7 +23,6 @@ namespace Aximo
             Bottom = all;
         }
 
-
         public static UIAnchors Zero => new UIAnchors();
 
         public Vector2 Min => new Vector2(Left, Top);

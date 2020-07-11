@@ -18,13 +18,6 @@ namespace Aximo.Engine.Components.UI
         Vertical,
     }
 
-    public class SliderValueChangedArgs
-    {
-        public float OldValue;
-        public float NewValue;
-        public UISlider.UISliderButton Button;
-    }
-
     public delegate void SliderValueChanged(SliderValueChangedArgs e);
 
     public class UISlider : UIContainerComponent
@@ -221,5 +214,12 @@ namespace Aximo.Engine.Components.UI
         {
             base.OnResized();
         }
+    }
+
+    public class SliderValueChangedArgs
+    {
+        public float OldValue;
+        public float NewValue;
+        public UISlider.UISliderButton Button;
     }
 }

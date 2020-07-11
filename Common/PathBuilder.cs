@@ -25,7 +25,7 @@ namespace Aximo
             var points = new Vector2[slices];
             for (var i = 0; i < slices; i++)
             {
-                var angle = ((MathF.PI * 2) / slices) * i;
+                var angle = MathF.PI * 2 / slices * i;
                 points[i].X = MathF.Cos(angle) * 0.5f;
                 points[i].Y = MathF.Sin(angle) * 0.5f;
             }
