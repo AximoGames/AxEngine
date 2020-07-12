@@ -250,6 +250,9 @@ namespace Aximo.Render.Objects
 
                 foreach (var light in lights)
                 {
+                    if (!light.Shadows)
+                        continue;
+
                     var shadowCamera = light.LightCamera;
 
                     var lightProjection = shadowCamera.ProjectionMatrix;
@@ -288,6 +291,9 @@ namespace Aximo.Render.Objects
 
                 foreach (var light in Lights)
                 {
+                    if (!light.Shadows)
+                        continue;
+
                     var shadowCamera = light.LightCamera;
 
                     CubeShadowsMatrices.Clear();
@@ -318,9 +324,9 @@ namespace Aximo.Render.Objects
                     cubeShadowShader.SetFloat("Light.FarPlane", shadowCamera.FarPlane);
                     cubeShadowShader.SetInt("Light.ShadowLayer", light.ShadowTextureIndex);
 
-                    //GL.Disable(EnableCap.CullFace);
+                    //GraphicsDevice.Default.CullFaceMode = CullFaceMode.Front;
                     mat.Vao.Draw();
-                    //GL.Enable(EnableCap.CullFace);
+                    //GraphicsDevice.Default.CullFaceMode = CullFaceMode.Back;
                 }
             }
         }

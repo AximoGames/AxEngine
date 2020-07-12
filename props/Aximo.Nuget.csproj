@@ -1,22 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
-  <Import Project="..\props\AssemblyVersion.props" />
-  <Import Project="..\props\Nuspec.props" />
-  <PropertyGroup>
-      <PackageId>Aximo</PackageId>
-      <Description>$(CommonDescription)</Description>
-  </PropertyGroup>
-  <PropertyGroup>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-  </PropertyGroup>
-  <Import Project="..\props\SharedProjectSettings.props" />
-  <ItemGroup>
-    <ProjectReference Include="..\Engine\Engine.csproj" />
-    <ProjectReference Include="..\Render\Render.csproj" />
-    <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\Engine\Aximo.AudioRack\Aximo.Audio.Rack\Aximo.Audio.Rack.csproj" />
-    <ProjectReference Include="..\Engine\Aximo.AudioRack\Aximo.Audio.Rack.Modules\Aximo.Audio.Rack.Modules.csproj" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+    <Import Project="..\props\AssemblyVersion.props" />
+    <Import Project="..\props\Nuspec.props" />
+    <PropertyGroup>
+        <PackageId>Aximo</PackageId>
+        <Description>$(CommonDescription)</Description>
+    </PropertyGroup>
+    <PropertyGroup>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+    </PropertyGroup>
+    <Import Project="..\props\SharedProjectSettings.props" />
+    <ItemGroup>
+        <ProjectReference Include="..\Engine\Engine.csproj" />
+        <ProjectReference Include="..\Render\Render.csproj" />
+        <ProjectReference Include="..\Common\Common.csproj" />
+        <ProjectReference Include="..\Aximo.AudioRack\Aximo.Audio.Rack\Aximo.Audio.Rack.csproj" />
+        <ProjectReference Include="..\Aximo.AudioRack\Aximo.Audio.Rack.Modules\Aximo.Audio.Rack.Modules.csproj" />
+    </ItemGroup>
 </Project>

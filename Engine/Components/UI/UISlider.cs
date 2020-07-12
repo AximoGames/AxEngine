@@ -44,8 +44,8 @@ namespace Aximo.Engine.Components.UI
 
         internal void OnSliderValueChangedInternal(SliderValueChangedArgs e)
         {
-            if (Parent == null)
-                return;
+            //if (Parent == null)
+            //    return;
 
             OnSliderValueChanged(e);
         }

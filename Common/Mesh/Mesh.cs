@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Aximo.Render;
 using Aximo.VertexData;
+using Microsoft.VisualBasic.CompilerServices;
 using OpenToolkit.Mathematics;
 using SixLabors.ImageSharp.Processing;
 
@@ -90,6 +91,22 @@ namespace Aximo
         public static Mesh CreateCube()
         {
             return CreateFromVertices(DataHelper.DefaultCube);
+        }
+
+        public static Mesh CreateRoundedCube()
+        {
+            var builder = new Aximo.Util.RoundedCube.RoundedCubeGenerator
+            {
+                SizeX = 40,
+                SizeY = 40,
+                SizeZ = 40,
+                Roundness = 15,
+            };
+            builder.Generate();
+            var mesh = builder.Mesh;
+            mesh.Scale(1f / 40f);
+            mesh.Translate(-0.5f, -0.5f, -0.5f);
+            return mesh;
         }
 
         public static Mesh CreateWallQuad()

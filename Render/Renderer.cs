@@ -158,8 +158,8 @@ namespace Aximo.Render
                     lightData.ShadowLayer = light.ShadowTextureIndex;
                     lightData.DirectionalLight = light.LightType == LightType.Directional ? 1 : 0;
                     lightData.LightSpaceMatrix = Matrix4.Transpose(light.LightCamera.ViewMatrix * light.LightCamera.ProjectionMatrix);
-                    lightData.Linear = 0.1f;
-                    lightData.Quadric = 0f;
+                    lightData.Linear = light.Linear;
+                    lightData.Quadric = light.Quadric;
                     lightData.FarPlane = light.LightCamera.FarPlane;
                     lightData.Direction = light.Direction.Normalized();
                     lightDataList.Add(lightData);

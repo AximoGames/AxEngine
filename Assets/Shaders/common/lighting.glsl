@@ -20,10 +20,18 @@ for(int i = 0; i < LightCount; ++i)
         lightDir = normalize(light.Position - FragPos);
 
     vec4 diffuse = max(dot(normal, lightDir), 0.0) * matDiffuse * light.Color;
+    
     // specular
-    vec3 halfwayDir = normalize(lightDir + viewDir);  
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), matShininess);
-    vec4 specular = light.Color * spec * matSpecular;
+    vec4 specular;
+    if(light.DirectionalLight == 1) {
+        specular = vec4(0);
+    }
+    else {
+        vec3 halfwayDir = normalize(lightDir + viewDir);  
+        float spec = pow(max(dot(normal, halfwayDir), 0.0), matShininess);
+        specular = light.Color * spec * matSpecular;
+    }
+
     // attenuation
     float attenuation;
     if(light.DirectionalLight == 1) {

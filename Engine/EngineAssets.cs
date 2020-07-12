@@ -19,12 +19,20 @@ namespace Aximo.Engine
             AssetManager.AddFileGenerator(EmbeddedRessource);
             AssetManager.AddFileGenerator("Textures/Engine/UVTest.png", CreateImage);
             AssetManager.AddFileGenerator("Textures/AlchemyCircle/.png", AlchemyCircle);
+            AssetManager.AddFileGenerator("Textures/Voronoi/.png", Voronoi);
         }
 
         private static bool AlchemyCircle(string subPath, string cachePath, object options)
         {
             var opt = (Generators.AlchemyCircle.AlchemyCircleOptions)options;
             new Generators.AlchemyCircle.AlchemyCircleGenerator().Generate(opt.Seed, opt.BackgroundColor, opt.Color, opt.Size, opt.Thickness).Save(cachePath);
+            return true;
+        }
+
+        private static bool Voronoi(string subPath, string cachePath, object options)
+        {
+            var opt = (Generators.Voronoi.VoronoiGeneratorOptions)options;
+            new Generators.Voronoi.VoronoiGenerator().Voronoi3Image(opt.Color1, opt.Color2, opt.Seed, opt.Size, opt.Points, opt.MinDelta).Save(cachePath);
             return true;
         }
 

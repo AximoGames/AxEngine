@@ -14,6 +14,11 @@ namespace Aximo.Render.OpenGL
             return Mesh.CreateFromVertices(DataHelper.DefaultCube);
         }
 
+        public static Mesh RoundedCube()
+        {
+            return Mesh.CreateRoundedCube();
+        }
+
         public static Mesh DebugCube()
         {
             return Mesh.CreateFromVertices(DataHelper.DefaultDebugCube);

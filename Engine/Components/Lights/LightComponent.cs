@@ -15,28 +15,26 @@ namespace Aximo.Engine.Components.Lights
 
         protected abstract LightType LightType { get; }
 
-        private float _Linear = 0.1f;
-        public float Linear
-        {
-            get => _Linear;
-            set { if (_Linear == value) return; _Linear = value; LightAttributesChanged = true; }
-        }
-
-        private float _Quadric = 0.1f;
-        public float Quadric
-        {
-            get => _Quadric;
-            set { if (_Quadric == value) return; _Quadric = value; LightAttributesChanged = true; }
-        }
-
         private Vector4 _Color = Vector4.One;
         public Vector4 Color
         {
             get => _Color;
-            set { if (_Color == value) return; _Color = value; LightAttributesChanged = true; }
+            set { if (_Color == value) return; _Color = value; LightAttributesChanged(); }
         }
 
-        private bool LightAttributesChanged = true;
+        private bool _CastShadow = true;
+        public bool CastShadow
+        {
+            get => _CastShadow;
+            set { if (_CastShadow == value) return; _CastShadow = value; LightAttributesChanged(); }
+        }
+
+        private bool _LightAttributesChanged;
+        private protected void LightAttributesChanged()
+        {
+            _LightAttributesChanged = true;
+            HasChanges = true;
+        }
 
         internal override void SyncChanges()
         {
@@ -51,15 +49,19 @@ namespace Aximo.Engine.Components.Lights
                 //LightObject.ShadowTextureIndex = ShadowIdx++;
                 InternalLightManager.RequestShadowLayer(LightObject);
                 RenderContext.Current.AddObject(LightObject);
-                LightAttributesChanged = true;
+                _LightAttributesChanged = true;
             }
 
-            if (LightAttributesChanged)
+            if (_LightAttributesChanged)
             {
-                LightAttributesChanged = false;
-                LightObject.Linear = _Linear;
-                LightObject.Quadric = _Quadric;
+                _LightAttributesChanged = false;
+                if (this is PointLightComponent pl)
+                {
+                    LightObject.Linear = pl.Linear;
+                    LightObject.Quadric = pl.Quadric;
+                }
                 LightObject.Color = _Color;
+                LightObject.Shadows = CastShadow;
             }
 
             if (TransformChanged)
