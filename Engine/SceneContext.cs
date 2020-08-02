@@ -30,6 +30,11 @@ namespace Aximo.Engine
 
         public List<IUpdateFrame> UpdateFrameObjects = new List<IUpdateFrame>();
 
+        /// <summary>
+        /// Scalable Clock
+        /// </summary>
+        public readonly Clock Clock = new Clock();
+
         public void AddUpdateFrameObject(IUpdateFrame obj)
         {
             UpdateFrameObjects.Add(obj);
@@ -210,8 +215,6 @@ namespace Aximo.Engine
         public void Init()
         {
             SetScale();
-            TimeWatcher = new Stopwatch();
-            TimeWatcher.Start();
             EngineAssets.Init();
         }
 
@@ -222,12 +225,11 @@ namespace Aximo.Engine
             ScaleToPixelFactor = Vector2.Divide(Vector2.One, ScreenScale);
         }
 
-        private Stopwatch TimeWatcher;
         public TimeSpan Time { get; set; }
 
         internal void UpdateTime()
         {
-            Time = TimeWatcher.Elapsed;
+            Clock.Tick(Application.Current.UpdateCounter.Elapsed.TotalSeconds);
         }
 
         public void OnScreenResize(ScreenResizeEventArgs e)

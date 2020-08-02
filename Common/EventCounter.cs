@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace Aximo
 {
+
     public class EventCounter
     {
         private Stopwatch Watch = new Stopwatch();
@@ -13,8 +14,7 @@ namespace Aximo
         private double DeltaTime = 0.0;
         private double UpdateRate = 4.0;  // 4 updates per sec.
 
-        private double _Fps = 0.0;
-        public double EventsPerSecond => _Fps;
+        public double EventsPerSecond { get; private set; } = 0.0;
 
         public TimeSpan Elapsed { get; private set; }
 
@@ -28,10 +28,10 @@ namespace Aximo
             Watch.Stop();
             Elapsed = Watch.Elapsed;
             FrameCount++;
-            DeltaTime += Watch.ElapsedMilliseconds / 1000.0;
+            DeltaTime += Watch.Elapsed.TotalSeconds;
             if (DeltaTime > 1.0 / UpdateRate)
             {
-                _Fps = FrameCount / DeltaTime;
+                EventsPerSecond = FrameCount / DeltaTime;
                 FrameCount = 0;
                 DeltaTime -= 1.0 / UpdateRate;
             }

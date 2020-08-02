@@ -40,7 +40,7 @@ namespace Aximo.Render.Objects
                     //var shadowCamera = new PerspectiveFieldOfViewCamera(light.Position, 1.0f)
                     var shadowCamera = new OrthographicCamera(Position)
                     {
-                        NearPlane = 1.0f,
+                        NearPlane = 0.1f,
                         FarPlane = 25f,
                     };
                     var box = Context.GetObjectByName("Box1"); // TODO: Remove Debug

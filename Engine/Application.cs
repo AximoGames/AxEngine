@@ -330,6 +330,10 @@ namespace Aximo.Engine
                 {
                     Camera.Position = MovingObject.Position;
                 }
+                if (kbState[Key.P])
+                {
+                    SceneContext.Clock.Scale = 1 - SceneContext.Clock.Scale;
+                }
             }
         }
 

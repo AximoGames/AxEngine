@@ -86,7 +86,7 @@ namespace Aximo.Engine
         }
 
         public TimeSpan Duration = TimeSpan.FromSeconds(30);
-        protected DateTime StartTime;
+        protected TimeSpan StartTime;
         public bool Repeat;
 
         public TweenFinishedDelegate TweenComplete;
@@ -114,7 +114,7 @@ namespace Aximo.Engine
             if (OnStart != null)
                 OnStart();
 
-            StartTime = DateTime.UtcNow;
+            StartTime = SceneContext.Current.Clock.Span;
             SceneContext.Current.AddUpdateFrameObject(this);
         }
 
@@ -173,7 +173,7 @@ namespace Aximo.Engine
             }
             else
             {
-                var ts = DateTime.UtcNow - StartTime;
+                var ts = SceneContext.Current.Clock.Span - StartTime;
                 Position = (float)(1.0 / Duration.TotalMilliseconds * ts.TotalMilliseconds);
 
                 if (Position >= 1.0)
@@ -188,7 +188,7 @@ namespace Aximo.Engine
                     }
 
                     if (Repeat)
-                        StartTime = DateTime.UtcNow;
+                        StartTime = SceneContext.Current.Clock.Span;
                 }
                 else
                 {
