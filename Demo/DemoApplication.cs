@@ -196,12 +196,12 @@ namespace Aximo.AxDemo
                 Name = "DebugLine",
             }));
 
-            SceneContext.AddActor(new Actor(new DirectionalLightComponent()
+            SceneContext.AddActor(new Actor(new PointLightComponent()
             {
                 RelativeTranslation = new Vector3(0, 2, 2.5f),
                 Name = "MovingLight",
             }));
-            SceneContext.AddActor(new Actor(new DirectionalLightComponent()
+            SceneContext.AddActor(new Actor(new PointLightComponent()
             {
                 RelativeTranslation = new Vector3(2f, 0.5f, 3.25f),
                 Name = "StaticLight",

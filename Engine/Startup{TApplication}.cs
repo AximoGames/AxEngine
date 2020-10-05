@@ -58,8 +58,8 @@ namespace Aximo.Engine
             if (Config.UseConsole)
             {
                 Log.Verbose("Configure for console session");
-                th = new Thread(UIThreadMain);
-                th.Start();
+                //th = new Thread(UIThreadMain);
+                //th.Start();
 
                 ConsoleLoop();
 

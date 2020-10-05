@@ -22,7 +22,7 @@ namespace Aximo.AxDemo
                 IdleRenderFrequency = 0,
                 IdleUpdateFrequency = 0,
                 VSync = VSyncMode.Off,
-                // UseGtkUI = true,
+                UseGtkUI = true,
                 UseConsole = true,
                 NormalizedUISize = new Vector2(800, 600),
             };

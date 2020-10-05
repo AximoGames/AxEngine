@@ -5,6 +5,8 @@ using System;
 using System.Threading;
 using Gdk;
 using Gtk;
+using OpenToolkit.Graphics.OpenGL4;
+using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine.Windows
 {
@@ -36,6 +38,9 @@ namespace Aximo.Engine.Windows
             Gtk.Application.Run();
         }
 
+        public GLArea area;
+        public Label label;
+
         private void Fill()
         {
             var menu = new GLib.Menu();
@@ -46,9 +51,48 @@ namespace Aximo.Engine.Windows
 
             win.DefaultSize = new Size(300, 300);
 
+            var fix = new Fixed();
+            win.Add(fix);
+
+            area = new GLArea();
+
+            area.Realized += AreaOnRealized;
+            area.Render += AreaOnRender;
+            area.SetSizeRequest(200, 200);
+            fix.Put(area, 50, 50);
+
             var s = new Scale(Orientation.Horizontal, 0, 100, 1);
-            s.ShowAll();
-            win.Add(s);
+            s.SetSizeRequest(100, 100);
+            fix.Put(s, 0, 0);
+
+            label = new Label("Blubb");
+            label.SetSizeRequest(100, 100);
+            fix.Put(label, 0, 0);
+
+            win.ShowAll();
+        }
+
+        private void AreaOnRealized(object sender, EventArgs e)
+        {
+            area.MakeCurrent();
+            GL.LoadBindings(new NativeBindingsContext());
+            GL.ClearColor(Color4.DarkRed);
+        }
+
+        private DateTime LastLog = DateTime.UtcNow;
+        private EventCounter TmpCounter = new EventCounter();
+        private void AreaOnRender(object o, RenderArgs args)
+        {
+            TmpCounter.Tick();
+            if ((DateTime.UtcNow - LastLog).TotalSeconds > 4)
+            {
+                LastLog = DateTime.UtcNow;
+                //Console.WriteLine($"FPS: {TmpCounter.EventsPerSecond.ToString("F1")}");
+                label.Text = $"FPS: {TmpCounter.EventsPerSecond:F1}";
+            }
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+            //Console.Write(".");
+            area.QueueDraw();
         }
 
         public void Dispose()
