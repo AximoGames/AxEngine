@@ -31,7 +31,4 @@
     <ItemGroup>
         <PackageReference Include="OpenTK" Version="4.0.0-pre9.1" />
     </ItemGroup>
-    <ItemGroup>
-        <Folder Include="Generators\Voronoi\" />
-    </ItemGroup>
 </Project>

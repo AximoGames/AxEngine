@@ -106,28 +106,28 @@ namespace Aximo.Engine
                 {
                     case "q":
                         return;
-                    case "diag":
-                        SceneContext.Current.DumpInfo(true);
-                        break;
-                    case "actor new":
-                        Application.Current.DispatchUpdater(() =>
-                        {
-                            SceneContext.Current.AddActor(new Actor(new CubeComponent()));
-                        });
-                        break;
-                    case "act del":
-                    case "actor del":
-                        Application.Current.DispatchUpdater(() =>
-                        {
-                            SceneContext.Current.RemoveActor(SceneContext.Current.Actors.LastOrDefault());
-                        });
-                        break;
-                    case "map list":
-                        Application.Current.DispatchUpdater(() =>
-                        {
-                            InternalTextureManager.DumpInfo(true);
-                        });
-                        break;
+                    //case "diag":
+                    //    SceneContext.Current.DumpInfo(true);
+                    //    break;
+                    //case "actor new":
+                    //    Application.Current.DispatchUpdater(() =>
+                    //    {
+                    //        SceneContext.Current.AddActor(new Actor(new CubeComponent()));
+                    //    });
+                    //    break;
+                    //case "act del":
+                    //case "actor del":
+                    //    Application.Current.DispatchUpdater(() =>
+                    //    {
+                    //        SceneContext.Current.RemoveActor(SceneContext.Current.Actors.LastOrDefault());
+                    //    });
+                    //    break;
+                    //case "map list":
+                    //    Application.Current.DispatchUpdater(() =>
+                    //    {
+                    //        InternalTextureManager.DumpInfo(true);
+                    //    });
+                    //    break;
                     default:
                         var a = new ExecuteConsoleCommandLineArgs(cmd);
                         CommandLineManager.Current.InvokeExecuteConsoleCommandLine(a);

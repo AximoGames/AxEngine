@@ -35,187 +35,20 @@ namespace Aximo.Engine
         /// </summary>
         public readonly Clock Clock = new Clock();
 
-        public void AddUpdateFrameObject(IUpdateFrame obj)
-        {
-            UpdateFrameObjects.Add(obj);
-        }
-
-        public void RemoveUpdateFrameObject(IUpdateFrame obj)
-        {
-            UpdateFrameObjects.Add(obj);
-        }
-
-        public IList<Actor> Actors = new List<Actor>(); //TODO: Sync
-        private ConcurrentDictionary<string, List<Actor>> ActorNamehash = new ConcurrentDictionary<string, List<Actor>>();
-
-        public Actor GetActor(string name)
-        {
-            List<Actor> actors;
-            if (!ActorNamehash.TryGetValue(name, out actors))
-                return null;
-            if (actors.Count == 0)
-                return null;
-            return actors[0];
-        }
-
-        public Actor[] GetActors(string name)
-        {
-            List<Actor> actors;
-            if (!ActorNamehash.TryGetValue(name, out actors))
-                return Array.Empty<Actor>();
-            return actors.ToArray();
-        }
-
-        public void AddActor(Actor actor)
-        {
-            if (actor == null)
-                return;
-
-            actor.IsAttached = true;
-            actor.AddRef(this);
-            Actors.Add(actor);
-            RegisterActorName(actor);
-        }
-
-        public override void Visit<T>(Action<T> action, Func<T, bool> visitChilds = null)
-        {
-            foreach (var act in Actors)
-                act.Visit(action, visitChilds);
-        }
-
-        public override IEnumerable<T> Find<T>(Func<T, bool> visitChilds = null)
-        {
-            foreach (var act in Actors)
-                foreach (var result in act.Find(visitChilds))
-                    yield return result;
-
-        }
-
-        public void Visit(Action<Actor> action)
-        {
-            foreach (var act in Actors)
-                action(act);
-        }
-
-        public void RemoveActor(Actor actor)
-        {
-            if (actor == null)
-                return;
-
-            actor.IsAttached = false;
-            Actors.Remove(actor);
-            UnregisterActorName(actor);
-
-            actor.RemoveRef(this);
-        }
-
-        internal void RegisterActorName(Actor actor)
-        {
-            if (string.IsNullOrEmpty(actor.Name) && actor.Components.Count > 0)
-                actor.Name = actor.Components[0].Name;
-
-            if (string.IsNullOrEmpty(actor.Name))
-                return;
-
-            List<Actor> array;
-            if (!ActorNamehash.TryGetValue(actor.Name, out array))
-                ActorNamehash.TryAdd(actor.Name, array = new List<Actor>());
-            array.Add(actor);
-        }
-
-        internal void UnregisterActorName(Actor actor)
-        {
-            if (string.IsNullOrEmpty(actor.Name))
-                return;
-
-            List<Actor> array;
-            if (!ActorNamehash.TryGetValue(actor.Name, out array))
-                return;
-            array.Remove(actor);
-        }
-
-        // private void AddLight(LightComponent comp)
-        // {
-        //     LightComponents.Add(comp);
-        // }
-
-        // private void AddPrimitive(PrimitiveComponent comp)
-        // {
-        //     PrimitiveComponents.Add(comp);
-        // }
-
-        // private List<LightComponent> LightComponents = new List<LightComponent>();
-        // private List<PrimitiveComponent> PrimitiveComponents = new List<PrimitiveComponent>();
-
         public void OnUpdateFrame()
         {
-            foreach (var act in Actors)
-                act.UpdateFrameInternal();
-
-            foreach (var act in Actors)
-                act.PropagateChangesUp();
-
-            foreach (var act in Actors)
-                act.PropagateChangesDown();
-
-            foreach (var act in Actors)
-                act.PostUpdate();
         }
-
-        internal SynchronizedCollection<SceneObject> ObjectsForDeallocation = new SynchronizedCollection<SceneObject>();
 
         public void Sync()
         {
-            while (ObjectsForDeallocation.Count > 0)
-            {
-                foreach (var obj in ObjectsForDeallocation.ToArray())
-                {
-                    if (obj.RefCount == 0)
-                    {
-                        obj.VisitChilds<SceneObject>(obj =>
-                        {
-                            if (obj.RefCount == 1)
-                                obj.Deallocate();
-                        }, child => child.RefCount <= 1);
-                    }
-                }
-
-                foreach (var obj in ObjectsForDeallocation.ToArray())
-                {
-                    obj.DoDeallocation();
-                    ObjectsForDeallocation.Remove(obj);
-                }
-            }
-
-            foreach (var act in Actors.ToArray())
-                act.SyncChanges();
-
-            RenderContext.DeleteOrphaned();
         }
 
         private RenderContext RenderContext => RenderContext.Current;
 
-        public Vector4 BackgroundColor
-        {
-            get => RenderContext.BackgroundColor;
-            set => RenderContext.BackgroundColor = value;
-        }
-
-        internal override void DumpInfo(bool list)
-        {
-            Log.Info("Actors: {ActorCount}", Actors.Count);
-            if (list)
-                lock (Actors)
-                    foreach (var obj in Actors)
-                        obj.DumpInfo(list);
-
-            RenderContext.DumpInfo(list);
-        }
-
         public void Init()
         {
-            SetScale();
-            EngineAssets.Init();
+            //SetScale();
+            //EngineAssets.Init();
         }
 
         private void SetScale()
@@ -235,22 +68,22 @@ namespace Aximo.Engine
         public void OnScreenResize(ScreenResizeEventArgs e)
         {
             SetScale();
-            Visit<Actor>(c => c.OnScreenResize(e));
+            //Visit<Actor>(c => c.OnScreenResize(e));
         }
 
         public void OnScreenMouseUp(MouseButtonArgs e)
         {
-            Visit<Actor>(c => c.OnScreenMouseUp(e), c => !e.Handled);
+            //Visit<Actor>(c => c.OnScreenMouseUp(e), c => !e.Handled);
         }
 
         public void OnScreenMouseDown(MouseButtonArgs e)
         {
-            Visit<Actor>(c => c.OnScreenMouseDown(e), c => !e.Handled);
+            //Visit<Actor>(c => c.OnScreenMouseDown(e), c => !e.Handled);
         }
 
         public void OnScreenMouseMove(MouseMoveArgs e)
         {
-            Visit<Actor>(c => c.OnScreenMouseMove(e), c => !e.Handled);
+            //Visit<Actor>(c => c.OnScreenMouseMove(e), c => !e.Handled);
         }
     }
 }

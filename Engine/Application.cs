@@ -127,8 +127,8 @@ namespace Aximo.Engine
 
             OnLoadInternal();
 
-            if (Config.InitializeAudio)
-                Audio.AudioManager.Initialize();
+            //if (Config.InitializeAudio)
+            //    Audio.AudioManager.Initialize();
 
             //ObjectManager.PushDebugGroup("Setup", "Scene");
             SetupScene();
@@ -292,49 +292,6 @@ namespace Aximo.Engine
         private void OnKeyDownInternal(KeyboardKeyEventArgs e)
         {
             OnKeyDown(e);
-            if (DefaultKeyBindings)
-            {
-                var kbState = Window.KeyboardState;
-                if (kbState[Key.C])
-                {
-                    if (e.Shift)
-                    {
-                        DebugCamera = !DebugCamera;
-                        var debugLine = SceneContext.GetActor("DebugLine").RootComponent as LineComponent;
-                        debugLine.Visible = DebugCamera;
-                        Console.WriteLine($"DebugCamera: {DebugCamera}");
-                    }
-                    else
-                    {
-                        MovingObject = Camera;
-                    }
-                }
-                if (kbState[Key.F])
-                {
-                    Console.WriteLine("Dump infos:");
-                    if (MovingObject != null)
-                    {
-                        Console.WriteLine($"MovingObject Position: {MovingObject.Position}");
-                    }
-                    Console.WriteLine($"Camer: Facing {Camera.Facing}, Pitch {Camera.Pitch}");
-                }
-                if (kbState[Key.B])
-                {
-                    MovingObject = RenderContext.GetObjectByName("Box1") as IPosition;
-                }
-                if (kbState[Key.L])
-                {
-                    MovingObject = RenderContext.GetObjectByName("StaticLight") as IPosition;
-                }
-                if (kbState[Key.J])
-                {
-                    Camera.Position = MovingObject.Position;
-                }
-                if (kbState[Key.P])
-                {
-                    SceneContext.Clock.Scale = 1 - SceneContext.Clock.Scale;
-                }
-            }
         }
 
         protected bool Initialized { get; private set; }
