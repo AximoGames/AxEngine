@@ -23,14 +23,14 @@ for(int i = 0; i < LightCount; ++i)
     
     // specular
     vec4 specular;
-    if(light.DirectionalLight == 1) {
-        specular = vec4(0);
-    }
-    else {
+    // if(light.DirectionalLight == 1) {
+    //     specular = vec4(0);
+    // }
+    //else {
         vec3 halfwayDir = normalize(lightDir + viewDir);  
         float spec = pow(max(dot(normal, halfwayDir), 0.0), matShininess);
         specular = light.Color * spec * matSpecular;
-    }
+    //}
 
     // attenuation
     float attenuation;

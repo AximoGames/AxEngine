@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.0.11
+
+* Added RoundedCube Component
+* Fixed Bugs in Light Component
+* Added Voronoi Generator
+
 ### 1.0.9
 
 * Check Cache version
