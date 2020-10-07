@@ -106,6 +106,16 @@ namespace Aximo.Engine
                 {
                     case "q":
                         return;
+                    case "reload-plugins":
+                        PluginManager.Reload();
+                        break;
+                    case "act-disable-all":
+                        SceneManager.GetCurrentScene().GetActors().ForEach(act => act.SetActive(false));
+                        break;
+                    case "act-enable-all":
+                        SceneManager.GetCurrentScene().GetActors().ForEach(act => act.SetActive(true));
+                        break;
+
                     //case "diag":
                     //    SceneContext.Current.DumpInfo(true);
                     //    break;

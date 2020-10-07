@@ -21,6 +21,7 @@
         <PackageReference Include="AdvancedDLSupport" Version="3.2.0" />
         <PackageReference Include="GtkSharp" Version="3.22.25.74" />
         <PackageReference Include="NetCoreAudio" Version="1.5.0" />
+        <PackageReference Include="McMaster.NETCore.Plugins" Version="1.3.1" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Aximo.AudioRack\Aximo.Audio.Rack.Modules\Aximo.Audio.Rack.Modules.csproj" />

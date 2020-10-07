@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <RootNamespace>Aximo.Demo</RootNamespace>
-        <AssemblyName>AxDemo</AssemblyName>
+        <AssemblyName>AxDemo.Plugin</AssemblyName>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <ApplicationIcon />
-        <OutputType>Exe</OutputType>
+        <OutputType>Library</OutputType>
         <StartupObject />
         <NoWarn>CS0162</NoWarn>
         <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
@@ -20,6 +20,7 @@
         <PackageReference Include="GtkSharp" Version="3.22.25.74" />
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\Demo\Demo.csproj" />
         <ProjectReference Include="..\Engine\Engine.csproj" />
         <ProjectReference Include="..\Render\Render.csproj" />
         <ProjectReference Include="..\Common\Common.csproj" />

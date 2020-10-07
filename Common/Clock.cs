@@ -17,4 +17,5 @@ namespace Aximo
             Span += TimeSpan.FromSeconds(elapsed);
         }
     }
+
 }
