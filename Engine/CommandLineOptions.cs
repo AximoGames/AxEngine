@@ -15,7 +15,7 @@ namespace Aximo.Engine
             Mute = commandLineArgs.Contains("--mute");
         }
 
-        private static CommandLineOptions _Current;
+        private static CommandLineOptions? _Current;
         public static CommandLineOptions Current
         {
             get

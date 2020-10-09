@@ -13,8 +13,13 @@ namespace Aximo.Engine
 
     public class Actor
     {
-        public Scene Scene { get; internal set; }
+        public Scene? Scene { get; internal set; }
         public int Layer { get; set; }
+
+        public Actor()
+        {
+            Transform = AddComponent<TransformComponent>();
+        }
 
         /// <summary>
         /// True if this and their parents are active

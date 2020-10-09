@@ -6,6 +6,8 @@ using System.Threading;
 using Gdk;
 using Gtk;
 
+#nullable disable
+
 namespace Aximo.Engine.Windows
 {
     public class GtkUI : IDisposable

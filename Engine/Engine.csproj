@@ -9,12 +9,17 @@
         <NoWarn>CS0162</NoWarn>
         <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     <Import Project="..\props\AssemblyVersion.props" />
     <Import Project="..\props\Nuspec.props" />
     <PropertyGroup>
         <PackageId>Aximo.Engine</PackageId>
         <Description>$(DependencyDescription)</Description>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+      <WarningsAsErrors>CS8618</WarningsAsErrors>
     </PropertyGroup>
     <Import Project="..\props\SharedProjectSettings.props" />
     <ItemGroup>

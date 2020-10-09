@@ -10,9 +10,11 @@ using Aximo.Engine.Windows;
 using Aximo.Render;
 using OpenToolkit.Mathematics;
 
+#nullable disable
+
 namespace Aximo.Engine
 {
-    public class SceneContext : SceneObject
+    internal class SceneContext : SceneObject
     {
         private static Serilog.ILogger Log = Aximo.Log.ForContext<SceneContext>();
 
@@ -23,7 +25,7 @@ namespace Aximo.Engine
         public Vector2i ScreenPixelSize => RenderContext.ScreenPixelSize;
         public Vector2 ScreenScaledSize => ScreenPixelSize.ToVector2() * ScreenScale;
 
-        public static SceneContext Current { get; set; }
+        internal static SceneContext Current { get; set; }
 
         public static bool IsRenderThread => WindowContext.IsRenderThread;
         public static bool IsUpdateThread => WindowContext.IsUpdateThread;
@@ -35,12 +37,34 @@ namespace Aximo.Engine
         /// </summary>
         public readonly Clock Clock = new Clock();
 
-        public void OnUpdateFrame()
+        internal void OnUpdateFrame()
         {
         }
 
-        public void Sync()
+        public void SetObjectsToSync(IEnumerable<BaseObject> objects)
         {
+            lock (ObjectsToSyncLock)
+                foreach (var obj in objects)
+                    ObjectsToSync.Add(obj);
+        }
+
+        private object ObjectsToSyncLock = new object();
+        private HashSet<BaseObject> ObjectsToSync = new HashSet<BaseObject>();
+
+        public void SyncRenderer()
+        {
+            ICollection<BaseObject> objects;
+            lock (ObjectsToSyncLock)
+            {
+                if (ObjectsToSync.Count == 0)
+                    return;
+
+                objects = ObjectsToSync;
+                ObjectsToSync = new HashSet<BaseObject>();
+            }
+
+            foreach (var obj in objects)
+                obj.CallOnSyncRenderer();
         }
 
         private RenderContext RenderContext => RenderContext.Current;

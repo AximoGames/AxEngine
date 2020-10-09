@@ -9,6 +9,8 @@ using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Windowing.Common;
 using OpenToolkit.Windowing.GraphicsLibraryFramework;
 
+#nullable disable
+
 namespace Aximo.Engine.Windows
 {
     /// <summary>

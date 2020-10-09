@@ -9,6 +9,8 @@ using Aximo.Engine.Components.Geometry;
 using Aximo.Engine.Windows;
 using Aximo.Render.OpenGL;
 
+#nullable disable
+
 namespace Aximo.Engine
 {
     public delegate void ExecuteConsoleCommandLineDelegate(ExecuteConsoleCommandLineArgs e);

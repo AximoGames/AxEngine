@@ -22,7 +22,7 @@ namespace Aximo.Engine
             throw new NotImplementedException();
         }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public IList<Actor> GetActors()
         {

@@ -13,6 +13,10 @@
       <PackageId>Aximo.Common</PackageId>
       <Description>$(DependencyDescription)</Description>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors>CS8618</WarningsAsErrors>
+  </PropertyGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

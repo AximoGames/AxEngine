@@ -24,15 +24,18 @@ namespace Aximo.AxDemo
             SceneManager.SetActiveScene(scene);
 
             scene.AddActor(act);
+            var m = act.AddComponent<MeshC>();
+            m.Mesh = Mesh.CreateCube();
+
             var comp = (ScriptBehaviour)act.AddComponent("TestClass");
             var comp2 = (ScriptBehaviour)act.AddComponent("TestClass");
         }
 
-        protected override void OnRenderFrame(FrameEventArgs e)
+        protected override void OnUpdateFrame(FrameEventArgs e)
         {
         }
 
-        protected override void OnUpdateFrame(FrameEventArgs e)
+        protected override void OnRenderFrame(FrameEventArgs e)
         {
         }
     }

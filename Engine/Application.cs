@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Aximo.Engine.Components.Geometry;
 using Aximo.Engine.Windows;
@@ -13,6 +15,8 @@ using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using OpenToolkit.Windowing.Common.Input;
 using OpenToolkit.Windowing.Desktop;
+
+#nullable disable
 
 namespace Aximo.Engine
 {
@@ -82,8 +86,8 @@ namespace Aximo.Engine
             Startup.Start(config, this);
         }
 
-        public RenderContext RenderContext { get; private set; }
-        public SceneContext SceneContext { get; private set; }
+        internal RenderContext RenderContext { get; private set; }
+        internal SceneContext SceneContext { get; private set; }
         internal Renderer Renderer { get; private set; }
 
         internal virtual void Init()
@@ -144,9 +148,19 @@ namespace Aximo.Engine
                 UpdateMouseWorldPosition();
             };
 
+            UILoopTimerController = new LoopTimerController(SceneContext.Clock);
+            FPSTimer = new LoopTimer(UILoopTimerController, TimeSpan.FromSeconds(1));
+            FPSTimer.OnTimer += () =>
+            {
+                Window.Title = $"{Config.WindowTitle} [{(int)Math.Round(RenderCounter.EventsPerSecond)}]";
+            };
+
             RegisterWindowEventsStage2();
             Initialized = true;
         }
+
+        private LoopTimer FPSTimer;
+        private LoopTimerController UILoopTimerController;
 
         private void RegisterWindowEvents()
         {
@@ -270,7 +284,7 @@ namespace Aximo.Engine
                 if (Closing)
                     return;
 
-                SceneContext.Sync();
+                SceneContext.SyncRenderer();
                 Renderer.Render();
                 Window.SwapBuffers();
                 AfterRenderFrame();
@@ -360,6 +374,8 @@ namespace Aximo.Engine
                 obj.OnUpdateFrame();
 
             OnUpdateFrame(e);
+            UILoopTimerController.Tick();
+            CollectObjectsToSync();
 
             if (Closing)
                 return;
@@ -515,6 +531,23 @@ namespace Aximo.Engine
             // }
 
             AfterUpdateFrame();
+        }
+
+        private void CollectObjectsToSync()
+        {
+            var objectsToSync = new List<BaseObject>();
+            ObjectManager.GetAllObjectsUnsafe((objects) =>
+            {
+                foreach (var obj in objects)
+                {
+                    if (obj._NeedSyncRenderer)
+                    {
+                        obj._NeedSyncRenderer = false;
+                        objectsToSync.Add(obj);
+                    }
+                }
+            });
+            SceneContext.SetObjectsToSync(objectsToSync);
         }
 
         private TaskQueue UpdaterTasks = new TaskQueue();
