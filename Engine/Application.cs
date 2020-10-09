@@ -11,6 +11,7 @@ using System.Threading;
 using Aximo.Engine.Components.Geometry;
 using Aximo.Engine.Windows;
 using Aximo.Render;
+using Aximo.Render.OpenGL;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using OpenToolkit.Windowing.Common.Input;
@@ -209,7 +210,7 @@ namespace Aximo.Engine
         private void StartFileListener()
         {
             var shaderPath = Path.Combine(AssetManager.EngineRootDir, "Assets", "Shaders");
-            if (!File.Exists(shaderPath))
+            if (!Directory.Exists(shaderPath))
                 return;
 
             ShaderWatcher = new FileSystemWatcher(shaderPath);
@@ -564,9 +565,14 @@ namespace Aximo.Engine
 
         private void Reload()
         {
-            foreach (var obj in RenderContext.AllObjects)
-                if (obj is IReloadable reloadable)
-                    reloadable.OnReload();
+            DispatchRender(() =>
+            {
+                RendererShader.ReloadAll();
+
+                foreach (var obj in RenderContext.AllObjects)
+                    if (obj is IReloadable reloadable)
+                        reloadable.OnReload();
+            });
         }
 
         protected bool IsFirstUpdate => UpdateFrameNumber == 0;

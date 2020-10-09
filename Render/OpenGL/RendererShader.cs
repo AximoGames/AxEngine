@@ -11,9 +11,16 @@ using OpenToolkit.Mathematics;
 
 namespace Aximo.Render.OpenGL
 {
+
     // A simple class meant to help create shaders.
-    public class RendererShader : IObjectLabel
+    public class RendererShader : IObjectLabel, IDisposable
     {
+
+        public static void ReloadAll()
+        {
+            ShaderManager.ReloadAll();
+        }
+
         private static Serilog.ILogger Log = Aximo.Log.ForContext<RendererShader>();
 
         public int Handle { get; private set; }
@@ -68,7 +75,7 @@ namespace Aximo.Render.OpenGL
             comp.SetOrdinals();
         }
 
-        public RendererShader()
+        private RendererShader()
         {
         }
 
@@ -98,6 +105,11 @@ namespace Aximo.Render.OpenGL
 
             if (compile)
                 Compile();
+        }
+
+        ~RendererShader()
+        {
+            Dispose(false);
         }
 
         internal int SourceHash { get; set; }
@@ -218,6 +230,7 @@ namespace Aximo.Render.OpenGL
             }
 
             ShaderCache.TryAdd(SourceHash, this);
+            ShaderManager.Register(this);
             Log.Verbose("Compiled shader {ObjectLabel}", ObjectLabel);
         }
 
@@ -227,11 +240,31 @@ namespace Aximo.Render.OpenGL
             {
                 var sh = new RendererShader();
                 foreach (var comp in Compilations)
+                {
+                    var shComp = new ShaderCompilation
+                    {
+                        Type = comp.Type,
+                    };
+
+                    sh.Compilations.Add(shComp);
+
                     foreach (var src in comp.Sources)
-                        sh.AddSource(src.Path, comp.Type);
+                    {
+                        shComp.Sources.Add(new ShaderSource
+                        {
+                            Compilation = shComp,
+                            Ordinal = src.Ordinal,
+                            Path = src.Path,
+                        });
+                    }
+
+                    foreach (var entry in comp.Defines)
+                        shComp.Defines.Add(entry.Key, entry.Value);
+                }
 
                 sh.Compile();
                 SetFrom(sh);
+                ShaderManager.Unregister(sh);
             }
             catch (Exception ex)
             {
@@ -375,6 +408,7 @@ namespace Aximo.Render.OpenGL
 
         private Dictionary<int, object> SharedUniformValues = new Dictionary<int, object>();
         private Dictionary<int, object> LocalUniformValues = new Dictionary<int, object>();
+        private bool disposedValue;
 
         private bool SetInternal<T>(string name, T value, Action<int, T> setter)
         {
@@ -493,6 +527,25 @@ namespace Aximo.Render.OpenGL
             {
                 GL.UniformBlockBinding(Handle, location, bindingPoint.Number);
             }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            ShaderManager.Unregister(this);
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~RendererShader()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
