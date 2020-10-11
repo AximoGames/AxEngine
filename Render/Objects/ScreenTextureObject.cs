@@ -12,7 +12,7 @@ using SixLabors.ImageSharp;
 
 namespace Aximo.Render
 {
-    public class ScreenTextureObject : RenderObject, IRenderTarget, IScaleRotate, IPosition
+    public class ScreenTextureObject : RenderObject, IRenderTarget, IScaleRotate, IPosition, IReloadable
     {
         private RendererShader _shader;
 
@@ -108,6 +108,11 @@ namespace Aximo.Render
             vao.Free();
             _shader.Free();
             SourceTexture = null;
+        }
+
+        public void OnReload()
+        {
+            Init();
         }
     }
 }

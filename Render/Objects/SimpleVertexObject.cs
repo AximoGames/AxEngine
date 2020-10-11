@@ -70,6 +70,11 @@ namespace Aximo.Render.Objects
 
         public override void Init()
         {
+            Init(false);
+        }
+
+        private void Init(bool reload)
+        {
             if (Mesh == null)
                 return;
 
@@ -98,7 +103,7 @@ namespace Aximo.Render.Objects
                 {
                     var m = Mesh.GetMaterial(materialId);
                     UsePipeline(m.RenderPipeline);
-                    m.CreateShaders();
+                    m.CreateShaders(true);
 
                     var data = Mesh.GetMeshData(materialId);
                     var vao = new VertexArrayObject(data.BindLayoutToShader(m.Shader));
@@ -367,6 +372,7 @@ namespace Aximo.Render.Objects
 
         public void OnReload()
         {
+            Init(true);
         }
 
         public List<ILightObject> Lights => Context.LightObjects;

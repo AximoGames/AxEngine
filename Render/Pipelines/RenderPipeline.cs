@@ -8,10 +8,10 @@ using Aximo.Render.OpenGL;
 
 namespace Aximo.Render.Pipelines
 {
-    public abstract class RenderPipeline : IRenderPipeline
+    public abstract class RenderPipeline : IRenderPipeline, IReloadable
     {
         public virtual void BeforeInit() { }
-        public virtual void Init() { }
+        public virtual void Init(bool reload = false) { }
         public virtual void AfterInit() { }
 
         public virtual void InitRender(RenderContext context, Camera camera)
@@ -63,13 +63,18 @@ namespace Aximo.Render.Pipelines
         {
             Dispose(true);
         }
+
         #endregion
+        public void OnReload()
+        {
+            Init(true);
+        }
     }
 
     public interface IRenderPipeline : IDisposable
     {
         void BeforeInit();
-        void Init();
+        void Init(bool reload = false);
         void AfterInit();
         void OnScreenResize(ScreenResizeEventArgs e);
         void InitRender(RenderContext context, Camera camera);

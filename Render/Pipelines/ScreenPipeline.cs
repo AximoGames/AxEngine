@@ -9,7 +9,7 @@ namespace Aximo.Render.Pipelines
 {
     public class ScreenPipeline : RenderPipeline
     {
-        public override void Init()
+        public override void Init(bool reload = false)
         {
         }
 

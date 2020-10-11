@@ -19,16 +19,23 @@ namespace Aximo.AxDemo
 
             //new TestClass().Invoke();
 
-            var act = new Actor();
-
             SceneManager.SetActiveScene(scene);
 
-            scene.AddActor(act);
-            var m = act.AddComponent<MeshC>();
-            m.Mesh = Mesh.CreateCube();
+            for (var y = -10; y < 10; y++)
+            {
+                for (var x = -10; x < 10; x++)
+                {
+                    var act = new Actor();
 
-            var comp = (ScriptBehaviour)act.AddComponent("TestClass");
-            var comp2 = (ScriptBehaviour)act.AddComponent("TestClass");
+                    scene.AddActor(act);
+                    var m = act.AddComponent<MeshC>();
+                    m.Mesh = Mesh.CreateCube();
+                    act.Transform.Position = new Vector3(x, y, 0);
+                }
+            }
+
+            //var comp = (ScriptBehaviour)act.AddComponent("TestClass");
+            //var comp2 = (ScriptBehaviour)act.AddComponent("TestClass");
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)

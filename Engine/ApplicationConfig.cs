@@ -27,7 +27,7 @@ namespace Aximo.Engine
         public bool UseConsole { get; set; } = true;
         public bool UseGtkUI { get; set; } = false;
         public bool UseShadows { get; set; } = true;
-        public bool UseFrameDebug { get; set; } = true;
+        public bool UseFrameDebug { get; set; } = false;
         public bool InitializeAudio { get; set; } = true;
 
         /// <summary>

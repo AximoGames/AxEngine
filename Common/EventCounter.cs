@@ -12,7 +12,12 @@ namespace Aximo
         private Stopwatch Watch = new Stopwatch();
         private double FrameCount = 0;
         private double DeltaTime = 0.0;
-        private double UpdateRate = 4.0;  // 4 updates per sec.
+        private double UpdateRate = 0.25;
+
+        public void SetUpdateRate(TimeSpan ts)
+        {
+            UpdateRate = 1 / ts.TotalSeconds;
+        }
 
         public double EventsPerSecond { get; private set; } = 0.0;
 

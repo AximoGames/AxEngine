@@ -1,8 +1,10 @@
 ﻿// This file is part of Aximo, a Game Engine written in C#. Web: https://github.com/AximoGames
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.Xml;
 using Aximo.Render.OpenGL;
@@ -18,7 +20,7 @@ namespace Aximo.Render
 
         public Matrix4 WorldPositionMatrix = Matrix4.Identity;
 
-        public List<IRenderPipeline> RenderPipelines = new List<IRenderPipeline>();
+        public IRenderPipeline[] RenderPipelines = Array.Empty<IRenderPipeline>();
 
         public IRenderPipeline CurrentPipeline { get; internal set; }
 
@@ -72,7 +74,15 @@ namespace Aximo.Render
         public T GetPipeline<T>()
             where T : class, IRenderPipeline
         {
-            return (T)RenderPipelines.FirstOrDefault(p => p is T);
+            var pipelines = RenderPipelines;
+            var length = pipelines.Length;
+            for (var i = 0; i < length; i++)
+            {
+                var pipe = pipelines[i];
+                if (pipe is T)
+                    return (T)pipe;
+            }
+            return null;
         }
 
         public IRenderPipeline PrimaryRenderPipeline { get; set; }
@@ -105,7 +115,7 @@ namespace Aximo.Render
 
         public void AddPipeline(IRenderPipeline pipeline)
         {
-            RenderPipelines.Add(pipeline);
+            RenderPipelines = RenderPipelines.AppendElement(pipeline);
         }
 
         public void AddObject(IRenderObject obj)

@@ -23,54 +23,57 @@ namespace Aximo.Render.Pipelines
         private VertexArrayObject vao;
         private VertexBufferObject vbo;
 
-        public override void Init()
+        public override void Init(bool reload = false)
         {
-            var width = RenderContext.Current.ScreenPixelSize.X;
-            var height = RenderContext.Current.ScreenPixelSize.Y;
-
-            GBuffer = new FrameBuffer(width, height);
-            GBuffer.ObjectLabel = nameof(GBuffer);
-            //GBuffer.InitNormal();
-
-            // R11fG11fB10f --> rgba16f
-            // Warning: R11fG11fB10f has no sign bit!
-
-            GPosition = new RendererTexture(nameof(GPosition), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-            GPosition.SetNearestFilter();
-            GBuffer.DestinationTextures.Add(GPosition);
-            GBuffer.BindTexture(GPosition, FramebufferAttachment.ColorAttachment0);
-
-            GNormal = new RendererTexture(nameof(GNormal), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-            GNormal.SetNearestFilter();
-            GBuffer.DestinationTextures.Add(GNormal);
-            GBuffer.BindTexture(GNormal, FramebufferAttachment.ColorAttachment1);
-
-            GAlbedoSpec = new RendererTexture(nameof(GAlbedoSpec), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
-            GAlbedoSpec.SetNearestFilter();
-            GBuffer.DestinationTextures.Add(GAlbedoSpec);
-            GBuffer.BindTexture(GAlbedoSpec, FramebufferAttachment.ColorAttachment2);
-
-            GMaterial = new RendererTexture(nameof(GMaterial), TextureTarget.Texture2D, 0, PixelInternalFormat.R11fG11fB10f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-            GMaterial.SetNearestFilter();
-            GBuffer.DestinationTextures.Add(GMaterial);
-            GBuffer.BindTexture(GMaterial, FramebufferAttachment.ColorAttachment3);
-
-            GL.DrawBuffers(4, new DrawBuffersEnum[]
+            if (!reload)
             {
+                var width = RenderContext.Current.ScreenPixelSize.X;
+                var height = RenderContext.Current.ScreenPixelSize.Y;
+
+                GBuffer = new FrameBuffer(width, height);
+                GBuffer.ObjectLabel = nameof(GBuffer);
+                //GBuffer.InitNormal();
+
+                // R11fG11fB10f --> rgba16f
+                // Warning: R11fG11fB10f has no sign bit!
+
+                GPosition = new RendererTexture(nameof(GPosition), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+                GPosition.SetNearestFilter();
+                GBuffer.DestinationTextures.Add(GPosition);
+                GBuffer.BindTexture(GPosition, FramebufferAttachment.ColorAttachment0);
+
+                GNormal = new RendererTexture(nameof(GNormal), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+                GNormal.SetNearestFilter();
+                GBuffer.DestinationTextures.Add(GNormal);
+                GBuffer.BindTexture(GNormal, FramebufferAttachment.ColorAttachment1);
+
+                GAlbedoSpec = new RendererTexture(nameof(GAlbedoSpec), TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+                GAlbedoSpec.SetNearestFilter();
+                GBuffer.DestinationTextures.Add(GAlbedoSpec);
+                GBuffer.BindTexture(GAlbedoSpec, FramebufferAttachment.ColorAttachment2);
+
+                GMaterial = new RendererTexture(nameof(GMaterial), TextureTarget.Texture2D, 0, PixelInternalFormat.R11fG11fB10f, width, height, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+                GMaterial.SetNearestFilter();
+                GBuffer.DestinationTextures.Add(GMaterial);
+                GBuffer.BindTexture(GMaterial, FramebufferAttachment.ColorAttachment3);
+
+                GL.DrawBuffers(4, new DrawBuffersEnum[]
+                {
                 DrawBuffersEnum.ColorAttachment0,
                 DrawBuffersEnum.ColorAttachment1,
                 DrawBuffersEnum.ColorAttachment2,
                 DrawBuffersEnum.ColorAttachment3,
-            });
+                });
 
-            // var rboDepth = new RenderBuffer(gBuffer, RenderbufferStorage.DepthComponent, FramebufferAttachment.DepthAttachment);
-            // rboDepth.ObjectLabel = nameof(rboDepth);
+                // var rboDepth = new RenderBuffer(gBuffer, RenderbufferStorage.DepthComponent, FramebufferAttachment.DepthAttachment);
+                // rboDepth.ObjectLabel = nameof(rboDepth);
 
-            // Attach default Forward Depth Buffer to this Framebuffer, so both share the same depth informations.
-            var fwPipe = RenderContext.Current.GetPipeline<ForwardRenderPipeline>();
-            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, fwPipe.FrameBuffer.RenderBuffer.Handle);
+                // Attach default Forward Depth Buffer to this Framebuffer, so both share the same depth informations.
+                var fwPipe = RenderContext.Current.GetPipeline<ForwardRenderPipeline>();
+                GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, fwPipe.FrameBuffer.RenderBuffer.Handle);
 
-            GBuffer.Check();
+                GBuffer.Check();
+            }
 
             _DefLightShader = new RendererShader("Shaders/deferred-shading.vert", "Shaders/deferred-shading.frag", null, false);
             if (Renderer.Current.UseShadows)

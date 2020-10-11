@@ -166,7 +166,9 @@ namespace Aximo.Engine
                 return script;
             }
 
-            return (Component)Activator.CreateInstance(componentType);
+            var comp = (Component)Activator.CreateInstance(componentType);
+            comp.Actor = this;
+            return comp;
         }
 
         public void AddComponent(Component component)

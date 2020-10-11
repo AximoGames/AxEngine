@@ -572,6 +572,10 @@ namespace Aximo.Engine
                 foreach (var obj in RenderContext.AllObjects)
                     if (obj is IReloadable reloadable)
                         reloadable.OnReload();
+
+                foreach (var obj in RenderContext.RenderPipelines)
+                    if (obj is IReloadable reloadable)
+                        reloadable.OnReload();
             });
         }
 

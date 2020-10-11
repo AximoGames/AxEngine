@@ -61,7 +61,10 @@ namespace Aximo.Engine.Windows
         {
             string messageString = Marshal.PtrToStringAnsi(message, length);
 
-            if (type == DebugType.DebugTypeError)
+            if (type == DebugType.DebugTypePushGroup || type == DebugType.DebugTypePopGroup)
+                return;
+
+            if (type == DebugType.DebugTypeError || type == DebugType.DebugTypePerformance)
                 OpenGlLog.Error(messageString);
         }
 
@@ -100,7 +103,7 @@ namespace Aximo.Engine.Windows
 
                 Log.Info($"Vendor: {vendor}, version: {version}, shadinglangVersion: {shadingLanguageVersion}, renderer: {renderer}");
 
-                EnableDebugCallback();
+                //EnableDebugCallback();
 
                 RenderInitialized = true;
             }

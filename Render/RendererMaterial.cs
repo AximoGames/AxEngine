@@ -52,15 +52,15 @@ namespace Aximo.Render
             return mat;
         }
 
-        public void CreateShaders()
+        public void CreateShaders(bool reload = false)
         {
-            if (Shader == null)
+            if (Shader == null || reload)
                 Shader = new RendererShader("Shaders/forward.vert", "Shaders/forward.frag");
-            if (DefGeometryShader == null)
+            if (DefGeometryShader == null || reload)
                 DefGeometryShader = new RendererShader("Shaders/deferred-gbuffer.vert", "Shaders/deferred-gbuffer.frag");
-            if (ShadowShader == null)
+            if (ShadowShader == null || reload)
                 ShadowShader = new RendererShader("Shaders/shadow-directional.vert", "Shaders/shadow-directional.frag", "Shaders/shadow-directional.geom");
-            if (CubeShadowShader == null)
+            if (CubeShadowShader == null || reload)
                 CubeShadowShader = new RendererShader("Shaders/shadow-cube.vert", "Shaders/shadow-cube.frag", "Shaders/shadow-cube.geom");
         }
 

@@ -30,7 +30,7 @@ namespace Aximo.Render.OpenGL
             References.Remove(code);
         }
 
-        public static void ReloadAll()
+        internal static void ReloadAll()
         {
             foreach (var weak in References.ToArray())
                 if (weak.Value.TryGetTarget(out var shader))

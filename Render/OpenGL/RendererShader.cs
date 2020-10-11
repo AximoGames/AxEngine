@@ -18,7 +18,8 @@ namespace Aximo.Render.OpenGL
 
         public static void ReloadAll()
         {
-            ShaderManager.ReloadAll();
+            ShaderCache.Clear();
+            //ShaderManager.ReloadAll();
         }
 
         private static Serilog.ILogger Log = Aximo.Log.ForContext<RendererShader>();
@@ -181,6 +182,9 @@ namespace Aximo.Render.OpenGL
             // Querying this from the shader is very slow, so we do it once on initialization and reuse those values
             // later.
 
+            int shaderSize;
+            GL.GetProgram(Handle, (GetProgramParameterName)0x8741, out shaderSize);
+
             // First, we have to get the number of active uniforms in the shader.
             GL.GetProgram(Handle, GetProgramParameterName.ActiveUniforms, out var numberOfUniforms);
 
@@ -231,7 +235,7 @@ namespace Aximo.Render.OpenGL
 
             ShaderCache.TryAdd(SourceHash, this);
             ShaderManager.Register(this);
-            Log.Verbose("Compiled shader {ObjectLabel}", ObjectLabel);
+            Log.Verbose("Compiled shader {ObjectLabel}, Size {Size}", ObjectLabel, shaderSize);
         }
 
         public void Reload()
@@ -278,6 +282,8 @@ namespace Aximo.Render.OpenGL
             SourceHash = source.SourceHash;
             Compilations = source.Compilations;
             SharedUniformValues = source.SharedUniformValues;
+            LocalUniformValues = source.LocalUniformValues;
+
             _uniformLocations = source._uniformLocations;
             _uniformBlockLocations = source._uniformBlockLocations;
         }
@@ -322,9 +328,15 @@ namespace Aximo.Render.OpenGL
 
         internal static int CurrentHandle { get; private set; }
 
+        private static RendererShader CurrentShader;
+
         // A wrapper function that enables the shader program.
         public void Bind()
         {
+            if (CurrentShader == this)
+                return;
+            CurrentShader = this;
+
             if (Cached)
             {
                 var s = "";

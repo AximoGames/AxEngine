@@ -52,7 +52,7 @@ namespace Aximo.Render
         List<ILightObject> Lights { get; }
     }
 
-    public interface IReloadable : IRenderObject
+    public interface IReloadable
     {
         void OnReload();
     }

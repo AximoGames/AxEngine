@@ -27,7 +27,7 @@ namespace Aximo.Render.Pipelines
             CreateFrameBuffer();
         }
 
-        public override void Init()
+        public override void Init(bool reload = false)
         {
         }
 

@@ -46,6 +46,7 @@ namespace Aximo.Engine
                 obj.SetVertices(new StaticInternalMesh(Mesh));
                 obj.Name = ToString();
                 RenderContext.Current.AddObject(obj);
+                obj.PositionMatrix = Actor.Transform.GetMatrix();
             }
         }
 

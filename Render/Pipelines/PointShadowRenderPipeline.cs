@@ -11,7 +11,7 @@ namespace Aximo.Render.Pipelines
     {
         public FrameBuffer FrameBuffer { get; private set; }
 
-        public override void Init()
+        public override void Init(bool reload = false)
         {
             FrameBuffer = new FrameBuffer(1024, 1024);
             FrameBuffer.InitCubeDepth();
