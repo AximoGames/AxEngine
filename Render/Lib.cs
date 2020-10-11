@@ -81,7 +81,13 @@ namespace Aximo.Render
 
     public interface IBounds
     {
+        Box3 LocalBounds { get; set; }
         Box3 WorldBounds { get; set; }
+
+        /// <summary>
+        /// Cached Center
+        /// </summary>
+        Vector3 WorldBoundsCenter { get; }
     }
 
     public interface IScaleRotate : IPosition

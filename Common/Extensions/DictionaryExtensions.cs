@@ -3,43 +3,38 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Aximo
 {
     public static class DictionaryExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static bool TryAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value)
         {
-            lock (dict)
-            {
-                if (dict.ContainsKey(key))
-                    return false;
+            if (dict.ContainsKey(key))
+                return false;
 
-                dict.Add(key, value);
-                return true;
-            }
+            dict.Add(key, value);
+            return true;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static void Set<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value)
         {
-            lock (dict)
-            {
-                //if (dict.ContainsKey(key))
-                dict[key] = value;
-                //else
-                //    dict.Add(key, value);
-            }
+            //if (dict.ContainsKey(key))
+            dict[key] = value;
+            //else
+            //    dict.Add(key, value);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static void Set<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Func<TValue> getValue)
         {
-            lock (dict)
-            {
-                if (dict.ContainsKey(key))
-                    dict[key] = getValue();
-                else
-                    dict.Add(key, getValue());
-            }
+            //if (dict.ContainsKey(key))
+            dict[key] = getValue();
+            //else
+            //    dict.Add(key, getValue());
         }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
@@ -24,7 +25,12 @@ namespace Aximo.Render.OpenGL
 
         private static Serilog.ILogger Log = Aximo.Log.ForContext<RendererShader>();
 
-        public int Handle { get; private set; }
+        public int Handle
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            get;
+            private set;
+        }
         public string ObjectLabel { get { return Compilations.FirstOrDefault()?.ObjectLabel ?? ""; } set { } }
 
         public ObjectLabelIdentifier ObjectLabelIdentifier => ObjectLabelIdentifier.Program;
@@ -326,7 +332,12 @@ namespace Aximo.Render.OpenGL
             }
         }
 
-        internal static int CurrentHandle { get; private set; }
+        internal static int CurrentHandle
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            get;
+            private set;
+        }
 
         private static RendererShader CurrentShader;
 

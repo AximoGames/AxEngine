@@ -1,31 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <RootNamespace>Aximo.Render</RootNamespace>
-    <AssemblyName>Aximo.Render</AssemblyName>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <NoWarn>CS0162</NoWarn>
-  	<CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <Import Project="..\props\AssemblyVersion.props" />
-  <Import Project="..\props\Nuspec.props" />
-  <PropertyGroup>
-      <PackageId>Aximo.Render</PackageId>
-      <Description>$(DependencyDescription)</Description>
-  </PropertyGroup>
-  <Import Project="..\props\SharedProjectSettings.props" />
-  <ItemGroup>
-    <PackageReference Include="OpenTK" Version="4.0.0-pre9.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="../Assets/**/*.*" Exclude="../Assets/Textures/**/*.*">
-      <Pack>true</Pack>
-      <PackagePath>content\Assets</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <EmbeddedResource Include="../Assets/**/*.*" Exclude="../Assets/Textures/**/*.*" />
-  </ItemGroup>
+    <PropertyGroup>
+        <RootNamespace>Aximo.Render</RootNamespace>
+        <AssemblyName>Aximo.Render</AssemblyName>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <NoWarn>CS0162</NoWarn>
+        <CodeAnalysisRuleSet>..\props\default.ruleset</CodeAnalysisRuleSet>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <Import Project="..\props\AssemblyVersion.props" />
+    <Import Project="..\props\Nuspec.props" />
+    <PropertyGroup>
+        <PackageId>Aximo.Render</PackageId>
+        <Description>$(DependencyDescription)</Description>
+    </PropertyGroup>
+    <Import Project="..\props\SharedProjectSettings.props" />
+    <ItemGroup>
+        <PackageReference Include="OpenTK" Version="4.0.0-pre9.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Common\Common.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="../Assets/**/*.*" Exclude="../Assets/Textures/**/*.*">
+            <Pack>true</Pack>
+            <PackagePath>content\Assets</PackagePath>
+            <PackageCopyToOutput>true</PackageCopyToOutput>
+        </Content>
+        <EmbeddedResource Include="../Assets/**/*.*" Exclude="../Assets/Textures/**/*.*" />
+    </ItemGroup>
 </Project>

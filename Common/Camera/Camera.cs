@@ -75,6 +75,8 @@ namespace Aximo
             ProjectionMatrix = GetProjectionMatrix();
             ViewProjectionMatrix = ViewMatrix * ProjectionMatrix;
             InvertedViewProjectionMatrix = Matrix4.Invert(ViewProjectionMatrix);
+            UpdateAABB();
+
             CameraChangedInternal?.Invoke();
         }
 
@@ -154,5 +156,125 @@ namespace Aximo
         {
             AspectRatio = width / height;
         }
+
+        public Vector3 UnProject(Vector2 normalizedScreenCoordinates, float z)
+        {
+            return UnProject(new Vector3(normalizedScreenCoordinates.X, normalizedScreenCoordinates.Y, z));
+        }
+
+        public Vector3 UnProject(Vector3 normalizedScreenCoordinates)
+        {
+            Vector4 vec;
+
+            vec.X = normalizedScreenCoordinates.X;
+            vec.Y = normalizedScreenCoordinates.Y;
+            vec.Z = normalizedScreenCoordinates.Z;
+            vec.W = 1.0f;
+
+            vec = Vector4.Transform(vec, InvertedViewProjectionMatrix);
+            //vec = vec * InvertedViewProjectionMatrix;
+
+            return vec.Xyz / vec.W;
+        }
+
+        public Box3 AABB { get; private set; }
+        private void UpdateAABB()
+        {
+            var screenPoints = new Vector3[]
+            {
+                new Vector3(-1, -1, -1),
+                new Vector3(-1, 1, -1),
+                new Vector3(1, -1, -1),
+                new Vector3(1, 1, -1),
+
+                new Vector3(-1, -1, 1),
+                new Vector3(-1, 1, 1),
+                new Vector3(1, -1, 1),
+                new Vector3(1, 1, 1),
+            };
+
+            var points = new List<Vector3>();
+            foreach (var sp in screenPoints)
+            {
+                var p = UnProject(sp);
+                points.Add(p);
+            }
+
+            AABB = points.GetBoundingBox();
+        }
+
+        public bool InFrustum(Box3 box)
+        {
+            //return true;
+            if (!AABB.Contains(box))
+                return false;
+
+            var frustum = ExtractFrustum(ViewProjectionMatrix);
+            if (frustum.Near.IsOutside(box)
+                || frustum.Left.IsOutside(box)
+                || frustum.Right.IsOutside(box)
+                || frustum.Top.IsOutside(box)
+                || frustum.Bottom.IsOutside(box)
+                || frustum.Far.IsOutside(box))
+                return false;
+
+            return true;
+        }
+
+        public static Frustum ExtractFrustum(Matrix4 viewProjMatrix)
+        {
+            Frustum frustum = new Frustum();
+
+            Plane left = new Plane();
+            left.A = viewProjMatrix.M14 + viewProjMatrix.M11;
+            left.B = viewProjMatrix.M24 + viewProjMatrix.M21;
+            left.C = viewProjMatrix.M34 + viewProjMatrix.M31;
+            left.D = viewProjMatrix.M44 + viewProjMatrix.M41;
+            left.Normalize();
+            frustum.Left = left;
+
+            Plane right = new Plane();
+            right.A = viewProjMatrix.M14 - viewProjMatrix.M11;
+            right.B = viewProjMatrix.M24 - viewProjMatrix.M21;
+            right.C = viewProjMatrix.M34 - viewProjMatrix.M31;
+            right.D = viewProjMatrix.M44 - viewProjMatrix.M41;
+            right.Normalize();
+            frustum.Right = right;
+
+            Plane top = new Plane();
+            top.A = viewProjMatrix.M14 - viewProjMatrix.M12;
+            top.B = viewProjMatrix.M24 - viewProjMatrix.M22;
+            top.C = viewProjMatrix.M34 - viewProjMatrix.M32;
+            top.D = viewProjMatrix.M44 - viewProjMatrix.M42;
+            top.Normalize();
+            frustum.Top = top;
+
+            Plane bottom = new Plane();
+            bottom.A = viewProjMatrix.M14 + viewProjMatrix.M12;
+            bottom.B = viewProjMatrix.M24 + viewProjMatrix.M22;
+            bottom.C = viewProjMatrix.M34 + viewProjMatrix.M32;
+            bottom.D = viewProjMatrix.M44 + viewProjMatrix.M42;
+            bottom.Normalize();
+            frustum.Bottom = bottom;
+
+            Plane near = new Plane();
+            near.A = viewProjMatrix.M13;
+            near.B = viewProjMatrix.M23;
+            near.C = viewProjMatrix.M33;
+            near.D = viewProjMatrix.M43;
+            near.Normalize();
+            frustum.Near = near;
+
+            Plane far = new Plane();
+            far.A = viewProjMatrix.M14 - viewProjMatrix.M13;
+            far.B = viewProjMatrix.M24 - viewProjMatrix.M23;
+            far.C = viewProjMatrix.M34 - viewProjMatrix.M33;
+            far.D = viewProjMatrix.M44 - viewProjMatrix.M43;
+            far.Normalize();
+            frustum.Far = far;
+
+            return frustum;
+        }
+
     }
 }

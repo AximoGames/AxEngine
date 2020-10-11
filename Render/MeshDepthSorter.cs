@@ -48,8 +48,8 @@ namespace Aximo.Render
             if (hasBoundsX == 0) // no check for Y needed
                 return 0;
 
-            var distanceX = Vector3.Distance(CameraPosition, boundsX.WorldBounds.Center);
-            var distanceY = Vector3.Distance(CameraPosition, boundsY.WorldBounds.Center);
+            var distanceX = Vector3.Distance(CameraPosition, boundsX.WorldBoundsCenter);
+            var distanceY = Vector3.Distance(CameraPosition, boundsY.WorldBoundsCenter);
             return distanceX.CompareTo(distanceY) * reverse;
         }
     }

@@ -13,6 +13,7 @@ namespace Aximo.Engine
 
         public Vector3 Position { get; set; }
         public Quaternion Rotation { get; set; }
+        public Vector3 Scale { get; set; }
 
         public Matrix4 GetMatrix()
         {
@@ -22,8 +23,7 @@ namespace Aximo.Engine
             //    * Matrix4.CreateRotationZ(Rotate.Z * (MathF.PI * 2))
             //    * Matrix4.CreateTranslation((new Vector4(Position, 1.0f) * PositionMatrix).Xyz);
 
-            return Matrix4.CreateTranslation(Position);
-
+            return Matrix4.CreateScale(Scale) * Matrix4.CreateTranslation(Position);
         }
 
     }

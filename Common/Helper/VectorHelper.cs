@@ -45,5 +45,6 @@ namespace Aximo
         {
             s = (v.X * tv.NotX) + (v.Y * tv.NotY) + (v.Z * tv.NotZ);
         }
+
     }
 }

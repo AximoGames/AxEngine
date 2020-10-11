@@ -2,13 +2,18 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Aximo.Render.Pipelines;
 
 namespace Aximo.Render.Objects
 {
     public abstract class RenderObject : RenderObjectBase
     {
-        public virtual List<IRenderPipeline> RenderPipelines { get; } = new List<IRenderPipeline>();
+        public virtual List<IRenderPipeline> RenderPipelines
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            get;
+        } = new List<IRenderPipeline>();
 
         public void UsePipeline<T>()
             where T : class, IRenderPipeline

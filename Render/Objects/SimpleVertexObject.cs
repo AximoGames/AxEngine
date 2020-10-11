@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Aximo.Render.OpenGL;
 using Aximo.Render.Pipelines;
 using OpenToolkit.Mathematics;
@@ -13,7 +14,15 @@ namespace Aximo.Render.Objects
     public class SimpleVertexObject : PrimitiveObject, IShadowObject, IReloadable, ILightTarget, IScaleRotate,
         IForwardRenderable, IDeferredRenderable, IScreenRenderable, IBounds
     {
-        public Camera Camera => Context.Camera;
+        public Camera Camera
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            get
+            {
+                return Context.Camera;
+            }
+        }
+
         public Vector3 Position { get; set; }
         public Vector3 Scale { get; set; } = new Vector3(1.0f);
         public Quaternion Rotate { get; set; }
@@ -377,6 +386,36 @@ namespace Aximo.Render.Objects
 
         public List<ILightObject> Lights => Context.LightObjects;
 
-        public Box3 WorldBounds { get; set; }
+        private Box3 _LocalBounds;
+        public Box3 LocalBounds
+        {
+            get => _LocalBounds;
+            set
+            {
+                _LocalBounds = value;
+                var min = Vector3.TransformPosition(value.Min, PositionMatrix);
+                var max = Vector3.TransformPosition(value.Max, PositionMatrix);
+                WorldBounds = new Box3(min, max);
+            }
+        }
+
+        private Box3 _WorldBounds;
+        public Box3 WorldBounds
+        {
+            get => _WorldBounds;
+            set
+            {
+                _WorldBounds = value;
+                _WorldBounds.Center = value.Center;
+            }
+        }
+
+        public Vector3 WorldBoundsCenter
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            get;
+            set;
+        }
+
     }
 }

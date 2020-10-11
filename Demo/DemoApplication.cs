@@ -31,8 +31,11 @@ namespace Aximo.AxDemo
                     var m = act.AddComponent<MeshC>();
                     m.Mesh = Mesh.CreateCube();
                     act.Transform.Position = new Vector3(x, y, 0);
+                    act.Transform.Scale = new Vector3(0.75f);
                 }
             }
+
+            //Camera.LookAt = new Vector3(0, 2, 50);
 
             //var comp = (ScriptBehaviour)act.AddComponent("TestClass");
             //var comp2 = (ScriptBehaviour)act.AddComponent("TestClass");

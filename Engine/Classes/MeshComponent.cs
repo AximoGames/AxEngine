@@ -47,6 +47,8 @@ namespace Aximo.Engine
                 obj.Name = ToString();
                 RenderContext.Current.AddObject(obj);
                 obj.PositionMatrix = Actor.Transform.GetMatrix();
+                Mesh.CalculateBounds();
+                obj.LocalBounds = Mesh.Bounds;
             }
         }
 

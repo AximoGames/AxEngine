@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace Aximo.Render.Objects
@@ -11,9 +12,26 @@ namespace Aximo.Render.Objects
     {
         public int Id { get; }
         public string Name { get; set; }
-        public bool Enabled { get; set; } = true;
-        public int DrawPriority { get; set; }
-        public bool UseTransparency { get; set; }
+
+        public bool Enabled
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            get;
+            set;
+        } = true;
+
+        public int DrawPriority
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            get;
+            set;
+        }
+        public bool UseTransparency
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            get;
+            set;
+        }
 
         public RenderObjectBase()
         {

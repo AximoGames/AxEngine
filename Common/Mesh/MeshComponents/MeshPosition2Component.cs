@@ -33,24 +33,7 @@ namespace Aximo
 
         public override void CalculateBounds()
         {
-            float minX = 0;
-            float minY = 0;
-
-            float maxX = 0;
-            float maxY = 0;
-
-            for (var i = 0; i < Values.Count; i++)
-            {
-                var pos = Values[i];
-
-                minX = MathF.Min(minX, pos.X);
-                minY = MathF.Min(minY, pos.Y);
-
-                maxX = MathF.Min(maxX, pos.X);
-                maxY = MathF.Min(maxY, pos.Y);
-            }
-
-            Bounds = new Box2(minX, minY, maxX, maxY);
+            Bounds = Values.GetBoundingBox();
         }
     }
 }

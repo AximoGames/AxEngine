@@ -780,12 +780,15 @@ namespace Aximo.Engine
 
         protected Vector3? ScreenPositionToWorldPosition(Vector2 normalizedScreenCoordinates)
         {
+            // Flip Y
+            normalizedScreenCoordinates.Y = -normalizedScreenCoordinates.Y;
+
             // FUTURE: Read Dept-Buffer to get the avoid ray-Cast and get adaptive Z-Position
             // Currently, it's fixed to 0 (Plane is at Z=0).
             var plane = new Plane(new Vector3(0, 0, 1), new Vector3(0, 0, 0));
 
-            var pos1 = UnProject(normalizedScreenCoordinates, -1); // -1 requied for ortho. With z=0, perspective will not work, but no ortho
-            var pos2 = UnProject(normalizedScreenCoordinates, 1);
+            var pos1 = Camera.UnProject(normalizedScreenCoordinates, -1); // -1 requied for ortho. With z=0, perspective will not work, but no ortho
+            var pos2 = Camera.UnProject(normalizedScreenCoordinates, 1);
 
             // if (!DebugCamera)
             // {
@@ -804,20 +807,6 @@ namespace Aximo.Engine
                 return (new Vector4(ray.GetPoint(result), 1) * RenderContext.WorldPositionMatrix).Xyz;
 
             return null;
-        }
-
-        public Vector3 UnProject(Vector2 mouse, float z)
-        {
-            Vector4 vec;
-
-            vec.X = mouse.X;
-            vec.Y = -mouse.Y;
-            vec.Z = z;
-            vec.W = 1.0f;
-
-            vec = Vector4.Transform(vec, Camera.InvertedViewProjectionMatrix);
-
-            return vec.Xyz / vec.W;
         }
 
         public double RenderFrequency => Window.RenderFrequency;

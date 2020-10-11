@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aximo.Render.OpenGL;
 using Aximo.VertexData;
 using OpenToolkit.Graphics.OpenGL4;
@@ -129,7 +130,8 @@ namespace Aximo.Render.Pipelines
 
         public override IEnumerable<IRenderableObject> GetRenderObjects(RenderContext context, Camera camera)
         {
-            return SortFromFrontToBack(context, camera, base.GetRenderObjects(context, camera));
+            return SortFromFrontToBack(context, camera, base.GetRenderObjects(context, camera)
+                .Where(obj => camera.InFrustum(((IBounds)obj).WorldBounds)));
         }
 
         private void RenderPass2(RenderContext context, Camera camera)
