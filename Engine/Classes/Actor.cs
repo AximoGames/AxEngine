@@ -131,7 +131,7 @@ namespace Aximo.Engine
         }
 
         public T AddComponent<T>()
-            where T : Component
+            where T : Component, new()
         {
             return (T)AddComponent(typeof(T));
         }

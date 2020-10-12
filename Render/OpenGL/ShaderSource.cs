@@ -17,6 +17,8 @@ namespace Aximo.Render.OpenGL
         public int Ordinal;
         public ShaderCompilation Compilation;
 
+        public string CacheKey => Path ?? Source;
+
         private static Regex FileFinder = new Regex(@"#include ""([\w\.\/-]+)""", RegexOptions.RightToLeft);
         private static Regex DefineFileFinder = new Regex(@"#include ([\w_]+)", RegexOptions.RightToLeft);
 

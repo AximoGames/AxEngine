@@ -21,6 +21,12 @@ namespace Aximo.AxDemo
 
             SceneManager.SetActiveScene(scene);
 
+            var act2 = new Actor();
+
+            scene.AddActor(act2);
+            var m2 = act2.AddComponent<PointLightComponent>();
+            act2.Transform.Position = new Vector3(0, 0, 2);
+
             for (var y = -10; y < 10; y++)
             {
                 for (var x = -10; x < 10; x++)
@@ -32,6 +38,7 @@ namespace Aximo.AxDemo
                     m.Mesh = Mesh.CreateCube();
                     act.Transform.Position = new Vector3(x, y, 0);
                     act.Transform.Scale = new Vector3(0.75f);
+                    act.Transform.UpdateTransform();
                 }
             }
 

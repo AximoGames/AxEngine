@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using Aximo.Render;
+﻿using Aximo.Render;
 using Aximo.Render.Objects;
 using Aximo.Render.OpenGL;
-using McMaster.NETCore.Plugins;
-using OpenToolkit.Graphics.OpenGL;
-using OpenToolkit.Mathematics;
 
 namespace Aximo.Engine
 {
-
     public class MeshC : Component
     {
         private Mesh? _Mesh;
@@ -46,7 +36,7 @@ namespace Aximo.Engine
                 obj.SetVertices(new StaticInternalMesh(Mesh));
                 obj.Name = ToString();
                 RenderContext.Current.AddObject(obj);
-                obj.PositionMatrix = Actor.Transform.GetMatrix();
+                obj.PositionMatrix = Actor.Transform.WorldTransform;
                 Mesh.CalculateBounds();
                 obj.LocalBounds = Mesh.Bounds;
             }

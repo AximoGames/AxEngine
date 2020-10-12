@@ -125,17 +125,8 @@ namespace Aximo.Render.OpenGL
         private bool Cached;
         public void Compile()
         {
-            // There are several different types of shaders, but the only two you need for basic rendering are the vertex and fragment shaders.
-            // The vertex shader is responsible for moving around vertices, and uploading that data to the fragment shader.
-            //   The vertex shader won't be too important here, but they'll be more important later.
-            // The fragment shader is responsible for then converting the vertices to "fragments", which represent all the data OpenGL needs to draw a pixel.
-            //   The fragment shader is what we'll be using the most here.
-
-            // GL.CreateShader will create an empty shader (obviously). The ShaderType enum denotes which type of shader will be created.
-            foreach (var comp in Compilations)
-                comp.GenerateSource();
-
-            var hashSource = string.Join(' ', Compilations.SelectMany(comp => comp.Sources.Select(s => s.Source)));
+            var hashSource = string.Join(' ', Compilations.SelectMany(comp => comp.Sources.Select(s => s.CacheKey)));
+            hashSource += " " + string.Join(' ', Compilations.SelectMany(comp => comp.Defines.Select(kv => $"{kv.Key}={kv.Value}")));
             SourceHash = Hashing.FNV32(hashSource);
             if (ShaderCache.TryGetValue(SourceHash, out var shader))
             {
@@ -148,6 +139,8 @@ namespace Aximo.Render.OpenGL
 
             foreach (var comp in Compilations)
             {
+                comp.GenerateSource();
+
                 var shaderSources = comp.Sources.Select(s => s.Source).ToArray();
                 var len = shaderSources.Select(s => s.Length).ToArray();
 

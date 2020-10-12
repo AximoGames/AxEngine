@@ -43,7 +43,7 @@ namespace Aximo.Engine
         {
         }
 
-        internal bool _NeedSyncRenderer;
+        internal bool _NeedSyncRenderer = true;
         private protected void NeedSyncRenderer()
         {
             _NeedSyncRenderer = true;
