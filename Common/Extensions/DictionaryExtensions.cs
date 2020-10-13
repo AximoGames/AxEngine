@@ -10,7 +10,7 @@ namespace Aximo
     public static class DictionaryExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static bool TryAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value)
+        public static bool TryAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, in TKey key, in TValue value)
         {
             if (dict.ContainsKey(key))
                 return false;
@@ -20,7 +20,7 @@ namespace Aximo
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static void Set<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value)
+        public static void Set<TKey, TValue>(this IDictionary<TKey, TValue> dict, in TKey key, in TValue value)
         {
             //if (dict.ContainsKey(key))
             dict[key] = value;
@@ -29,7 +29,7 @@ namespace Aximo
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static void Set<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Func<TValue> getValue)
+        public static void Set<TKey, TValue>(this IDictionary<TKey, TValue> dict, in TKey key, in Func<TValue> getValue)
         {
             //if (dict.ContainsKey(key))
             dict[key] = getValue();

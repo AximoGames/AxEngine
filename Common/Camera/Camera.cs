@@ -71,10 +71,10 @@ namespace Aximo
 
         protected void OnCameraChanged()
         {
-            ViewMatrix = GetViewMatrix(Position);
-            ProjectionMatrix = GetProjectionMatrix();
-            ViewProjectionMatrix = ViewMatrix * ProjectionMatrix;
-            InvertedViewProjectionMatrix = Matrix4.Invert(ViewProjectionMatrix);
+            _ViewMatrix = GetViewMatrix(Position);
+            _ProjectionMatrix = GetProjectionMatrix();
+            _ViewProjectionMatrix = ViewMatrix * ProjectionMatrix;
+            _InvertedViewProjectionMatrix = Matrix4.Invert(ViewProjectionMatrix);
             UpdateAABB();
 
             CameraChangedInternal?.Invoke();
@@ -117,10 +117,17 @@ namespace Aximo
             set { if (_LookAt == value) return; _LookAt = value; OnCameraChanged(); }
         }
 
-        public Matrix4 ViewMatrix { get; private set; }
-        public Matrix4 ProjectionMatrix { get; private set; }
-        public Matrix4 ViewProjectionMatrix { get; private set; }
-        public Matrix4 InvertedViewProjectionMatrix { get; private set; }
+        private Matrix4 _ViewMatrix;
+        public ref readonly Matrix4 ViewMatrix => ref _ViewMatrix;
+
+        public Matrix4 _ProjectionMatrix;
+        public ref readonly Matrix4 ProjectionMatrix => ref _ProjectionMatrix;
+
+        public Matrix4 _ViewProjectionMatrix;
+        public ref readonly Matrix4 ViewProjectionMatrix => ref _ViewProjectionMatrix;
+
+        public Matrix4 _InvertedViewProjectionMatrix;
+        public ref readonly Matrix4 InvertedViewProjectionMatrix => ref _InvertedViewProjectionMatrix;
 
         public virtual Matrix4 GetViewMatrix(Vector3 eye)
         {

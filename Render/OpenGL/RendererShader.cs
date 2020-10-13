@@ -411,7 +411,7 @@ namespace Aximo.Render.OpenGL
 
         // The shader sources provided with this project use hardcoded layout(location)-s. If you want to do it dynamically,
         // you can omit the layout(location=X) lines in the vertex shader, and use this in VertexAttribPointer instead of the hardcoded values.
-        public int GetAttribLocation(string attribName)
+        public int GetAttribLocation(in string attribName)
         {
             Bind();
             var attrHandle = GL.GetAttribLocation(Handle, attribName);
@@ -426,7 +426,7 @@ namespace Aximo.Render.OpenGL
         private Dictionary<int, object> LocalUniformValues = new Dictionary<int, object>();
         private bool disposedValue;
 
-        private bool SetInternal<T>(string name, T value, Action<int, T> setter)
+        private bool SetInternal<T>(in string name, in T value, Action<int, T> setter)
         {
             if (!_uniformLocations.TryGetValue(name, out var location))
                 return false;
@@ -499,7 +499,7 @@ namespace Aximo.Render.OpenGL
         ///   The matrix is transposed before being sent to the shader.
         ///   </para>
         /// </remarks>
-        public void SetMatrix4(string name, Matrix4 data) => SetInternal(name, data, GLUniformMatrix4);
+        public void SetMatrix4(string name, in Matrix4 data) => SetInternal(name, data, GLUniformMatrix4);
 
         private static void GLUniformMatrix3(int location, Matrix3 data) => GL.UniformMatrix3(location, true, ref data);
         private static void GLUniformMatrix4(int location, Matrix4 data) => GL.UniformMatrix4(location, true, ref data);

@@ -35,8 +35,8 @@ namespace Aximo.Render.Pipelines
 
         protected virtual IEnumerable<IRenderableObject> SortFromFrontToBack(RenderContext context, Camera camera, IEnumerable<IRenderableObject> objects)
         {
-            var list = objects.ToList();
-            list.Sort(new MeshDepthSorter(camera));
+            var list = objects.ToArray();
+            Array.Sort(list, new MeshDepthSorter(camera));
             return list;
         }
 
