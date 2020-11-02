@@ -10,6 +10,10 @@ using Aximo.Render.Pipelines;
 using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 
+using SkiaSharp;
+using Svg.Picture;
+using Svg.Skia;
+
 namespace Aximo.Render
 {
     public class Renderer
@@ -44,7 +48,7 @@ namespace Aximo.Render
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
-            GL.Enable(EnableCap.Blend);
+            GraphicsDevice.Default.Blend = true;
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             InternalTextureManager.Init();
@@ -189,9 +193,102 @@ namespace Aximo.Render
 
             ubo.Free();
 
+            //---
+
+            if (false)
+            {
+
+                ObjectManager.PushDebugGroup("Draw", "SVG");
+
+                if (grContext == null)
+                {
+                    var glInterface = GRGlInterface.CreateNativeGlInterface();
+                    grContext = GRContext.CreateGl(glInterface);
+                }
+
+                if (renderTarget == null)
+                {
+                    int w = 300;
+                    int h = 300;
+
+                    // define the surface properties
+                    // create or update the dimensions
+                    renderTarget?.Dispose();
+                    GL.GetInteger(GetPName.FramebufferBinding, out var framebuffer);
+                    //GL.GetInteger(GetPName.StencilBits, out var stencil);
+                    var stencil = 0;
+                    GL.GetInteger(GetPName.Samples, out var samples);
+                    var maxSamples = grContext.GetMaxSurfaceSampleCount(colorType);
+                    if (samples > maxSamples)
+                        samples = maxSamples;
+                    var glInfo = new GRGlFramebufferInfo((uint)framebuffer, colorType.ToGlSizedFormat());
+                    renderTarget = new GRBackendRenderTarget(w, h, samples, stencil, glInfo);
+                    // create the surface
+                    surface?.Dispose();
+                    surface = SKSurface.Create(grContext, renderTarget, surfaceOrigin, colorType);
+                }
+
+                using (new SKAutoCanvasRestore(surface.Canvas, true))
+                {
+                    // start drawing
+                    //OnPaintSurface(new Desktop.SKPaintGLSurfaceEventArgs(surface, renderTarget, surfaceOrigin, colorType));
+
+                    var canvas = surface.Canvas;
+                    canvas.Clear(new SKColor(0, 0, 128));
+
+                    float scale = 256.0f - (testCounter * 00000.1f);
+                    testCounter++;
+                    float R = 0.45f * scale;
+                    float TAU = 6.2831853f;
+                    SKPath path = new SKPath();
+                    path.MoveTo(R, 0.0f);
+                    for (int i = 1; i < 7; ++i)
+                    {
+                        float theta = 3 * i * TAU / 7;
+                        path.LineTo(R * MathF.Cos(theta), R * MathF.Sin(theta));
+                    }
+                    path.Close();
+                    canvas.Clear(new SKColor(255, 128, 60));
+                    canvas.Translate(0.5f * scale, 0.5f * scale);
+                    canvas.DrawPath(path, new SKPaint() { IsAntialias = true });
+
+                }
+                // update the control
+                surface.Canvas.Flush();
+
+                ObjectManager.PopDebugGroup();
+                // Reset (using OpenTK's GL bindings)
+                GL.Disable(EnableCap.VertexProgramPointSize);
+                //GL.BindVertexArray(vertexArrayObject); // Restore default VAO 
+                GL.FrontFace(FrontFaceDirection.Cw);
+                GL.Enable(EnableCap.FramebufferSrgb);
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.PixelStore(PixelStoreParameter.UnpackAlignment, 4);
+                GL.BindFramebuffer(FramebufferTarget.FramebufferExt, 0);
+                GL.UseProgram(0);
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+                GL.DrawBuffer(DrawBufferMode.Back);
+                GL.Enable(EnableCap.Dither);
+                GL.DepthMask(true);
+                GL.Enable(EnableCap.Multisample);
+                GL.Disable(EnableCap.ScissorTest);
+            }
+            GraphicsDevice.Default.WriteState();
+
+            //---
+
             if (FlushRenderBackend == FlushRenderBackend.End)
                 GL.Finish();
         }
+
+        private int testCounter = 0;
+        private GRContext grContext;
+        private GRBackendRenderTarget renderTarget;
+        private SKSurface surface;
+
+        private const SKColorType colorType = SKColorType.Rgba8888;
+        private const GRSurfaceOrigin surfaceOrigin = GRSurfaceOrigin.BottomLeft;
 
         private void CheckForProgramError()
         {

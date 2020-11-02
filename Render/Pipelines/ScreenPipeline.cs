@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Aximo.Render.OpenGL;
 using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render.Pipelines
@@ -15,7 +16,7 @@ namespace Aximo.Render.Pipelines
 
         public override void Render(RenderContext context, Camera camera)
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            GraphicsDevice.Default.Framebuffer = 0;
             GL.Disable(EnableCap.DepthTest);
             GL.ClearColor(1.0f, 0.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);

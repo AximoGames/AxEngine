@@ -100,7 +100,7 @@ namespace Aximo.Render.Pipelines
 
         public override void Render(RenderContext context, Camera camera)
         {
-            GL.Disable(EnableCap.Blend);
+            GraphicsDevice.Default.Blend = false;
 
             ObjectManager.PushDebugGroup("OnRender Pass1", this);
             RenderPass1(context, camera);
@@ -110,7 +110,7 @@ namespace Aximo.Render.Pipelines
             RenderPass2(context, camera);
             ObjectManager.PopDebugGroup();
 
-            GL.Enable(EnableCap.Blend);
+            GraphicsDevice.Default.Blend = true;
         }
 
         private void RenderPass1(RenderContext context, Camera camera)

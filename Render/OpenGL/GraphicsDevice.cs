@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
 using OpenToolkit.Graphics.OpenGL4;
 
 namespace Aximo.Render.OpenGL
@@ -32,9 +33,83 @@ namespace Aximo.Render.OpenGL
         static GraphicsDevice()
         {
             Default = new GraphicsDevice();
+            Default.ReadState();
         }
 
         public static GraphicsDevice Default { get; private set; }
+
+        private void SetCap(EnableCap cap, bool value)
+        {
+            if (value)
+                GL.Enable(cap);
+            else
+                GL.Disable(cap);
+        }
+
+        public void ReadState()
+        {
+            _Blend = GL.IsEnabled(EnableCap.Blend);
+            _CullFace = GL.IsEnabled(EnableCap.CullFace);
+            _CullFaceMode = (CullFaceMode)GL.GetInteger(GetPName.CullFaceMode);
+            _DepthMask = GL.GetBoolean(GetPName.DepthWritemask);
+            _DepthFunc = (DepthFunction)GL.GetInteger(GetPName.DepthFunc);
+
+            _ReadFramebuffer = GL.GetInteger(GetPName.ReadFramebufferBinding);
+            _DrawFramebuffer = GL.GetInteger(GetPName.DrawFramebufferBinding);
+            _Framebuffer = GL.GetInteger(GetPName.FramebufferBinding);
+        }
+
+        public void WriteState()
+        {
+            SetCap(EnableCap.Blend, _Blend);
+            SetCap(EnableCap.CullFace, _CullFace);
+            _CullFaceMode = (CullFaceMode)GL.GetInteger(GetPName.CullFaceMode);
+            _DepthMask = GL.GetBoolean(GetPName.DepthWritemask);
+            _DepthFunc = (DepthFunction)GL.GetInteger(GetPName.DepthFunc);
+
+            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, _ReadFramebuffer);
+            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, _DrawFramebuffer);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _Framebuffer);
+        }
+
+        private int _Framebuffer;
+        public int Framebuffer
+        {
+            get => _Framebuffer;
+            set
+            {
+                if (_Framebuffer == value)
+                    return;
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, value);
+                _Framebuffer = value;
+            }
+        }
+
+        private int _DrawFramebuffer;
+        public int DrawFramebuffer
+        {
+            get => _DrawFramebuffer;
+            set
+            {
+                if (_DrawFramebuffer == value)
+                    return;
+                GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, value);
+                _DrawFramebuffer = value;
+            }
+        }
+
+        private int _ReadFramebuffer;
+        public int ReadFramebuffer
+        {
+            get => _ReadFramebuffer;
+            set
+            {
+                if (_ReadFramebuffer == value)
+                    return;
+                GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, value);
+                _ReadFramebuffer = value;
+            }
+        }
 
         private bool _CullFace;
         public bool CullFace
@@ -44,11 +119,21 @@ namespace Aximo.Render.OpenGL
             {
                 if (_CullFace == value)
                     return;
-                if (value)
-                    GL.Enable(EnableCap.CullFace);
-                else
-                    GL.Disable(EnableCap.CullFace);
+                SetCap(EnableCap.CullFace, value);
                 _CullFace = value;
+            }
+        }
+
+        private bool _Blend;
+        public bool Blend
+        {
+            get => _Blend;
+            set
+            {
+                if (_Blend == value)
+                    return;
+                SetCap(EnableCap.Blend, value);
+                _Blend = value;
             }
         }
 

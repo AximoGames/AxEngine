@@ -86,7 +86,7 @@ namespace Aximo.AxDemo
                 // UseGtkUI = true,
                 UseConsole = true,
                 NormalizedUISize = new Vector2(800, 600),
-                //UseFrameDebug = true,
+                UseFrameDebug = true,
             };
             new DemoApplication().Start(config);
         }

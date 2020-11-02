@@ -158,7 +158,7 @@ namespace Aximo.Render.OpenGL
 
         public void Bind()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _Handle);
+            GraphicsDevice.Default.Framebuffer = _Handle;
         }
     }
 }
