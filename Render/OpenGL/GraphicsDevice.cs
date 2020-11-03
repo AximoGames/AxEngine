@@ -16,6 +16,18 @@ namespace Aximo.Render.OpenGL
         FrontAndBack = 1032,
     }
 
+    public enum FrontFaceDirection
+    {
+        //
+        // Summary:
+        //     Original was GL_CW = 0x0900
+        Cw = 2304,
+        //
+        // Summary:
+        //     Original was GL_CCW = 0x0901
+        Ccw = 2305
+    }
+
     public enum DepthFunction
     {
         Never = 512,
@@ -64,6 +76,8 @@ namespace Aximo.Render.OpenGL
             s.FramebufferExt = GL.GetInteger(GetPName.FramebufferBindingExt);
 
             s.Program = GL.GetInteger(GetPName.CurrentProgram);
+            s.VertexProgramPointSize = GL.IsEnabled(EnableCap.VertexProgramPointSize);
+            s.VertexArrayBinding = GL.GetInteger(GetPName.VertexArrayBinding);
         }
 
         internal void WriteStateToDevice()
@@ -88,6 +102,8 @@ namespace Aximo.Render.OpenGL
             GL.BindFramebuffer(FramebufferTarget.FramebufferExt, s.FramebufferExt);
 
             GL.UseProgram(s.Program);
+            SetCap(EnableCap.VertexProgramPointSize, s.VertexProgramPointSize);
+            GL.BindVertexArray(s.VertexArrayBinding);
         }
 
         public GraphicsDeviceState State = new GraphicsDeviceState();
@@ -255,6 +271,45 @@ namespace Aximo.Render.OpenGL
                     return;
                 GL.DepthFunc((OpenToolkit.Graphics.OpenGL4.DepthFunction)value);
                 state.DepthFunc = value;
+            }
+        }
+
+        public FrontFaceDirection FrontFaceDirection
+        {
+            get => State.FrontFace;
+            set
+            {
+                var state = State;
+                if (state.FrontFace == value)
+                    return;
+                GL.FrontFace((OpenToolkit.Graphics.OpenGL4.FrontFaceDirection)value);
+                state.FrontFace = value;
+            }
+        }
+
+        public bool VertexProgramPointSize
+        {
+            get => State.VertexProgramPointSize;
+            set
+            {
+                var state = State;
+                if (state.VertexProgramPointSize == value)
+                    return;
+                SetCap(EnableCap.VertexProgramPointSize, value);
+                state.VertexProgramPointSize = value;
+            }
+        }
+
+        public int VertexArrayBinding
+        {
+            get => State.VertexArrayBinding;
+            set
+            {
+                var state = State;
+                if (state.VertexArrayBinding == value)
+                    return;
+                GL.BindVertexArray(value);
+                state.VertexArrayBinding = value;
             }
         }
     }

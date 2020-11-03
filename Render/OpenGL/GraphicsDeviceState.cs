@@ -28,6 +28,9 @@ namespace Aximo.Render.OpenGL
         internal bool DepthTest;
         internal bool DepthMask;
         internal DepthFunction DepthFunc;
+        internal FrontFaceDirection FrontFace;
+        internal bool VertexProgramPointSize;
+        internal int VertexArrayBinding;
 
         public GraphicsDeviceState Clone()
         {

@@ -211,7 +211,7 @@ namespace Aximo.Render
             if (skiaState == null)
                 skiaState = gameState.Clone();
 
-            //GraphicsDevice.Default.SetState(skiaState);
+            GraphicsDevice.Default.SetState(skiaState);
 
             DrawSkia();
 
