@@ -207,9 +207,18 @@ namespace Aximo.Render
             ubo.Free();
 
             //---
-            //GraphicsDevice.Default.ReadState();
+            //var gameState = GraphicsDevice.Default.State;
+            //if (skiaState == null)
+            //    skiaState = gameState.Clone();
+
+            //GraphicsDevice.Default.SetState(skiaState);
+
             DrawSkia();
-            GraphicsDevice.Default.WriteState();
+
+            //GraphicsDevice.Default.ReadStateFromDevice(skiaState);
+            //GraphicsDevice.Default.SetState(gameState);
+
+            GraphicsDevice.Default.WriteStateToDevice();
             //---
 
             if (FlushRenderBackend == FlushRenderBackend.End)
@@ -311,6 +320,7 @@ namespace Aximo.Render
         }
 
         private int testCounter = 0;
+        private GraphicsDeviceState skiaState;
         private GRContext grContext;
         private GRBackendRenderTarget renderTarget;
         private SKSurface surface;
