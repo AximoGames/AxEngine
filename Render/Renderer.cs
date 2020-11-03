@@ -218,7 +218,6 @@ namespace Aximo.Render
             GraphicsDevice.Default.ReadStateFromDevice(skiaState);
             GraphicsDevice.Default.SetState(gameState);
 
-            GraphicsDevice.Default.WriteStateToDevice();
             //---
 
             if (FlushRenderBackend == FlushRenderBackend.End)
@@ -269,6 +268,9 @@ namespace Aximo.Render
 
                 using (new SKAutoCanvasRestore(surface.Canvas, true))
                 {
+                    // This is an alternative for restoring the skia opengl state. When using, only restore game state is required.
+                    // grContext.ResetContext();
+
                     // start drawing
                     //OnPaintSurface(new Desktop.SKPaintGLSurfaceEventArgs(surface, renderTarget, surfaceOrigin, colorType));
 
