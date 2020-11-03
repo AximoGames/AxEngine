@@ -354,7 +354,7 @@ namespace Aximo.Render.OpenGL
             if (CurrentHandle == Handle)
                 return;
             CurrentHandle = Handle;
-            GL.UseProgram(Handle);
+            GraphicsDevice.Default.Program = Handle;
         }
 
         private void BindParams()

@@ -48,28 +48,79 @@ namespace Aximo.Render.OpenGL
 
         public void ReadState()
         {
+            _ScissorTest = GL.IsEnabled(EnableCap.ScissorTest);
             _Blend = GL.IsEnabled(EnableCap.Blend);
             _CullFace = GL.IsEnabled(EnableCap.CullFace);
             _CullFaceMode = (CullFaceMode)GL.GetInteger(GetPName.CullFaceMode);
+
             _DepthMask = GL.GetBoolean(GetPName.DepthWritemask);
+            _DepthTest = GL.IsEnabled(EnableCap.DepthTest);
             _DepthFunc = (DepthFunction)GL.GetInteger(GetPName.DepthFunc);
 
             _ReadFramebuffer = GL.GetInteger(GetPName.ReadFramebufferBinding);
             _DrawFramebuffer = GL.GetInteger(GetPName.DrawFramebufferBinding);
             _Framebuffer = GL.GetInteger(GetPName.FramebufferBinding);
+            _FramebufferExt = GL.GetInteger(GetPName.FramebufferBindingExt);
+
+            _Program = GL.GetInteger(GetPName.CurrentProgram);
         }
 
         public void WriteState()
         {
+            SetCap(EnableCap.ScissorTest, _ScissorTest);
             SetCap(EnableCap.Blend, _Blend);
             SetCap(EnableCap.CullFace, _CullFace);
-            _CullFaceMode = (CullFaceMode)GL.GetInteger(GetPName.CullFaceMode);
-            _DepthMask = GL.GetBoolean(GetPName.DepthWritemask);
-            _DepthFunc = (DepthFunction)GL.GetInteger(GetPName.DepthFunc);
+            GL.CullFace((OpenToolkit.Graphics.OpenGL4.CullFaceMode)_CullFaceMode);
+
+            GL.DepthMask(_DepthMask);
+            SetCap(EnableCap.DepthTest, _DepthTest);
+            GL.DepthFunc((OpenToolkit.Graphics.OpenGL4.DepthFunction)_DepthFunc);
 
             GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, _ReadFramebuffer);
             GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, _DrawFramebuffer);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, _Framebuffer);
+            GL.BindFramebuffer(FramebufferTarget.FramebufferExt, _FramebufferExt);
+
+            GL.UseProgram(_Program);
+        }
+
+        private bool _ScissorTest;
+        public bool ScissorTest
+        {
+            get => _ScissorTest;
+            set
+            {
+                if (_ScissorTest == value)
+                    return;
+                SetCap(EnableCap.ScissorTest, value);
+                _ScissorTest = value;
+            }
+        }
+
+        private int _Program;
+        public int Program
+        {
+            get => _Program;
+            set
+            {
+                if (_Program == value)
+                    return;
+                GL.UseProgram(value);
+                _Program = value;
+            }
+        }
+
+        private int _FramebufferExt;
+        public int FramebufferExt
+        {
+            get => _FramebufferExt;
+            set
+            {
+                if (_FramebufferExt == value)
+                    return;
+                GL.BindFramebuffer(FramebufferTarget.FramebufferExt, value);
+                _FramebufferExt = value;
+            }
         }
 
         private int _Framebuffer;
@@ -147,6 +198,19 @@ namespace Aximo.Render.OpenGL
                     return;
                 GL.CullFace((OpenToolkit.Graphics.OpenGL4.CullFaceMode)value);
                 _CullFaceMode = value;
+            }
+        }
+
+        private bool _DepthTest;
+        public bool DepthTest
+        {
+            get => _DepthTest;
+            set
+            {
+                if (_DepthTest == value)
+                    return;
+                SetCap(EnableCap.DepthTest, value);
+                _DepthTest = value;
             }
         }
 

@@ -11,7 +11,7 @@ using OpenToolkit.Graphics.OpenGL4;
 using OpenToolkit.Mathematics;
 
 using SkiaSharp;
-using Svg.Picture;
+//using Svg.Picture;
 using Svg.Skia;
 
 namespace Aximo.Render
@@ -41,13 +41,16 @@ namespace Aximo.Render
 
         public void Init()
         {
+            //DrawSkia();
+            //return;
+
             //PrintExtensions();
             CheckMemoryLeak();
 
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.CullFace);
+            GraphicsDevice.Default.DepthTest = true;
+            GraphicsDevice.Default.CullFace = true;
             GraphicsDevice.Default.Blend = true;
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
@@ -125,6 +128,16 @@ namespace Aximo.Render
 
         public void Render()
         {
+            //GraphicsDevice.Default.Framebuffer = 0;
+            //DrawSkia();
+
+            //ObjectManager.PushDebugGroup("State", "SVG");
+
+            //// https://github.com/mono/SkiaSharp/issues/614
+            //GraphicsDevice.Default.WriteState();
+            //ObjectManager.PopDebugGroup();
+            //return;
+
             //--
             var ubo = new UniformBufferObject();
             ubo.Create();
@@ -173,7 +186,7 @@ namespace Aximo.Render
             }
 
             //--
-            GL.Enable(EnableCap.DepthTest);
+            GraphicsDevice.Default.DepthTest = true;
 
             //--
 
@@ -194,38 +207,55 @@ namespace Aximo.Render
             ubo.Free();
 
             //---
+            //GraphicsDevice.Default.ReadState();
+            DrawSkia();
+            GraphicsDevice.Default.WriteState();
+            //---
 
-            if (false)
+            if (FlushRenderBackend == FlushRenderBackend.End)
+                GL.Finish();
+        }
+
+        private void DrawSkia()
+        {
+            if (true)
             {
+                GL.Viewport(0, 0, Context.ScreenPixelSize.X, Context.ScreenPixelSize.Y);
 
                 ObjectManager.PushDebugGroup("Draw", "SVG");
 
                 if (grContext == null)
                 {
-                    var glInterface = GRGlInterface.CreateNativeGlInterface();
+                    var glInterface = GRGlInterface.Create();
                     grContext = GRContext.CreateGl(glInterface);
                 }
 
                 if (renderTarget == null)
                 {
-                    int w = 300;
-                    int h = 300;
+                    var txtId0 = GL.GetInteger(GetPName.TextureBinding2D);
+                    int w = Context.ScreenPixelSize.X;
+                    int h = Context.ScreenPixelSize.Y;
 
                     // define the surface properties
                     // create or update the dimensions
                     renderTarget?.Dispose();
                     GL.GetInteger(GetPName.FramebufferBinding, out var framebuffer);
                     //GL.GetInteger(GetPName.StencilBits, out var stencil);
-                    var stencil = 0;
+                    var stencil = 1;
                     GL.GetInteger(GetPName.Samples, out var samples);
                     var maxSamples = grContext.GetMaxSurfaceSampleCount(colorType);
                     if (samples > maxSamples)
                         samples = maxSamples;
                     var glInfo = new GRGlFramebufferInfo((uint)framebuffer, colorType.ToGlSizedFormat());
-                    renderTarget = new GRBackendRenderTarget(w, h, samples, stencil, glInfo);
+                    //txt = new RendererTexture("SkiaTargetTexture", TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, 800, 600, 1, PixelFormat.Rgba, PixelType.Byte, IntPtr.Zero);
+                    //var glInfo = new GRGlTextureInfo((uint)TextureTarget.Texture2D, (uint)txt.Handle, (uint)PixelInternalFormat.Rgba8);
+                    //var info = new SKImageInfo(800, 600);
+                    renderTarget = new GRBackendRenderTarget(w, h, 0, 0, glInfo);
+
                     // create the surface
                     surface?.Dispose();
                     surface = SKSurface.Create(grContext, renderTarget, surfaceOrigin, colorType);
+                    //surface = SKSurface.Create(grContext, false, info);
                 }
 
                 using (new SKAutoCanvasRestore(surface.Canvas, true))
@@ -233,10 +263,17 @@ namespace Aximo.Render
                     // start drawing
                     //OnPaintSurface(new Desktop.SKPaintGLSurfaceEventArgs(surface, renderTarget, surfaceOrigin, colorType));
 
-                    var canvas = surface.Canvas;
-                    canvas.Clear(new SKColor(0, 0, 128));
+                    //GL.ClearColor(Color4.AliceBlue);
+                    //GL.Clear(ClearBufferMask.ColorBufferBit);
+                    //GL.ClearColor(Color4.Transparent);
+                    //GL.Clear(ClearBufferMask.ColorBufferBit);
 
-                    float scale = 256.0f - (testCounter * 00000.1f);
+                    var canvas = surface.Canvas;
+                    canvas.ResetMatrix();
+                    canvas.Save();
+                    //canvas.Clear(SKColors.Transparent);
+
+                    float scale = 256.0f; // - (testCounter * 00000.1f);
                     testCounter++;
                     float R = 0.45f * scale;
                     float TAU = 6.2831853f;
@@ -248,44 +285,36 @@ namespace Aximo.Render
                         path.LineTo(R * MathF.Cos(theta), R * MathF.Sin(theta));
                     }
                     path.Close();
-                    canvas.Clear(new SKColor(255, 128, 60));
-                    canvas.Translate(0.5f * scale, 0.5f * scale);
-                    canvas.DrawPath(path, new SKPaint() { IsAntialias = true });
 
+                    canvas.Translate(0.5f * scale, 0.5f * scale);
+                    canvas.RotateDegrees(testCounter * 0.05f);
+                    canvas.DrawPath(path, new SKPaint() { Color = new SKColor(128, 0, 0), IsAntialias = true });
+                    canvas.Restore();
                 }
                 // update the control
                 surface.Canvas.Flush();
 
                 ObjectManager.PopDebugGroup();
                 // Reset (using OpenTK's GL bindings)
-                GL.Disable(EnableCap.VertexProgramPointSize);
-                //GL.BindVertexArray(vertexArrayObject); // Restore default VAO 
-                GL.FrontFace(FrontFaceDirection.Cw);
-                GL.Enable(EnableCap.FramebufferSrgb);
-                GL.ActiveTexture(TextureUnit.Texture0);
-                GL.PixelStore(PixelStoreParameter.UnpackAlignment, 4);
-                GL.BindFramebuffer(FramebufferTarget.FramebufferExt, 0);
-                GL.UseProgram(0);
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-                GL.DrawBuffer(DrawBufferMode.Back);
-                GL.Enable(EnableCap.Dither);
-                GL.DepthMask(true);
-                GL.Enable(EnableCap.Multisample);
-                GL.Disable(EnableCap.ScissorTest);
+                //GL.Disable(EnableCap.VertexProgramPointSize);
+                ////GL.BindVertexArray(vertexArrayObject); // Restore default VAO 
+                //GL.FrontFace(FrontFaceDirection.Cw);
+                //GL.Enable(EnableCap.FramebufferSrgb);
+                //GL.ActiveTexture(TextureUnit.Texture0);
+                //GL.PixelStore(PixelStoreParameter.UnpackAlignment, 4);
+                //GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+                //GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+                //GL.DrawBuffer(DrawBufferMode.Back);
+                //GL.Enable(EnableCap.Dither);
+                //GL.Enable(EnableCap.Multisample);
             }
-            GraphicsDevice.Default.WriteState();
-
-            //---
-
-            if (FlushRenderBackend == FlushRenderBackend.End)
-                GL.Finish();
         }
 
         private int testCounter = 0;
         private GRContext grContext;
         private GRBackendRenderTarget renderTarget;
         private SKSurface surface;
+        private RendererTexture txt;
 
         private const SKColorType colorType = SKColorType.Rgba8888;
         private const GRSurfaceOrigin surfaceOrigin = GRSurfaceOrigin.BottomLeft;

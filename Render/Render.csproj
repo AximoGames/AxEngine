@@ -16,8 +16,7 @@
     <Import Project="..\props\SharedProjectSettings.props" />
     <ItemGroup>
         <PackageReference Include="OpenTK" Version="4.0.0-pre9.1" />
-        <PackageReference Include="SkiaSharp.Views" Version="2.80.2" />
-        <PackageReference Include="Svg.Skia" Version="0.4.1" />
+        <PackageReference Include="Svg.Skia" Version="0.4.2-preview7" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Common\Common.csproj" />

@@ -17,7 +17,7 @@ namespace Aximo.Render.Pipelines
         public override void Render(RenderContext context, Camera camera)
         {
             GraphicsDevice.Default.Framebuffer = 0;
-            GL.Disable(EnableCap.DepthTest);
+            GraphicsDevice.Default.DepthTest = false;
             GL.ClearColor(1.0f, 0.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 

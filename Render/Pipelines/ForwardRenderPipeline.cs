@@ -45,7 +45,7 @@ namespace Aximo.Render.Pipelines
         {
             GL.Viewport(0, 0, context.ScreenPixelSize.X, context.ScreenPixelSize.Y);
             FrameBuffer.Bind();
-            GL.Enable(EnableCap.DepthTest);
+            GraphicsDevice.Default.DepthTest = true;
 
             foreach (var obj in GetRenderObjects(context, camera))
                 Render(context, camera, obj);

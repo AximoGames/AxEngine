@@ -117,7 +117,7 @@ namespace Aximo.Render.Pipelines
         {
             GL.Viewport(0, 0, context.ScreenPixelSize.X, context.ScreenPixelSize.Y);
             GBuffer.Bind();
-            GL.Enable(EnableCap.DepthTest);
+            GraphicsDevice.Default.DepthTest = true;
 
             // At least gPosition requires Color = 0, so the Positions is 0. Used to stencil the background.
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -165,9 +165,9 @@ namespace Aximo.Render.Pipelines
 
             context.GetPipeline<ForwardRenderPipeline>().FrameBuffer.Bind();
             vao.Bind();
-            GL.Disable(EnableCap.DepthTest);
+            GraphicsDevice.Default.DepthTest = false;
             vao.Draw();
-            GL.Enable(EnableCap.DepthTest);
+            GraphicsDevice.Default.DepthTest = true;
 
             ObjectManager.PopDebugGroup();
         }
