@@ -49,21 +49,21 @@ namespace Aximo.Render.OpenGL
 
         internal void ReadStateFromDevice(GraphicsDeviceState s)
         {
-            s._ScissorTest = GL.IsEnabled(EnableCap.ScissorTest);
-            s._Blend = GL.IsEnabled(EnableCap.Blend);
-            s._CullFace = GL.IsEnabled(EnableCap.CullFace);
-            s._CullFaceMode = (CullFaceMode)GL.GetInteger(GetPName.CullFaceMode);
+            s.ScissorTest = GL.IsEnabled(EnableCap.ScissorTest);
+            s.Blend = GL.IsEnabled(EnableCap.Blend);
+            s.CullFace = GL.IsEnabled(EnableCap.CullFace);
+            s.CullFaceMode = (CullFaceMode)GL.GetInteger(GetPName.CullFaceMode);
 
-            s._DepthMask = GL.GetBoolean(GetPName.DepthWritemask);
-            s._DepthTest = GL.IsEnabled(EnableCap.DepthTest);
-            s._DepthFunc = (DepthFunction)GL.GetInteger(GetPName.DepthFunc);
+            s.DepthMask = GL.GetBoolean(GetPName.DepthWritemask);
+            s.DepthTest = GL.IsEnabled(EnableCap.DepthTest);
+            s.DepthFunc = (DepthFunction)GL.GetInteger(GetPName.DepthFunc);
 
-            s._ReadFramebuffer = GL.GetInteger(GetPName.ReadFramebufferBinding);
-            s._DrawFramebuffer = GL.GetInteger(GetPName.DrawFramebufferBinding);
-            s._Framebuffer = GL.GetInteger(GetPName.FramebufferBinding);
-            s._FramebufferExt = GL.GetInteger(GetPName.FramebufferBindingExt);
+            s.ReadFramebuffer = GL.GetInteger(GetPName.ReadFramebufferBinding);
+            s.DrawFramebuffer = GL.GetInteger(GetPName.DrawFramebufferBinding);
+            s.Framebuffer = GL.GetInteger(GetPName.FramebufferBinding);
+            s.FramebufferExt = GL.GetInteger(GetPName.FramebufferBindingExt);
 
-            s._Program = GL.GetInteger(GetPName.CurrentProgram);
+            s.Program = GL.GetInteger(GetPName.CurrentProgram);
         }
 
         internal void WriteStateToDevice()
@@ -73,21 +73,21 @@ namespace Aximo.Render.OpenGL
 
         internal void WriteStateToDevice(GraphicsDeviceState s)
         {
-            SetCap(EnableCap.ScissorTest, s._ScissorTest);
-            SetCap(EnableCap.Blend, s._Blend);
-            SetCap(EnableCap.CullFace, s._CullFace);
-            GL.CullFace((OpenToolkit.Graphics.OpenGL4.CullFaceMode)s._CullFaceMode);
+            SetCap(EnableCap.ScissorTest, s.ScissorTest);
+            SetCap(EnableCap.Blend, s.Blend);
+            SetCap(EnableCap.CullFace, s.CullFace);
+            GL.CullFace((OpenToolkit.Graphics.OpenGL4.CullFaceMode)s.CullFaceMode);
 
-            GL.DepthMask(s._DepthMask);
-            SetCap(EnableCap.DepthTest, s._DepthTest);
-            GL.DepthFunc((OpenToolkit.Graphics.OpenGL4.DepthFunction)s._DepthFunc);
+            GL.DepthMask(s.DepthMask);
+            SetCap(EnableCap.DepthTest, s.DepthTest);
+            GL.DepthFunc((OpenToolkit.Graphics.OpenGL4.DepthFunction)s.DepthFunc);
 
-            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, s._ReadFramebuffer);
-            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, s._DrawFramebuffer);
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, s._Framebuffer);
-            GL.BindFramebuffer(FramebufferTarget.FramebufferExt, s._FramebufferExt);
+            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, s.ReadFramebuffer);
+            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, s.DrawFramebuffer);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, s.Framebuffer);
+            GL.BindFramebuffer(FramebufferTarget.FramebufferExt, s.FramebufferExt);
 
-            GL.UseProgram(s._Program);
+            GL.UseProgram(s.Program);
         }
 
         public GraphicsDeviceState State = new GraphicsDeviceState();
@@ -104,145 +104,157 @@ namespace Aximo.Render.OpenGL
 
         public bool ScissorTest
         {
-            get => State._ScissorTest;
+            get => State.ScissorTest;
             set
             {
-                if (State._ScissorTest == value)
+                var state = State;
+                if (state.ScissorTest == value)
                     return;
                 SetCap(EnableCap.ScissorTest, value);
-                State._ScissorTest = value;
+                state.ScissorTest = value;
             }
         }
 
         public int Program
         {
-            get => State._Program;
+            get => State.Program;
             set
             {
-                if (State._Program == value)
+                var state = State;
+                if (state.Program == value)
                     return;
                 GL.UseProgram(value);
-                State._Program = value;
+                state.Program = value;
             }
         }
 
         public int FramebufferExt
         {
-            get => State._FramebufferExt;
+            get => State.FramebufferExt;
             set
             {
-                if (State._FramebufferExt == value)
+                var state = State;
+                if (state.FramebufferExt == value)
                     return;
                 GL.BindFramebuffer(FramebufferTarget.FramebufferExt, value);
-                State._FramebufferExt = value;
+                state.FramebufferExt = value;
             }
         }
 
         public int Framebuffer
         {
-            get => State._Framebuffer;
+            get => State.Framebuffer;
             set
             {
-                if (State._Framebuffer == value)
+                var state = State;
+                if (state.Framebuffer == value)
                     return;
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, value);
-                State._Framebuffer = value;
+                state.Framebuffer = value;
             }
         }
 
         public int DrawFramebuffer
         {
-            get => State._DrawFramebuffer;
+            get => State.DrawFramebuffer;
             set
             {
-                if (State._DrawFramebuffer == value)
+                var state = State;
+                if (state.DrawFramebuffer == value)
                     return;
                 GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, value);
-                State._DrawFramebuffer = value;
+                state.DrawFramebuffer = value;
             }
         }
 
         public int ReadFramebuffer
         {
-            get => State._ReadFramebuffer;
+            get => State.ReadFramebuffer;
             set
             {
-                if (State._ReadFramebuffer == value)
+                var state = State;
+                if (state.ReadFramebuffer == value)
                     return;
                 GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, value);
-                State._ReadFramebuffer = value;
+                state.ReadFramebuffer = value;
             }
         }
 
         public bool CullFace
         {
-            get => State._CullFace;
+            get => State.CullFace;
             set
             {
-                if (State._CullFace == value)
+                var state = State;
+                if (state.CullFace == value)
                     return;
                 SetCap(EnableCap.CullFace, value);
-                State._CullFace = value;
+                state.CullFace = value;
             }
         }
 
         public bool Blend
         {
-            get => State._Blend;
+            get => State.Blend;
             set
             {
-                if (State._Blend == value)
+                var state = State;
+                if (state.Blend == value)
                     return;
                 SetCap(EnableCap.Blend, value);
-                State._Blend = value;
+                state.Blend = value;
             }
         }
 
         public CullFaceMode CullFaceMode
         {
-            get => State._CullFaceMode;
+            get => State.CullFaceMode;
             set
             {
-                if (State._CullFaceMode == value)
+                var state = State;
+                if (state.CullFaceMode == value)
                     return;
                 GL.CullFace((OpenToolkit.Graphics.OpenGL4.CullFaceMode)value);
-                State._CullFaceMode = value;
+                state.CullFaceMode = value;
             }
         }
 
         public bool DepthTest
         {
-            get => State._DepthTest;
+            get => State.DepthTest;
             set
             {
-                if (State._DepthTest == value)
+                var state = State;
+                if (state.DepthTest == value)
                     return;
                 SetCap(EnableCap.DepthTest, value);
-                State._DepthTest = value;
+                state.DepthTest = value;
             }
         }
 
         public bool DepthMask
         {
-            get => State._DepthMask;
+            get => State.DepthMask;
             set
             {
-                if (State._DepthMask == value)
+                var state = State;
+                if (state.DepthMask == value)
                     return;
                 GL.DepthMask(value);
-                State._DepthMask = value;
+                state.DepthMask = value;
             }
         }
 
         public DepthFunction DepthFunc
         {
-            get => State._DepthFunc;
+            get => State.DepthFunc;
             set
             {
-                if (State._DepthFunc == value)
+                var state = State;
+                if (state.DepthFunc == value)
                     return;
                 GL.DepthFunc((OpenToolkit.Graphics.OpenGL4.DepthFunction)value);
-                State._DepthFunc = value;
+                state.DepthFunc = value;
             }
         }
     }

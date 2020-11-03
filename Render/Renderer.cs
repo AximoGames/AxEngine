@@ -207,16 +207,16 @@ namespace Aximo.Render
             ubo.Free();
 
             //---
-            //var gameState = GraphicsDevice.Default.State;
-            //if (skiaState == null)
-            //    skiaState = gameState.Clone();
+            var gameState = GraphicsDevice.Default.State;
+            if (skiaState == null)
+                skiaState = gameState.Clone();
 
             //GraphicsDevice.Default.SetState(skiaState);
 
             DrawSkia();
 
-            //GraphicsDevice.Default.ReadStateFromDevice(skiaState);
-            //GraphicsDevice.Default.SetState(gameState);
+            GraphicsDevice.Default.ReadStateFromDevice(skiaState);
+            GraphicsDevice.Default.SetState(gameState);
 
             GraphicsDevice.Default.WriteStateToDevice();
             //---

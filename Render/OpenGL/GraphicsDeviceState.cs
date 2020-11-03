@@ -16,18 +16,18 @@ namespace Aximo.Render.OpenGL
         {
         }
 
-        internal bool _ScissorTest;
-        internal int _Program;
-        internal int _FramebufferExt;
-        internal int _Framebuffer;
-        internal int _DrawFramebuffer;
-        internal int _ReadFramebuffer;
-        internal bool _CullFace;
-        internal bool _Blend;
-        internal CullFaceMode _CullFaceMode;
-        internal bool _DepthTest;
-        internal bool _DepthMask;
-        internal DepthFunction _DepthFunc;
+        internal bool ScissorTest;
+        internal int Program;
+        internal int FramebufferExt;
+        internal int Framebuffer;
+        internal int DrawFramebuffer;
+        internal int ReadFramebuffer;
+        internal bool CullFace;
+        internal bool Blend;
+        internal CullFaceMode CullFaceMode;
+        internal bool DepthTest;
+        internal bool DepthMask;
+        internal DepthFunction DepthFunc;
 
         public GraphicsDeviceState Clone()
         {
