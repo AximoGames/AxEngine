@@ -15,7 +15,7 @@
   </PropertyGroup>
   <Import Project="..\props\SharedProjectSettings.props" />
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="OpenTK" Version="4.0.0-pre9.1" />
   </ItemGroup>
 </Project>
